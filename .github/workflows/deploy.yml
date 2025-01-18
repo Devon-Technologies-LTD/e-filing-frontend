@@ -29,13 +29,16 @@ jobs:
           DEPLOY_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
           DEPLOY_SERVER_IP=""
           DEPLOY_SERVER_PORT=""
+          DEPLOY_SERVER_KEY=""
           DEPLOY_SERVER_USERNAME=""
           if [ "$DEPLOY_BRANCH" == "staging" ]; then
             DEPLOY_SERVER_IP="${{ secrets.STAGING_SERVER_IP }}"
+            DEPLOY_SERVER_KEY="${{ secrets.STAGING_SERVER_KEY }}"
             DEPLOY_SERVER_USERNAME="${{ secrets.STAGING_SERVER_USERNAME }}"
           elif [ "$DEPLOY_BRANCH" == "production" ]; then
             DEPLOY_SERVER_IP="${{ secrets.PROD_SERVER_IP }}"
             DEPLOY_SERVER_PORT="${{ secrets.PROD_SERVER_PORT }}"
+            DEPLOY_SERVER_KEY="${{ secrets.PROD_SERVER_KEY }}"
             DEPLOY_SERVER_USERNAME="${{ secrets.PROD_SERVER_USERNAME }}"
           else
             echo "No deployment logic for branch: $DEPLOY_BRANCH"
