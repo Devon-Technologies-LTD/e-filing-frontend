@@ -29,46 +29,28 @@ jobs:
           DEPLOY_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
           DEPLOY_SERVER_IP=""
           DEPLOY_SERVER_PORT=""
-          DEPLOY_SERVER_KEY=""
-
+          DEPLOY_SERVER_USERNAME=""
           if [ "$DEPLOY_BRANCH" == "staging" ]; then
             DEPLOY_SERVER_IP="${{ secrets.STAGING_SERVER_IP }}"
-            DEPLOY_SERVER_KEY="${{ secrets.STAGING_SERVER_KEY }}"
             DEPLOY_SERVER_USERNAME="${{ secrets.STAGING_SERVER_USERNAME }}"
           elif [ "$DEPLOY_BRANCH" == "production" ]; then
             DEPLOY_SERVER_IP="${{ secrets.PROD_SERVER_IP }}"
             DEPLOY_SERVER_PORT="${{ secrets.PROD_SERVER_PORT }}"
-            DEPLOY_SERVER_KEY="${{ secrets.PROD_SERVER_KEY }}"
             DEPLOY_SERVER_USERNAME="${{ secrets.PROD_SERVER_USERNAME }}"
           else
             echo "No deployment logic for branch: $DEPLOY_BRANCH"
             exit 0
           fi
-
-          ssh -p "${DEPLOY_SERVER_PORT:-22}" "$(DEPLOY_SERVER_USERNAME)"@"${DEPLOY_SERVER_IP}" << EOF
-            if [ "$DEPLOY_BRANCH" == "staging" ]; then
-              cd /home/devonadmin/e-filing-frontend
-              git stash
-              git checkout "$DEPLOY_BRANCH"
-              git pull origin "$DEPLOY_BRANCH"
-              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json
-              yarn install || exit 1
-              yarn build || exit 1
-              sudo systemctl restart efiling-frontend.service
-              sudo systemctl status efiling-frontend.service
-              #docker compose up --build -d
-              echo "Successfully deployed to Staging"
-            elif [ "$DEPLOY_BRANCH" == "production" ]; then
-              cd /home/devonadmin/e-filing-frontend
-              git stash
-              git checkout "$DEPLOY_BRANCH"
-              git pull origin "$DEPLOY_BRANCH"
-              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json
-              yarn install || exit 1
-              yarn build || exit 1
-              sudo systemctl restart efiling-frontend.service
-              sudo systemctl status efiling-frontend.service
-              #docker compose up --build -d
-              echo "Successfully deployed to Production"
+          ssh -p "${DEPLOY_SERVER_PORT:-22}" "${DEPLOY_SERVER_USERNAME}@${DEPLOY_SERVER_IP}" << EOF
+            cd /home/devonadmin/e-filing-frontend
+            git stash
+            git checkout "$DEPLOY_BRANCH"
+            git pull origin "$DEPLOY_BRANCH"
+            cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
+            sudo rm -rf node_modules package-lock.json
+            yarn install || exit 1
+            yarn build || exit 1
+            sudo systemctl restart efiling-frontend.service
+            sudo systemctl status efiling-frontend.service
+            echo "Successfully deployed to $DEPLOY_BRANCH"
+          EOF
