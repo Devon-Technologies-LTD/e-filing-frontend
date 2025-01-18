@@ -22,10 +22,14 @@ const config: Config = {
       },
       fontFamily: {
         hennypenny: ['var(--henny-penny)'],
-        poppins: ['var(--font-poppins)'],
-        risque: ['var(--font-risque)']
+        inter: ['var(--font-inter)'],
       },
       colors: {
+        app: {
+          primary: '#5F0000',
+          btn: '#4A3928',
+          coffee: '#997E63',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
