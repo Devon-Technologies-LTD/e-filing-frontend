@@ -1,5 +1,5 @@
 {
-  "name": "e-filling-final",
+  "name": "e-filling-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,25 +9,35 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
+    "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.4",
     "@tanstack/react-query": "^5.64.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "input-otp": "^1.4.2",
     "lucide-react": "^0.473.0",
     "next": "14.2.23",
     "nextjs-toploader": "^3.6.15",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.54.2",
+    "sharp": "^0.33.5",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.23",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.23",
+    "eslint-plugin-react": "^7.37.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

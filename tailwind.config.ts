@@ -27,6 +27,8 @@ const config: Config = {
       colors: {
         app: {
           primary: '#5F0000',
+          secondary: '#EB963F',
+          tertiary: '#3C2003',
           btn: '#4A3928',
           coffee: '#997E63',
         },
@@ -75,7 +77,16 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
-      }
+      },
+      keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
+      },
+      animation: {
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
+      },
     }
   },
   plugins: [require("tailwindcss-animate")],

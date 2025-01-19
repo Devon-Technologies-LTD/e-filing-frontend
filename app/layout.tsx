@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "@/lib/provider";
 import NextTopLoader from 'nextjs-toploader';
+import Head from "next/head";
+
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -27,6 +29,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
+      <Head>
+        <title>E-Filling Portal</title>
+        <meta name="description" content="E-Filling Portal - Manage your records seamlessly." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <body
         className={`${inter.variable} ${inter.variable} font-inter antialiased bg-background min-h-dvh overflow-hidden w-full`}
       >
