@@ -4,7 +4,7 @@ import { UserNav } from "./user-nav";
 import Link from "next/link";
 import { Icons } from "./svg/icons";
 import HelpCircleComponent from "./help-circle";
-import { Notifications } from "./notifications";
+import Notifications from "./notifications";
 
 export function DashboardHeader() {
   return (
