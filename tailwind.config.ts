@@ -32,11 +32,13 @@ const config: Config = {
           coffee: "#997E63",
         },
         background: "hsl(var(--background))",
-        neutral: "hsla(0, 0%, 25%, 1)",
+        neutral: {
+          DEFAULT: "hsla(0, 0%, 25%, 1)",
+        },
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          foreground: "hsla(220, 23%, 97%, 1)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -63,8 +65,8 @@ const config: Config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         border: "hsla(240, 5%, 65%, 1)",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        input: "hsla(30, 81%, 58%, 1)",
+        ring: "hsla(0, 0%, 90%, 1)",
         chart: {
           "1": "hsl(var(--chart-1))",
           "2": "hsl(var(--chart-2))",
@@ -77,6 +79,28 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
