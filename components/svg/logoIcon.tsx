@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils"
 
-interface svgProps extends React.SVGAttributes<HTMLOrSVGElement> { }
-
-const LogoIcon = ({ className }: svgProps) => {
+const LogoIcon = ({ className }: React.SVGAttributes<HTMLOrSVGElement>) => {
     return (
         <svg className={cn('fill-current', className && className)} width="28" height="28" viewBox="0 0 28 28" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <g id="Frame">
