@@ -18,7 +18,7 @@ export function UserNav() {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>JD</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -39,13 +39,13 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link href="settings/profile">Profile</Link>
+            <Link className="w-full" href="settings/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link href="settings/security">Account and security</Link>
+            <Link className="w-full" href="settings/security">Account and security</Link>
           </DropdownMenuItem>{" "}
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link href="settings/help">Help </Link>
+            <Link className="w-full" href="settings/help">Help </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
