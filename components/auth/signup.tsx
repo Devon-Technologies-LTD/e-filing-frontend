@@ -24,7 +24,7 @@ const Signup = () => {
                             <div className="relative w-full h-full">
                                 <Image
                                     src={LegalCard1}
-                                    alt="food-image"
+                                    alt="legal-image"
                                     height={1000}
                                     width={500}
                                     className="w-full h-full object-cover object-center group-hover:grayscale-0 grayscale transition-transform duration-300 ease-in-out "
@@ -51,7 +51,7 @@ const Signup = () => {
                             <div className="relative w-full h-full">
                                 <Image
                                     src={LegalCard2}
-                                    alt="food-image"
+                                    alt="legal-image"
                                     height={1000}
                                     width={500}
                                     className="w-full h-full object-cover object-center group-hover:grayscale-0 grayscale transition-transform duration-300 ease-in-out "
@@ -73,28 +73,7 @@ const Signup = () => {
                     </div>
                 </Link>
 
-                {/* <div className="w-[406px] border-[1px] border-t-0 space-y-3">
-                    <div className="">
-                        <div className="relative w-full h-full">
-                            <Image
-                                src={LegalCard2}
-                                alt="food-image"
-                                height={1000}
-                                width={500}
-                                className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                            />
-                            <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-                        </div>
-                    </div>
-                    <div className="p-6 space-y-10">
-                        <p className="text-sm font-semibold">I'm Filing for Myself</p>
-                        <p className="text-xs text-muted">Easily submit your case details without legal credentials. Our platform is here to simplify the filing process for you</p>
-                        <div className="flex justify-between mt-10 items-center text-xs">
-                            <FrontIcon className='size-4' />
-
-                        </div>
-                    </div>
-                </div> */}
+              
 
             </div >
 

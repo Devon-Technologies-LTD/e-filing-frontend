@@ -19,7 +19,7 @@ export default function LawyerPage() {
             }>
             <LawyerComponent />
             <div className="flex flex-col gap-4 items-center justify-between w-full space-y-4">
-                <footer className="bg-white shadow-sm px-2 py-6 absolute bottom-0 p-4 border-t-2 w-full ">
+                <footer className="bg-white shadow-sm px-2  absolute bottom-0 p-4 border-t-2 w-full ">
                     <div className="mx-8 flex justify-between items-center">
                         <BackButton />
                         <Button className="bg-app-primary font-bold text-white p-6">
