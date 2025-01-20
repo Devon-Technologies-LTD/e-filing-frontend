@@ -1,22 +1,60 @@
-import * as React from "react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
+type InputVariant = "default" | "search" | "bordered" | "underlined" | "ghost";
+type InputSize = "sm" | "md" | "lg";
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
+interface InputProps extends Omit<React.ComponentProps<"input">, "size"> {
+  variant?: InputVariant;
+  size?: InputSize;
+  error?: boolean;
+}
+
+const variantStyles: Record<InputVariant, string> = {
+  default:
+    "border border-input bg-transparent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+  search: "border border-input bg-transparent pl-9",
+  bordered: "border-2 border-input bg-transparent",
+  underlined:
+    "border-0 border-b-2 border-border bg-transparent rounded-none focus:outline-none focus-visible:ring-b focus-visible:ring-input font-medium text-zinc-600 placeholder:text-zinc-400",
+  ghost: "border-b-2 border-border bg-[#F4F4F5] ",
+};
+
+const sizeStyles: Record<InputSize, string> = {
+  sm: "h-8 text-sm px-2",
+  md: "h-10 text-base py-2",
+  lg: "h-12 text-lg px-4",
+};
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    { className, type, variant = "default", size = "md", error, ...props },
+    ref
+  ) => {
     return (
       <input
         type={type}
         className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-1 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          // Base styles
+          "flex w-full rounded-md shadow-sm transition-colors",
+          "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring",
+          "file:border-0 file:bg-transparent file:text-sm file:font-medium",
+          "placeholder:text-muted-foreground",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          // Variant styles
+          variantStyles[variant],
+          // Size styles
+          sizeStyles[size],
+          // Error styles
+          error && "border-destructive focus-visible:ring-destructive",
           className
         )}
         ref={ref}
         {...props}
       />
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
+Input.displayName = "Input";
 
-export { Input }
+export { Input };
