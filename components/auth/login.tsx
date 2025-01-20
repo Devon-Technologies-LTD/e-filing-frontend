@@ -4,8 +4,14 @@ import InputField from '@/components/ui/InputField';
 import { Button } from '@/components/ui/button';
 import { GogleIcon } from '@/components/svg/gogle-icon';
 import TransformingLineLink from "../ui/animation-link";
+import { useRouter } from "next/navigation";
 
 const LoginComponent = () => {
+    const router = useRouter();
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        router.push('/cases');
+    };
     return (
         <>
             <div className="heading">
@@ -20,7 +26,7 @@ const LoginComponent = () => {
                 </p>
             </div>
 
-            <form className="w-full space-y-6">
+            <form onSubmit={handleSubmit} className="w-full space-y-6">
                 <InputField
                     id="username"
                     type="email"
