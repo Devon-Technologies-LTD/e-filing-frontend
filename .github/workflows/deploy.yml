@@ -45,11 +45,11 @@ jobs:
            ssh -p "${DEPLOY_SERVER_PORT:-22}" "${DEPLOY_SERVER_USERNAME}@${DEPLOY_SERVER_IP}" << EOF
             if [ "$DEPLOY_BRANCH" == "staging" ]; then
               cd /home/devonadmin/e-filing-frontend
+              sudo rm -rf node_modules package-lock.json yarn.lock
               git stash
               git checkout staging
               git pull origin staging
               cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json yarn.lock
               yarn install || exit 1
               yarn build || exit 1
               sudo systemctl restart efiling-frontend.service
