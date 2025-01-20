@@ -49,7 +49,7 @@ jobs:
               git checkout staging
               git pull origin staging
               cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json
+              sudo rm -rf node_modules package-lock.json yarn.lock
               yarn install || exit 1
               yarn build || exit 1
               sudo systemctl restart efiling-frontend.service
