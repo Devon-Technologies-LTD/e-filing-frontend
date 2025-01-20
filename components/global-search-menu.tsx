@@ -13,6 +13,8 @@ export function SearchMenu() {
         <Input
           type="search"
           variant="ghost"
+          autoComplete="off"
+          data-form-type="other"  
           placeholder="e.g case name, number, magistrate"
           className="pl-9 text-sm md:w-[100px] lg:w-[350px] opacity-60"
         />
