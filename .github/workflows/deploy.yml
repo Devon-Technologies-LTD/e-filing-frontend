@@ -1,0 +1,73 @@
+name: Deploy Based on Branch
+
+on:
+  push:
+    branches:
+      - staging
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            echo "${{ secrets.STAGING_SERVER_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          elif [ "${{ github.ref }}" == "refs/heads/production" ]; then
+            echo "${{ secrets.PROD_SERVER_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          fi
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - name: Deploy Application
+        run: |
+          DEPLOY_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+          DEPLOY_SERVER_IP=""
+          DEPLOY_SERVER_PORT=""
+          DEPLOY_SERVER_KEY=""
+          if [ "$DEPLOY_BRANCH" == "staging" ]; then
+            DEPLOY_SERVER_IP="${{ secrets.STAGING_SERVER_IP }}"
+            DEPLOY_SERVER_KEY="${{ secrets.STAGING_SERVER_KEY }}"
+            DEPLOY_SERVER_USERNAME="${{ secrets.STAGING_SERVER_USERNAME }}"
+          elif [ "$DEPLOY_BRANCH" == "production" ]; then
+            DEPLOY_SERVER_IP="${{ secrets.PROD_SERVER_IP }}"
+            DEPLOY_SERVER_PORT="${{ secrets.PROD_SERVER_PORT }}"
+            DEPLOY_SERVER_KEY="${{ secrets.PROD_SERVER_KEY }}"
+            DEPLOY_SERVER_USERNAME="${{ secrets.PROD_SERVER_USERNAME }}"
+          else
+            echo "No deployment logic for branch: $DEPLOY_BRANCH"
+            exit 0
+          fi
+           ssh -p "${DEPLOY_SERVER_PORT:-22}" "${DEPLOY_SERVER_USERNAME}@${DEPLOY_SERVER_IP}" << EOF
+            if [ "$DEPLOY_BRANCH" == "staging" ]; then
+              cd /home/devonadmin/e-filing-frontend
+              git stash
+              git checkout "$DEPLOY_BRANCH"
+              git pull origin "$DEPLOY_BRANCH"
+              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
+              sudo rm -rf node_modules package-lock.json
+              yarn install || exit 1
+              yarn build || exit 1
+              sudo systemctl restart efiling-frontend.service
+              sudo systemctl status efiling-frontend.service
+              #docker compose up --build -d
+              echo "Successfully deployed to Staging"
+            elif [ "$DEPLOY_BRANCH" == "production" ]; then
+              cd /home/devonadmin/e-filing-frontend
+              git stash
+              git checkout "$DEPLOY_BRANCH"
+              git pull origin "$DEPLOY_BRANCH"
+              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
+              sudo rm -rf node_modules package-lock.json
+              yarn install || exit 1
+              yarn build || exit 1
+              sudo systemctl restart efiling-frontend.service
+              sudo systemctl status efiling-frontend.service
+              #docker compose up --build -d
+              echo "Successfully deployed to Production"
+            fi
+          EOF
