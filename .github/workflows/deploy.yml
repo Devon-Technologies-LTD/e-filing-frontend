@@ -46,21 +46,21 @@ jobs:
             if [ "$DEPLOY_BRANCH" == "staging" ]; then
               cd /home/devonadmin/e-filing-frontend
               git stash
-              git checkout "$DEPLOY_BRANCH"
-              git pull origin "$DEPLOY_BRANCH"
+              git checkout staging
+              git pull origin staging
               cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
               sudo rm -rf node_modules package-lock.json
               yarn install || exit 1
               yarn build || exit 1
               sudo systemctl restart efiling-frontend.service
               sudo systemctl status efiling-frontend.service
-              #docker compose up --build -d
+              docker compose up --build -d
               echo "Successfully deployed to Staging"
             elif [ "$DEPLOY_BRANCH" == "production" ]; then
               cd /home/devonadmin/e-filing-frontend
               git stash
-              git checkout "$DEPLOY_BRANCH"
-              git pull origin "$DEPLOY_BRANCH"
+              git checkout production
+              git pull origin production
               cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
               sudo rm -rf node_modules package-lock.json
               yarn install || exit 1
