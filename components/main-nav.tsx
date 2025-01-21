@@ -2,6 +2,7 @@
 import { cn, getAuthorizedLinks } from "@/lib/utils";
 import { NavLink } from "./nav-link";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function MainNav({
   className,
@@ -18,9 +19,11 @@ export function MainNav({
       {navLinks.map((link) => (
         <NavLink key={link.href} {...link} />
       ))}
-      <Button variant="default" size="lg" className="h-12 uppercase">
-        File a Case
-      </Button>
+      <Link href="/case-filing">
+        <Button variant="default" size="lg" className="h-12 uppercase">
+          File a Case
+        </Button>
+      </Link>
     </nav>
   );
 }
