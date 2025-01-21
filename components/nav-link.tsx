@@ -17,7 +17,7 @@ export function NavLink({ href, title, isActive, className }: NavLinkProps) {
       <Link
         href={href}
         className={cn(
-          "px-4 py-3 rounded-md text-sm font-medium transition-colors",
+          "px-4 py-3 rounded-md text-base font-semibold transition-colors",
           isActive?.(pathname)
             ? "text-foreground bg-primary-foreground"
             : "hover:bg-primary-foreground",

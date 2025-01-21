@@ -8,8 +8,7 @@ import Notifications from "./notifications";
 
 export function DashboardHeader() {
   return (
-    <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container-wrapper">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-20 items-center">
           <div className="mr-4 hidden md:flex">
             <Link href="/" className="mr-4 flex items-center gap-2 lg:mr-6">
@@ -25,7 +24,6 @@ export function DashboardHeader() {
             <UserNav />
           </div>
         </div>
-      </div>
     </header>
   );
 }
