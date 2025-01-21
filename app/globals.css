@@ -12,3 +12,23 @@ body {
   }
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #5F0000;
+  border-radius: 20px;
+  min-height: 1px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
