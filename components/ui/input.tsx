@@ -13,11 +13,11 @@ interface InputProps extends Omit<React.ComponentProps<"input">, "size"> {
 const variantStyles: Record<InputVariant, string> = {
   default:
     "border border-input bg-transparent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-  search: "border border-input bg-transparent pl-9",
+  search: "border border-input bg-zinc-100 pl-9",
   bordered: "border-2 border-input bg-transparent",
   underlined:
     "border-0 border-b-2 border-border bg-transparent rounded-none focus:outline-none focus-visible:ring-b focus-visible:ring-input font-medium text-zinc-600 placeholder:text-zinc-400",
-  ghost: "border-b-2 border-border bg-[#F4F4F5] ",
+  ghost: "border-b-2 border-zinc-400 opacity-60 bg-zinc-100 font-medium placeholder:text-neutral-700",
 };
 
 const sizeStyles: Record<InputSize, string> = {

@@ -14,7 +14,7 @@ export const navigationLinks: NavItem[] = [
     isActive: (pathname) => pathname?.startsWith("/docs/drafts"),
   },
   {
-    title: "Tracks Cases",
+    title: "Track Cases",
     href: "/track",
     roles: ["admin"],
     isActive: (pathname) => pathname?.startsWith("/track"),
