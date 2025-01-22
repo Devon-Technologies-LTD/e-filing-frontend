@@ -4,6 +4,7 @@ import { FormStep } from "@/types/file-case";
 import { GeneralOverview } from "./steps/general-overview";
 import { useCaseFilingForm } from "@/context/file-case";
 import ExhibitForm from "./steps/exhibit-form";
+import DocumentUpload from "./steps/document-upload";
 
 export function CaseForm({ initialStep }: { initialStep?: number }) {
   const { currentStep, setCurrentStep } = useCaseFilingForm();
@@ -20,7 +21,7 @@ export function CaseForm({ initialStep }: { initialStep?: number }) {
       case 2:
         return <div>Case Types Form</div>;
       case 3:
-        return <div>Upload Documents Form</div>;
+        return <DocumentUpload />;
       case 4:
         return <ExhibitForm />;
       default:
