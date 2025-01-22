@@ -16,7 +16,7 @@ const variantStyles: Record<InputVariant, string> = {
   search: "border border-input bg-zinc-100 pl-9",
   bordered: "border-2 border-input bg-transparent",
   underlined:
-    "border-0 border-b-2 border-border bg-transparent rounded-none focus:outline-none focus-visible:ring-b focus-visible:ring-input font-medium text-zinc-600 placeholder:text-zinc-400",
+    "border-0 border-b-2 border-input bg-transparent rounded-none focus:outline-none focus-visible:ring-b focus-visible:border-border font-medium text-zinc-600 placeholder:text-zinc-400",
   ghost: "border-b-2 border-zinc-400 opacity-60 bg-zinc-100 font-medium placeholder:text-neutral-700",
 };
 
