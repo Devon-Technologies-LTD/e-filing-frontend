@@ -1,6 +1,5 @@
 "use client";
-
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import type { CaseFormData, FormStep } from "@/types/file-case";
 
 interface FormContextType {
@@ -25,14 +24,13 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     claimantEmail: "",
     claimantAddress: "",
     exhibits: [{ id: 1, title: "", file: undefined }],
+    documents: [],
   });
 
 
-  console.log("formData", formData);
-  
-  const updateFormData = (data: Partial<CaseFormData>) => {
+  const updateFormData = useCallback((data: Partial<CaseFormData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
-  };
+  }, []);
 
   const goToNextStep = () => {
     if (currentStep < 4) {

@@ -1,4 +1,4 @@
-import { Exhibit } from "./exhibit";
+import { Exhibit, DocumentFile } from "./exhibit";
 
 export type FormStep = 1 | 2 | 3 | 4;
 
@@ -11,6 +11,7 @@ export interface CaseFormData {
   claimantEmail: string;
   claimantAddress: string;
   exhibits: Exhibit[];
+  documents: DocumentFile[];
 }
 
 export interface StepProps {

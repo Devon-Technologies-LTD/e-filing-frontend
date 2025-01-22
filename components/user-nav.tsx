@@ -39,13 +39,13 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="settings/profile">Profile</Link>
+            <Link className="w-full" href="/settings/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="settings/security">Account and security</Link>
+            <Link className="w-full" href="/settings/security">Account and security</Link>
           </DropdownMenuItem>{" "}
           <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="settings/help">Help </Link>
+            <Link className="w-full" href="/settings/help">Help </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
