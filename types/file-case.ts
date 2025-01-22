@@ -1,3 +1,5 @@
+import { Exhibit } from "./exhibit";
+
 export type FormStep = 1 | 2 | 3 | 4;
 
 export interface CaseFormData {
@@ -8,6 +10,7 @@ export interface CaseFormData {
   claimantPhone: string;
   claimantEmail: string;
   claimantAddress: string;
+  exhibits: Exhibit[];
 }
 
 export interface StepProps {

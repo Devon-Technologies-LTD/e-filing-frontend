@@ -1,54 +1,30 @@
-import React, { useState } from 'react'
+import React from "react";
 import { Plus, X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/svg/icons";
-import { Exhibit } from '@/types/exhibit';
+import useExhibits from "@/hooks/use-exhibit-form";
 
 export default function ExhibitFormFields() {
-     const [exhibits, setExhibits] = useState<Exhibit[]>([
-       { id: 1, title: "" },
-     ]);
+  const {
+    exhibits,
+    addExhibit,
+    removeExhibit,
+    updateExhibitTitle,
+    handleFileChange,
+    updateExhibitFile,
+  } = useExhibits();
 
-     const handleAddExhibit = () => {
-       const newId = Math.max(...exhibits.map((e) => e.id)) + 1;
-       setExhibits([...exhibits, { id: newId, title: "" }]);
-     };
+  const handleAddExhibit = () => {
+    const newId = Math.max(...exhibits.map((e) => e.id), 0) + 1; 
+    addExhibit({ id: newId, title: "" });
+  };
 
-     const handleRemoveExhibit = (id: number) => {
-       setExhibits(exhibits.filter((exhibit) => exhibit.id !== id));
-     };
-
-     const handleTitleChange = (id: number, value: string) => {
-       setExhibits(
-         exhibits.map((exhibit) =>
-           exhibit.id === id ? { ...exhibit, title: value } : exhibit
-         )
-       );
-     };
-
-     const handleFileChange = (id: number, files: FileList | null) => {
-       if (!files || files.length === 0) return;
-
-       setExhibits(
-         exhibits.map((exhibit) =>
-           exhibit.id === id
-             ? {
-                 ...exhibit,
-                 file: files[0],
-                 fileName: files[0].name,
-               }
-             : exhibit
-         )
-       );
-     };
-
-     const handleDownloadSample = (id: number) => {
-       // In a real application, this would trigger a download of the sample document
-       console.log("Downloading sample document for exhibit:", id);
-     };
-
+  const handleDownloadSample = (id: number) => {
+    //trigger a download of the sample document
+    console.log("Downloading sample document for exhibit:", id);
+  };
 
   return (
     <div className="space-y-2">
@@ -69,7 +45,7 @@ export default function ExhibitFormFields() {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleRemoveExhibit(exhibit.id)}
+                  onClick={() => removeExhibit(exhibit.id)}
                 >
                   <Icons.bin className="h-4 w-4" />
                 </Button>
@@ -81,7 +57,7 @@ export default function ExhibitFormFields() {
                 id={`title-${exhibit.id}`}
                 value={exhibit.title}
                 variant="underlined"
-                onChange={(e) => handleTitleChange(exhibit.id, e.target.value)}
+                onChange={(e) => updateExhibitTitle(exhibit.id, e.target.value)}
                 placeholder="e.g evidence documents"
               />
 
@@ -109,7 +85,9 @@ export default function ExhibitFormFields() {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleFileChange(exhibit.id, null)}
+                      onClick={() =>
+                        updateExhibitFile(exhibit.id, undefined, "")
+                      }
                     >
                       <X className="h-4 w-4" />
                     </Button>
