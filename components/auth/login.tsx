@@ -4,14 +4,13 @@ import InputField from '@/components/ui/InputField';
 import { Button } from '@/components/ui/button';
 import { GogleIcon } from '@/components/svg/gogle-icon';
 import TransformingLineLink from "../ui/animation-link";
-import { useRouter } from "next/navigation";
+import { LoginAction } from "@/lib/actions/login";
+import { useFormState } from "react-dom";
+import { LoginPasswordField } from "./login-component";
 
 const LoginComponent = () => {
-    const router = useRouter();
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        router.push('/cases');
-    };
+    const [state, dispatch] = useFormState(LoginAction, undefined);
+
     return (
         <>
             <div className="heading">
@@ -26,7 +25,7 @@ const LoginComponent = () => {
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="w-full space-y-6">
+            <form action={dispatch} className="w-full space-y-6">
                 <InputField
                     id="username"
                     type="email"
@@ -35,14 +34,8 @@ const LoginComponent = () => {
                     placeholder="name@gmail.com"
                     required
                 />
-                <InputField
-                    id="password"
-                    type="password"
-                    label="PASSWORD"
-                    name="password"
-                    placeholder="PASSWORD"
-                    required
-                />
+                <LoginPasswordField state={state} />
+
                 <SubmitButton
                     value="LOG IN"
                     pendingValue="Processing..."
@@ -55,12 +48,9 @@ const LoginComponent = () => {
                     <GogleIcon className="size-8" />
                     Continue with Google
                 </Button>
-
                 <TransformingLineLink href="forgot" text="CAN'T LOG IN" />
             </form>
-
         </>
-
     );
 };
 
