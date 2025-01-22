@@ -1,17 +1,10 @@
-import { navigationLinks } from "@/config/nav";
-import { UserRole } from "@/types/auth";
-import { clsx, type ClassValue } from "clsx"
+import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { jwtDecode } from "jwt-decode"
 
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
-}
-
-export function getAuthorizedLinks(userRole: UserRole) {
-  return navigationLinks.filter((link) => link.roles.includes(userRole));
 }
 
 export function decodeToken(token: string) {
