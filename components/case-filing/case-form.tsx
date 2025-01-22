@@ -3,6 +3,7 @@
 import { FormStep } from "@/types/file-case";
 import { GeneralOverview } from "./steps/general-overview";
 import { useCaseFilingForm } from "@/context/file-case";
+import ExhibitForm from "./steps/exhibit-form";
 
 export function CaseForm({ initialStep }: { initialStep?: number }) {
   const { currentStep, setCurrentStep } = useCaseFilingForm();
@@ -21,11 +22,11 @@ export function CaseForm({ initialStep }: { initialStep?: number }) {
       case 3:
         return <div>Upload Documents Form</div>;
       case 4:
-        return <div>Submit Exhibits Form</div>;
+        return <ExhibitForm />;
       default:
         return null;
     }
   };
 
-  return <div className="">{renderStep()}</div>;
+  return <div className="w-1/2">{renderStep()}</div>;
 }
