@@ -1,6 +1,6 @@
 "use client";
 import { useCaseFilingForm } from "@/context/file-case";
-import { FORM_STEPS } from "@/constants/form";
+import { FORM_STEPS, STEP_TITLES } from "@/constants/form";
 import { CaseFilingStepper } from "./case-filing-indicator";
 
 export function StepNav() {
@@ -15,7 +15,7 @@ export function StepNav() {
             STEP {currentStep} OF {FORM_STEPS.length}
           </div>
           <div className="text-3xl font-medium leading-8 text-primary">
-            General Overview of the case you want to file
+            {STEP_TITLES[currentStep]}
           </div>
         </div>
         <div className="space-y-3 ">
