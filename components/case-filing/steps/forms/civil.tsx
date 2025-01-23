@@ -4,12 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState, useCallback } from "react";
 import {
     CaseOption,
-    CASE_TYPES,
-    CASE_OPTIONS,
-    CaseTypes,
     FileInputProps,
     RichTextEditorProps,
-    WORTH_OPTIONS
 } from "@/types/files/case-type";
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import { MessageCircleQuestionIcon, InfoIcon, BoldIcon, ItalicIcon, UnderlineIcon } from 'lucide-react';
