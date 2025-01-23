@@ -1,12 +1,17 @@
 "use client";
 import { createContext, useCallback, useContext, useState } from "react";
-import type { CaseFormData, FormStep } from "@/types/file-case";
+import type { CaseOverViewData, FormStep } from "@/types/file-case";
+import { DocumentFileType, Exhibit } from "@/types/exhibit";
 
 interface FormContextType {
   currentStep: FormStep;
-  formData: CaseFormData;
+  exhibitFormData: Exhibit[];
+  documentUpload: DocumentFileType[];
+  caseOverviewFormData: CaseOverViewData;
   setCurrentStep: (step: FormStep) => void;
-  updateFormData: (data: Partial<CaseFormData>) => void;
+  updateExhibitFormData: (data: Exhibit[]) => void;
+  updateDocumentUpload: (data: DocumentFileType[]) => void;
+  updateCaseOverViewFormData: (data: Partial<CaseOverViewData>) => void;
   goToNextStep: () => void;
   goToPreviousStep: () => void;
 }
@@ -15,22 +20,35 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export function FormProvider({ children }: { children: React.ReactNode }) {
   const [currentStep, setCurrentStep] = useState<FormStep>(1);
-  const [formData, setFormData] = useState<CaseFormData>({
-    filingLocation: "",
-    claimant: "",
-    defendant: "",
-    caseTitle: "",
-    claimantPhone: "",
-    claimantEmail: "",
-    claimantAddress: "",
-    exhibits: [{ id: 1, title: "", file: undefined }],
-    documents: [],
-  });
+  const [caseOverviewFormData, setCaseOverviewFormData] =
+    useState<CaseOverViewData>({
+      filingLocation: "",
+      claimant: "",
+      defendant: "",
+      caseTitle: "",
+      claimantPhone: "",
+      claimantEmail: "",
+      claimantAddress: "",
+    });
 
+  const [exhibitFormData, setExhibitFormData] = useState<Exhibit[]>([
+    { id: 1, title: "", file: undefined },
+  ]);
+  const [documentUpload, setDocumentUpload] = useState<DocumentFileType[]>([]);
 
-  const updateFormData = useCallback((data: Partial<CaseFormData>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+  const updateExhibitFormData = useCallback((data: Exhibit[]) => {
+    setExhibitFormData(data);
   }, []);
+  const updateDocumentUpload = useCallback((data: DocumentFileType[]) => {
+    setDocumentUpload(data);
+  }, []);
+
+  const updateCaseOverViewFormData = useCallback(
+    (data: Partial<CaseOverViewData>) => {
+      setCaseOverviewFormData((prev) => ({ ...prev, ...data }));
+    },
+    []
+  );
 
   const goToNextStep = () => {
     if (currentStep < 4) {
@@ -48,11 +66,15 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     <FormContext.Provider
       value={{
         currentStep,
-        formData,
+        documentUpload,
+        updateDocumentUpload,
+        exhibitFormData,
         setCurrentStep,
-        updateFormData,
+        updateExhibitFormData,
+        updateCaseOverViewFormData,
         goToNextStep,
         goToPreviousStep,
+        caseOverviewFormData,
       }}
     >
       {children}

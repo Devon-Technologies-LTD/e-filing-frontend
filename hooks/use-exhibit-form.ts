@@ -2,24 +2,23 @@ import { useCaseFilingForm } from "@/context/file-case";
 import { Exhibit } from "@/types/exhibit";
 
 const useExhibits = () => {
-  const { formData, updateFormData } = useCaseFilingForm();
+  const { exhibitFormData, updateExhibitFormData } = useCaseFilingForm();
 
   const addExhibit = (exhibit: Exhibit) => {
-    updateFormData({ exhibits: [...formData.exhibits, exhibit] });
+    updateExhibitFormData([...exhibitFormData, exhibit]);
   };
-
   const removeExhibit = (id: number) => {
-    updateFormData({
-      exhibits: formData.exhibits.filter((exhibit) => exhibit.id !== id),
-    });
+    updateExhibitFormData(
+      exhibitFormData.filter((exhibit) => exhibit.id !== id)
+    );
   };
 
   const updateExhibitTitle = (id: number, title: string) => {
-    updateFormData({
-      exhibits: formData.exhibits.map((exhibit) =>
+    updateExhibitFormData(
+      exhibitFormData.map((exhibit) =>
         exhibit.id === id ? { ...exhibit, title } : exhibit
-      ),
-    });
+      )
+    );
   };
 
   const handleFileChange = (id: number, files: FileList | null) => {
@@ -34,16 +33,14 @@ const useExhibits = () => {
   };
 
   const updateExhibitFile = (id: number, file?: File, fileName?: string) => {
-    updateFormData({
-      exhibits: formData.exhibits.map((exhibit) =>
+    updateExhibitFormData(
+      exhibitFormData.map((exhibit) =>
         exhibit.id === id ? { ...exhibit, file, fileName } : exhibit
-      ),
-    });
+      )
+    );
   };
-
-
   return {
-    exhibits: formData.exhibits,
+    exhibits: exhibitFormData,
     addExhibit,
     removeExhibit,
     updateExhibitTitle,

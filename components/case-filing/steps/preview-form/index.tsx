@@ -27,7 +27,7 @@ export default function PreviewPage() {
             Information and details of the type of case{" "}
           </h2>
         </section>
-        <section className="w-1/2">
+        <section className="min-w-1/2">
           <CaseTypesForm />
         </section>
       </div>

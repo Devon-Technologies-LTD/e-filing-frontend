@@ -15,9 +15,9 @@ import { Icons } from "@/components/svg/icons";
 import { useDocumentUpload } from "@/hooks/use-document-upload";
 
 const allDocuments = [
-  { value: "charge-sheet", label: "CHARGE SHEET" },
-  { value: "motion-for-bail", label: "MOTION FOR BAIL" },
-  { value: "counter-affidavit", label: "COUNTER AFFIDAVIT" },
+  { id: 1, value: "charge-sheet", label: "CHARGE SHEET" },
+  { id: 2, value: "motion-for-bail", label: "MOTION FOR BAIL" },
+  { id: 3, value: "counter-affidavit", label: "COUNTER AFFIDAVIT" },
 ];
 
 export default function DocumentUploadForm() {
@@ -101,7 +101,12 @@ export default function DocumentUploadForm() {
             </SelectTrigger>
             <SelectContent>
               {remainingDocuments.map((doc) => (
-                <SelectItem variant="underlined" className="py-2" key={doc.value} value={doc.value}>
+                <SelectItem
+                  variant="underlined"
+                  className="py-2"
+                  key={doc.value}
+                  value={doc.value}
+                >
                   {doc.label}
                 </SelectItem>
               ))}

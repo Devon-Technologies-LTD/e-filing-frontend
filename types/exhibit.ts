@@ -4,7 +4,7 @@ export interface Exhibit {
   file?: File;
   fileName?: string;
 }
-export interface DocumentFile {
+export interface DocumentFileType {
   id: number;
   type: string;
   file: File | null;
