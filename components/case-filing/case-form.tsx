@@ -3,6 +3,7 @@
 import { FormStep } from "@/types/file-case";
 import { GeneralOverview } from "./steps/general-overview";
 import { useCaseFilingForm } from "@/context/file-case";
+import { CaseType } from "./steps/case-type";
 import ExhibitForm from "./steps/exhibit-form";
 import DocumentUpload from "./steps/document-upload";
 import GenerateSeal from "./steps/generate-seal";
@@ -20,7 +21,7 @@ export function CaseForm({ initialStep }: { initialStep?: number }) {
       case 1:
         return <GeneralOverview />;
       case 2:
-        return <div>Case Types Form</div>;
+        return <CaseType />;
       case 3:
         return <DocumentUpload />;
       case 4:
