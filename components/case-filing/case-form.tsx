@@ -1,32 +1,44 @@
 "use client";
 
 import { FormStep } from "@/types/file-case";
-import { GeneralOverview } from "./steps/general-overview";
+// import { GeneralOverview } from "./steps/general-overview";
 import { useCaseFilingForm } from "@/context/file-case";
-import { CaseType } from "./steps/case-type";
+// import { CaseType } from "./steps/case-type";
+import ExhibitForm from "./steps/exhibit-form";
+import DocumentUpload from "./steps/document-upload";
+import GenerateSeal from "./steps/generate-seal";
+import CaseOverview from "./steps/case-overview";
+import CaseTypes from "./steps/case-type-form";
+import PreviewPage from "./steps/preview-form";
+import { useEffect } from "react";
 
 export function CaseForm({ initialStep }: { initialStep?: number }) {
   const { currentStep, setCurrentStep } = useCaseFilingForm();
 
-  // Ensure the form context is in sync with the URL
-  if (currentStep !== initialStep) {
-    setCurrentStep(initialStep as FormStep);
-  }
+   useEffect(() => {
+     if (currentStep !== initialStep) {
+       setCurrentStep(initialStep as FormStep);
+     }
+   }, [initialStep, currentStep, setCurrentStep]);
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <GeneralOverview />;
+        return <CaseOverview />;
       case 2:
-        return <CaseType />;
+        return <CaseTypes />;
       case 3:
-        return <div>Upload Documents Form</div>;
+        return <DocumentUpload />;
       case 4:
-        return <div>Submit Exhibits Form</div>;
+        return <ExhibitForm />;
+      case 5:
+        return <PreviewPage />;
+      case 6:
+        return <GenerateSeal />;
       default:
         return null;
     }
   };
 
-  return <div className="">{renderStep()}</div>;
+  return <div>{renderStep()}</div>;
 }

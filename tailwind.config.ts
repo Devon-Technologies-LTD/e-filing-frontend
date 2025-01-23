@@ -52,7 +52,7 @@ const config: Config = {
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          foreground: "hsla(32, 81%, 96%, 1)",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -111,6 +111,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar-hide')],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
 };
 export default config;
