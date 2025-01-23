@@ -1,5 +1,5 @@
 import axios from "axios"
-import auth from "@/lib/auth"
+// import auth from "@/lib/auth"
 
 // import AuthService from "@/lib/_services/auth-service"
 import { BASE_URL } from "@/lib/_constants"
@@ -14,16 +14,16 @@ const userConfig = axios.create({
   },
 })
 
-userConfig.interceptors.request.use(async (req) => {
-  const token = await auth.getToken()
+// userConfig.interceptors.request.use(async (req) => {
+//   const token = await auth.getToken()
 
-  if (token) {
-    req.headers['Authorization'] = `${token}`
-  }
-  return req
-}, (error) => {
-  return Promise.reject(error)
-})
+//   if (token) {
+//     req.headers['Authorization'] = `${token}`
+//   }
+//   return req
+// }, (error) => {
+//   return Promise.reject(error)
+// })
 
 
 // let refreshing_token: any = null

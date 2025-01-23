@@ -6,6 +6,19 @@ import { twMerge } from "tailwind-merge"
 import { jwtDecode } from "jwt-decode"
 
 
+
+// interface DecodedToken {
+//   exp: number;
+//   iat: number;
+//   [key: string]: any; // Add more properties as needed
+// }
+
+// export function decodeToken(token: string): DecodedToken {
+//   return jwtDecode<DecodedToken>(token);
+// }
+
+
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -28,11 +41,9 @@ export function getInitials(name: string) {
     .toUpperCase()
 }
 
-// helper function to convert FormData to object preserving multiple values with repeated names as arrays
-export function formDataToObject(formData: FormData): Record<string, any> {
+export function formDataToObject(formData: FormData): Record<string, string | File | (string | File)[]> {
   const entries = Array.from(formData.entries());
 
-  // Group entries by name and concatenate values for repeated names
   const groupedEntries = entries.reduce((acc, [key, value]) => {
     if (acc[key]) {
       if (Array.isArray(acc[key])) {
@@ -44,9 +55,8 @@ export function formDataToObject(formData: FormData): Record<string, any> {
       acc[key] = value;
     }
     return acc;
-  }, {} as Record<string, any>);
+  }, {} as Record<string, string | File | (string | File)[]>);
 
-  // Remove empty string values from arrays
   const cleanedEntries = Object.entries(groupedEntries).map(([key, value]) => {
     if (Array.isArray(value)) {
       return [key, value.filter((item) => item !== '')];
