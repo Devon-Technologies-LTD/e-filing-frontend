@@ -10,14 +10,16 @@ import GenerateSeal from "./steps/generate-seal";
 import CaseOverview from "./steps/case-overview";
 import CaseTypes from "./steps/case-type-form";
 import PreviewPage from "./steps/preview-form";
+import { useEffect } from "react";
 
 export function CaseForm({ initialStep }: { initialStep?: number }) {
   const { currentStep, setCurrentStep } = useCaseFilingForm();
 
-  // Ensure the form context is in sync with the URL
-  if (currentStep !== initialStep) {
-    setCurrentStep(initialStep as FormStep);
-  }
+   useEffect(() => {
+     if (currentStep !== initialStep) {
+       setCurrentStep(initialStep as FormStep);
+     }
+   }, [initialStep, currentStep, setCurrentStep]);
 
   const renderStep = () => {
     switch (currentStep) {
