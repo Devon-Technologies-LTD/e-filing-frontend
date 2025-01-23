@@ -5,7 +5,6 @@ import { EditorState, Editor } from 'draft-js';
 import { InfoIcon } from 'lucide-react';
 import InputField from "@/components/ui/InputField";
 import 'draft-js/dist/Draft.css';
-import { RichTextEditor } from "./civil";
 import {
     Select,
     SelectContent,
@@ -20,7 +19,7 @@ import { Input } from "@/components/ui/input";
 
 
 // Custom Select Component
-const LocationSelect = ({
+export const LocationSelect = ({
     value,
     onChange
 }: {
@@ -48,7 +47,6 @@ const LocationSelect = ({
 export const FamilyComplaintForm = () => {
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [formData, setFormData] = useState<Record<string, string>>({});
 
     return (
         <div className="space-y-1">
