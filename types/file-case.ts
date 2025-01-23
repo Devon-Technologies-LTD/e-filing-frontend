@@ -1,6 +1,7 @@
-export type FormStep = 1 | 2 | 3 | 4;
 
-export interface CaseFormData {
+export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
+
+export interface CaseOverViewData {
   filingLocation: string;
   claimant: string;
   defendant: string;
@@ -9,7 +10,6 @@ export interface CaseFormData {
   claimantEmail: string;
   claimantAddress: string;
 }
-
 export interface StepProps {
   title: string;
   isActive: boolean;

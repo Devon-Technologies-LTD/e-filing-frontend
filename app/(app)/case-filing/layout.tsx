@@ -15,7 +15,7 @@ export default function CaseFilingLayout({
             <StepNav />
           </div>
         </aside>
-        <main className="p-6 pb-24 overflow-auto">{children}</main>
+        <main className="py-6 pb-32 overflow-auto">{children}</main>
       </div>
       <div className="sticky border bg-white shadow-inner bottom-0 w-full z-50">
         <StepperNavigation /> 
