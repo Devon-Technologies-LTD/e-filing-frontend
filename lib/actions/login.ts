@@ -1,24 +1,31 @@
 'use server'
 
-import { LoginFormSchema, ROLES } from "@/lib/_definitions"
+import { LoginFormSchema } from "@/lib/_definitions"
 import authService from "@/lib/_services/auth-service"
-import auth from "@/lib/auth"
-import { DEFAULT_LOGIN_REDIRECT, defaultLoginRedirect } from "@/routes"
-import { redirect } from "next/navigation"
+
+type ErrorResponse = {
+    response?: {
+        status: number;
+        data: {
+            message: string;
+            data: string; // If `data` has a specific structure, replace `any` with its type.
+        };
+    };
+    request?: unknown;
+    message?: string;
+};
 
 export async function loginAction(_prevState: unknown, formData: FormData) {
-    const data = Object.fromEntries(formData)
+    const data = Object.fromEntries(formData);
 
-    const result = LoginFormSchema.safeParse(data)
+    const result = LoginFormSchema.safeParse(data);
 
     if (!result.success) {
-        return { status: 400, errors: result.error.flatten().fieldErrors, message: 'Login failed' }
+        return { status: 400, errors: result.error.flatten().fieldErrors, message: 'Login failed' };
     }
 
-    let role: ROLES;
-
     try {
-        // const res = await authService.loginUser(result.data)
+        // const res = await authService.loginUser(result.data);
         // const sessionData = {
         //     user: {
         //         staff_id: res.data.staff,
@@ -29,31 +36,51 @@ export async function loginAction(_prevState: unknown, formData: FormData) {
         //         role: res.data.role,
         //     },
         //     token: res.data.token,
-        // }
-        // role = sessionData.user.role
-        // await auth.createSession(sessionData)
-    } catch (err: any) {
-        if (err?.response) {
-            return { status: err.response.status, message: err.response.data.message, errors: err.response.data.data }
-        } else if (err.request) {
-            return { status: 504, message: 'Something went wrong. Please try again.', errors: 'Unable to process request.' }
+        // };
+        // await auth.createSession(sessionData);
+    } catch (err: unknown) {
+        const error = err as ErrorResponse;
+
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: 'Something went wrong. Please try again.',
+                errors: 'Unable to process request.',
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+            };
         } else {
-            return { status: 500, message: err.message, errors: err.message }
+            return {
+                status: 500,
+                message: 'An unexpected error occurred.',
+                errors: 'Unknown error.',
+            };
         }
     }
 
-    // redirect(defaultLoginRedirect(role))
-    // redirect(DEFAULT_LOGIN_REDIRECT)
+    // redirect(DEFAULT_LOGIN_REDIRECT);
 }
 
 export async function LoginAction(_prevState: unknown, formData: FormData) {
-    const data = Object.fromEntries(formData)
-    const result = LoginFormSchema.safeParse(data)
+    const data = Object.fromEntries(formData);
+    const result = LoginFormSchema.safeParse(data);
+
     if (!result.success) {
-        return { status: 400, errors: result.error.flatten().fieldErrors, message: 'Login failed' }
+        return { status: 400, errors: result.error.flatten().fieldErrors, message: 'Login failed' };
     }
+
     try {
-        const res = await authService.loginUser(result.data)
+        const res = await authService.loginUser(result.data);
         console.log(res.data);
         // const sessionData = {
         //     user: {
@@ -65,23 +92,43 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         //         role: res.data.role,
         //     },
         //     token: res.data.token,
-        // }
-        // await auth.createSession(sessionData)
-    } catch (err: any) {
-        if (err?.response) {
-            return { status: err.response.status, message: err.response.data.message, errors: err.response.data.data }
-        } else if (err.request) {
-            return { status: 504, message: 'Something went wrong. Please try again.', errors: 'Unable to process request.' }
+        // };
+        // await auth.createSession(sessionData);
+    } catch (err: unknown) {
+        const error = err as ErrorResponse;
+
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: 'Something went wrong. Please try again.',
+                errors: 'Unable to process request.',
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+            };
         } else {
-            return { status: 500, message: err.message, errors: err.message }
+            return {
+                status: 500,
+                message: 'An unexpected error occurred.',
+                errors: 'Unknown error.',
+            };
         }
     }
 
-    redirect(DEFAULT_LOGIN_REDIRECT)
+    // redirect(DEFAULT_LOGIN_REDIRECT);
 }
 
-export async function logoutAction(_formData: FormData) {
-    auth.deleteSession()
-    auth.user = null
-    redirect('/login')
-}
+// export async function logoutAction(_formData: FormData) {
+//     auth.deleteSession();
+//     auth.user = null;
+//     redirect('/login');
+// }

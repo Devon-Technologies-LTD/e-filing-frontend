@@ -11,11 +11,8 @@ import {
 import { useState } from "react";
 
 import {
-  Location,
-  FormField,
   FILING_LOCATIONS,
   FORM_FIELDS,
-  FormData
 } from "@/types/files/general";
 
 

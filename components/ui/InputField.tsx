@@ -97,6 +97,7 @@ const InputField: React.FC<InputFieldProps> = ({
                         bg-transparent 
                         px-2
                         py-2
+                        border-app-secondary
                         ${error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-app-secondary'}
                         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                         ${Icon ? 'pr-10' : ''}
