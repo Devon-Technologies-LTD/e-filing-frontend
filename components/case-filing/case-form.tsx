@@ -5,6 +5,7 @@ import { GeneralOverview } from "./steps/general-overview";
 import { useCaseFilingForm } from "@/context/file-case";
 import ExhibitForm from "./steps/exhibit-form";
 import DocumentUpload from "./steps/document-upload";
+import GenerateSeal from "./steps/generate-seal";
 
 export function CaseForm({ initialStep }: { initialStep?: number }) {
   const { currentStep, setCurrentStep } = useCaseFilingForm();
@@ -24,10 +25,14 @@ export function CaseForm({ initialStep }: { initialStep?: number }) {
         return <DocumentUpload />;
       case 4:
         return <ExhibitForm />;
+      case 5:
+        return <ExhibitForm />;
+      case 6:
+        return <GenerateSeal />;
       default:
         return null;
     }
   };
 
-  return <div className="w-1/2">{renderStep()}</div>;
+  return <div className="">{renderStep()}</div>;
 }
