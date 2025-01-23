@@ -76,8 +76,15 @@ export default function ExhibitFormFields() {
                       }
                       className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
                     />
-                    <div className="flex px-2 font-semibold items-center w-full rounded-md shadow-sm transition-colors border-0 border-b-2 border-app-secondary bg-zinc-100 h-10 focus:outline-none focus-visible:ring-b focus-visible:ring-input text-neutral-950 placeholder:text-zinc-400">
-                      {exhibit.fileName || "Choose File"}
+                    <div className="flex items-center gap-3 font-semibold px-2 w-full rounded-md shadow-sm transition-colors border-0 border-b-2 border-app-secondary bg-zinc-100 h-10 focus:outline-none focus-visible:ring-b focus-visible:ring-input text-neutral-950 placeholder:text-zinc-400">
+                      {exhibit.fileName ? (
+                        <>
+                          <Icons.documents />
+                          {exhibit.fileName}
+                        </>
+                      ) : (
+                        "Choose File"
+                      )}{" "}
                     </div>
                   </div>
                   {exhibit.fileName && (

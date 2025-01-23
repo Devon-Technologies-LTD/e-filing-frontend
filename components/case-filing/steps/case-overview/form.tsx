@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -10,21 +9,23 @@ import {
 } from "@/components/ui/select";
 import { FILING_LOCATIONS, FORM_FIELDS } from "@/types/files/general";
 import InputField from "@/components/ui/InputField";
-
-
-
+import { useCaseFilingForm } from "@/context/file-case";
+import { CaseOverViewData } from "@/types/file-case";
 
 // Custom Select Component
 const LocationSelect = ({
   value,
-  onChange
+  onChange,
 }: {
   value: string;
   onChange: (value: string) => void;
 }) => (
   <Select onValueChange={onChange} value={value}>
     <SelectTrigger className="w-[354px] border-0 border-b-[1px] text-neutral-700">
-      <SelectValue className="text-neutral-700 text-xs" placeholder="Select A Filing Location" />
+      <SelectValue
+        className="text-neutral-700 text-xs"
+        placeholder="Select A Filing Location"
+      />
     </SelectTrigger>
     <SelectContent className="bg-white w-[354px] text-zinc-900">
       {FILING_LOCATIONS.map((location) => (
@@ -40,18 +41,21 @@ const LocationSelect = ({
   </Select>
 );
 
-
 export default function CaseOverviewForm() {
-const [selectedLocation, setSelectedLocation] = useState<string>("");
-const [formData, setFormData] = useState<Record<string, string>>({});
-
-const handleInputChange = (name: string, value: string) => {
-  setFormData((prev) => ({ ...prev, [name]: value }));
-};
+  const { caseOverviewFormData, updateCaseOverViewFormData } =
+    useCaseFilingForm();
+  const handleInputChange = (name: string, value: string) => {
+    updateCaseOverViewFormData({ [name]: value });
+  };
 
   return (
     <div className="w-full space-y-8 ">
-      <LocationSelect value={selectedLocation} onChange={setSelectedLocation} />
+      <LocationSelect
+        value={caseOverviewFormData.filingLocation}
+        onChange={(value) => {
+          handleInputChange("filingLocation", value);
+        }}
+      />
 
       {FORM_FIELDS.map((field) => (
         <InputField
@@ -63,7 +67,9 @@ const handleInputChange = (name: string, value: string) => {
           tooltipIcon={field.tooltipIcon}
           placeholder={field.placeholder}
           icon={field.icon}
-          value={formData[field.name] || ""}
+          value={
+            caseOverviewFormData[field.name as keyof CaseOverViewData] || ""
+          }
           onChange={(e) => handleInputChange(field.name, e.target.value)}
         />
       ))}

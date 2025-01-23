@@ -1,20 +1,19 @@
 import { useCaseFilingForm } from "@/context/file-case";
-import { DocumentFile } from "@/types/exhibit";
+import { DocumentFileType } from "@/types/exhibit";
 import { useEffect, useState } from "react";
 
-
 export const useDocumentUpload = () => {
-  const { formData, updateFormData } = useCaseFilingForm();
-  const [documents, setDocuments] = useState<DocumentFile[]>(
-    formData.documents || []
+  const { documentUpload, updateDocumentUpload } = useCaseFilingForm();
+  const [documents, setDocuments] = useState<DocumentFileType[]>(
+    documentUpload || []
   );
 
   useEffect(() => {
-    updateFormData({ documents });
-  }, [documents, updateFormData]);
+    updateDocumentUpload(documents);
+  }, [documents, updateDocumentUpload]);
 
   const addDocument = (type: string) => {
-    const newDocument: DocumentFile = {
+    const newDocument: DocumentFileType = {
       id: documents.length + 1,
       type,
       file: null,
