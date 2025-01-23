@@ -1,4 +1,4 @@
-import { Search, LockIcon, InfoIcon } from 'lucide-react';
+import { LockIcon, InfoIcon } from 'lucide-react';
 
 // Type definitions
 export type Location = {
