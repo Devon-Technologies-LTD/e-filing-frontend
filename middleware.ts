@@ -11,43 +11,43 @@ import {
 } from '@/routes'
 
 export async function middleware(request: NextRequest) {
-  // const nextUrl = request.nextUrl
-  // const isLoggedIn = !!(await auth.getUser())
-  // const session = await auth.verifySession()
-  // const user = session?.user
+  const nextUrl = request.nextUrl
+  const isLoggedIn = !!(await auth.getUser())
+  const session = await auth.verifySession()
+  const user = session?.user
 
 
-  // const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-  // const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
-  // const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
+  const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-  // // Exclude '/' from allowing subpaths
-  // const isPublicRoute = publicRoutes.some(route => {
-  //   if (route === '/') {
-  //     return nextUrl.pathname === '/'; // Exact match only for '/'
-  //   }
-  //   return nextUrl.pathname.startsWith(route); // Allow subpaths for all other routes
-  // });
+  // Exclude '/' from allowing subpaths
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === '/') {
+      return nextUrl.pathname === '/'; // Exact match only for '/'
+    }
+    return nextUrl.pathname.startsWith(route); // Allow subpaths for all other routes
+  });
 
-  // if (isApiAuthRoute) {
-  //   return NextResponse.next()
-  // }
+  if (isApiAuthRoute) {
+    return NextResponse.next()
+  }
 
-  // if (isApiRoute) {
-  //   return NextResponse.next()
-  // }
+  if (isApiRoute) {
+    return NextResponse.next()
+  }
 
-  // if (isAuthRoute) {
-  //   if (isLoggedIn) {
-  //     return NextResponse.redirect(new URL(defaultLoginRedirect(user?.role), nextUrl))
-  //     // return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-  //   }
-  //   return NextResponse.next()
-  // }
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(defaultLoginRedirect(user?.role), nextUrl))
+      // return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+    }
+    return NextResponse.next()
+  }
 
-  // if (!isPublicRoute && !isLoggedIn) {
-  //   return NextResponse.redirect(new URL('/login', nextUrl))
-  // }
+  if (!isPublicRoute && !isLoggedIn) {
+    return NextResponse.redirect(new URL('/login', nextUrl))
+  }
 
   return NextResponse.next()
 }

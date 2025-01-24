@@ -21,13 +21,13 @@ const LocationSelect = ({
   onChange: (value: string) => void;
 }) => (
   <Select onValueChange={onChange} value={value}>
-    <SelectTrigger className="w-[354px] border-0 border-b-[1px] text-neutral-700">
+    <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
       <SelectValue
         className="text-neutral-700 text-xs"
         placeholder="Select A Filing Location"
       />
     </SelectTrigger>
-    <SelectContent className="bg-white w-[354px] text-zinc-900">
+    <SelectContent className="bg-white text-zinc-900">
       {FILING_LOCATIONS.map((location) => (
         <SelectItem
           key={location.value}
