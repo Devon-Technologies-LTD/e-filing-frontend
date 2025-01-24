@@ -78,6 +78,7 @@ const InputField: React.FC<InputFieldProps> = ({
                     name={name}
                     type={type}
                     placeholder={placeholder}
+                    variant="underlined"
                     required={required}
                     disabled={disabled}
                     value={value}
@@ -94,10 +95,7 @@ const InputField: React.FC<InputFieldProps> = ({
                         shadow-none 
                         focus:outline-none 
                         focus:border-b-2 
-                        bg-transparent 
-                        px-2
-                        py-2
-                        border-app-secondary
+                      
                         ${error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-app-secondary'}
                         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                         ${Icon ? 'pr-10' : ''}
