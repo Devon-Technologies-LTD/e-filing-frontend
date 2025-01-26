@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "@/lib/provider";
 import NextTopLoader from 'nextjs-toploader';
 import Head from "next/head";
+import { ToastContainer, Zoom } from "react-toastify";
+
 
 
 export const viewport: Viewport = {
@@ -38,6 +40,17 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${inter.variable} font-inter antialiased bg-background min-h-dvh overflow-hidden w-full`}
       >
+        <ToastContainer
+          toastStyle={{
+            backgroundColor: "#ffffff",
+            color: "#000000",
+          }}
+          position="top-right"
+          hideProgressBar={true}
+          transition={Zoom}
+          autoClose={2000}
+        />
+        <Toaster />
         <Provider>{children}</Provider>
         <NextTopLoader showSpinner={false} color="#6F4E37" />
         <Toaster />
