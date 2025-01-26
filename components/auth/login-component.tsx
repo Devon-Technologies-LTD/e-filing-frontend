@@ -41,8 +41,11 @@ export const LoginIdField = (props: {
     );
 }
 
-export const LoginPasswordField = (props: { state?: State }) => {
+
+
+export const LoginPasswordField = (props: { state?: { status: any; message: any; errors: any; } }) => {
     const [showPassword, setShowPassword] = useState(false);
+    console.log(props.state?.errors?.password);
     return (
         <div>
             <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
@@ -54,7 +57,6 @@ export const LoginPasswordField = (props: { state?: State }) => {
                     id="password"
                     placeholder="Input Password"
                 />
-
                 <span
                     onClick={() => setShowPassword(!showPassword)}
                     className={`col-span-full row-span-full justify-self-end mr-5 hover:cursor-pointer transition-all opacity-50 peer-focus-within:opacity-100 peer-focus:opacity-100`}

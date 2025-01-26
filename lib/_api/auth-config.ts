@@ -8,5 +8,4 @@ const authConfig = axios.create({
     'Accept': 'application/json',
   },
 })
-
 export { authConfig }

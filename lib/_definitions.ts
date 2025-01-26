@@ -38,7 +38,7 @@ export type TUpdateType = 'updateInput' | 'updateAddArray' | 'updateRemoveArray'
 /* Login schema */
 
 export const LoginFormSchema = z.object({
-  staff_id: z.string()
+  email: z.string()
     .min(1, { message: 'Email field must not be empty.' }),
   password: z.string().min(1, { message: 'Password field must not be empty.' }),
 });
@@ -86,9 +86,9 @@ export type GENDERS = "male" | "female" | "others"
 
 export type TUser = {
   id: string;
-  staff_id: string;
   first_name: string;
   last_name: string;
+  phone_number: string;
   email: string;
   role: ROLES;
 }

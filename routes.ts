@@ -40,7 +40,7 @@ export const apiPrefix = '/api'
  * The default redirect path after logging in
  * @type {string}
 */
-export const DEFAULT_LOGIN_REDIRECT = '/dashboard/menus'
+export const DEFAULT_LOGIN_REDIRECT = '/case-filing'
 export const defaultLoginRedirect = (role?: ROLES) => {
   switch (role) {
     case 'SUPER_ADMIN':
