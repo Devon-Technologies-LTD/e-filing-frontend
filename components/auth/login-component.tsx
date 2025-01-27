@@ -68,7 +68,6 @@ export const LoginPasswordField = (props: { state?: { status: any; message: any;
                     }
                 </span>
             </div>
-
             <span className="h-1 text-xs text-destructive">
                 {props.state?.errors?.password}
             </span>

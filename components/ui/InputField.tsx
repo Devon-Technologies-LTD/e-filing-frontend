@@ -1,10 +1,11 @@
 'use client';
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import React from 'react';
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { LucideIcon, HelpCircle } from 'lucide-react';
+import clsx from 'clsx';
 
 interface InputFieldProps {
     id: string;
@@ -24,7 +25,13 @@ interface InputFieldProps {
     onIconClick?: () => void;
     className?: string;
     autoFocus?: boolean;
+    state?: {
+        status?: any;
+        message?: any;
+        errors?: Record<string, string>;
+    };
 }
+
 const InputField: React.FC<InputFieldProps> = ({
     id,
     name,
@@ -43,7 +50,7 @@ const InputField: React.FC<InputFieldProps> = ({
     onIconClick,
     className = "",
     autoFocus = false,
-
+    state,
 }) => {
     return (
         <div className="relative w-full space-y-1">
@@ -65,7 +72,10 @@ const InputField: React.FC<InputFieldProps> = ({
                 )}
                 <Label
                     htmlFor={id}
-                    className={`text-sm text-neutral-600 font-bold ${error ? 'text-red-500' : 'text-neutral-600'}`}
+                    className={clsx(
+                        "text-sm font-bold",
+                        error ? "text-red-500" : "text-neutral-600"
+                    )}
                 >
                     {label}
                     {required && <span className="text-red-500 ml-1">*</span>}
@@ -78,36 +88,27 @@ const InputField: React.FC<InputFieldProps> = ({
                     name={name}
                     type={type}
                     placeholder={placeholder}
-                    variant="underlined"
                     required={required}
                     disabled={disabled}
                     value={value}
                     onChange={onChange}
                     autoComplete="off"
                     autoFocus={autoFocus}
-                    className={` 
-                        w-full 
-                        border-0 
-                        border-b-[1px] 
-                        placeholder:text-xs
-                        placeholder:font-semibold
-                        placeholder:text-zinc-500 
-                        shadow-none 
-                        focus:outline-none 
-                        focus:border-b-2 
-                      
-                        ${error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-app-secondary'}
-                        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-                        ${Icon ? 'pr-10' : ''}
-                        ${className}
-                    `}
+                    className={clsx(
+                        "w-full border-0 border-b-[1px] placeholder:text-xs placeholder:font-semibold placeholder:text-zinc-500 shadow-none focus:outline-none focus:border-b-2",
+                        error ? "border-red-500 focus:border-red-500" : "border-neutral-200 focus:border-app-secondary",
+                        disabled && "opacity-50 cursor-not-allowed",
+                        Icon && "pr-10",
+                        className
+                    )}
                 />
                 {Icon && (
                     <div
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 
-                            ${onIconClick ? 'cursor-pointer hover:opacity-70' : ''} 
-                            ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-                        `}
+                        className={clsx(
+                            "absolute right-2 top-1/2 -translate-y-1/2",
+                            onIconClick && "cursor-pointer hover:opacity-70",
+                            disabled && "opacity-50 cursor-not-allowed"
+                        )}
                         onClick={!disabled && onIconClick ? onIconClick : undefined}
                     >
                         <Icon className="h-4 w-4 text-neutral-500" />
@@ -116,9 +117,11 @@ const InputField: React.FC<InputFieldProps> = ({
             </div>
             {bottomText && <div>{bottomText}</div>}
             {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+            {state?.errors && state.errors[name] && (
+                <span className="h-1 text-xs text-destructive">{state.errors[name]}</span>
+            )}
         </div>
     );
 };
-
 
 export default InputField;

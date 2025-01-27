@@ -4,20 +4,38 @@ import { z } from 'zod'
 
 /* Signup schema */
 
+
+
+// Define schema for validation
+export const SignuplawyerSchema = z.object({
+  email: z.string().email("Invalid email address").nonempty("Email is required"),
+
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  confirmPassword: z
+    .string()
+    .min(6, "Password confirmation must be at least 6 characters long"),
+});
+
+
 export const SignupFormSchema = z.object({
   first_name: z
     .string()
     .min(2, { message: 'First name must be at least 2 characters long.' })
     .trim(),
+  nin: z.string().optional(),
+  role: z.string().optional(),
+  gender: z.string().optional(),
+  court: z.string().nonempty("Supreme Court Number is required"),
+  phone_number: z
+    .string()
+    .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
+    .nonempty("Phone number is required"),
   last_name: z
     .string()
+
     .min(2, { message: 'Last name must be at least 2 characters long.' })
     .trim(),
   email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
-  username: z
-    .string()
-    .min(3, { message: 'Username must be at least 3 characters long.' })
-    .trim(),
   password: z
     .string()
     .min(8, { message: 'Be at least 8 characters long' })
@@ -42,6 +60,7 @@ export const LoginFormSchema = z.object({
     .min(1, { message: 'Email field must not be empty.' }),
   password: z.string().min(1, { message: 'Password field must not be empty.' }),
 });
+
 
 export type TLoginFormPayload = z.infer<typeof LoginFormSchema>
 
@@ -81,7 +100,7 @@ export type TFullUser = {
   updated_at: string;
 };
 
-export type ROLES = "SUPER_ADMIN" | "GENERAL_MANAGER" | "FLOOR_ADMIN" | "STAFF" | "CHEF" | "WAITER" | "SECURITY"
+export type ROLES = "USER" | "LAWYER" | "ADMIN" | "SUPER"
 export type GENDERS = "male" | "female" | "others"
 
 export type TUser = {
