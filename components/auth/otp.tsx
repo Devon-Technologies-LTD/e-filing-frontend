@@ -7,8 +7,12 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
+// import { useFormState } from "react-dom";
+// import { SignupAction } from "@/lib/actions/login";
+
 
 const OtpComponent = () => {
+    // const [state, dispatch] = useFormState(SignupAction, undefined);
     return (
         <>
             <div className="flex w-full h-full space-x-2">
@@ -21,6 +25,7 @@ const OtpComponent = () => {
                     />
                 </div>
                 <div className="flex-1 flex justify-center items-center">
+                <form id="lawyer-form"  >
                     <div className="col flex flex-col text-center  justify-center items-center space-y-6">
                         <p className="text-app-primary text-3xl font-bold">Check your email for a code</p>
                         <p className="text-xs" >We&apos;ve sent a 6-character code to janedoe@gmail.com. <br />
@@ -47,6 +52,7 @@ const OtpComponent = () => {
                             <p className="text-xs">Resend Code</p>
                         </div>
                     </div>
+                </form>
                 </div>
             </div>
         </>

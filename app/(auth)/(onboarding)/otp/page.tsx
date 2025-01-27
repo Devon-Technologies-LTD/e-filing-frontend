@@ -20,7 +20,7 @@ export default function OtpPage() {
                 <footer className="bg-white shadow-sm px-2 py-6 absolute bottom-0 p-4 border-t-2 w-full ">
                     <div className="mx-8 flex justify-end items-center">
                         {/* <BackButton /> */}
-                        <Button className="bg-app-primary font-bold text-white p-6">PROCEED</Button>
+                        <Button type="submit" form="lawyer-form" className="bg-app-primary font-bold text-white p-6">PROCEED</Button>
                     </div>
                 </footer>
             </div>

@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose'
-import { TSessionData, TFullUser, TUser } from '@/lib/_definitions'
+import { TSessionData, TFullUser } from '@/lib/_definitions'
 import { ALGORITHM, SECRET } from '@/lib/_constants'
 import { cookies } from 'next/headers'
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
@@ -41,6 +41,7 @@ const auth = {
       })
       return payload
     } catch (error) {
+      console.error("Decryption error:", error);
       return null
     }
   },
@@ -51,13 +52,11 @@ const auth = {
     // if (!session?.id) {
     //   redirect('/login')
     // }
-
     return session as TSessionData | null
   },
 
   createSession: async (userData: TSessionData) => {
-    let decryptedToken = decodeToken(userData.token)
-
+    const decryptedToken = decodeToken(userData.token)
     const expires = decryptedToken.exp
       ? decryptedToken.exp * 1000
       : new Date(Date.now() + cookieHelper.duration)
@@ -80,7 +79,6 @@ const auth = {
     return session?.token
   },
 }
-
 
 export default auth
 
