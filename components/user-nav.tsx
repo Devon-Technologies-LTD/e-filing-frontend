@@ -10,6 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { logoutAction } from '@/lib/actions/login'
 
 export function UserNav() {
   return (
@@ -50,7 +51,11 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="uppercase font-semibold text-xs">
-          Log out
+          <form className="w-full" action={logoutAction}>
+            <button type="submit" className="flex items-center w-full gap-4 text-sm font-medium text-destructive">
+              Log out
+            </button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

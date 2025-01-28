@@ -73,7 +73,7 @@ const Signup = () => {
                     </div>
                 </Link>
 
-              
+
 
             </div >
 

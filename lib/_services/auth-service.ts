@@ -3,7 +3,7 @@ import { TSignupFormPayload, TLoginFormPayload } from "@/lib/_definitions"
 
 const AuthService = {
   async signupUser(payload: TSignupFormPayload) {
-    return await authConfig.post('/auth/register', payload)
+    return await authConfig.post('/auth/signup', payload)
   },
   async loginUser(payload: TLoginFormPayload) {
     return await authConfig.post('/auth/login', payload)
