@@ -1,18 +1,17 @@
-import { SignJWT, jwtVerify } from 'jose';
-import { TSessionData, TFullUser } from '@/lib/_definitions';
-import { ALGORITHM, SECRET } from '@/lib/_constants';
-import { cookies } from 'next/headers';
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { decodeToken } from './utils';
+import { SignJWT, jwtVerify } from 'jose'
+import { TSessionData, TFullUser } from '@/lib/_definitions'
+import { ALGORITHM, SECRET } from '@/lib/_constants'
+import { cookies } from 'next/headers'
+import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
+import { decodeToken } from './utils'
 
-const key = new TextEncoder().encode(SECRET);
+const key = new TextEncoder().encode(SECRET)
 
 type TCookieHelper = {
   name: string;
   options: Partial<ResponseCookie>;
   duration: number;
-};
-
+}
 const cookieHelper: TCookieHelper = {
   name: 'session',
   options: {
@@ -21,68 +20,65 @@ const cookieHelper: TCookieHelper = {
     sameSite: 'strict',
     path: '/',
   },
-  duration: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-};
+  duration: 24 * 60 * 60 * 1000,
+}
 
 const auth = {
   user: <TFullUser | null>null,
-  tokens: null as string | null,
-  sessionCookie: null as string | null,
+  tokens: null,
+  sessionCookie: null,
 
-  encrypt: async (payload: Record<string, unknown>) => {
+  encrypt: async (payload: any) => {
     return new SignJWT(payload)
       .setProtectedHeader({ alg: ALGORITHM })
-      .sign(key);
+      .sign(key)
   },
 
-  decrypt: async (session: string) => {
+  decrypt: async (session: any) => {
     try {
       const { payload } = await jwtVerify(session, key, {
         algorithms: [ALGORITHM],
-      });
-      return payload as Record<string, unknown>; // Use a stricter type if possible
+      })
+      return payload
     } catch (error) {
-      console.log(error);
-      return null;
+      console.error("Decryption error:", error);
+      return null
     }
   },
 
   verifySession: async () => {
-    const cookie = cookies().get(cookieHelper.name)?.value;
-    if (!cookie) return null;
-
-    const session = await auth.decrypt(cookie);
-    return session as TSessionData | null;
+    const cookie = cookies().get(cookieHelper.name)?.value
+    const session = await auth.decrypt(cookie)
+    // if (!session?.id) {
+    //   redirect('/login')
+    // }
+    return session as TSessionData | null
   },
 
   createSession: async (userData: TSessionData) => {
-    const decryptedToken = decodeToken(userData.token);
-
+    const decryptedToken = decodeToken(userData.token)
     const expires = decryptedToken.exp
-      ? new Date(decryptedToken.exp * 1000) // Convert to milliseconds
-      : new Date(Date.now() + cookieHelper.duration);
-
-    const session = await auth.encrypt({ ...userData, expires });
-    cookies().set(cookieHelper.name, session, {
-      ...cookieHelper.options,
-      expires,
-    });
+      ? decryptedToken.exp * 1000
+      : new Date(Date.now() + cookieHelper.duration)
+    const session = await auth.encrypt({ ...userData, expires })
+    cookies().set(cookieHelper.name, session, { ...cookieHelper.options, expires })
   },
 
   deleteSession: () => {
-    cookies().delete(cookieHelper.name);
-    // redirect('/login'); // Commented out because server action would cause an error
+    cookies().delete(cookieHelper.name)
+    // redirect('/login') // would prefer this but server action will return an error instead
   },
 
   getUser: async () => {
-    const session = await auth.verifySession();
-    return session?.user?.id || null;
+    const session = await auth.verifySession()
+    return session?.user?.id
   },
 
   getToken: async () => {
-    const session = await auth.verifySession();
-    return session?.token || null;
+    const session = await auth.verifySession()
+    return session?.token
   },
-};
+}
 
-export default auth;
+export default auth
+

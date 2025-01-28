@@ -110,7 +110,7 @@ export const DirectCriminalComplaintForm = () => {
                     <p>THE REGISTRAR</p>
                     <p>CHIEF JUSTICE COURT</p>
                 </div>
-                <div className="flex w-[354px] bg-zinc-200 p-2 justify-between items-center">
+                <div className="flex  bg-zinc-200 p-2 justify-between items-center">
                     <p className="text-xs font-bold">WUSE ZONE 2 DISTRICT</p>
                     <InfoIcon />
                 </div>
@@ -139,10 +139,10 @@ export const CustomSelect = ({
     onChange: (value: string) => void;
 }) => (
     <Select onValueChange={onChange} value={value}>
-        <SelectTrigger className="w-[354px] border-0 border-b-[1px] text-neutral-700">
+        <SelectTrigger className=" border-0 border-b-[1px] text-neutral-700">
             <SelectValue className="text-neutral-700 text-xs" placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent className="bg-white w-[354px] text-zinc-900">
+        <SelectContent className="bg-white  text-zinc-900">
             {options.map((option) => (
                 <SelectItem
                     key={option.value}

@@ -62,7 +62,6 @@ export const FamilyComplaintForm = () => {
                         onChange={setSelectedLocation}
                     />
                 </div>
-
                 <p className="text-xs font-bold">BETWEEEN</p>
                 <InputField
                     id="claimant"
@@ -74,7 +73,6 @@ export const FamilyComplaintForm = () => {
                     placeholder="eg. John Doe"
                 />
                 <p className="text-xs font-bold">AND</p>
-
                 <>
                     <div className="text-sm font-bold">
                         At the suit of this complainat, this plaint is taking out with respect to
