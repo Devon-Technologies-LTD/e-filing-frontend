@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { decodeToken } from "./utils";
 import { redirect } from "next/navigation";
-import authService from "./_services/auth-service";
 
 const key = new TextEncoder().encode(SECRET);
 

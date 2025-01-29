@@ -6,13 +6,6 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-type Errors = Record<string, string>;
-type State = {
-  status: boolean;
-  message: string;
-  errors: Errors;
-};
-
 export const LoginPasswordField = (props: {
   state?: { status: any; message: any; errors: any };
 }) => {

@@ -48,7 +48,7 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
                         We&apos;ve sent a 6-character code to {email}. <br />
                         The code expires shortly, so please enter it soon.
                     </p>
-                    <InputOTP maxLength={6} name = "otp"
+                    <InputOTP maxLength={6} name="otp"
                         pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
 
                         <InputOTPGroup className="gap-2">
@@ -72,6 +72,9 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
                         </InputOTPGroup>
                     </InputOTP>
 
+                    <p className="text-xs text-red-500 h-2 text-center">
+                        {state && state?.message}
+                    </p>
                     <SubmitButton value="PROCEED" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
 
                     <div className="space-y-2 mt-6">

@@ -7,7 +7,7 @@ import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
 import { LoginPasswordField } from "./login-component";
 import InputField from "../ui/InputField";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
 
