@@ -1,29 +1,20 @@
 import { Button } from "@/components/ui/button"
-import SignUpLayout from "@/components/SignupLayout"
 import { OtpComponent } from '@/components/auth/otp'
 
 
 export default function OtpPage() {
     return (
-        <SignUpLayout
-            headerContent={
-                <>
-                    {/* <div className="text-sm font-medium text-app-primary relative z-10">
-                        <Link href="/login">
-                            Close
-                        </Link>
-                    </div> */}
-                </>
-            }>
-            <OtpComponent />
-            <div className="flex flex-col gap-4 items-center justify-between w-full space-y-4">
-                <footer className="bg-white shadow-sm px-2 py-6 absolute bottom-0 p-4 border-t-2 w-full ">
-                    <div className="mx-8 flex justify-end items-center">
-                        {/* <BackButton /> */}
-                        <Button type="submit" form="lawyer-form" className="bg-app-primary font-bold text-white p-6">PROCEED</Button>
-                    </div>
-                </footer>
+        <>
+            <div className="flex flex-col items-center w-full px-4 md:px-8 space-y-6">
+                <OtpComponent />
             </div>
-        </SignUpLayout>
+            <footer className="bg-white shadow-sm fixed bottom-0 left-0 w-full px-4 py-4 border-t-2">
+                <div className="flex flex-col md:flex-row justify-end items-center gap-4">
+                    {/* <BackButton /> */}
+                    <Button type="submit" form="lawyer-form" className="bg-app-primary font-bold text-white p-6">PROCEED</Button>
+                </div>
+            </footer>
+        </>
+
     )
 }
