@@ -24,18 +24,6 @@ interface LoginResponseData {
   token: string;
 }
 
-type OTPErrorResponse = {
-  response?: {
-    status: number;
-    data: {
-      message: string;
-      data?: { error: string }; // Updated to match the API response
-    };
-  };
-  request?: unknown;
-  message?: string;
-};
-
 type ErrorResponse = {
   response?: {
     status: number;
@@ -246,7 +234,7 @@ export async function ForgotPasswordAction(
 
   try {
     // Simulate API call (uncomment when ready)
-    const res = await authService.forgotPassword(result.data);
+    await authService.forgotPassword(result.data);
     // Store email in cookie/session
     cookies().set("otpEmail", result.data.email);
   } catch (err: any) {
@@ -356,7 +344,7 @@ export async function changePassword(_prevState: unknown, formData: FormData) {
         errors: "Missing email.",
       };
     }
-    const response = await authService.changePassword({
+    await authService.changePassword({
       old_password: result.data.oldPassword,
       new_password: result.data.newPassword,
       email: email,

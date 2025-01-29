@@ -232,16 +232,16 @@ export type TMealCategoryCreateFormPayload = z.infer<
 
 /* Menu schema */
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1; // 1MB
-const SUPPORTED_FILE_TYPE = ["png", "jpg", "jpeg"];
+// const MAX_FILE_SIZE = 1024 * 1024 * 1; // 1MB
+// const SUPPORTED_FILE_TYPE = ["png", "jpg", "jpeg"];
 
-function checkFileType(file: File | undefined) {
-  if (file?.name) {
-    const fileType = file.name.split(".").pop();
-    return SUPPORTED_FILE_TYPE.some((el) => el === fileType);
-  }
-  return false;
-}
+// function checkFileType(file: File | undefined) {
+//   if (file?.name) {
+//     const fileType = file.name.split(".").pop();
+//     return SUPPORTED_FILE_TYPE.some((el) => el === fileType);
+//   }
+//   return false;
+// }
 
 export type TCategorySectionList = {
   id: string;

@@ -43,6 +43,7 @@ const OtpComponent = () => {
                                     <InputOTPSlot index={5} className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[114px] w-[86px]" />
                                 </InputOTPGroup>
                             </InputOTP>
+                            
 
                             <div className="space-y-2 mt-6">
                                 <p className="text-xs" >Did&apos;nt get the code?</p>
