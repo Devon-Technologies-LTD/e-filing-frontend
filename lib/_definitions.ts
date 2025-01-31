@@ -208,16 +208,16 @@ export type TMealCategoryCreateFormPayload = z.infer<typeof CreateMealCategoryFo
 
 /* Menu schema */
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1 // 1MB
-const SUPPORTED_FILE_TYPE = ['png', 'jpg', 'jpeg']
+// const MAX_FILE_SIZE = 1024 * 1024 * 1 // 1MB
+// const SUPPORTED_FILE_TYPE = ['png', 'jpg', 'jpeg']
 
-function checkFileType(file: File | undefined) {
-  if (file?.name) {
-    const fileType = file.name.split(".").pop();
-    return SUPPORTED_FILE_TYPE.some((el) => (el === fileType))
-  }
-  return false;
-}
+// function checkFileType(file: File | undefined) {
+//   if (file?.name) {
+//     const fileType = file.name.split(".").pop();
+//     return SUPPORTED_FILE_TYPE.some((el) => (el === fileType))
+//   }
+//   return false;
+// }
 
 export const CreateMenuFormSchema = z.object({
   id: z.string().uuid().optional(),
@@ -249,16 +249,16 @@ export const CreateMenuFormSchema = z.object({
     { message: 'Tags are required' }
   ),
   status: z.boolean().default(false),
-  image: z.instanceof(File)
-    .refine(
-      (file) => file && file.size > 0, 'Image is required.'
-    )
-    .refine(
-      (file) => file && file?.size < MAX_FILE_SIZE, `Image size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`
-    )
-    .refine(
-      (file) => checkFileType(file), `Only ${SUPPORTED_FILE_TYPE.join(', ')} formats are supported.`
-    ),
+  // image: z.instanceof(File)
+  //   .refine(
+  //     (file) => file && file.size > 0, 'Image is required.'
+  //   )
+  //   .refine(
+  //     (file) => file && file?.size < MAX_FILE_SIZE, `Image size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`
+  //   )
+  //   .refine(
+  //     (file) => checkFileType(file), `Only ${SUPPORTED_FILE_TYPE.join(', ')} formats are supported.`
+  //   ),
   // notes: z.string().optional(),
 })
 
