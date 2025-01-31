@@ -9,7 +9,6 @@ import {
 import { Button } from "./ui/button";
 import { Icons } from "./svg/icons";
 import { Badge } from "./ui/badge";
-import { NotificationIcon } from "./ui/notifications-icon";
 
 interface Notification {
   id: string;
@@ -61,7 +60,36 @@ const notifications: Notification[] = [
   },
 ];
 
-
+function NotificationIcon({
+  type,
+  initials,
+}: {
+  type: Notification["icon"];
+  initials?: string;
+}) {
+  switch (type) {
+    case "check":
+      return (
+        <div className="flex items-center justify-center">
+          <Icons.check />
+        </div>
+      );
+    case "scale":
+      return (
+        <div className="flex items-center justify-center">
+          <Icons.justice />
+        </div>
+      );
+    case "initials":
+      return (
+        <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+          {initials}
+        </div>
+      );
+    default:
+      return null;
+  }
+}
 
 export default function Notifications() {
   return (

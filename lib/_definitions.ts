@@ -232,64 +232,16 @@ export type TMealCategoryCreateFormPayload = z.infer<
 
 /* Menu schema */
 
-// const MAX_FILE_SIZE = 1024 * 1024 * 1 // 1MB
-// const SUPPORTED_FILE_TYPE = ['png', 'jpg', 'jpeg']
+// const MAX_FILE_SIZE = 1024 * 1024 * 1; // 1MB
+// const SUPPORTED_FILE_TYPE = ["png", "jpg", "jpeg"];
 
 // function checkFileType(file: File | undefined) {
 //   if (file?.name) {
 //     const fileType = file.name.split(".").pop();
-//     return SUPPORTED_FILE_TYPE.some((el) => (el === fileType))
+//     return SUPPORTED_FILE_TYPE.some((el) => el === fileType);
 //   }
 //   return false;
 // }
-
-export const CreateMenuFormSchema = z.object({
-  id: z.string().uuid().optional(),
-  name: z.string().min(2, { message: 'Name is required' }).trim(),
-  description: z.string().optional(),
-  // ingredients: z.union([
-  //   z.string({ message: 'Ingredients are required' }).array(), z.string()],
-  //   { message: 'Ingredients are required' }
-  // ).optional(),
-  price: z.union([
-    z.string()
-      .refine(
-        // price should not have comma and should be number
-        (price) => !price?.includes(',') && !isNaN(Number(price)), 'Price should be a number without commas.'
-      ),
-    z.number()]),
-  // sections: z.string().uuid().array(),
-  // categories: z.string().uuid().array(),
-  sections: z.union(
-    [z.string({ message: 'Sections are required' }).array(), z.string()],
-    { message: "Sections are required" }
-  ),
-  categories: z.union(
-    [z.string({ message: 'Categories are required' }).array(), z.string()],
-    { message: "Categories are required" }
-  ),
-  tags: z.union(
-    [z.string().array(), z.string()],
-    { message: 'Tags are required' }
-  ),
-  status: z.boolean().default(false),
-  // image: z.instanceof(File)
-  //   .refine(
-  //     (file) => file && file.size > 0, 'Image is required.'
-  //   )
-  //   .refine(
-  //     (file) => file && file?.size < MAX_FILE_SIZE, `Image size must be less than ${MAX_FILE_SIZE / (1024 * 1024)}MB.`
-  //   )
-  //   .refine(
-  //     (file) => checkFileType(file), `Only ${SUPPORTED_FILE_TYPE.join(', ')} formats are supported.`
-  //   ),
-  // notes: z.string().optional(),
-})
-
-export type TMenuCreateFormPayload = z.infer<typeof CreateMenuFormSchema>
-
-
-/* Category and section schema */
 
 export type TCategorySectionList = {
   id: string;
