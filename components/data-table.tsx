@@ -30,12 +30,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
+  onRowClick?: (val: any) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   loading,
   data,
+  onRowClick, // Add this line
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -102,6 +104,7 @@ export function DataTable<TData, TValue>({
                   className="h-16  hover:border-b-2 transition-colors duration-500 hover:bg-zinc-50 hover:border-b-app-secondary"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => onRowClick && onRowClick(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

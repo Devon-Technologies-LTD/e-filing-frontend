@@ -1,13 +1,16 @@
+"use client";
+
 import { ColumnDef } from "@tanstack/react-table";
+import DraftTableActionCell from "./action-cell";
 
 export interface IDraftsColumn {
+  id: string;
   lastEdit: string;
   title: string;
   type: string;
 }
 
-
-export const draftsColumns: ColumnDef<IDraftsColumn>[] = [
+export const DraftsColumns: ColumnDef<IDraftsColumn>[] = [
   {
     accessorKey: "lastEdit",
     header: "Last Edited",
@@ -19,5 +22,10 @@ export const draftsColumns: ColumnDef<IDraftsColumn>[] = [
   {
     accessorKey: "type",
     header: "Case Type",
+  },
+  {
+    accessorKey: "",
+    header: "Action",
+    cell: ({ row }) => <DraftTableActionCell row={row} />,
   },
 ];
