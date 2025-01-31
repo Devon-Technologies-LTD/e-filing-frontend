@@ -15,8 +15,14 @@ export const navigationLinks: NavItem[] = [
   },
   {
     title: "Track Cases",
-    href: "/track-cases",
+    href: "/track",
     roles: ["admin"],
+    isActive: (pathname) => pathname?.startsWith("/track"),
+  },
+  {
+    title: "File",
+    href: "/track",
+    roles: ["user"],
     isActive: (pathname) => pathname?.startsWith("/track"),
   },
 ];
