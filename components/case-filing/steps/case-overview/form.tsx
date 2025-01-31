@@ -12,7 +12,6 @@ import InputField from "@/components/ui/InputField";
 import { useCaseFilingForm } from "@/context/file-case";
 import { CaseOverViewData } from "@/types/file-case";
 
-// Custom Select Component
 const LocationSelect = ({
   value,
   onChange,
