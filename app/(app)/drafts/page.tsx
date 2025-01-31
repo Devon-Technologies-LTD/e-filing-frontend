@@ -6,9 +6,10 @@ import { DraftsDataTableToolbar } from "./_components/data-table-toolbar";
 import { DraftsColumns } from "./_components/table-columns";
 import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
   const handleRowClick = (row: any) => {
+    console.log(row);
     router.push(`/case-filing/1`);
   };
 

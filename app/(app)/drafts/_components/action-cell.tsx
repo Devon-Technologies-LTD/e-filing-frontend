@@ -5,7 +5,6 @@ import {
   AlertDialogCancel,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import { AlertCircle } from "lucide-react";
 import React from "react";
 
 interface ActionCellProps {
@@ -14,6 +13,7 @@ interface ActionCellProps {
 
 const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
   const handleDelete = (e: any) => {
+    console.log(row);
     e.stopPropagation();
   };
 
@@ -35,12 +35,15 @@ const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
             </div>
           </div>
           <AlertDialogFooter className="flex items-center sm:justify-center w-full">
-            <AlertDialogAction className="font-medium text-sm bg-red-600 h-12" onClick={() => {}}>
+            <AlertDialogAction
+              className="font-medium text-sm bg-red-600 h-12"
+              onClick={handleDelete}
+            >
               DELETE THIS DRAFT
             </AlertDialogAction>
 
             <AlertDialogCancel
-            className="font-extrabold text-red-800 text-xs uppercase"
+              className="font-extrabold text-red-800 text-xs uppercase"
               onClick={(e) => {
                 e.stopPropagation();
               }}
