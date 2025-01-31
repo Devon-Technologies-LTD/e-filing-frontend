@@ -1,3 +1,5 @@
-export default function IndexPage() {
-  return <div className="container py-3"></div>;
+import { redirect } from "next/navigation";
+
+export default function CasesPage() {
+  redirect("/cases/recent");
 }
