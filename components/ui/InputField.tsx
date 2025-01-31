@@ -28,7 +28,7 @@ interface InputFieldProps {
     state?: {
         status?: any;
         message?: any;
-        errors?: Record<string, string>;
+        errors: any;
     };
 }
 
@@ -95,7 +95,7 @@ const InputField: React.FC<InputFieldProps> = ({
                     autoComplete="off"
                     autoFocus={autoFocus}
                     className={clsx(
-                        "w-full border-0 border-b-[1px] placeholder:text-xs placeholder:font-semibold placeholder:text-zinc-500 shadow-none focus:outline-none focus:border-b-2",
+                        "w-full p-2 border-0 border-b-[1px] placeholder:text-sm placeholder:font-semibold placeholder:text-zinc-500 shadow-none focus:outline-none focus:border-b-2 border-app-secondary",
                         error ? "border-red-500 focus:border-red-500" : "border-neutral-200 focus:border-app-secondary",
                         disabled && "opacity-50 cursor-not-allowed",
                         Icon && "pr-10",
@@ -118,7 +118,7 @@ const InputField: React.FC<InputFieldProps> = ({
             {bottomText && <div>{bottomText}</div>}
             {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
             {state?.errors && state.errors[name] && (
-                <span className="h-1 text-xs text-destructive">{state.errors[name]}</span>
+                <span className="h-1 text-xs text-red-500">{state.errors[name]}</span>
             )}
         </div>
     );

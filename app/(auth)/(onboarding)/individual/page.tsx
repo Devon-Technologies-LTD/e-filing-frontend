@@ -1,32 +1,26 @@
-import Link from "next/link"
 import { BackButton } from '@/components/ui/back-button'
-import { Button } from "@/components/ui/button"
-import SignUpLayout from "@/components/SignupLayout"
 import { IndividualComponent } from '@/components/auth/individual'
+import { SubmitButton } from '@/components/ui/submit-button';
+
 
 export default function IndividualPage() {
     return (
-        <SignUpLayout
-            headerContent={
-                <>
-                    <div className="text-sm font-extrabold text-app-primary relative z-10">
-                        <Link href="/login">
-                            LOG IN
-                        </Link>
-                    </div>
-                </>
-            }>
-            <IndividualComponent />
-            <div className="flex flex-col gap-4 items-center justify-between w-full space-y-4">
-                <footer className="bg-white shadow-sm px-2 py-6 absolute bottom-0 p-4 border-t-2 w-full ">
-                    <div className="mx-8 flex justify-between items-center">
-                        <BackButton />
-                        <Button className="bg-app-primary font-bold text-white p-6">
-                            <Link href="/otp">Create Account</Link>
-                        </Button>
-                    </div>
-                </footer>
+        <>
+            <div className="flex flex-col items-center w-full px-4 md:px-8 space-y-6">
+                <IndividualComponent />
             </div>
-        </SignUpLayout>
+            <footer className="bg-white shadow-sm fixed bottom-0 left-0 w-full px-4 py-4 border-t-2">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <BackButton />
+                    <SubmitButton
+                        value="Create Account"
+                        submitform="individual-form"
+                        pendingValue="Processing..."
+                        className="md:w-auto bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2"
+                    />
+                </div>
+            </footer>
+        </>
+
     )
 }
