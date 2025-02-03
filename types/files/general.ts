@@ -1,6 +1,6 @@
 import { LockIcon, InfoIcon } from 'lucide-react';
 
-// Type definitions
+
 export type Location = {
     value: string;
     label: string;
@@ -17,7 +17,7 @@ export interface FormField {
     required?: boolean;
 }
 
-// Constants (not interfaces)
+
 export const FILING_LOCATIONS: Location[] = [
     { value: "wuse-2", label: "WUSE ZONE 2" },
     { value: "garki", label: "GARKI" },

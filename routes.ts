@@ -1,4 +1,4 @@
-import { ROLES } from "./lib/_definitions";
+import { ROLES } from "./types/auth";
 
 /**
  * An array of routes that are accessible to the public
@@ -41,11 +41,12 @@ export const apiPrefix = "/api";
  * The default redirect path after logging in
  * @type {string}
  */
+
 export const DEFAULT_LOGIN_REDIRECT = "/case-filing";
 export const defaultLoginRedirect = (role?: ROLES) => {
   switch (role) {
-    case "SUPER":
-      return "/case-filing";
+    case "ASSIGNING_MAGISTRATES":
+      return "/overview/case";
     case "ADMIN":
       return "/case-filing";
     case "USER":
