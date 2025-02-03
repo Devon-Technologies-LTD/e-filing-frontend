@@ -1,6 +1,6 @@
 "use client";
-import { cn, getAuthorizedLinks } from "@/lib/utils";
-import { NavLink } from "./nav-link";
+import { cn } from "@/lib/utils";
+import { Navigation } from "./nav-link";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
@@ -9,18 +9,15 @@ export function MainNav({
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   // TODO: this should be dynamic and changed to database user role enum
-  const navLinks = getAuthorizedLinks("admin");
-
+  // const navLinks = getAuthorizedLinks("admin");
   return (
     <nav
       className={cn("flex items-center gap-3 text-sm xl:gap-4", className)}
       {...props}
     >
-      {navLinks.map((link) => (
-        <NavLink key={link.href} {...link} />
-      ))}
+      <Navigation />
       <Link href="/case-filing">
-        <Button variant="default" size="lg" className="h-12 uppercase">
+        <Button variant="default" size="sm" className="h-10 uppercase">
           File a Case
         </Button>
       </Link>

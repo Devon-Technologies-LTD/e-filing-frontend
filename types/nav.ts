@@ -1,8 +1,8 @@
-import { UserRole } from "./auth";
+import { ROLES } from "./auth";
 
 export interface NavItem {
   title: string;
   href: string;
-  roles: UserRole[];
+  roles: ROLES[];
   isActive?: (pathname: string) => boolean;
 }
