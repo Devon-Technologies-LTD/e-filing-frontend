@@ -1,5 +1,5 @@
 import { Icons } from "../svg/icons";
-
+import React from "react";
 export function NotificationIcon({
   type,
   initials,
@@ -30,6 +30,18 @@ export function NotificationIcon({
       return (
         <div className="flex items-center justify-center">
           <Icons.calender />
+        </div>
+      );
+    case "pdf":
+      return (
+        <div className="flex items-center justify-center">
+          <Icons.pdf />
+        </div>
+      );
+    case "shield":
+      return (
+        <div className="flex items-center justify-center">
+          <Icons.shield />
         </div>
       );
     default:

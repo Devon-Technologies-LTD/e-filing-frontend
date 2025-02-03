@@ -7,7 +7,7 @@ import {
   selectTriggerVariants,
   SelectValue,
 } from "./select";
-
+import React from "react";
 export const FilterDropdown = ({
   placeholder,
   options,

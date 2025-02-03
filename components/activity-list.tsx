@@ -1,8 +1,8 @@
 import { NotificationIcon } from "@/components/ui/notifications-icon";
-
-interface Notification {
+import React from "react";
+export interface INotification {
   id: string;
-  icon: "check" | "scale" | "initials" | "hearings";
+  icon: "check" | "scale" | "initials" | "hearings" | "pdf" | "shield";
   message: string;
   caseNumber: string;
   timestamp: string;
@@ -10,7 +10,7 @@ interface Notification {
 }
 
 interface ActivityListProps {
-  notifications: Notification[];
+  notifications: INotification[];
   showCaseNumberForCheck?: boolean;
 }
 
@@ -24,7 +24,7 @@ export function ActivityList({
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className="border-b flex items-center py-4 justify-between"
+          className="border-b py-3"
         >
           <div className="flex items-center gap-4">
             <NotificationIcon
@@ -47,7 +47,7 @@ export function ActivityList({
               )}
             </div>
           </div>
-          <span className="text-xs text-stone-600">
+          <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
             {notification.timestamp}
           </span>
         </div>
