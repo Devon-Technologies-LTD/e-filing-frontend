@@ -2,7 +2,7 @@
 
 import UserService from "@/lib/_services/user-service";
 import { ActivatorSchema, CreateStaffFormSchema, DeleteObjectFormSchema } from "@/lib/_definitions";
-import auth from "@/lib/auth";
+import { getUser } from "@/lib/server/auth";
 import { revalidatePath } from "next/cache";
 
 type ErrorResponse = {
@@ -51,7 +51,7 @@ export async function createStaff(_prevState: unknown, formData: FormData) {
 
 export async function updateStaff(formData: FormData) {
   const data = Object.fromEntries(formData);
-  const id = await auth.getUser() as string;
+  const id = await getUser() as string;
 
   const result = CreateStaffFormSchema.partial().safeParse(data);
 

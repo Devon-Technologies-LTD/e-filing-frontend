@@ -1,4 +1,14 @@
-export type TCaseFilterType = "recent" | "active" | "unassigned" | "concluded";
+export type TCaseFilterType =
+  | "all"
+  | "pending"
+  | "case"
+  | "recent"
+  | "active"
+  | "reassigned"
+  | "unassigned"
+  | "concluded"
+  | "request";
+export type MCaseFilterType = "case" | "magistrate";
 
 export interface ICase {
   caseId: string;
@@ -9,4 +19,15 @@ export interface ICase {
   magistrate: string;
   status: string;
   stage: string;
+  name: string;
+  email: string;
+  districts: string;
+  action: string;
+}
+export interface Management {
+  name: string;
+  email: string;
+  districts: string;
+  status: string;
+  action: string;
 }
