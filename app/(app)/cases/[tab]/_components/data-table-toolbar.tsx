@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { Search } from "lucide-react";
 import { CASE_TYPES, CaseTypes } from "@/types/files/case-type";
 import { useState } from "react";
