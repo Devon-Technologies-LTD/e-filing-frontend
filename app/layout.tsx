@@ -6,8 +6,8 @@ import { Provider } from "@/lib/provider";
 import NextTopLoader from 'nextjs-toploader';
 import Head from "next/head";
 import { ToastContainer, Zoom } from "react-toastify";
-
-
+import React from "react";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -33,27 +33,32 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <Head>
         <title>E-Filling Portal</title>
-        <meta name="description" content="E-Filling Portal - Manage your records seamlessly." />
+        <meta
+          name="description"
+          content="E-Filling Portal - Manage your records seamlessly."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.png" />
       </Head>
       <body
         className={`${inter.variable} ${inter.variable} font-inter antialiased bg-background min-h-dvh overflow-hidden w-full`}
       >
-        <ToastContainer
-          toastStyle={{
-            backgroundColor: "#ffffff",
-            color: "#000000",
-          }}
-          position="top-right"
-          hideProgressBar={true}
-          transition={Zoom}
-          autoClose={2000}
-        />
-        <Toaster />
-        <Provider>{children}</Provider>
-        <NextTopLoader showSpinner={false} color="#6F4E37" />
-        <Toaster />
+        <TooltipProvider>
+          <ToastContainer
+            toastStyle={{
+              backgroundColor: "#ffffff",
+              color: "#000000",
+            }}
+            position="top-right"
+            hideProgressBar={true}
+            transition={Zoom}
+            autoClose={2000}
+          />
+          <Toaster />
+          <Provider>{children}</Provider>
+          <NextTopLoader showSpinner={false} color="#6F4E37" />
+          <Toaster />
+        </TooltipProvider>
       </body>
     </html>
   );
