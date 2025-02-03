@@ -1,3 +1,4 @@
+import { ROLES } from "@/types/auth";
 import { z } from "zod";
 
 export const SignuplawyerSchema = z.object({
@@ -91,7 +92,6 @@ export type TFullUser = {
   updated_at: string;
 };
 
-export type ROLES = "USER" | "LAWYER" | "ADMIN" | "SUPER";
 export type GENDERS = "male" | "female" | "others";
 
 export type TUser = {
@@ -245,33 +245,33 @@ export type TMealCategoryCreateFormPayload = z.infer<
 
 export const CreateMenuFormSchema = z.object({
   id: z.string().uuid().optional(),
-  name: z.string().min(2, { message: 'Name is required' }).trim(),
+  name: z.string().min(2, { message: "Name is required" }).trim(),
   description: z.string().optional(),
   // ingredients: z.union([
   //   z.string({ message: 'Ingredients are required' }).array(), z.string()],
   //   { message: 'Ingredients are required' }
   // ).optional(),
   price: z.union([
-    z.string()
-      .refine(
-        // price should not have comma and should be number
-        (price) => !price?.includes(',') && !isNaN(Number(price)), 'Price should be a number without commas.'
-      ),
-    z.number()]),
+    z.string().refine(
+      // price should not have comma and should be number
+      (price) => !price?.includes(",") && !isNaN(Number(price)),
+      "Price should be a number without commas."
+    ),
+    z.number(),
+  ]),
   // sections: z.string().uuid().array(),
   // categories: z.string().uuid().array(),
   sections: z.union(
-    [z.string({ message: 'Sections are required' }).array(), z.string()],
+    [z.string({ message: "Sections are required" }).array(), z.string()],
     { message: "Sections are required" }
   ),
   categories: z.union(
-    [z.string({ message: 'Categories are required' }).array(), z.string()],
+    [z.string({ message: "Categories are required" }).array(), z.string()],
     { message: "Categories are required" }
   ),
-  tags: z.union(
-    [z.string().array(), z.string()],
-    { message: 'Tags are required' }
-  ),
+  tags: z.union([z.string().array(), z.string()], {
+    message: "Tags are required",
+  }),
   status: z.boolean().default(false),
   // image: z.instanceof(File)
   //   .refine(
@@ -284,10 +284,9 @@ export const CreateMenuFormSchema = z.object({
   //     (file) => checkFileType(file), `Only ${SUPPORTED_FILE_TYPE.join(', ')} formats are supported.`
   //   ),
   // notes: z.string().optional(),
-})
+});
 
-export type TMenuCreateFormPayload = z.infer<typeof CreateMenuFormSchema>
-
+export type TMenuCreateFormPayload = z.infer<typeof CreateMenuFormSchema>;
 
 /* Category and section schema */
 

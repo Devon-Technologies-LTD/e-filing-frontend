@@ -1,5 +1,5 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
-import { ICase } from "../types/case";
+import { ICase, Management } from "../types/case";
 
 interface Notification {
   id: string;
@@ -20,6 +20,10 @@ export const mockCases: ICase[] = [
     magistrate: "Boryo Aderola",
     status: "IN PROGRESS",
     stage: "First Information Report",
+    name: "CVfWuse/233456789/2024",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    action: "Koru - Koru Site",
   },
   {
     caseId: "CVfWuse/233456789/2024",
@@ -30,6 +34,33 @@ export const mockCases: ICase[] = [
     magistrate: "Boryo Aderola",
     status: "IN PROGRESS",
     stage: "First Information Report",
+    name: "CVfWuse/233456789/2024",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    action: "Koru - Koru Site",
+  },
+];
+export const management: Management[] = [
+  {
+    name: "CVfWuse/233456789/2024",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    status: "12/02/2025",
+    action: "Koru - Koru Site",
+  },
+  {
+    name: "CVfWuse/233456789/2024",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    status: "12/02/2025",
+    action: "Koru - Koru Site",
+  },
+  {
+    name: "CVfWuse/233456789/2024",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    status: "12/02/2025",
+    action: "Koru - Koru Site",
   },
 ];
 
@@ -96,7 +127,6 @@ export const notifications: Notification[] = [
   },
 ];
 
-
 export const demoData = {
   caseNumber: "CV/Wuse/233456789/2024",
   title:
@@ -153,3 +183,99 @@ export const demoData = {
     },
   ],
 };
+
+export const caseMetric = [
+  {
+    id: 1,
+    title: "Total Case Filed",
+    total: "5,675,000",
+    lastYear: "12,200",
+    color: "bg-gray-300",
+    description: "The total number of cases filed under Wuse zone 6.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 4500 },
+      { name: "Wuse Zone 2", cases: 3200 },
+      { name: "Wuse Zone 3", cases: 6000 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Active Cases",
+    total: "3,890,000",
+    lastYear: "9,450",
+    color: "bg-green-200",
+    description: "Cases that are still ongoing in Wuse division.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+  {
+    id: 3,
+    title: "Unassigned Cases",
+    total: "1,890,000",
+    lastYear: "2,450",
+    color: "bg-slate-100",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+  {
+    id: 4,
+    title: "Re-assigned Cases",
+    total: "1,890,000",
+    lastYear: "2,450",
+    color: "bg-red-100",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+  {
+    id: 5,
+    title: "Concluded Cases",
+    total: "1,890,000",
+    lastYear: "2,450",
+    color: "bg-blue-100",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+];
+export const magistrateMetric = [
+  {
+    id: 4,
+    title: "Re-assigned Cases",
+    total: "1,890,000",
+    lastYear: "2,450",
+    color: "bg-red-100",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+  {
+    id: 5,
+    title: "Concluded Cases",
+    total: "1,890,000",
+    lastYear: "2,450",
+    color: "bg-blue-100",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+];

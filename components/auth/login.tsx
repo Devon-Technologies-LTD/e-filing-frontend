@@ -7,21 +7,26 @@ import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
 import { LoginPasswordField } from "./login-component";
 import InputField from "../ui/InputField";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { redirect } from "next/navigation";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const LoginComponent = () => {
   const [state, dispatch] = useFormState(LoginAction, undefined);
-  useEffect(() => {
-    if (state?.success) {
-      toast.success(state.success);
-      redirect("/case-filing");
-    }
-    if (state?.message && !state.success) {
-      toast.error(state.message);
-    }
-  }, [state]);
+  // useEffect(() => {
+  //   if (state?.success) {
+  //     toast.success(state.success);
+  //     redirect("/case-filing");
+  //   }
+  //   if (state?.message && !state.success) {
+  //     toast.error(state.message);
+  //   }
+  // }, [state]);
 
   return (
     <>
@@ -51,9 +56,23 @@ const LoginComponent = () => {
           required
         />
         <LoginPasswordField />
+        <Select name="userType">
+          <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
+            <SelectValue className="text-neutral-700" placeholder="Please Select User type" />
+          </SelectTrigger>
+          <SelectContent className="bg-white w-[354px] text-zinc-900">
+            <SelectItem value="USER" className="text-sm font-semibold text-zinc-900">USER</SelectItem>
+            <SelectItem value="LAWYER" className="text-sm font-semibold text-zinc-900">LAWYER</SelectItem>
+            <SelectItem value="ADMIN" className="text-sm font-semibold text-zinc-900">ADMIN</SelectItem>
+            <SelectItem value="ASSIGNING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">ASSIGNING MAGISTRATES</SelectItem>
+            <SelectItem value="PRESIDING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">PRESIDING MAGISTRATES</SelectItem>
+          </SelectContent>
+        </Select>
         <p className="text-xs text-red-500 h-2 text-center">
           {state && state?.message}
         </p>
+
+
         <SubmitButton
           value="LOG IN"
           pendingValue="Processing..."

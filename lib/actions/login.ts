@@ -4,15 +4,15 @@ import {
   EMailFormSchema,
   LoginFormSchema,
   OTPFormSchema,
-  ROLES,
   SignupFormSchema,
 } from "@/lib/_definitions";
 import authService from "@/lib/_services/auth-service";
-import auth from "../auth";
+import  { createSession, deleteSession } from "../server/auth";
 import { redirect } from "next/navigation";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { DEFAULT_LOGIN_REDIRECT, defaultLoginRedirect } from "@/routes";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { ROLES } from "@/types/auth";
 
 interface LoginResponseData {
   ID: string;
@@ -38,6 +38,7 @@ type ErrorResponse = {
 
 export async function LoginAction(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
+  const userType = data.userType;
   const result = LoginFormSchema.safeParse(data);
   if (!result.success) {
     return {
@@ -46,6 +47,7 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       message: "Login failed",
     };
   }
+  let role: ROLES;
   try {
     const res = await authService.loginUser(result.data);
     const data = res.data as LoginResponseData; //Cast to the expected type
@@ -56,16 +58,18 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         first_name: data.first_name,
         last_name: data.last_name,
         phone_number: data.phone_number,
-        role: data.role as ROLES,
+        role: userType as ROLES,
+        // role: data.role as ROLES,
       },
       token: data.token,
     };
-    await auth.createSession(sessionData);
-    return {
-      status: 200,
-      message: "Login successful.",
-      success: true,
-    };
+    role = sessionData.user.role;
+    await createSession(sessionData);
+    // return {
+    //   status: 200,
+    //   message: "Login successful.",
+    //   success: true,
+    // };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     if (error?.response) {
@@ -99,7 +103,8 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
     }
   }
 
-  redirect(DEFAULT_LOGIN_REDIRECT);
+  // redirect(DEFAULT_LOGIN_REDIRECT);
+  redirect(defaultLoginRedirect(role));
 }
 export async function SignupAction(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -126,7 +131,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
       },
       token: data.token,
     };
-    await auth.createSession(sessionData);
+    await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     if (error?.response) {
@@ -184,7 +189,7 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
       },
       token: data.token,
     };
-    await auth.createSession(sessionData);
+    await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     if (error?.response) {
@@ -267,8 +272,7 @@ export async function ForgotPasswordAction(
 }
 
 export async function logoutAction() {
-  auth.deleteSession();
-  auth.user = null;
+  deleteSession();
   redirect("/login");
 }
 

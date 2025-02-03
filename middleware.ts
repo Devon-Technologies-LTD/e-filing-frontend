@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import auth from "@/lib/auth";
+import  { getUser, verifySession } from "@/lib/server/auth";
 
 import {
   DEFAULT_LOGIN_REDIRECT,
@@ -12,21 +12,18 @@ import {
 
 export async function middleware(request: NextRequest) {
   const nextUrl = request.nextUrl
-  const isLoggedIn = !!(await auth.getUser())
-  const session = await auth.verifySession()
+  const isLoggedIn = !!(await getUser())
+  const session = await verifySession()
   const user = session?.user
-
-
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-  // Exclude '/' from allowing subpaths
   const isPublicRoute = publicRoutes.some(route => {
     if (route === '/') {
-      return nextUrl.pathname === '/'; // Exact match only for '/'
+      return nextUrl.pathname === '/'; 
     }
-    return nextUrl.pathname.startsWith(route); // Allow subpaths for all other routes
+    return nextUrl.pathname.startsWith(route); 
   });
 
   if (isApiAuthRoute) {
@@ -36,6 +33,8 @@ export async function middleware(request: NextRequest) {
   if (isApiRoute) {
     return NextResponse.next()
   }
+  console.log(isAuthRoute);
+  
 
   if (isAuthRoute) {
     if (isLoggedIn) {

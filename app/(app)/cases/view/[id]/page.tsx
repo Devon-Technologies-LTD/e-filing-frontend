@@ -14,7 +14,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
       <div className="container py-4 grid grid-cols-12 gap-5">
         <div className="col-span-7 bg-white p-2">
           <CaseOverview {...demoData} />
-        </div>{" "}
+        </div>
         <div className="col-span-5 bg-white p-2">
           <CaseUpdates />
         </div>
