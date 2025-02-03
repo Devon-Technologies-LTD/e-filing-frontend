@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
-
+import React from "react";
 const STATUS_VARIANTS = {
   // Pending states
   "PENDING RE-ASSIGNMENT": "pending",

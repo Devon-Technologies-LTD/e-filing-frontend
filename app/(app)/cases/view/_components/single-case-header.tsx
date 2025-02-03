@@ -1,27 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import React from "react";
 import Link from "next/link";
 import { QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
-import ReusableTabs from "@/components/ui/reusable-tabs";
-import { useState } from "react";
-import { Icons } from "@/components/svg/icons";
 
 export function SingleCaseHeader({ params }: { params: { id: string } }) {
   const id = decodeURIComponent(params.id);
-  const tabs: { id: any; label: string }[] = [
-    { id: "overview", label: "Case Overview" },
-    { id: "documents", label: "Documents" },
-    { id: "decisions", label: "Decisions" },
-  ];
-  const [activeTab, setActiveTab] = useState("overview");
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-  };
+  
   return (
-    <div className="space-y-3 bg-white pt-4 shadow-xl ">
+    <div className="space-y-3 bg-white pt-4 ">
       <div className="container space-y-3">
         <div>
           {/* Breadcrumb */}
@@ -57,17 +45,7 @@ export function SingleCaseHeader({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-        {/* Navigation */}
-
-        <div className="flex justify-between items-center">
-          <ReusableTabs
-            tablistClassName="border-0"
-            tabs={tabs}
-            onTabChange={handleTabChange}
-            activeTab={activeTab}
-          />
-          <Icons.settings />
-        </div>
+      
       </div>
     </div>
   );
