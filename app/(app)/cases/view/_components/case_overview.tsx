@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ClaimantInfo } from "./claimant-info";
 import { MagistrateCourtInfo } from "./magistrate-court-info";

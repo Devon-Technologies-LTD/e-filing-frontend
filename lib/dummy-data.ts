@@ -1,14 +1,8 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
-import { ICase, Management } from "../types/case";
+import { Management } from "../types/case";
+import { ICase } from "../types/case";
+import { INotification } from "@/components/activity-list";
 
-interface Notification {
-  id: string;
-  icon: "check" | "scale" | "initials" | "hearings";
-  message: string;
-  caseNumber: string;
-  timestamp: string;
-  initials?: string;
-}
 
 export const mockCases: ICase[] = [
   {
@@ -79,7 +73,7 @@ export const mockDrafts: IDraftsColumn[] = [
   },
 ];
 
-export const notifications: Notification[] = [
+export const notifications: INotification[] = [
   {
     id: "1",
     icon: "check",
@@ -124,6 +118,32 @@ export const notifications: Notification[] = [
     message: "A Magistrate court (Division A) has been assigned to your case",
     caseNumber: "CV/Wuse/233456789/2024",
     timestamp: "2 weeks ago",
+  },
+];
+export const documentHistory: INotification[] = [
+  {
+    id: "1",
+    icon: "pdf",
+    message:
+      "A Documents titled “More T-Pain” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+    caseNumber: "",
+    timestamp: "2 hours ago",
+  },
+  {
+    id: "2",
+    icon: "shield",
+    message:
+      "Seal and QR code were generated for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+    caseNumber: "",
+    timestamp: "2 hours ago",
+  },
+  {
+    id: "3",
+    icon: "pdf",
+    message:
+      "23 Documents uploaded for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+    caseNumber: "",
+    timestamp: "2 hours ago",
   },
 ];
 
