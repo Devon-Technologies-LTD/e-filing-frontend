@@ -61,3 +61,11 @@ export const CASE_OPTIONS: Record<CaseTypes, CaseOption[]> = {
 
 // Define the valid case types
 export type CaseTypes = "criminal" | "civil" | "family";
+
+export const CASES_FILED: CaseOption[] = [
+  { value: "active", label: "ACTIVE CASES" },
+  { value: "pending", label: "PENDING CASES(NON - ASSIGNED)" },
+  { value: "reassigned", label: "RE-ASSIGNED CASES" },
+  { value: "completed", label: "COMPLETED (CLOSED) CASES" },
+];
+export type CasesFiled = "active" | "pending" | "reassigned" | "completed";

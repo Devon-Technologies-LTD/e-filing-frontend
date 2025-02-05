@@ -13,7 +13,7 @@ export default function LayoutPage({
   const activeTab = params?.tab as string;
 
   const handleTabChange = (newTab: string) => {
-    router.push(`/cases/${newTab}`);
+    router.push(`/your-cases/${newTab}`);
   };
   const tabs: { id: TCaseFilterType; label: string }[] = [
     { id: "case", label: "My Cases" },
