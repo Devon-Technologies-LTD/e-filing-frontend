@@ -20,8 +20,8 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
   const isPublicRoute = publicRoutes.some(route => {
-    if (route === '/') {
-      return nextUrl.pathname === '/'; 
+    if (route === '/login') {
+      return nextUrl.pathname === '/login'; 
     }
     return nextUrl.pathname.startsWith(route); 
   });
