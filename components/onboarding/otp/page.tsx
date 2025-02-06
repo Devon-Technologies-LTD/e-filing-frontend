@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { OtpComponent } from '@/components/auth/otp'
+import { OtpComponent } from '@/components/onboarding/signup/otp'
 
 
 export default function OtpPage() {

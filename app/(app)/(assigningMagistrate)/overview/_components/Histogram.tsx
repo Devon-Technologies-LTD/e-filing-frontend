@@ -9,6 +9,8 @@ import {
     Title,
     Tooltip,
     ChartOptions,
+    ChartData,
+    TooltipItem,
 } from "chart.js";
 import { FC } from "react";
 
@@ -24,14 +26,14 @@ interface HistogramProps {
 }
 
 const Histogram: FC<HistogramProps> = ({ labels, data, label, histogramTitle }) => {
-    const chartData = {
+    const chartData: ChartData<"bar"> = {
         labels: labels,
         datasets: [
             {
                 label: label,
                 data: data,
-                backgroundColor: "rgba(0,0,0, 0.6)",
-                borderColor: "rgba(0,0,0, 1)",
+                backgroundColor: "#EB963F",
+                borderColor: "#EB963F",
                 borderWidth: 1,
                 borderRadius: 10, // Rounded corners for the bars
             },
@@ -68,6 +70,19 @@ const Histogram: FC<HistogramProps> = ({ labels, data, label, histogramTitle }) 
                     size: 14, // Adjust font size
                 },
             },
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    label: (tooltipItem: TooltipItem<"bar">) => {
+                        const value = tooltipItem.raw as number;
+                        return `Value: ${value}`;
+                    },
+                },
+            },
+        },
+        hover: {
+            mode: "nearest",
+            // animationDuration: 300, // Smooth highlight effect
         },
     };
 

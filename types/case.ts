@@ -24,7 +24,7 @@ export interface ICase {
   districts: string;
   action: string;
 }
-export interface Management {
+export interface TManagement {
   name: string;
   email: string;
   districts: string;

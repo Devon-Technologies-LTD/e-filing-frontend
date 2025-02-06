@@ -48,6 +48,8 @@ export function TrackCaseDetails() {
         </Button>
       </div>
 
+      
+
       <ReusableTabs
         tabs={tabs}
         onTabChange={handleTabChange}
