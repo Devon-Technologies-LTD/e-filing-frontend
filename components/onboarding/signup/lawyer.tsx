@@ -5,7 +5,6 @@ import StepComponent from "../../auth/step";
 import InputField from "@/components/ui/InputField";
 import PasswordField from "@/components/ui/PasswordField";
 import Nin from "@/public/assets/images/nin.png";
-import Image from "next/image";
 import { useFormState } from "react-dom";
 import {
   Select,
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import TransformingLineLink from "../../ui/animation-link";
 import { SignupAction } from "@/lib/actions/login";
+import DragDropUploader from "./DragDropUploaderComponent";
 
 const LawyerComponent = () => {
   const [selectedMethod, setSelectedMethod] = useState<string>("");
@@ -31,14 +31,14 @@ const LawyerComponent = () => {
 
   return (
     <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-      {/* <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
+      <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
         <StepComponent
           currentStep={2}
           totalSteps={3}
           heading="Provide your information to get started!"
           subheading="I'm a Legal Practitioner"
         />
-      </div> */}
+      </div>
       <form id="lawyer-form" action={dispatch} className="md:w-1/3 space-y-6">
         <input type="hidden" name="role" value="LAWYER" />
         <input type="hidden" name="first_name" value="first_user" />
@@ -97,7 +97,7 @@ const LawyerComponent = () => {
           {/* NIN Section */}
           {selectedMethod === "NIN" && (
             <div className="space-y-6">
-              
+
               <div>
                 <InputField
                   id="nin"
@@ -113,31 +113,13 @@ const LawyerComponent = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-                <div className="w-full md:max-w-[50%]">
-                  <div className="bg-zinc-100 h-[145px] mb-3 flex items-center justify-center">
-                    <TransformingLineLink
-                      href="#"
-                      text="Click or Drag file here"
-                    />
-                  </div>
-                  <p className="text-sm font-bold text-neutral-600">
-                    FRONT PAGE VIEW
-                  </p>
-                  <p className="text-xs font-bold text-neutral-600">
-                    Please upload a clear and legible image of your ID card.
-                    Accepted formats are JPG, PNG, or PDF, with a maximum file
-                    size of 5MB.
-                  </p>
-                </div>
-                <div className="w-full md:max-w-[50%]">
-                  <Image
-                    src={Nin}
-                    alt="legal-image"
-                    className="w-full h-full object-cover object-center transition-transform duration-300 ease-in-out"
-                  />
-                </div>
-              </div>
+
+              <DragDropUploader imageSrc="/assets/images/nin.png" />
+
+              <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
+              <p className="text-xs font-bold text-neutral-600">
+                Please upload a clear and legible image of your ID card. Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.
+              </p>
             </div>
           )}
 
@@ -156,7 +138,7 @@ const LawyerComponent = () => {
               id="phone"
               type="text"
               label="PHONE NUMBER"
-              name=""
+              name="phone_number"
               placeholder="e.g +2347030338024"
               required
               error={errors.phone_number?.[0]}
