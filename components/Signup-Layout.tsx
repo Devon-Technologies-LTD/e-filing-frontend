@@ -1,12 +1,13 @@
 import { LogoIcon } from "@/components/svg/logoIcon";
 import { ReactNode } from "react";
+import Link from "next/link";
 
 interface SignUpLayoutProps {
     children: ReactNode;
-    headerContent?: ReactNode;
+    loginLink?: ReactNode;
 }
 
-const SignUpLayout = ({ children, headerContent }: SignUpLayoutProps) => {
+const SignUpLayout = ({ children, loginLink }: SignUpLayoutProps) => {
     return (
         <main className="relative w-full min-h-screen bg-gray-50">
             <header className="w-full bg-white shadow-sm px-2 py-6">
@@ -21,12 +22,12 @@ const SignUpLayout = ({ children, headerContent }: SignUpLayoutProps) => {
                             </div>
                         </div>
                     </div>
-                    {headerContent && (
-                        <div className="hidden md:flex items-center text-app-primary group relative">
-                            {headerContent}
-                            <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-24 group-hover:bg-app-secondary"></div>
+                    <div className="hidden md:flex items-center text-app-primary group relative">
+                        <div className="text-sm font-extrabold text-app-primary">
+                            <Link href="/login">{loginLink}</Link>
                         </div>
-                    )}
+                        <div className="absolute bottom-0 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-24 group-hover:bg-app-secondary"></div>
+                    </div>
                 </div>
             </header>
             <section className="mx-auto py-8 px-4 sm:px-6 lg:px-8">

@@ -5,18 +5,13 @@ import { mockCases } from "@/lib/dummy-data";
 import { TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
-import { mainColumns, unassignedColumns } from "./_components/table-columns";
+import { mainColumns } from "./_components/table-columns";
 
 export default function FilteredCases() {
   const params = useParams();
   const tab = params.tab as TCaseFilterType;
   const getColumns = () => {
-    switch (tab) {
-      case "unassigned":
-        return unassignedColumns;
-      default:
-        return mainColumns;
-    }
+    return mainColumns;
   };
   const columns = getColumns();
 

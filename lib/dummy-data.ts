@@ -1,8 +1,6 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
-import { Management } from "../types/case";
-import { ICase } from "../types/case";
+import { ICase, TManagement } from "../types/case";
 import { INotification } from "@/components/activity-list";
-
 
 export const mockCases: ICase[] = [
   {
@@ -34,27 +32,27 @@ export const mockCases: ICase[] = [
     action: "Koru - Koru Site",
   },
 ];
-export const management: Management[] = [
+export const management: TManagement[] = [
   {
-    name: "CVfWuse/233456789/2024",
+    name: "Prince Muteh",
     email: "John Ibuku Johnson vs Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
+    status: "Active",
+    action: "['view profile', 'De-activate User', 'Delete user']",
+  },
+  {
+    name: "Peter John",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    status: "Inactive",
+    action: "['view profile', 'De-activate User', 'Delete user']",
   },
   {
     name: "CVfWuse/233456789/2024",
     email: "John Ibuku Johnson vs Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
-  },
-  {
-    name: "CVfWuse/233456789/2024",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
+    status: "Pending",
+    action: "['view profile', 'De-activate User', 'Delete user']",
   },
 ];
 
@@ -204,98 +202,168 @@ export const demoData = {
   ],
 };
 
-export const caseMetric = [
-  {
-    id: 1,
-    title: "Total Case Filed",
-    total: "5,675,000",
-    lastYear: "12,200",
-    color: "bg-gray-300",
-    description: "The total number of cases filed under Wuse zone 6.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 4500 },
-      { name: "Wuse Zone 2", cases: 3200 },
-      { name: "Wuse Zone 3", cases: 6000 },
+export const caseMetric = {
+  histogram: {
+    labels: [
+      "Wuse Zone 1",
+      "Wuse Zone 2",
+      "Wuse Zone 3",
+      "Wuse Zone 4",
+      "Wuse Zone 5",
     ],
+    data: [4500, 3200, 6000, 2500, 4000],
+    label: "Case Frequency",
+    histogramTitle: "Case Distribution Across Wuse Division",
+  },
+  data: [
+    {
+      id: 1,
+      title: "Total Case Filed",
+      total: "5,675,000",
+      lastYear: "12,200",
+      color: "bg-zinc-100",
+      description: "The total number of cases filed under Wuse zone 6.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+      ],
+    },
+    {
+      id: 2,
+      title: "Active Cases",
+      total: "3,890,000",
+      lastYear: "9,450",
+      color: "bg-green-50",
+      description: "Cases that are still ongoing in Wuse division.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 3,
+      title: "Unassigned Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-orange-50",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 4,
+      title: "Re-assigned Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-zinc-50",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 5,
+      title: "Concluded Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-zinc-100",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+  ],
+};
+export const magistrateMetric = {
+  histogram: {
+    labels: [
+      "Wuse Zone 1",
+      "Wuse Zone 2",
+      "Wuse Zone 3",
+      "Wuse Zone 4",
+      "Wuse Zone 5",
+      "Wuse Zone 6",
+      "Wuse Zone 7",
+      "Wuse Zone 8",
+      "Wuse Zone 9",
+      "Wuse Zone 10",
+    ],
+    data: [2000, 1500, 3000, 1000, 2500, 3000, 1000, 2500, 2000, 1500],
+    label: "Magistrate Frequency",
+    histogramTitle: "Magistrate Distribution Across Wuse Division",
+  },
+  data: [
+    {
+      id: 4,
+      title: "Re-assigned Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-gray-100",
+      description: "The total number of cases filed under Wuse Zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 5,
+      title: "Concluded Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-slate-200",
+      description: "The total number of cases filed under Wuse Zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+  ],
+};
+
+export const hearings = [
+  {
+    caseNumber: "CV/Wuse/233456789/2024",
+    parties:
+      "Johnathan Smith and Associates vs. The Federal Housing Development Corporation of the State of New Lagos",
+    description:
+      "Breach of Contract Regarding Urban Development Project Phase 3, Filed on Behalf of Affected Stakeholders",
+    hearingDate: "12th January, 2025",
+    hearingTime: "9:00 AM",
+    displayDate: "12/01/2025",
   },
   {
-    id: 2,
-    title: "Active Cases",
-    total: "3,890,000",
-    lastYear: "9,450",
-    color: "bg-slate-200",
-    description: "Cases that are still ongoing in Wuse division.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
+    caseNumber: "CV/Wuse/233456790/2024",
+    parties:
+      "Doe Legal Services vs. The City Planning Authority of Greater Abuja",
+    description:
+      "Dispute Over Land Use Regulations and Compensation Claims for Displaced Residents",
+    hearingDate: "15th February, 2025",
+    hearingTime: "10:30 AM",
+    displayDate: "15/02/2025",
   },
   {
-    id: 3,
-    title: "Unassigned Cases",
-    total: "1,890,000",
-    lastYear: "2,450",
-    color: "bg-gray-100",
-    description: "The total number of cases  filed under wuse zone 2.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
-  },
-  {
-    id: 4,
-    title: "Re-assigned Cases",
-    total: "1,890,000",
-    lastYear: "2,450",
-    color: "bg-gray-100",
-    description: "The total number of cases  filed under wuse zone 2.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
-  },
-  {
-    id: 5,
-    title: "Concluded Cases",
-    total: "1,890,000",
-    lastYear: "2,450",
-    color: "bg-gray-100",
-    description: "The total number of cases  filed under wuse zone 2.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
-  },
-];
-export const magistrateMetric = [
-  {
-    id: 4,
-    title: "Re-assigned Cases",
-    total: "1,890,000",
-    lastYear: "2,450",
-    color: "bg-gray-100",
-    description: "The total number of cases  filed under wuse zone 2.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
-  },
-  {
-    id: 5,
-    title: "Concluded Cases",
-    total: "1,890,000",
-    lastYear: "2,450",
-    color: "bg-slate-200",
-    description: "The total number of cases  filed under wuse zone 2.",
-    districts: [
-      { name: "Wuse Zone 1", cases: 2000 },
-      { name: "Wuse Zone 2", cases: 1500 },
-      { name: "Wuse Zone 3", cases: 3000 },
-    ],
+    caseNumber: "CV/Wuse/233456791/2024",
+    parties: "Green Energy Ltd. vs. National Power Grid Authority",
+    description: "Contractual Violations in Renewable Energy Supply Agreements",
+    hearingDate: "20th March, 2025",
+    hearingTime: "11:45 AM",
+    displayDate: "20/03/2025",
   },
 ];

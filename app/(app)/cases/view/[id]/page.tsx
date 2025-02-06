@@ -38,7 +38,6 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             onTabChange={handleTabChange}
             activeTab={activeTab}
           />
-
           <DropdownMenu>
             <DropdownMenuTrigger className=" ">
               <Tooltip>
