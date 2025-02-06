@@ -7,7 +7,7 @@ import {
   SignupFormSchema,
 } from "@/lib/_definitions";
 import authService from "@/lib/_services/auth-service";
-import  { createSession, deleteSession } from "../server/auth";
+import { createSession, deleteSession } from "../server/auth";
 import { redirect } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT, defaultLoginRedirect } from "@/routes";
 import { cookies } from "next/headers";

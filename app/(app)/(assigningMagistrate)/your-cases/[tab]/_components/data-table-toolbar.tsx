@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { YearSelector } from "@/components/year-selector";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
+import { AllDistrictFilter } from "@/components/filters/all-district";
 
 export function CasesDataTableToolbar() {
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
@@ -28,8 +29,7 @@ export function CasesDataTableToolbar() {
       </div>
 
       <section className="flex gap-3">
-        <YearSelector />
-        <YearSelector />
+        <AllDistrictFilter />
         <FilterDropdown
           triggerVariant="outline"
           itemVariant="outline"
@@ -38,6 +38,7 @@ export function CasesDataTableToolbar() {
           value={selectedCase}
           onChange={handleCaseTypeChange}
         />
+        <YearSelector />
       </section>
     </div>
   );

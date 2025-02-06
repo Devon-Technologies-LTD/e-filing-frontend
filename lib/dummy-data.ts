@@ -1,8 +1,6 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
-import { Management } from "../types/case";
-import { ICase } from "../types/case";
+import { ICase, TManagement } from "../types/case";
 import { INotification } from "@/components/activity-list";
-
 
 export const mockCases: ICase[] = [
   {
@@ -34,27 +32,27 @@ export const mockCases: ICase[] = [
     action: "Koru - Koru Site",
   },
 ];
-export const management: Management[] = [
+export const management: TManagement[] = [
   {
-    name: "CVfWuse/233456789/2024",
+    name: "Prince Muteh",
     email: "John Ibuku Johnson vs Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
+    status: "Active",
+    action: "['view profile', 'De-activate User', 'Delete user']",
+  },
+  {
+    name: "Peter John",
+    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    districts: "CRIMINAL CASE",
+    status: "Inactive",
+    action: "['view profile', 'De-activate User', 'Delete user']",
   },
   {
     name: "CVfWuse/233456789/2024",
     email: "John Ibuku Johnson vs Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
-  },
-  {
-    name: "CVfWuse/233456789/2024",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    districts: "CRIMINAL CASE",
-    status: "12/02/2025",
-    action: "Koru - Koru Site",
+    status: "Pending",
+    action: "['view profile', 'De-activate User', 'Delete user']",
   },
 ];
 
@@ -226,6 +224,12 @@ export const caseMetric = {
       color: "bg-zinc-100",
       description: "The total number of cases filed under Wuse zone 6.",
       districts: [
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
         { name: "Wuse Zone 1", cases: 4500 },
         { name: "Wuse Zone 2", cases: 3200 },
         { name: "Wuse Zone 3", cases: 6000 },
