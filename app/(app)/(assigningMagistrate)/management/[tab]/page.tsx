@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/data-table";
-import { mockCases } from "@/lib/dummy-data";
+import { management } from "@/lib/dummy-data";
 import { TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
@@ -19,11 +19,10 @@ export default function FilteredCases() {
     }
   };
   const columns = getColumns();
-
   return (
-    <div className="space-y-12">
-      <CasesDataTableToolbar />
-      <DataTable columns={columns} loading={false} data={mockCases} />
+    <div className="space-y-8">
+      <CasesDataTableToolbar columns={columns} tab={tab} />
+      <DataTable columns={columns} loading={false} data={management} />
     </div>
   );
 }

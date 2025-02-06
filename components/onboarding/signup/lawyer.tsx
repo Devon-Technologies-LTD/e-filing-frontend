@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import StepComponent from "./step";
+import StepComponent from "../../auth/step";
 import InputField from "@/components/ui/InputField";
 import PasswordField from "@/components/ui/PasswordField";
 import Nin from "@/public/assets/images/nin.png";
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TransformingLineLink from "../ui/animation-link";
+import TransformingLineLink from "../../ui/animation-link";
 import { SignupAction } from "@/lib/actions/login";
 
 const LawyerComponent = () => {
@@ -31,14 +31,14 @@ const LawyerComponent = () => {
 
   return (
     <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-      <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
+      {/* <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
         <StepComponent
           currentStep={2}
           totalSteps={3}
           heading="Provide your information to get started!"
           subheading="I'm a Legal Practitioner"
         />
-      </div>
+      </div> */}
       <form id="lawyer-form" action={dispatch} className="md:w-1/3 space-y-6">
         <input type="hidden" name="role" value="LAWYER" />
         <input type="hidden" name="first_name" value="first_user" />

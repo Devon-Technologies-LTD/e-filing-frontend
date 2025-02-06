@@ -25,3 +25,14 @@ export const STEP_TITLES: Record<number, string> = {
   5: "Review all case details before payment",
   6: "Generating your case seal and QR Code",
 };
+export const ONBOARDING_FORM_STEPS = [
+  "Case Types",
+  "Upload Documents",
+  "Generate Seal and QR Code",
+];
+
+export const ONBOARDING_FORM_STEPS_TITLES: Record<number, string> = {
+  1: "How will you be filling your cases",
+  2: "Provide your information to get Started",
+  3: "Please Input the One Time Password Sent (OTP)",
+};
