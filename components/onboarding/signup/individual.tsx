@@ -24,14 +24,14 @@ const IndividualComponent = () => {
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-                {/* <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
+                <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
                     <StepComponent
                         currentStep={2}
                         totalSteps={3}
                         heading="Provide your information to get started!"
                         subheading="I'm FILING FOR MYSELF"
                     />
-                </div> */}
+                </div>
 
                 <form id="individual-form" action={dispatch} className="md:w-1/3 justify-start items-start space-y-6">
                     <input type="hidden" name="role" value="USER" />
