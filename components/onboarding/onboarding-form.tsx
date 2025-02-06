@@ -5,7 +5,6 @@ import { useCaseFilingForm } from "@/context/file-case";
 import { useEffect } from "react";
 import { LawyerComponent } from "./signup/lawyer";
 import { OtpComponent } from "./signup/otp";
-import { Signup } from "../auth/signup";
 import { IndividualComponent } from "./signup/individual";
 
 export function OnboardingForm({ initialStep, location }: { initialStep?: number; location?: string }) {
@@ -18,20 +17,21 @@ export function OnboardingForm({ initialStep, location }: { initialStep?: number
   }, [initialStep, currentStep, setCurrentStep]);
 
   const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <Signup />;
-      case 2:
-        if (location === "lawyer") {
-          return <LawyerComponent />;
-        } else {
-          return <IndividualComponent />;
-        }
-      case 3:
-        return <OtpComponent />;
-      default:
-        return null;
-    }
+    return <LawyerComponent />;
+    // switch (currentStep) {
+    //   case 1:
+    //     return <Signup />;
+    //   case 2:
+    //     if (location === "lawyer") {
+    //       return <LawyerComponent />;
+    //     } else {
+    //       return <IndividualComponent />;
+    //     }
+    //   case 3:
+    //     return <OtpComponent />;
+    //   default:
+    //     return null;
+    // }
   };
 
   return <div>{renderStep()}</div>;
