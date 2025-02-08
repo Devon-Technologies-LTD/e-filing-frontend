@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React from "react";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { GogleIcon } from "@/components/svg/gogle-icon";
@@ -7,6 +8,13 @@ import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
 import { LoginPasswordField } from "./login-component";
 import InputField from "../ui/InputField";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const LoginComponent = () => {
   const [state, dispatch] = useFormState(LoginAction, undefined);
@@ -38,6 +46,19 @@ const LoginComponent = () => {
           required
         />
         <LoginPasswordField />
+        <Select name="userType">
+          <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
+            <SelectValue className="text-neutral-700" placeholder="Please Select User type" />
+          </SelectTrigger>
+          <SelectContent className="bg-white w-[354px] text-zinc-900">
+            <SelectItem value="USER" className="text-sm font-semibold text-zinc-900">USER</SelectItem>
+            <SelectItem value="LAWYER" className="text-sm font-semibold text-zinc-900">LAWYER</SelectItem>
+            <SelectItem value="ADMIN" className="text-sm font-semibold text-zinc-900">ADMIN</SelectItem>
+            <SelectItem value="ASSIGNING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">ASSIGNING MAGISTRATES</SelectItem>
+            <SelectItem value="PRESIDING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">PRESIDING MAGISTRATES</SelectItem>
+            <SelectItem value="CHIEF_JUDGE" className="text-sm font-semibold text-zinc-900">CHIEF JUDGE</SelectItem>
+          </SelectContent>
+        </Select>
         <p className="text-xs text-red-500 h-2 text-center">
           {state && state?.message}
         </p>

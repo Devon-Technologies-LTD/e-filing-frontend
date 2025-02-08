@@ -115,3 +115,8 @@ export const formatDate = (date: Date) => {
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+
+export const formatNumber = (num: number) => {
+  return new Intl.NumberFormat().format(num);
+};

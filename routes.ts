@@ -49,12 +49,13 @@ export const defaultLoginRedirect = (role?: ROLES) => {
       return "/overview/case";
     case "ADMIN":
       return "/case-filing";
-    case "USER":
-      return "/case-filing";
+    case ROLES.CHIEF_JUDGE:
+    case ROLES.DIRECTOR_MAGISTRATES:
+      return "/overview/case";
     case "LAWYER":
     case "USER":
       return "/case-filing";
     default:
-      return "/";
+      return "/cases";
   }
 };

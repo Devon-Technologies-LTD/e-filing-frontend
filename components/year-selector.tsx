@@ -22,7 +22,7 @@ export function YearSelector() {
     <Select defaultValue={selectedYear} onValueChange={setSelectedYear}>
       <SelectTrigger
         className={cn(
-          "flex items-center gap-2 h-12 border-app-tertiary border-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0"
+          "flex items-center gap-2 h-11 border-app-tertiary border-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0"
         )}
         aria-label="Select account"
       >

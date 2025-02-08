@@ -1,6 +1,8 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
 import { ICase, TManagement } from "../types/case";
 import { INotification } from "@/components/activity-list";
+import { IUsersColumn } from "@/app/(app)/(assigningMagistrate)/management/[tab]/_components/chief-judge/table-column";
+import { USER_STATUS } from "@/types/auth";
 
 export const mockCases: ICase[] = [
   {
@@ -70,6 +72,24 @@ export const mockDrafts: IDraftsColumn[] = [
     lastEdit: "12/02/2025",
   },
 ];
+export const mockUsers: IUsersColumn[] = [
+  {
+    id: "1",
+    name: "Bayo Adetola",
+    email: "bayoadetola@gmail.com",
+    status: USER_STATUS.ACTIVE,
+    division: "Life Camp",
+    courtType: "Magistrate Court",
+  },
+  {
+    id: "1",
+    name: "Bayo Adetola",
+    email: "bayoadetola@gmail.com",
+    status: USER_STATUS.INACTIVE,
+    division: "Kuje",
+    courtType: "Family Court",
+  },
+];
 
 export const notifications: INotification[] = [
   {
@@ -123,7 +143,7 @@ export const documentHistory: INotification[] = [
     id: "1",
     icon: "pdf",
     message:
-      "A Documents titled “More T-Pain” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+      "A Documents titled “Cases” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
     caseNumber: "",
     timestamp: "2 hours ago",
   },
@@ -221,6 +241,104 @@ export const caseMetric = {
       title: "Total Case Filed",
       total: "5,675,000",
       lastYear: "12,200",
+      variant: "total",
+      color: "bg-neutral-200",
+      description: "The total number of cases filed under Wuse zone 6.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+        { name: "Wuse Zone 1", cases: 4500 },
+        { name: "Wuse Zone 2", cases: 3200 },
+        { name: "Wuse Zone 3", cases: 6000 },
+      ],
+    },
+    {
+      id: 2,
+      title: "Active Cases",
+      total: "3,890,000",
+      lastYear: "9,450",
+      variant: "active",
+      color: "bg-green-50",
+      description: "Cases that are still ongoing in Wuse division.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 3,
+      title: "Unassigned Cases",
+      total: "1,890,000",
+      variant: "unassigned",
+      lastYear: "2,450",
+      color: "bg-orange-50",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 4,
+      title: "Re-assigned Cases",
+      total: "1,890,000",
+      variant: "reassigned",
+      lastYear: "2,450",
+      color: "bg-zinc-50",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 5,
+      title: "Concluded Cases",
+      variant: "concluded",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-zinc-100",
+      description: "The total number of cases  filed under wuse zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+  ],
+};
+export const chiefJudgeCaseMetric = {
+  histogram: {
+    labels: [
+      "Wuse Zone 2",
+      "Garki",
+      "Wuse Zone 6",
+      "Lugbe",
+      "Jiwa",
+      "Karu",
+      "Karsi",
+      "Kuje",
+      "Bwari",
+      "Mpape",
+      "Kubwa",
+    ],
+    data: [4500, 3200, 6000, 2500, 4000, 4000, 3923, 45542, 2344, 8432],
+    label: "Case Frequency",
+    histogramTitle: "Case Distribution Across Divisions (Abuja)",
+  },
+  data: [
+    {
+      id: 1,
+      title: "Total Case Filed",
+      total: "5,675,000",
+      lastYear: "12,200",
       color: "bg-zinc-100",
       description: "The total number of cases filed under Wuse zone 6.",
       districts: [
@@ -306,6 +424,54 @@ export const magistrateMetric = {
     data: [2000, 1500, 3000, 1000, 2500, 3000, 1000, 2500, 2000, 1500],
     label: "Magistrate Frequency",
     histogramTitle: "Magistrate Distribution Across Wuse Division",
+  },
+  data: [
+    {
+      id: 4,
+      title: "Re-assigned Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-gray-100",
+      description: "The total number of cases filed under Wuse Zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+    {
+      id: 5,
+      title: "Concluded Cases",
+      total: "1,890,000",
+      lastYear: "2,450",
+      color: "bg-slate-200",
+      description: "The total number of cases filed under Wuse Zone 2.",
+      districts: [
+        { name: "Wuse Zone 1", cases: 2000 },
+        { name: "Wuse Zone 2", cases: 1500 },
+        { name: "Wuse Zone 3", cases: 3000 },
+      ],
+    },
+  ],
+};
+export const chiefJudgeMagistrateMetric = {
+  histogram: {
+    labels: [
+      "Wuse Zone 2",
+      "Garki",
+      "Wuse Zone 6",
+      "Lugbe",
+      "Jiwa",
+      "Karu",
+      "Karsi",
+      "Kuje",
+      "Bwari",
+      "Mpape",
+      "Kubwa",
+    ],
+    data: [2000, 1500, 3000, 1000, 2500, 3000, 1000, 2500, 2000, 1500],
+    label: "Magistrate Frequency",
+    histogramTitle: "Magistrate Distribution Across Divisions (ABUJA)",
   },
   data: [
     {

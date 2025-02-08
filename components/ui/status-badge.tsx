@@ -34,7 +34,7 @@ const STATUS_VARIANTS = {
 
   // Activity states
   "INACTIVE": "inactive",
-  "ACTIVE": "active",
+  "ACTIVE": "progress",
 
   // Special cases
   "WITHDRAWN": "withdrawn",
@@ -51,10 +51,10 @@ const VARIANT_STYLES = {
   unassigned: "bg-gray-50 text-gray-800 border-gray-200",
   approved: "bg-emerald-50 text-emerald-800 border-emerald-200",
   denied: "bg-rose-50 text-rose-800 border-rose-200",
-  inactive: "bg-slate-50 text-slate-800 border-slate-200",
   active: "bg-lime-50 text-lime-800 border-lime-200",
   withdrawn: "bg-orange-50 text-orange-800 border-orange-200",
   criminal: "bg-secondary-foreground text-primary opacity-60",
+  inactive: "bg-rose-50 text-rose-700 opacity-60",
 };
 
 type StatusKey = keyof typeof STATUS_VARIANTS;

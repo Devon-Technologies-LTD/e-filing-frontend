@@ -38,7 +38,7 @@ interface LabelProps
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   LabelProps
->(({ className, variant, size, required, ...props }, ref) => (
+>(({ className, variant="default", size="default", required, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
     className={cn(
