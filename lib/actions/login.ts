@@ -114,10 +114,12 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     return {
       status: 400,
       errors: result.error.flatten().fieldErrors,
-      message: "Login failed",
+      message: "Sign up failed",
     };
   }
   try {
+    console.log(result.data);
+
     const res = await authService.signupUser(result.data);
     console.log(res);
     const data = res.data as LoginResponseData;
