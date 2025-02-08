@@ -2,6 +2,20 @@
 import { useParams, useRouter } from "next/navigation";
 import { MCaseFilterType } from "@/types/case";
 import ReusableTabs from "@/components/ui/reusable-tabs";
+import { RoleToTabs } from "@/types/general";
+import { ROLES } from "@/types/auth";
+import { useAppSelector } from "@/hooks/redux";
+import { useMemo } from "react";
+
+const defaultTabs: { id: MCaseFilterType; label: string }[] = [
+  { id: "case", label: "Cases Metrics" },
+  { id: "magistrate", label: "Magistrate Cases" },
+];
+const chiefJudgeTabs = [
+  { id: "case", label: "Cases Metric" },
+  { id: "magistrate", label: "Magistrate Cases" },
+  { id: "financial", label: "Financial Metrics" },
+];
 
 export default function LayoutPage({
   children,
@@ -11,27 +25,34 @@ export default function LayoutPage({
   const router = useRouter();
   const params = useParams();
   const activeTab = params?.tab as string;
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const handleTabChange = (newTab: string) => {
     router.push(`/overview/${newTab}`);
   };
-  
-  const tabs: { id: MCaseFilterType; label: string }[] = [
-    { id: "case", label: "Cases Metric" },
-    { id: "magistrate", label: "Magistrate Cases" },
-  ];
+
+  const roleToTabs: RoleToTabs = {
+    [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
+  };
+  const tabs = useMemo(() => {
+    return roleToTabs[user?.role as string] || defaultTabs;
+  }, [user?.role]);
 
   return (
-    <div className="container mx-auto space-y-8 py-4">
-      <header className="space-y-4">
-        <h1 className="text-xl font-semibold uppercase">Overview</h1>
-        <ReusableTabs
-          tabs={tabs}
-          onTabChange={handleTabChange}
-          activeTab={activeTab}
-        />
+    <div className="bg-zinc-100 min-h-dh">
+      <header className="bg-white shadow-md pt-6 sticky top-0 z-10">
+        <div className="container space-y-3">
+          <h1 className="text-xl font-bold uppercase">Overview</h1>
+          <ReusableTabs
+            tabs={tabs}
+            onTabChange={handleTabChange}
+            activeTab={activeTab}
+          />
+        </div>
       </header>
-      <div>{children}</div>
+      <div className=" overflow-y-auto min-h-dvh">
+        {children}
+      </div>
     </div>
   );
 }
