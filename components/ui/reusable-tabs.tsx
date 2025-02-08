@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -38,7 +39,7 @@ export default function ReusableTabs({
           <TabsTrigger
             key={tab.id}
             value={tab.id}
-            className="relative px-0 py-2 font-semibold rounded-none border-b-2 border-transparent data-[state=active]:border- data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-none text-neutral-400"
+            className="relative px-0 py-1 font-semibold rounded-none border-b-2 border-transparent data-[state=active]:border- data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-none text-base text-neutral-400"
           >
             {tab.label}
             {activeTab == tab.id && (

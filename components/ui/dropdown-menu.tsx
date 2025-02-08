@@ -32,7 +32,7 @@ export const itemVariants = {
       "hover:bg-green-500/20 focus:bg-green-500/30 hover:text-green-600 dark:hover:text-green-400",
   },
   size: {
-    default: "py-1.5 pl-2 pr-2 text-sm",
+    default: "px-2 py-1.5 text-sm",
     sm: "py-1 pl-6 pr-1 m-2 text-sm",
     lg: "py-2 pl-10 pr-3 text-lg",
   },
@@ -100,13 +100,15 @@ const DropdownMenuItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
     variant?: keyof typeof itemVariants.variant;
+    size?: keyof typeof itemVariants.size;
   }
->(({ className, variant = "default", inset, ...props }, ref) => (
+>(({ className, variant = "default",size="default", inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-primary-foreground focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+      "relative flex cursor-default select-none items-center gap-2 rounded-sm text-sm outline-none transition-colors focus:bg-primary-foreground focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
       itemVariants.variant[variant],
+      itemVariants.size[size],
       inset && "pl-8",
       className
     )}

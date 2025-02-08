@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import  { getUser, verifySession } from "@/lib/server/auth";
 
 import {
-  DEFAULT_LOGIN_REDIRECT,
   defaultLoginRedirect,
   apiAuthPrefix,
   apiPrefix,
@@ -33,8 +32,6 @@ export async function middleware(request: NextRequest) {
   if (isApiRoute) {
     return NextResponse.next()
   }
-  console.log(isAuthRoute);
-  
 
   if (isAuthRoute) {
     if (isLoggedIn) {

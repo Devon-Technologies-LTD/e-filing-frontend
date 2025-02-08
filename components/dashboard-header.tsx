@@ -1,3 +1,4 @@
+import React from "react";
 import { MainNav } from "./main-nav";
 import { SearchMenu } from "./global-search-menu";
 import { UserNav } from "./user-nav";
