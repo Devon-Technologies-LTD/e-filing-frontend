@@ -5,13 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
+import { RoleToTabs } from "@/types/general";
 
-interface RoleToTabs {
-  [key: string]: {
-    id: string;
-    label: string;
-  }[];
-}
 const chiefJudgeTabs = [
   { id: "all", label: "All (Director) Magistrates" },
   { id: "pending", label: "Pending Invitation" },
@@ -45,7 +40,7 @@ export default function LayoutPage({
   };
   const { data: user } = useAppSelector((state) => state.profile);
   const tabs = useMemo(() => {
-    return roleToTabs[user?.role as string] || defaultTabs; // Default to userTabs
+    return roleToTabs[user?.role as string] || defaultTabs; 
   }, [user?.role]);
 
   return (

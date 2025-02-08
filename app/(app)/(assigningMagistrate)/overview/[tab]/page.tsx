@@ -28,11 +28,14 @@ import { useParams } from "next/navigation";
 import { caseMetric, magistrateMetric, hearings } from "@/lib/dummy-data";
 import { MCaseFilterType } from "@/types/case";
 import CASEMETRIC from "../_components/case-metric";
+import { useAppSelector } from "@/hooks/redux";
+import { ROLES } from "@/types/auth";
+import CaseOverview from "../_components/chief-judge";
 
 export default function FilteredCases() {
   const params = useParams();
   const tab = params.tab as MCaseFilterType;
-
+  const { data: user } = useAppSelector((state) => state.profile);
   const { metrics, histogram } = useMemo(() => {
     const selectedMetric = tab === "case" ? caseMetric : magistrateMetric;
     return {
@@ -42,12 +45,22 @@ export default function FilteredCases() {
   }, [tab]);
 
   return (
-    <div className="space-y-12">
-      <CASEMETRIC
-        metric={metrics}
-        hearings={tab === "case" ? hearings : []}
-        histogram={histogram}
-      />
+    <div className="space-y-8">
+      {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATES].includes(
+        user?.role as ROLES
+      ) ? (
+        <CaseOverview />
+      ) : (
+        <div className=" bg-white">
+          <div className="container space-y-8 ">
+            <CASEMETRIC
+              metric={metrics}
+              hearings={tab === "case" ? hearings : []}
+              histogram={histogram}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

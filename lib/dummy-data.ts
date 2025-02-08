@@ -241,7 +241,8 @@ export const caseMetric = {
       title: "Total Case Filed",
       total: "5,675,000",
       lastYear: "12,200",
-      color: "bg-zinc-100",
+      variant: "total",
+      color: "bg-neutral-200",
       description: "The total number of cases filed under Wuse zone 6.",
       districts: [
         { name: "Wuse Zone 1", cases: 4500 },
@@ -260,6 +261,7 @@ export const caseMetric = {
       title: "Active Cases",
       total: "3,890,000",
       lastYear: "9,450",
+      variant: "active",
       color: "bg-green-50",
       description: "Cases that are still ongoing in Wuse division.",
       districts: [
@@ -272,6 +274,7 @@ export const caseMetric = {
       id: 3,
       title: "Unassigned Cases",
       total: "1,890,000",
+      variant: "unassigned",
       lastYear: "2,450",
       color: "bg-orange-50",
       description: "The total number of cases  filed under wuse zone 2.",
@@ -285,6 +288,7 @@ export const caseMetric = {
       id: 4,
       title: "Re-assigned Cases",
       total: "1,890,000",
+      variant: "reassigned",
       lastYear: "2,450",
       color: "bg-zinc-50",
       description: "The total number of cases  filed under wuse zone 2.",
@@ -297,6 +301,7 @@ export const caseMetric = {
     {
       id: 5,
       title: "Concluded Cases",
+      variant: "concluded",
       total: "1,890,000",
       lastYear: "2,450",
       color: "bg-zinc-100",
