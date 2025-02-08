@@ -1,8 +1,28 @@
 
-export type ROLES = "USER" | "LAWYER" | "ADMIN" | "ASSIGNING_MAGISTRATES" | "PRESIDING_MAGISTRATES";
+// export type ROLES =
+//   | "USER"
+//   | "LAWYER"
+//   | "ADMIN"
+//   | "ASSIGNING_MAGISTRATES"
+//   | "PRESIDING_MAGISTRATES"
+//   | "CHIEF_JUDGE";
 
+export enum ROLES {
+  USER = "USER",
+  LAWYER = "LAWYER",
+  ADMIN = "ADMIN",
+  ASSIGNING_MAGISTRATES = "ASSIGNING_MAGISTRATES",
+  PRESIDING_MAGISTRATES = "PRESIDING_MAGISTRATES",
+  DIRECTOR_MAGISTRATES = "DIRECTOR_MAGISTRATES",
+  CHIEF_JUDGE = "CHIEF_JUDGE",
+}    
 export interface User {
   id: string;
   role: ROLES;
   name: string;
 }
+
+export enum USER_STATUS {
+  INACTIVE = "INACTIVE",
+  ACTIVE = "ACTIVE",
+};

@@ -8,7 +8,7 @@ export type TCaseFilterType =
   | "unassigned"
   | "concluded"
   | "request";
-export type MCaseFilterType = "case" | "magistrate";
+export type MCaseFilterType = "case" | "magistrate"|"financial";
 
 export interface ICase {
   caseId: string;

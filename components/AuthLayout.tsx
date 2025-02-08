@@ -1,7 +1,7 @@
 import { LogoIcon } from "@/components/svg/logoIcon";
 import { ReactNode } from "react";
 import TermsAndPrivacy from "./auth/terms";
-
+import React from "react";
 interface AuthLayoutProps {
     children: ReactNode;
     headerContent?: ReactNode;

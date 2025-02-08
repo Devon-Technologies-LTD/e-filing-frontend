@@ -37,6 +37,7 @@ type ErrorResponse = {
 };
 
 export async function LoginAction(_prevState: unknown, formData: FormData) {
+  console.log("formData", formData);
   const data = Object.fromEntries(formData);
   const userType = data.userType;
   const result = LoginFormSchema.safeParse(data);

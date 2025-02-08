@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { inter } from "@/app/fonts";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { Provider } from "@/lib/provider";
-import NextTopLoader from 'nextjs-toploader';
+import { AppProvider } from "@/lib/provider";
+import NextTopLoader from "nextjs-toploader";
 import Head from "next/head";
 import { ToastContainer, Zoom } from "react-toastify";
 import React from "react";
@@ -55,7 +55,7 @@ export default function RootLayout({
             autoClose={2000}
           />
           <Toaster />
-          <Provider>{children}</Provider>
+          <AppProvider>{children}</AppProvider>
           <NextTopLoader showSpinner={false} color="#6F4E37" />
           <Toaster />
         </TooltipProvider>

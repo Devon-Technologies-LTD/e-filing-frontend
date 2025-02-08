@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import React from "react";
 import { Search } from "lucide-react";
 import { ALL_DISTRICT, CaseTypes } from "@/types/files/case-type";
 import { useState } from "react";

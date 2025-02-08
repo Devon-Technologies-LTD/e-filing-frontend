@@ -23,6 +23,10 @@ export const CASE_TYPES: CaseOption[] = [
   { value: "civil", label: "CIVIL CASE" },
   { value: "family", label: "FAMILY CASE" },
 ];
+export const COURT_TYPE: CaseOption[] = [
+  { value: "magistrate", label: "MAGISTRATE COURT" },
+  { value: "family", label: "FAMILY COURT" },
+];
 export const ALL_DISTRICT: CaseOption[] = [
   { value: "zone1", label: "WUSE ZONE 1" },
   { value: "zone2", label: "WUSE ZONE 2" },
