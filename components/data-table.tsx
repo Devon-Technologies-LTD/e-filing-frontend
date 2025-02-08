@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({
   columns,
   loading,
   data,
-  onRowClick, // Add this line
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =

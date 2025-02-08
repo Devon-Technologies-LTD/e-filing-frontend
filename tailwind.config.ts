@@ -104,6 +104,10 @@ const config: Config = {
           },
         },
       },
+      boxShadow: {
+        customOne: "0px 4px 4px -4px rgba(12, 12, 13, 0.05)",
+        customTwo: "0px 16px 32px -10px rgba(12, 12, 13, 0.1)",
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",

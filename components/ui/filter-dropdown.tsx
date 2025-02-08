@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "./select";
 import React from "react";
+
 export const FilterDropdown = ({
   placeholder,
   options,
@@ -24,7 +25,7 @@ export const FilterDropdown = ({
   onChange: (value: string) => void;
 }) => (
   <Select onValueChange={onChange} value={value}>
-    <SelectTrigger className="h-12" variant={triggerVariant}>
+    <SelectTrigger className="h-11" variant={triggerVariant}>
       <SelectValue placeholder={placeholder} />
     </SelectTrigger>
     <SelectContent>

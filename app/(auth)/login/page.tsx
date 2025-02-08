@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import LoginComponent from '@/components/auth/login'
 import AuthLayout from '@/components/AuthLayout'
 import Link from 'next/link'

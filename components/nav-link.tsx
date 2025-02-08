@@ -1,12 +1,11 @@
-'use client';
-
+"use client";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn, getAuthorizedLinks } from "@/lib/utils";
 import { NavItem } from "@/types/nav";
 import { ROLES } from "@/types/auth";
-import { useEffect, useState } from "react";
-import { getSession } from "@/lib/getSession"; // Import server function
+import { useAppSelector } from "@/hooks/redux";
 
 interface NavLinkProps extends Omit<NavItem, "roles"> {
   className?: string;
@@ -21,16 +20,16 @@ export function NavLink({ href, title, isActive, className }: NavLinkProps) {
       <Link
         href={href}
         className={cn(
-          "text-center text-sm py-2 px-1 rounded-md font-semibold ",
+          "px-4 py-3 rounded-md text-sm font-semibold transition-colors",
           isActive?.(pathname) || isLinkActive
-            ? "text-foreground bg-secondary-foreground"
+            ? "text-primary font-bold bg-secondary-foreground"
             : "hover:bg-secondary-foreground",
           className
         )}
       >
         {title}
         {isActive?.(pathname) || isLinkActive ? (
-          <div className="absolute w-full  bg-black left-0"></div>
+          <div className="absolute w-3/4 h-1 bg-black rounded-t-full -bottom-6 left-1/2 transform -translate-x-1/2"></div>
         ) : null}
       </Link>
     </div>
@@ -38,22 +37,15 @@ export function NavLink({ href, title, isActive, className }: NavLinkProps) {
 }
 
 export function Navigation() {
-  const [user, setUser] = useState<{ role?: ROLES } | null>(null);
-  const [navLinks, setNavLinks] = useState<NavItem[]>([]); // Store links separately
+  const { data: user } = useAppSelector((state) => state.profile);
+  const navLinks = getAuthorizedLinks(user?.role as ROLES);
 
-  useEffect(() => {
-    getSession().then((userData) => {
-      if (userData && userData.role) {
-        setUser(userData);
-        setNavLinks(getAuthorizedLinks(userData.role)); // Only set once
-      }
-    });
-  }, []); // Empty dependency array ensures it runs only once
-
-  if (!user) return null; // Prevent rendering until session is fetched
+  if (!user?.role) return null;
 
   return (
-    <nav className="flex space-x-4"> {/* Horizontal layout */}
+    <nav className="flex space-x-2">
+      {" "}
+      {/* Horizontal layout */}
       {navLinks.map((link) => (
         <NavLink key={link.href} {...link} />
       ))}
