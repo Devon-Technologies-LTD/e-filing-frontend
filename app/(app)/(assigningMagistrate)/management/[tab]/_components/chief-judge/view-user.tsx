@@ -40,7 +40,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
       <Sheet>
         <SheetTrigger
           onClick={(e) => e.stopPropagation()}
-          className="uppercase"
+          className="uppercase w-full text-left px-2 py-1.5 "
         >
           View profile
         </SheetTrigger>
