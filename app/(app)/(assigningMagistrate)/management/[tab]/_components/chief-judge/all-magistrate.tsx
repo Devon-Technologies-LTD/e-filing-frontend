@@ -17,9 +17,6 @@ export default function AllMagistrates() {
   const handleCourtTypeChange = (value: string) => {
     setSelectedCourt(value as CaseTypes);
   };
-  const handleRowClick = (row: any) => {
-    console.log(row);
-  };
 
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
@@ -82,7 +79,6 @@ export default function AllMagistrates() {
           />
         </div>
       </div>
-
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
         <Input
@@ -94,9 +90,7 @@ export default function AllMagistrates() {
           className="pl-9 h-12 md:w-[100px] lg:w-[500px]"
         />
       </div>
-
       <DataTable
-        onRowClick={handleRowClick}
         columns={columns}
         loading={false}
         data={mockUsers}
