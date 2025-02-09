@@ -112,10 +112,7 @@ const LawyerComponent = () => {
                   UPLOAD NATIONAL IDENTITY CARD*
                 </p>
               </div>
-
-
               <DragDropUploader imageSrc="/assets/images/nin.png" />
-
               <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
               <p className="text-xs font-bold text-neutral-600">
                 Please upload a clear and legible image of your ID card. Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.
