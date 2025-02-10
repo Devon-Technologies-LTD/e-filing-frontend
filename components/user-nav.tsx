@@ -1,3 +1,4 @@
+import { useState } from "react"; // Add useState hook
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -10,54 +11,119 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { logoutAction } from '@/lib/actions/login'
+import { useAppSelector } from "@/hooks/redux";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Icons } from "./svg/icons";
+import { logoutAction } from "@/lib/actions/login";
+import { redirect } from "next/navigation";
+import { deleteSession } from "@/lib/server/auth";
 
 export function UserNav() {
+  const { data: user } = useAppSelector((state) => state.profile);
+  const name = user?.first_name || "User";
+  const initials = name
+    ? name
+      .split(" ")
+      .map((part) => part.charAt(0).toUpperCase())
+      .join("")
+    : "U"; // Fallback initials
+
+  const [isDialogOpen, setDialogOpen] = useState(false); // Add state for dialog visibility
+
+  const openDialog = () => setDialogOpen(true);
+  const closeDialog = () => setDialogOpen(false);
+  const handleLogout = async () => {
+    deleteSession();
+    redirect("/login");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarImage src={user?.last_name || "/avatars/default.png"} alt={name} />
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 space-y-3" align="end" forceMount>
         <DropdownMenuLabel className="font-normal flex items-center gap-3">
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </Button>
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={user?.last_name || "/avatars/default.png"} alt={name} />
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Jane Doe </p>
+            <p className="text-sm font-medium leading-none">{name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              janedoe@gmail.com{" "}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuGroup className="space-y-1">
-          <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="/settings/profile">Profile</Link>
+          <DropdownMenuItem asChild>
+            <Link className="w-full uppercase font-semibold text-xs" href="/settings/profile">
+              Profile
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="/settings/security">Account and security</Link>
-          </DropdownMenuItem>{" "}
-          <DropdownMenuItem className="uppercase font-semibold text-xs">
-            <Link className="w-full" href="/settings/help">Help </Link>
+          <DropdownMenuItem asChild>
+            <Link className="w-full uppercase font-semibold text-xs" href="/settings/security">
+              Account and security
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link className="w-full uppercase font-semibold text-xs" href="/settings/help">
+              Help
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="uppercase font-semibold text-xs">
-          <form className="w-full" action={logoutAction}>
-            <button type="submit" className="flex items-center w-full gap-4 text-sm font-medium text-destructive">
-              Log out
-            </button>
-          </form>
+
+        <DropdownMenuItem onClick={openDialog}>
+          LOGOUT
         </DropdownMenuItem>
       </DropdownMenuContent>
+      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-[450px] p-6 space-y-3">
+          <DialogTitle className="text-xl text-black font-semibold text-center">
+            Logout
+          </DialogTitle>
+          <DialogDescription className="text-sm text-black text-center">
+            Are you sure you want to log out? Any unsaved changes will be lost.
+          </DialogDescription>
+          <div className="flex justify-center">
+            <Icons.exclamation />
+          </div>
+          <DialogFooter className="flex md:justify-center gap-4 sm:gap-0">
+            <Button
+              variant="default"
+              size={"lg"}
+              className="flex-1 text-xs sm:flex-none"
+              onClick={handleLogout}
+            >
+              LOGOUT
+            </Button>
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                className="flex-1 text-xs text-primary sm:flex-none"
+              // onClick={() => setOpen(false)}
+              >
+                CANCEL
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DropdownMenu>
   );
 }

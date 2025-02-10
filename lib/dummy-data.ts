@@ -79,6 +79,7 @@ export const mockUsers: IUsersColumn[] = [
     email: "bayoadetola@gmail.com",
     status: USER_STATUS.ACTIVE,
     division: "Life Camp",
+    districts: "Wuse zone 1",
     courtType: "Magistrate Court",
   },
   {
@@ -87,6 +88,7 @@ export const mockUsers: IUsersColumn[] = [
     email: "bayoadetola@gmail.com",
     status: USER_STATUS.INACTIVE,
     division: "Kuje",
+    districts: "Wuse zone 2",
     courtType: "Family Court",
   },
 ];

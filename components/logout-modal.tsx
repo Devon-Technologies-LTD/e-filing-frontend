@@ -6,17 +6,22 @@ import {
   DialogContent,
   DialogFooter,
   DialogTrigger,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Icons } from "./svg/icons";
+import { deleteSession } from "@/lib/server/auth";
 
 export default function LogoutModal() {
   const router = useRouter();
 
   const handleLogout = async () => {
+    deleteSession();
     router.push("/login");
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,13 +35,14 @@ export default function LogoutModal() {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[450px] p-6 space-y-3">
-        <div className="flex flex-col items-center text-center space-y-2">
-          <Icons.exclamation className="" />
-          <h2 className="text-xl text-black font-semibold">Logout</h2>
-          <p className="text-sm text-black">
-            Are you sure you want to log out? Any unsaved changes will be lost.
-            Are you sure you want to proceed?
-          </p>
+        <DialogTitle className="text-xl text-black font-semibold text-center">
+          Logout
+        </DialogTitle>
+        <DialogDescription className="text-sm text-black text-center">
+          Are you sure you want to log out? Any unsaved changes will be lost.
+        </DialogDescription>
+        <div className="flex justify-center">
+          <Icons.exclamation />
         </div>
         <DialogFooter className="flex md:justify-center gap-4 sm:gap-0">
           <Button

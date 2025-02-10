@@ -12,7 +12,7 @@ export function CasesDataTableToolbar() {
   const handleCaseTypeChange = (value: string) => {
     setSelectedCase(value as CaseTypes);
   };
-  const caseFilter = [{value: 'all', label: 'ALL CASE TYPE'}, ...CASE_TYPES];
+  const caseFilter = [{ value: 'all', label: 'ALL CASE TYPE' }, ...CASE_TYPES];
   return (
     <div className="flex items-center justify-between">
       <div className="relative">

@@ -21,7 +21,7 @@ export const toolbarConfigByRole: { [role: string]: ToolbarConfig } = {
   DIRECTOR_MAGISTRATE: {
     headerTitleAllTab: "Director's Overview",
     headerDescriptionAllTab:
-      "Manage all magistrates through a director’s lens with additional filtering and oversight options.",
+      "Manage all magistrates through a director's lens with additional filtering and oversight options.",
     headerTitlePendingTab: "Director - Pending Invitations",
     headerDescriptionPendingTab:
       "Review pending invitations with director-specific controls.",
