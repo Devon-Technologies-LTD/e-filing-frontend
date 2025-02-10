@@ -15,7 +15,6 @@ const directorMagostrateTabs = [
   { id: "all", label: "All (Assigning) Magistrates" },
   { id: "pending", label: "Pending Invitation" },
 ];
-
 const defaultTabs = [
   { id: "all", label: "All (Presiding) Magistrates" },
   { id: "pending", label: "Pending Invitation" },

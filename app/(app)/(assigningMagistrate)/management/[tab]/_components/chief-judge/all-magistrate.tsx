@@ -17,7 +17,6 @@ export default function AllMagistrates() {
   const handleCourtTypeChange = (value: string) => {
     setSelectedCourt(value as CaseTypes);
   };
-
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
     case ROLES.CHIEF_JUDGE:
@@ -32,7 +31,12 @@ export default function AllMagistrates() {
         "View and manage all assigning magistrates responsible for case allocations. Monitor their activity and administrative roles across divisions";
       buttonText = "INVITE NEW MAGISTRATE";
       break;
-
+    case ROLES.ASSIGNING_MAGISTRATES:
+      headingText = "All Assigning Magistrates";
+      descriptionText =
+        "View and manage all assigning magistrates responsible for case allocations. Monitor their activity and administrative roles across divisions";
+      buttonText = "INVITE NEW MAGISTRATE";
+      break;
     default:
       headingText = "Magistrate Information";
       descriptionText = "View general information about magistrates.";
@@ -58,7 +62,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATES].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES ].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
                 triggerVariant="outline"

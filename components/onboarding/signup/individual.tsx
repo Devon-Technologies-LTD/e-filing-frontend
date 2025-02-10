@@ -1,11 +1,7 @@
 'use client'
-import StepComponent from "../../auth/step";
 import { useState } from "react";
 import { useFormState } from "react-dom";
-import Nin from "@/public/assets/images/nin.png";
-import Image from "next/image";
 import InputField from '@/components/ui/InputField';
-import TransformingLineLink from "../../ui/animation-link";
 import { SignupAction } from "@/lib/actions/login";
 import {
     Select,
@@ -14,35 +10,39 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import DragDropUploader from "./DragDropUploaderComponent";
 
 
 const IndividualComponent = () => {
     const [selectedMethod, setSelectedMethod] = useState<string>("");
     const [state, dispatch] = useFormState(SignupAction, undefined);
 
+    function isFieldErrorObject(
+        error: string | Record<string, string[]>
+    ): error is Record<string, string[]> {
+        return typeof error !== "string";
+    }
+    const errors =
+        state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
 
     return (
         <>
-            <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-                <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
-                    <StepComponent
-                        currentStep={2}
-                        totalSteps={3}
-                        heading="Provide your information to get started!"
-                        subheading="I'm FILING FOR MYSELF"
-                    />
-                </div>
-
-                <form id="individual-form" action={dispatch} className="md:w-1/3 justify-start items-start space-y-6">
+            <div className="flex flex-col md:flex-row w-full h-full  md:space-y-0 md:space-x-6">
+                <form id="individual-form" action={dispatch} className="md:w-2/3 space-y-10">
                     <input type="hidden" name="role" value="USER" />
+                    <input type="hidden" name="first_name" value="first_user" />
+                    <input type="hidden" name="last_name" value="last_user" />
+                    <input type="hidden" name="gender" value="male" />
                     <div
                         className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
                         style={{
-                            height: "calc(100vh - 220px)",
+                            height: "calc(100vh - 300px)",
                         }}
                     >
                         <div>
-                            <p className="font-bold text-sm text-neutral-500" >Fields marked with an asterisk (*) are required.</p>
+                            <p className="font-bold text-sm text-neutral-500">
+                                Fields marked with an asterisk (*) are required.
+                            </p>
                             <p className="text-sm text-red-500 h-2 text-center">
                                 {state?.message}
                             </p>
@@ -54,22 +54,60 @@ const IndividualComponent = () => {
                                 name="email"
                                 placeholder="name@gmail.com"
                                 required
+                                error={errors.email?.[0]}
                             />
-                            <div className="my-6">
+
+                            <div className="mt-6">
                                 <Select onValueChange={(value) => setSelectedMethod(value)}>
-                                    <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
-                                        <SelectValue className="text-neutral-700" placeholder="Select an Identification Method" />
+                                    <SelectTrigger className="w-full border-0 border-b-2 font-bold text-neutral-700">
+                                        <SelectValue
+                                            className="text-neutral-700 text-md font-bold"
+                                            placeholder="Select an Identification Method"
+                                        />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-white w-[354px] text-zinc-900">
-                                        <SelectItem value="NIN" className="text-sm font-semibold text-zinc-900">National Identity Number (NIN)</SelectItem>
-                                        <SelectItem value="IPN" className="text-sm font-semibold text-zinc-900">International Passport Number (IPN)</SelectItem>
-                                        <SelectItem value="DriverLience" className="text-sm font-semibold text-zinc-900">Drivers License Number</SelectItem>
-                                        <SelectItem value="voterCard" className="text-sm font-semibold text-zinc-900">Voters Identification Number</SelectItem>
+                                    <SelectContent className="bg-white text-zinc-900">
+                                        <SelectItem
+                                            value="NIN"
+                                            className="text-sm font-semibold text-zinc-900 hover:text-gray-600"
+                                        >
+                                            National Identity Number (NIN)
+                                        </SelectItem>
+                                        <SelectItem
+                                            value="IPN"
+                                            className="text-sm font-semibold text-zinc-900"
+                                        >
+                                            International Passport Number (IPN)
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
 
-                            <div className={`w-[800px] space-y-10 ${selectedMethod === "NIN" ? "block" : "hidden"}`}>
+                        {/* NIN Section */}
+                        {selectedMethod === "NIN" && (
+                            <div className="space-y-6">
+                                <div>
+                                    <InputField
+                                        id="nin"
+                                        type="text"
+                                        label="National Identity Number (NIN)*"
+                                        name="nin"
+                                        placeholder="e.g. 09876543212345"
+                                        required
+                                        error={errors.nin?.[0]}
+                                    />
+                                    <p className="text-sm font-bold mt-4 text-neutral-600">
+                                        UPLOAD NATIONAL IDENTITY CARD*
+                                    </p>
+                                </div>
+                                <DragDropUploader imageSrc="/assets/images/nin.png" />
+                                <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
+                                <p className="text-xs font-bold text-neutral-600">
+                                    Please upload a clear and legible image of your ID card. Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.
+                                </p>
+                            </div>
+                        )}
+                        {/* <div className={`w-[800px] space-y-10 ${selectedMethod === "NIN" ? "block" : "hidden"}`}>
                                 <div className="md:max-w-sm">
                                     <InputField
                                         id="nin"
@@ -103,8 +141,7 @@ const IndividualComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                            
-                        </div>
+                             */}
                     </div>
                 </form>
 

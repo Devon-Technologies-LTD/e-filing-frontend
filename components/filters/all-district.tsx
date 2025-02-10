@@ -8,13 +8,13 @@ export function AllDistrictFilter() {
   const handleCaseTypeChange = (value: string) => {
     setSelectedCase(value as CaseTypes);
   };
-  const caseFilter = [{ value: 'all', label: 'ALL DISTRICT' }, ...ALL_DISTRICT];
+  const caseFilter = [{ value: 'all', label: 'ALL DISTRICTS' }, ...ALL_DISTRICT];
   return (
     <section className="flex gap-3">
       <FilterDropdown
         triggerVariant="outline"
         itemVariant="outline"
-        placeholder="ALL DISTRICT"
+        placeholder="ALL DISTRICTS"
         options={caseFilter}
         value={selectedCase}
         onChange={handleCaseTypeChange}

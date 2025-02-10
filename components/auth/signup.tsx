@@ -3,26 +3,21 @@ import Image from 'next/image';
 import LegalCard1 from '@/public/assets/images/Legal-card.png';
 import LegalCard2 from '@/public/assets/images/Legal-card2.png';
 import { FrontIcon } from '@/components/svg/front-icon';
-import StepComponent from './step';
 import Link from 'next/link';
+import { useCaseFilingForm } from '@/context/file-case';
+import { useEffect } from 'react';
 
 const Signup = () => {
+    const { currentStep, setCurrentStep } = useCaseFilingForm();
+    useEffect(() => {
+        if (currentStep !== 1) {
+            setCurrentStep(2 as 3);
+        }
+    }, [1, currentStep, setCurrentStep]);
+
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6 p-4">
-                {/* Sidebar StepComponent */}
-                {/* <div className="w-full md:w-[354px] border-b-2 md:border-b-0 md:border-r-2 pb-6 md:pb-0 md:pr-6"> */}
-                {/* <div className="w-full md:max-w-[25%] md:border-r-2 md:pr-6"> */}
-                <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
-
-                    <StepComponent
-                        currentStep={1}
-                        totalSteps={3}
-                        heading="How will you be filing your cases?"
-                    />
-                </div>
-
-                {/* Card 1 */}
                 <Link href="/lawyer" className="w-full md:max-w-md ">
                     <div className="group relative w-full border-[1px] border-t-0 border-gray-300 hover:border-app-secondary space-y-3 overflow-hidden transition-colors duration-300">
                         <div className="relative">

@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "./select";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export const FilterDropdown = ({
   placeholder,
@@ -16,6 +17,7 @@ export const FilterDropdown = ({
   triggerVariant,
   itemVariant,
   onChange,
+  className, // Added className as a prop
 }: {
   placeholder: string;
   options: { value: string; label: string }[];
@@ -23,15 +25,16 @@ export const FilterDropdown = ({
   triggerVariant?: keyof typeof selectTriggerVariants.variant;
   itemVariant?: keyof typeof selectItemVariants.variant;
   onChange: (value: string) => void;
+  className?: string; // Allowing className to be passed
 }) => (
   <Select onValueChange={onChange} value={value}>
-    <SelectTrigger className="h-11" variant={triggerVariant}>
+    <SelectTrigger className={cn("h-11", className)} variant={triggerVariant}>
       <SelectValue placeholder={placeholder} />
     </SelectTrigger>
     <SelectContent>
       {options.map((option) => (
         <SelectItem
-          className="min-w-40 "
+          className="min-w-40"
           variant={itemVariant}
           key={option.value}
           value={option.value}
