@@ -7,6 +7,7 @@ export type TCaseFilterType =
   | "reassigned"
   | "unassigned"
   | "concluded"
+  | "performing"
   | "request";
 export type MCaseFilterType = "case" | "magistrate" | "financial";
 

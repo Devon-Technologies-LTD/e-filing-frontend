@@ -7,7 +7,8 @@ import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
 import { useMemo } from "react";
 
-const defaultTabs: { id: MCaseFilterType; label: string }[] = [
+const defaultTabs: { id: MCaseFilterType; label: string }[] = [];
+const assigningMTabs: { id: MCaseFilterType; label: string }[] = [
   { id: "case", label: "Cases Metrics" },
   { id: "magistrate", label: "Magistrate Cases" },
 ];
@@ -33,6 +34,7 @@ export default function LayoutPage({
 
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
+    [ROLES.ASSIGNING_MAGISTRATES]: assigningMTabs,
   };
   const tabs = useMemo(() => {
     return roleToTabs[user?.role as string] || defaultTabs;

@@ -1,26 +1,3 @@
-// "use client";
-
-// import { useMemo } from "react";
-// import { useParams } from "next/navigation";
-// import { caseMetric, magistrateMetric, hearings } from "@/lib/dummy-data";
-// import { MCaseFilterType } from "@/types/case";
-// import CASEMETRIC from "../_components/case-metric";
-
-// export default function FilteredCases() {
-//   const params = useParams();
-//   const tab = params.tab as MCaseFilterType;
-
-//   const casefiles = useMemo(() => {
-//     return tab === "case" ? caseMetric : magistrateMetric;
-//   }, [tab]);
-
-//   return (
-//     <div className="space-y-12">
-//       <CASEMETRIC metric={casefiles} hearings={hearings} />
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useMemo } from "react";
@@ -46,11 +23,11 @@ export default function FilteredCases() {
 
   return (
     <div className="space-y-8">
-      {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATES].includes(
+      {/* {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATES].includes(
         user?.role as ROLES
-      ) ? (
+      ) ? ( */}
         <CaseOverview />
-      ) : (
+      {/* ) : (
         <div className=" bg-white">
           <div className="container space-y-8 ">
             <CASEMETRIC
@@ -60,7 +37,7 @@ export default function FilteredCases() {
             />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -51,6 +51,7 @@ export const defaultLoginRedirect = (role?: ROLES) => {
       return "/case-filing";
     case ROLES.CHIEF_JUDGE:
     case ROLES.DIRECTOR_MAGISTRATES:
+    case ROLES.ASSIGNING_MAGISTRATES:
       return "/overview/case";
     case "LAWYER":
     case "USER":

@@ -5,6 +5,16 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ConfirmInvite from "./confirm-invite";
+import { ROLES } from "@/types/auth";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAppSelector } from "@/hooks/redux";
+import { ALL_DISTRICT } from "@/types/files/case-type";
 
 interface InviteUserProps {
   trigger: ReactNode;
@@ -19,6 +29,8 @@ export const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function InviteUser({ trigger }: InviteUserProps) {
+  const { data: user } = useAppSelector((state) => state.profile);
+
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
     lastName: "",
@@ -31,7 +43,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
     email?: string;
   }>({});
 
-  const [isValid, setIsValid] = useState(false); 
+  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -40,6 +52,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
     setFormValues({ ...formValues, [field]: e.target.value });
     setIsValid(true)
   };
+
 
   const validateForm = (): boolean => {
     const result = formSchema.safeParse(formValues);
@@ -50,7 +63,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
         lastName: formattedErrors.lastName?._errors?.[0],
         email: formattedErrors.email?._errors?.[0],
       });
-      setIsValid(false); 
+      setIsValid(false);
       return false;
     } else {
       setFormErrors({});
@@ -63,11 +76,12 @@ export default function InviteUser({ trigger }: InviteUserProps) {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form submitted:", formValues);
-    //   setFormValues({ firstName: "", lastName: "", email: "" });
+      //   setFormValues({ firstName: "", lastName: "", email: "" });
     } else {
       console.log("Form has errors");
     }
   };
+
 
   return (
     <>
@@ -75,10 +89,12 @@ export default function InviteUser({ trigger }: InviteUserProps) {
         <SheetTrigger onClick={(e) => e.stopPropagation()} className="">
           {trigger}
         </SheetTrigger>
+
         <SheetContent
           side="right"
-          className="bg-white md:!w-[505px] min-w-[505px] !max-w-none"
+          className="bg-white md:!w-[505px] min-w-[505px] h-4/5 !max-w-none"
         >
+    
           <div className=" mx-auto space-y-8">
             <div className="w-full space-y-6">
               <div className="space-y-1 border-b">
@@ -92,6 +108,27 @@ export default function InviteUser({ trigger }: InviteUserProps) {
               </div>
               <section>
                 <form onSubmit={onSubmit} className="space-y-6">
+                  {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
+                    <>
+                      <Select>
+                        <SelectTrigger variant="underlined" className="w-full text-base">
+                          <SelectValue placeholder="Select District" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ALL_DISTRICT.map((doc) => (
+                            <SelectItem
+                              variant="underlined"
+                              className="py-2"
+                              key={doc.value}
+                              value={doc.value}
+                            >
+                              {doc.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
                   <div className="space-y-1">
                     <Label variant={"underline"} htmlFor="firstName">
                       FIRST NAME
