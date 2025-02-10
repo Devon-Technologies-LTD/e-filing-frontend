@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import StepComponent from "../../auth/step";
 import InputField from "@/components/ui/InputField";
 import PasswordField from "@/components/ui/PasswordField";
-import Nin from "@/public/assets/images/nin.png";
 import { useFormState } from "react-dom";
 import {
   Select,
@@ -13,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TransformingLineLink from "../../ui/animation-link";
 import { SignupAction } from "@/lib/actions/login";
 import DragDropUploader from "./DragDropUploaderComponent";
 
@@ -30,16 +27,8 @@ const LawyerComponent = () => {
     state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-      <div className="w-full md:max-w-xs md:border-r-2 md:pr-6">
-        <StepComponent
-          currentStep={2}
-          totalSteps={3}
-          heading="Provide your information to get started!"
-          subheading="I'm a Legal Practitioner"
-        />
-      </div>
-      <form id="lawyer-form" action={dispatch} className="md:w-1/3 space-y-6">
+    <div className="flex flex-col md:flex-row w-full h-full  md:space-y-0 md:space-x-6">
+      <form id="lawyer-form" action={dispatch} className="md:w-2/3 space-y-10">
         <input type="hidden" name="role" value="LAWYER" />
         <input type="hidden" name="first_name" value="first_user" />
         <input type="hidden" name="last_name" value="last_user" />
@@ -47,9 +36,8 @@ const LawyerComponent = () => {
         <div
           className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
           style={{
-            height: "calc(100vh - 220px)",
-          }}
-        >
+            height: "calc(100vh - 300px)",
+          }}>
           <div>
             <p className="font-bold text-sm text-neutral-500">
               Fields marked with an asterisk (*) are required.
@@ -70,9 +58,9 @@ const LawyerComponent = () => {
 
             <div className="mt-6">
               <Select onValueChange={(value) => setSelectedMethod(value)}>
-                <SelectTrigger className="w-full border-0 border-b-[1px] text-neutral-700">
+                <SelectTrigger className="w-full border-0 border-b-2 font-bold text-neutral-700">
                   <SelectValue
-                    className="text-neutral-700 text-sm"
+                    className="text-neutral-700 text-md font-bold"
                     placeholder="Select an Identification Method"
                   />
                 </SelectTrigger>
@@ -112,7 +100,10 @@ const LawyerComponent = () => {
                   UPLOAD NATIONAL IDENTITY CARD*
                 </p>
               </div>
+
+
               <DragDropUploader imageSrc="/assets/images/nin.png" />
+
               <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
               <p className="text-xs font-bold text-neutral-600">
                 Please upload a clear and legible image of your ID card. Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.
@@ -140,20 +131,28 @@ const LawyerComponent = () => {
               required
               error={errors.phone_number?.[0]}
             />
-            <PasswordField
+            <InputField
+              id="password"
+              type="password"
+              label="Password"
+              name="passord"
+              placeholder="********"
+              required
+            />
+            {/* <PasswordField
               id="password"
               label="PASSWORD*"
               name="password"
               placeholder="Password"
               required
-            />
-            <PasswordField
+            /> */}
+            {/* <PasswordField
               id="confirm-password"
               label="CONFIRM PASSWORD*"
               name="confirm-password"
               placeholder="Re-enter your password to confirm"
               required
-            />
+            /> */}
           </div>
         </div>
       </form>

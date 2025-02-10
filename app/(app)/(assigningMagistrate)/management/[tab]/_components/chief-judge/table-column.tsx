@@ -11,6 +11,7 @@ export interface IUsersColumn {
   email: string;
   status: USER_STATUS;
   division?: string;
+  districts?: string;
   courtType?: string;
 }
 
@@ -71,6 +72,29 @@ export const createUserColumns = (
       {
         header: "Court Type",
         accessorKey: "courtType",
+      },
+    ];
+    const statusIndex = conditionalColumns.findIndex(
+      (column) => column.id === "status"
+    );
+    // basically moving the new columns to a position before status column
+    if (statusIndex !== -1) {
+      const statusColumn = conditionalColumns.splice(statusIndex, 1)[0];
+      conditionalColumns.splice(statusIndex, 0, ...directorColumns);
+      conditionalColumns.splice(
+        statusIndex + directorColumns.length,
+        0,
+        statusColumn
+      );
+    } else {
+      conditionalColumns.unshift(...directorColumns);
+    }
+  }
+  if (userRole === ROLES.ASSIGNING_MAGISTRATES) {
+    const directorColumns: ColumnDef<IUsersColumn>[] = [
+      {
+        accessorKey: "districts",
+        header: "Districts",
       },
     ];
     const statusIndex = conditionalColumns.findIndex(

@@ -1,11 +1,8 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { FormStep } from "@/types/file-case";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface StepperProps {
-  steps: string[];
+  steps: number[];
   currentStep: number;
   onStepClick?: (step: number) => void;
   className?: string;
