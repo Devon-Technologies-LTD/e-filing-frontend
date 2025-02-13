@@ -1,8 +1,11 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import InputField from '@/components/ui/InputField';
 import { SignupAction } from "@/lib/actions/login";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import { useToast } from "@/hooks/use-toast";
 import {
     Select,
     SelectContent,
@@ -14,8 +17,11 @@ import DragDropUploader from "./DragDropUploaderComponent";
 
 
 const IndividualComponent = () => {
+    const { toast } = useToast();
     const [selectedMethod, setSelectedMethod] = useState<string>("");
     const [state, dispatch] = useFormState(SignupAction, undefined);
+    const [loading, setLoading] = useState<boolean>(false);
+
 
     function isFieldErrorObject(
         error: string | Record<string, string[]>
@@ -24,11 +30,43 @@ const IndividualComponent = () => {
     }
     const errors =
         state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
+    useEffectAfterMount(() => {
+        if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
+            toast({
+                title: state?.message,
+                description:
+                    typeof state.errors === "string"
+                        ? state.errors
+                        : Object.values(state.errors || {}).flat().join(", ") || "An error occurred.",
+                variant: "destructive",
+                style: {
+                    backgroundColor: "#f44336",
+                    color: "#fff",
+                    borderRadius: "8px",
+                    padding: "12px",
+                },
+            });
+        }
+    }, [state]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        dispatch(formData);
+    };
+    useEffect(() => {
+        if (state) {
+            setLoading(false);
+        }
+    }, [state]);
+
 
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full  md:space-y-0 md:space-x-6">
-                <form id="individual-form" action={dispatch} className="md:w-2/3 space-y-10">
+                <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10">
                     <input type="hidden" name="role" value="USER" />
                     <input type="hidden" name="first_name" value="first_user" />
                     <input type="hidden" name="last_name" value="last_user" />
@@ -44,6 +82,11 @@ const IndividualComponent = () => {
                                 Fields marked with an asterisk (*) are required.
                             </p>
                             <p className="text-sm text-red-500 h-2 text-center">
+                                {typeof state?.errors === "string"
+                                    ? state.errors
+                                    : Object.values(state?.errors || {}).flat().join(", ")}
+                            </p>
+                            <p className="text-sm text-red-500 h-2 mt-3 text-center">
                                 {state?.message}
                             </p>
                             <br />
@@ -56,7 +99,6 @@ const IndividualComponent = () => {
                                 required
                                 error={errors.email?.[0]}
                             />
-
                             <div className="mt-6">
                                 <Select onValueChange={(value) => setSelectedMethod(value)}>
                                     <SelectTrigger className="w-full border-0 border-b-2 font-bold text-neutral-700">
@@ -83,14 +125,13 @@ const IndividualComponent = () => {
                             </div>
                         </div>
 
-                        {/* NIN Section */}
                         {selectedMethod === "NIN" && (
                             <div className="space-y-6">
                                 <div>
                                     <InputField
                                         id="nin"
                                         type="text"
-                                        label="National Identity Number (NIN)*"
+                                        label="National Identity Number (NIN)"
                                         name="nin"
                                         placeholder="e.g. 09876543212345"
                                         required
@@ -100,52 +141,44 @@ const IndividualComponent = () => {
                                         UPLOAD NATIONAL IDENTITY CARD*
                                     </p>
                                 </div>
-                                <DragDropUploader imageSrc="/assets/images/nin.png" />
-                                <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
-                                <p className="text-xs font-bold text-neutral-600">
-                                    Please upload a clear and legible image of your ID card. Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.
-                                </p>
+                                <DragDropUploader />
                             </div>
                         )}
-                        {/* <div className={`w-[800px] space-y-10 ${selectedMethod === "NIN" ? "block" : "hidden"}`}>
-                                <div className="md:max-w-sm">
-                                    <InputField
-                                        id="nin"
-                                        type="text"
-                                        label="National Identity Number (NIN)"
-                                        name="nin"
-                                        placeholder="eg. 09876543212345"
-                                        required
-                                    />
-                                    <p className="text-xs mt-10 text-muted text-neutral-600">
-                                        UPLOAD NATIONAL IDENTITY CARD*
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <div className="md:max-w-sm">
-                                        <div className="bg-zinc-100 h-[145px] mb-3 w-full flex items-center justify-center">
-                                            <TransformingLineLink href="#" text="Click or Drag file here" />
-                                        </div>
-                                        <p className="text-sm font-bold text-neutral-600">FRONT PAGE VIEW</p>
-                                        <p className="text-xs font-bold text-neutral-600">Please upload a clear and legible image of your ID card.
-                                            Accepted formats are JPG, PNG, or PDF, with a maximum file size of 5MB.</p>
-                                    </div>
-                                    <div className="ml-5 p-4">
-                                        <Image
-                                            src={Nin}
-                                            alt="legal-image"
-                                            height={1000}
-                                            width={500}
-                                            className="w-full h-full object-cover object-center group-hover:grayscale-0 grayscale transition-transform duration-300 ease-in-out "
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                             */}
+                        <div className="space-y-6">
+                            <InputField
+                                id="phone"
+                                type="text"
+                                label="PHONE NUMBER"
+                                name="phone_number"
+                                placeholder="e.g 07030338024"
+                                required
+                                error={errors.phone_number?.[0]}
+                            />
+                            <InputField
+                                id="password"
+                                type="password"
+                                label="PASSWORD"
+                                name="password"
+                                placeholder="********"
+                                required
+                            />
+                            <InputField
+                                id="password"
+                                type="password"
+                                label="CONFIRM PASSWORD"
+                                name="confirm_password"
+                                placeholder="********"
+                                required
+                            />
+                        </div>
                     </div>
+                    {/* Loading State */}
+                    {loading && (
+                        <div className="flex justify-center items-center mt-4">
+                            <div className="spinner"></div> {/* Add spinner */}
+                        </div>
+                    )}
                 </form>
-
-
             </div>
         </>
     )

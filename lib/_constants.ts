@@ -1,6 +1,6 @@
 export const ALGORITHM = process.env.ALGORITHM as string
 export const SECRET = process.env.SECRET_KEY as string
-export const BASE_URL = `${process.env.BASE_URL as string}/api/v1`
+export const NEXT_BASE_URL = `${process.env.NEXT_BASE_URL as string}/api/v1`
 
 export const SUCCESS_STATUS = [200, 201, 202, 203, 204, 205, 206, 207, 208, 226]
 export const REDIRECT_STATUS = [300, 301, 302, 303, 304, 305, 306, 307, 308]

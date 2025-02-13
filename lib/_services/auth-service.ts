@@ -15,6 +15,9 @@ const AuthService = {
   async loginUser(payload: TLoginFormPayload) {
     return await authConfig.post("/auth/login", payload);
   },
+  async googleLoginUser(email: string) {
+    return await authConfig.get(`/user/google-email-data/${email}`);
+  },
   async logout(payload: { refresh: string }) {
     return await authConfig.post("/auth/blacklist", payload);
   },

@@ -44,20 +44,10 @@ export default function RootLayout({
         className={`${inter.variable} ${inter.variable} font-inter antialiased bg-background min-h-dvh overflow-hidden w-full`}
       >
         <TooltipProvider>
-          <ToastContainer
-            toastStyle={{
-              backgroundColor: "#ffffff",
-              color: "#000000",
-            }}
-            position="top-right"
-            hideProgressBar={true}
-            transition={Zoom}
-            autoClose={2000}
-          />
-          <Toaster />
           <AppProvider>{children}</AppProvider>
           <NextTopLoader showSpinner={false} color="#6F4E37" />
-          <Toaster />
+          <Toaster
+          />
         </TooltipProvider>
       </body>
     </html>

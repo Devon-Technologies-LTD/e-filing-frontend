@@ -1,6 +1,5 @@
 "use client";
 import { useCaseFilingForm } from "@/context/file-case";
-import { OnboarindIndicator } from "./onboarding-indicator";
 import { useEffect, useState } from "react";
 
 export const ONBOARDING_FORM_STEPS_TITLES: Record<number, string> = {

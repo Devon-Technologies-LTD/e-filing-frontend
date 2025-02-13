@@ -2,12 +2,12 @@ import axios from "axios"
 // import auth from "@/lib/auth"
 
 // import AuthService from "@/lib/_services/auth-service"
-import { BASE_URL } from "@/lib/_constants"
+import { NEXT_BASE_URL } from "@/lib/_constants"
 
 // import { redirect } from 'next/navigation'
 
 const userConfig = axios.create({
-  baseURL: BASE_URL,
+  baseURL: NEXT_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
