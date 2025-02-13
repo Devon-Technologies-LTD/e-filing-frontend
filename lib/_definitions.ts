@@ -19,31 +19,44 @@ export const OTPFormSchema = z.object({
   otp: z.string().min(6, { message: "Min of 6 digit." }).trim(),
 });
 
-export const SignupFormSchema = z.object({
-  first_name: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters long." })
-    .trim(),
-  nin: z.string().optional(),
-  role: z.string().optional(),
-  gender: z.string().optional(),
-  court: z.string().nonempty("Supreme Court Number is required"),
-  phone_number: z
-    .string()
-    .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
-    .nonempty("Phone number is required"),
-  last_name: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters long." })
-    .trim(),
-  email: z.string().email({ message: "Please enter a valid email." }).trim(),
-  password: z
-    .string()
-    .min(8, { message: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
-    .regex(/[0-9]/, { message: "Contain at least one number." })
-    .trim(),
-});
+export const SignupFormSchema = z
+  .object({
+    first_name: z
+      .string()
+      .min(2, { message: "First name must be at least 2 characters long." })
+      .trim(),
+    nin: z.string().optional(),
+    role: z.string().optional(),
+    gender: z.string().optional(),
+    scn: z.string().optional(),
+    // image: z
+    // .instanceof(File, { message: "Image must be a file" }) // Ensure it's a file
+    // .refine((file) => file.size < 5 * 1024 * 1024, { message: "Image must be less than 5MB" }) // Limit size
+    // .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), {
+    //   message: "Invalid file type. Only JPEG, PNG, and WEBP are allowed.",
+    // }),
+    // court: z.string().nonempty("Supreme Court Number is required"),
+    phone_number: z
+      .string()
+      .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
+      .nonempty("Phone number is required"),
+    last_name: z
+      .string()
+      .min(2, { message: "Last name must be at least 2 characters long." })
+      .trim(),
+    email: z.string().email({ message: "Please enter a valid email." }).trim(),
+    password: z
+      .string()
+      .min(8, { message: "Be at least 8 characters long" })
+      .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+      .regex(/[0-9]/, { message: "Contain at least one number." })
+      .trim(),
+    confirm_password: z.string().trim(),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
 
 export type TSignupFormPayload = z.infer<typeof SignupFormSchema>;
 export type TForogotPayload = z.infer<typeof EMailFormSchema>;
@@ -61,15 +74,15 @@ export type TLoginFormPayload = z.infer<typeof LoginFormSchema>;
 
 export type FormState =
   | {
-      errors?: {
-        first_name?: string[];
-        last_name?: string[];
-        username?: string[];
-        email?: string[];
-        password?: string[];
-      };
-      message?: string;
-    }
+    errors?: {
+      first_name?: string[];
+      last_name?: string[];
+      username?: string[];
+      email?: string[];
+      password?: string[];
+    };
+    message?: string;
+  }
   | undefined;
 
 export type TFullUser = {

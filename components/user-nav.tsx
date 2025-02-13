@@ -1,4 +1,5 @@
-import { useState } from "react"; // Add useState hook
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -18,13 +19,9 @@ import {
   DialogContent,
   DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Icons } from "./svg/icons";
-import { logoutAction } from "@/lib/actions/login";
-import { redirect } from "next/navigation";
 import { deleteSession } from "@/lib/server/auth";
 
 export function UserNav() {
@@ -35,22 +32,36 @@ export function UserNav() {
       .split(" ")
       .map((part) => part.charAt(0).toUpperCase())
       .join("")
-    : "U"; // Fallback initials
+    : "U";
 
-  const [isDialogOpen, setDialogOpen] = useState(false); // Add state for dialog visibility
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const openDialog = () => setDialogOpen(true);
   const closeDialog = () => setDialogOpen(false);
+
   const handleLogout = async () => {
-    deleteSession();
-    redirect("/login");
+    setLoading(true);
+    try {
+      deleteSession();
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user?.last_name || "/avatars/default.png"} alt={name} />
+            <AvatarImage
+              src={user?.last_name || "/avatars/default.png"}
+              alt={name}
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -58,7 +69,10 @@ export function UserNav() {
       <DropdownMenuContent className="w-56 space-y-3" align="end" forceMount>
         <DropdownMenuLabel className="font-normal flex items-center gap-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user?.last_name || "/avatars/default.png"} alt={name} />
+            <AvatarImage
+              src={user?.last_name || "/avatars/default.png"}
+              alt={name}
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col space-y-1">
@@ -70,26 +84,33 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem asChild>
-            <Link className="w-full uppercase font-semibold text-xs" href="/settings/profile">
+            <Link
+              className="w-full uppercase font-semibold text-xs"
+              href="/settings/profile"
+            >
               Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link className="w-full uppercase font-semibold text-xs" href="/settings/security">
+            <Link
+              className="w-full uppercase font-semibold text-xs"
+              href="/settings/security"
+            >
               Account and security
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link className="w-full uppercase font-semibold text-xs" href="/settings/help">
+            <Link
+              className="w-full uppercase font-semibold text-xs"
+              href="/settings/help"
+            >
               Help
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={openDialog}>
-          LOGOUT
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={openDialog}>LOGOUT</DropdownMenuItem>
       </DropdownMenuContent>
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-[450px] p-6 space-y-3">
@@ -108,15 +129,15 @@ export function UserNav() {
               size={"lg"}
               className="flex-1 text-xs sm:flex-none"
               onClick={handleLogout}
+              disabled={loading}
             >
-              LOGOUT
+              {loading ? "Logging out..." : "LOGOUT"}
             </Button>
             <DialogClose asChild>
               <Button
                 type="button"
                 variant="ghost"
                 className="flex-1 text-xs text-primary sm:flex-none"
-              // onClick={() => setOpen(false)}
               >
                 CANCEL
               </Button>

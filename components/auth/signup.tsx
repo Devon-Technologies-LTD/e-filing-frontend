@@ -14,7 +14,6 @@ const Signup = () => {
             setCurrentStep(2 as 3);
         }
     }, [1, currentStep, setCurrentStep]);
-
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6 p-4">
@@ -70,7 +69,7 @@ const Signup = () => {
                                 platform is here to simplify the filing process for you.
                             </p>
                             <div className="flex justify-between mt-6 md:mt-10 items-center text-xs">
-                                PROCEED AS AN INDIVIDUAL
+                                PROCEED AS A NON-LAWYER
                                 <FrontIcon className="size-4" />
                                 <div className="absolute m-6 mb-4 bottom-0 left-0 w-full h-[2px] bg-gradient-to-b from-app-primary to-app-secondary scale-x-0 transform origin-left transition-transform duration-300 group-hover:scale-x-90"></div>
                             </div>

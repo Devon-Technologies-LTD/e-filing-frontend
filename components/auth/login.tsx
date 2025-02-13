@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { Button } from "@/components/ui/button";
-import { GogleIcon } from "@/components/svg/gogle-icon";
 import TransformingLineLink from "../ui/animation-link";
 import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
@@ -15,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import GoogleSignInButton from "../GoogleSignInButton";
 
 const LoginComponent = () => {
   const [state, dispatch] = useFormState(LoginAction, undefined);
@@ -62,17 +61,13 @@ const LoginComponent = () => {
         <p className="text-xs text-red-500 h-2 text-center">
           {state && state?.message}
         </p>
-
         <SubmitButton
           value="LOG IN"
           pendingValue="Processing..."
           className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2"
         />
         <div className="text-center text-gray-400 my-6">OR</div>
-        <Button className="w-full  hover:bg-app-secondary/90  text-white h-12 rounded mt-2">
-          <GogleIcon className="size-8" />
-          Continue with Google
-        </Button>
+        <GoogleSignInButton />
         <TransformingLineLink href="forgot" text="CAN'T LOG IN" />
       </form>
     </>

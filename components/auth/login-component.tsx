@@ -4,12 +4,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import { useToast } from "@/hooks/use-toast";
 
 export const LoginPasswordField = (props: {
   state?: { status: any; message: any; errors: any };
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
   console.log(props.state?.errors?.password);
+  useEffectAfterMount(() => {
+    if (props.state && CLIENT_ERROR_STATUS.includes(props.state?.status)) {
+      toast({
+        title: props.state?.message,
+        description:
+          typeof props.state.errors === "string"
+            ? props.state.errors
+            : props.state.errors?.error || "An error occurred.",
+        variant: "destructive",
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "12px",
+        },
+      });
+    }
+  }, [props.state]);
   return (
     <div>
       <Label htmlFor="password" className="text-sm font-bold text-neutral-600">

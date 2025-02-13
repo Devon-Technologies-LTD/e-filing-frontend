@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { useCaseFilingForm } from "@/context/file-case";
 import { MoveLeft } from "lucide-react";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 interface OnboardingLayout {
     currentStep: number;
@@ -17,11 +18,12 @@ export function OnboaringFooter({ currentStep }: OnboardingLayout) {
     const handlePreviousStep = () => {
         goToPreviousStep();
         if (currentStep == 1) {
-            router.push(`/login}`);
+            router.push(`/login`);
         }
         if (currentStep == 2) {
-            router.push(`/signup}`);
+            router.push(`/signup`);
         }
+        router.back();
     };
 
     return (
@@ -48,7 +50,12 @@ export function OnboaringFooter({ currentStep }: OnboardingLayout) {
 
             {currentStep === 2 && (
                 <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-                    <Button type="submit" form="lawyer-form" className="bg-app-primary font-bold text-white p-6">Create Account</Button>
+                    <SubmitButton pendingValue="Processing..." submitform="lawyer-form" className="bg-app-primary font-bold text-white p-6" value="Create Account" />
+                </div>
+            )}
+            {currentStep === 3 && (
+                <div className="flex flex-col md:flex-row justify-end items-center gap-4">
+                    <SubmitButton pendingValue="Processing..." submitform="otp-form" className="bg-app-primary font-bold text-white p-6" value="Proceed" />
                 </div>
             )}
         </CardFooter>

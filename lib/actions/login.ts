@@ -29,7 +29,8 @@ type ErrorResponse = {
     status: number;
     data: {
       message: string;
-      data: string; // If `data` has a specific structure, replace `any` with its type.
+      data?: { error?: string };
+      error: string;
     };
   };
   request?: unknown;
@@ -103,26 +104,15 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       };
     }
   }
-
-  // redirect(DEFAULT_LOGIN_REDIRECT);
   redirect(defaultLoginRedirect(role));
 }
-export async function SignupAction(_prevState: unknown, formData: FormData) {
-  const data = Object.fromEntries(formData);
-  const result = SignupFormSchema.safeParse(data);
-  if (!result.success) {
-    return {
-      status: 400,
-      errors: result.error.flatten().fieldErrors,
-      message: "Sign up failed",
-    };
-  }
-  try {
-    console.log(result.data);
 
-    const res = await authService.signupUser(result.data);
+export async function googleLoginAction(email: string) {
+  let role: ROLES;
+  try {
+    const res = await authService.googleLoginUser(email);
     console.log(res);
-    const data = res.data as LoginResponseData;
+    const data = res.data as LoginResponseData; //Cast to the expected type
     const sessionData = {
       user: {
         id: data.ID,
@@ -134,6 +124,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
       },
       token: data.token,
     };
+    role = sessionData.user.role;
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -142,6 +133,108 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
         status: error.response.status,
         message: error.response.data.message,
         errors: error.response.data.data,
+        success: false,
+      };
+    } else if (error?.request) {
+      return {
+        status: 504,
+        message: "Something went wrong. Please try again.",
+        errors: "Unable to process request.",
+        success: false,
+      };
+    } else if (error?.message) {
+      return {
+        status: 500,
+        message: error.message,
+        errors: error.message,
+        success: false,
+      };
+    } else {
+      return {
+        status: 500,
+        message: "An unexpected error occurred.",
+        errors: "Unknown error.",
+        success: false,
+      };
+    }
+  }
+  redirect(defaultLoginRedirect(role));
+}
+
+
+export async function SignupAction(_prevState: unknown, formData: FormData) {
+  const data = Object.fromEntries(formData.entries());
+
+  // Validate the image first
+  const image = formData.get("image") as File | null;
+  if (!image || (typeof File !== "undefined" && !(image instanceof File))) {
+    return {
+      status: 400,
+      errors: "Image file is required",
+      message: "Validation failed",
+    };
+  }
+
+  // Validate the form data with image included
+  const result = SignupFormSchema.safeParse({ ...data, image });
+
+  if (!result.success) {
+    return {
+      status: 400,
+      errors: result.error.flatten().fieldErrors,
+      message: "Validation failed",
+    };
+  }
+
+  try {
+    const url = `${process.env.NEXT_BASE_URL as string}/api/v1/auth/signup`;
+    console.log(url);
+    console.log(formData);
+
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw {
+        response: {
+          status: response.status,
+          data: errorData,
+        },
+      } as ErrorResponse;
+    }
+
+    const responseData = (await response.json()) as LoginResponseData;
+
+    // Prepare session data
+    const sessionData = {
+      user: {
+        id: responseData.ID,
+        email: responseData.email,
+        first_name: responseData.first_name,
+        last_name: responseData.last_name,
+        phone_number: responseData.phone_number,
+        role: responseData.role as ROLES,
+      },
+      token: responseData.token,
+    };
+    // Store session data
+    cookies().set("otpEmail", result.data.email);
+    cookies().set("AuthData", JSON.stringify(sessionData));
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    console.error(error?.response);
+
+    if (error?.response) {
+      return {
+        status: error.response.status,
+        message: error.response.data?.message || "An error occurred",
+        errors:
+          typeof error.response.data?.data === "string"
+            ? error.response.data.data
+            : error.response.data?.data?.error || "An error occurred",
       };
     } else if (error?.request) {
       return {
@@ -149,27 +242,21 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
         message: "Something went wrong. Please try again.",
         errors: "Unable to process request.",
       };
-    } else if (error?.message) {
-      return {
-        status: 500,
-        message: error.message,
-        errors: error.message,
-      };
     } else {
       return {
         status: 500,
-        message: "An unexpected error occurred.",
-        errors: "Unknown error.",
+        message: error?.message || "An unexpected error occurred.",
+        errors: error?.message || "Unknown error.",
       };
     }
   }
-  redirect(DEFAULT_LOGIN_REDIRECT);
-  // redirect("/otp");
+  return redirect("/otp");
 }
 
 export async function OTPAction(_prevState: unknown, formData: FormData) {
-  const data = Object.fromEntries(formData);
-  const result = SignupFormSchema.safeParse(data);
+  const dataz = Object.fromEntries(formData);
+  const result = OTPFormSchema.safeParse(dataz);
+
   if (!result.success) {
     return {
       status: 400,
@@ -177,24 +264,54 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
       message: "Login failed",
     };
   }
+
+  let role: ROLES;
   try {
-    const res = await authService.signupUser(result.data);
-    console.log(res);
-    const data = res.data as LoginResponseData;
-    const sessionData = {
+    const email = cookies().get("otpEmail")?.value;
+    if (!email) {
+      return {
+        status: 400,
+        message: "Email not found in session. Please restart the process.",
+        errors: "Missing email.",
+      };
+    }
+
+    const res = await authService.verifyOtp({
+      otp: result.data.otp,
+      email: email,
+    });
+
+    const responseData = res.data as LoginResponseData;
+
+    // Retrieve stored session data
+    const storedData = cookies().get("AuthData")?.value;
+    if (!storedData) {
+      return {
+        status: 400,
+        message: "Session data missing. Please restart the process.",
+        errors: "Missing session data.",
+      };
+    }
+
+    const sessionData = JSON.parse(storedData);
+    const updatedSessionData = {
       user: {
-        id: data.ID,
-        email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        phone_number: data.phone_number,
-        role: data.role as ROLES,
+        id: sessionData.user.id,
+        email: responseData.email,
+        first_name: sessionData.user.first_name,
+        last_name: sessionData.user.last_name,
+        phone_number: sessionData.user.phone_number,
+        role: sessionData.user.role as ROLES,
       },
-      token: data.token,
+      token: responseData.token,
     };
-    await createSession(sessionData);
+    role = updatedSessionData.user.role;
+    await createSession(updatedSessionData);
+
   } catch (err: unknown) {
     const error = err as ErrorResponse;
+    console.log(error);
+
     if (error?.response) {
       return {
         status: error.response.status,
@@ -207,22 +324,18 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
         message: "Something went wrong. Please try again.",
         errors: "Unable to process request.",
       };
-    } else if (error?.message) {
-      return {
-        status: 500,
-        message: error.message,
-        errors: error.message,
-      };
     } else {
       return {
         status: 500,
-        message: "An unexpected error occurred.",
-        errors: "Unknown error.",
+        message: error?.message || "An unexpected error occurred.",
+        errors: error?.message || "Unknown error.",
       };
     }
   }
-  redirect(DEFAULT_LOGIN_REDIRECT);
+  return redirect(defaultLoginRedirect(role));
+
 }
+
 
 export async function ForgotPasswordAction(
   _prevState: unknown,
