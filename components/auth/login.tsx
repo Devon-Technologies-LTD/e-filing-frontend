@@ -1,41 +1,76 @@
-'use client'
+import Link from "next/link";
+import React from "react";
+import { SubmitButton } from "@/components/ui/submit-button";
+import TransformingLineLink from "../ui/animation-link";
+import { LoginAction } from "@/lib/actions/login";
+import { useFormState } from "react-dom";
+import { LoginPasswordField } from "./login-component";
+import InputField from "../ui/InputField";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import GoogleSignInButton from "../GoogleSignInButton";
 
-
-import Link from "next/link"
-// import { useFormState } from "react-dom"
-
-import { SubmitButton } from "@/components/ui/submit-button"
-// import { LoginIdField, LoginPasswordField } from "./login"
-// import { adminLoginAction } from "@/lib/actions/login"
-
-const Login = () => {
-    // const [state, dispatch] = useFormState(adminLoginAction, undefined)
-
-    return (
-        <div className="flex flex-col gap-4 items-center w-full">
-            <div className="heading">
-                <p className="font-inter text-[40px]  text-app-primary text-center">Log In</p>
-                <p className="text-muted-foreground text-xs ">DON'T HAVEN AN ACCOUNT 
-                    <a href="/signup"  className="text-sm font-medium text-app-primary hover:underline" >
-                        Create One
-                    </a>
-                </p>
-            </div>
-
-            {/* <form action={dispatch} className="w-full space-y-4"> */}
-            <form className="w-full space-y-4">
-                {/* <LoginIdField state={state} field_name="admin_id" field_id="admin_id" field_label="Admin I.D" field_placeholder="Input Staff Identification here" />
-
-                <LoginPasswordField state={state} /> */}
-
-                <SubmitButton value="Confirm and Create" pendingValue="Processing..." className="w-full bg-chocolate hover:bg-chocolate/90" />
-            </form>
-
-            <div className="text-xs flex items-center justify-center gap-2">
-                <p className="text-muted-foreground">Not an Admin?</p> <span className="text-muted-foreground">|</span> <Link href={'/login'}>Login Here with Assigned Credentials</Link>
-            </div>
-        </div>
-    )
-}
-
-export { Login }
+const LoginComponent = () => {
+  const [state, dispatch] = useFormState(LoginAction, undefined);
+  return (
+    <>
+      <div className="heading">
+        <p className="font-bold text-3xl text-app-primary text-center">Log In</p>
+        <p className="text-center text-xs space-x-2 mt-3">
+          <span className="text-muted text-gray-400">
+            DON&apos;T HAVE AN ACCOUNT?
+          </span>
+          <span>
+            <Link
+              href="/signup"
+              className="text-sm font-extrabold text-app-primary hover:none"
+            >
+              Create One
+            </Link>
+          </span>
+        </p>
+      </div>
+      <form action={dispatch} className="w-full space-y-6">
+        <InputField
+          id="email"
+          type="email"
+          label="EMAIL ADDRESS"
+          name="email"
+          placeholder="name@gmail.com"
+          required
+        />
+        <LoginPasswordField />
+        <Select name="userType">
+          <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
+            <SelectValue className="text-neutral-700" placeholder="Please Select User type" />
+          </SelectTrigger>
+          <SelectContent className="bg-white w-[354px] text-zinc-900">
+            <SelectItem value="USER" className="text-sm font-semibold text-zinc-900">USER</SelectItem>
+            <SelectItem value="LAWYER" className="text-sm font-semibold text-zinc-900">LAWYER</SelectItem>
+            <SelectItem value="ADMIN" className="text-sm font-semibold text-zinc-900">ADMIN</SelectItem>
+            <SelectItem value="ASSIGNING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">ASSIGNING MAGISTRATES</SelectItem>
+            <SelectItem value="PRESIDING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">PRESIDING MAGISTRATES</SelectItem>
+            <SelectItem value="CHIEF_JUDGE" className="text-sm font-semibold text-zinc-900">CHIEF JUDGE</SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-red-500 h-2 text-center">
+          {state && state?.message}
+        </p>
+        <SubmitButton
+          value="LOG IN"
+          pendingValue="Processing..."
+          className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2"
+        />
+        <div className="text-center text-gray-400 my-6">OR</div>
+        <GoogleSignInButton />
+        <TransformingLineLink href="forgot" text="CAN'T LOG IN" />
+      </form>
+    </>
+  );
+};
+export default LoginComponent;

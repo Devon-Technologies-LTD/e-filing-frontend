@@ -1,16 +1,18 @@
-import { Login } from '@/components/auth/login'
-// import { BackButton } from '@/components/ui/back-button'
+'use client';
+import React from 'react';
+import LoginComponent from '@/components/auth/login'
+import AuthLayout from '@/components/AuthLayout'
+import Link from 'next/link'
 
-export default function AdminLoginPage() {
+export default function LoginPage() {
     return (
-        <div className="p-6 flex items-center justify-center container min-w-screen-sm mx-auto">
-            {/* <div className='absolute top-10 left-10'>
-        <BackButton />
-      </div> */}
-
-            <section className="form-section w-1/2 p-32">
-                <Login />
-            </section>
-        </div>
-    )
+        <AuthLayout
+            headerContent={
+                <Link href="/signup" className="text-sm font-bold text-app-primary relative z-10">
+                    Create Account
+                </Link>
+            }>
+            <LoginComponent />
+        </AuthLayout>
+    );
 }
