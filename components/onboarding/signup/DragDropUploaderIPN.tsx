@@ -4,10 +4,8 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
-
-export default function DragDropUploader() {
+export default function DragDropUploaderIPN() {
     const [frontImage, setFrontImage] = useState<string | null>(null);
-
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
             const file = acceptedFiles[0];
@@ -33,7 +31,7 @@ export default function DragDropUploader() {
                     >
                         <input name="image" {...getInputProps()} />
                         <p className="text-center text-sm font-medium text-gray-600">
-                            {frontImage ? "Replace Front ID" : "Click or Drag file here"}
+                            {frontImage ? "Replace Front ID" : "click or drag file here"}
                         </p>
                     </Card>
                 </div>

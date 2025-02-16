@@ -26,6 +26,7 @@ export const SignupFormSchema = z
       .min(2, { message: "First name must be at least 2 characters long." })
       .trim(),
     nin: z.string().optional(),
+    ipn: z.string().optional(),
     role: z.string().optional(),
     gender: z.string().optional(),
     scn: z.string().optional(),
@@ -367,3 +368,13 @@ export const ActivatorSchema = z.object({
 });
 
 export type TActivatorPayload = z.infer<typeof ActivatorSchema>;
+
+
+export const ResetPasswordScheme = z.object({
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+})
+  .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "Passwords must match",
+      path: ["confirm_password"],
+  });

@@ -1,4 +1,4 @@
-import { authConfig } from "@/lib/_api/auth-config";
+import { authConfig, authTemp } from "@/lib/_api/auth-config";
 import {
   TSignupFormPayload,
   TLoginFormPayload,
@@ -30,7 +30,7 @@ const AuthService = {
     new_password: string;
     confirm_password: string;
   }) {
-    return await authConfig.post("/auth/reset-password", payload);
+    return await authTemp.post("/auth/reset-password", payload);
   },
 
   async changePassword(payload: {
