@@ -21,35 +21,38 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useAuth } from "../lib/auth";
 import { Icons } from "./svg/icons";
 import { deleteSession } from "@/lib/server/auth";
+import { LoaderCircle } from "lucide-react";
 
 export function UserNav() {
   const { data: user } = useAppSelector((state) => state.profile);
   const name = user?.first_name || "User";
   const initials = name
-    ? name
-      .split(" ")
-      .map((part) => part.charAt(0).toUpperCase())
-      .join("")
-    : "U";
+    .split(" ")
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const openDialog = () => setDialogOpen(true);
-  const closeDialog = () => setDialogOpen(false);
+    const { signOut } = useAuth();
 
   const handleLogout = async () => {
     setLoading(true);
     try {
-      deleteSession();
+      // Wait for the deleteSession to complete before redirecting
+      await deleteSession();
+      await signOut();
+      // Close the dialog before redirecting
+      setDialogOpen(false);
+      // Add a small delay before redirecting to ensure state updates are processed
+      await new Promise(resolve => setTimeout(resolve, 100));
       router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);
-    } finally {
-      setLoading(false);
+      setLoading(false); // Reset loading state on error
     }
   };
 
@@ -109,12 +112,14 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-
-        <DropdownMenuItem onClick={openDialog}>LOGOUT</DropdownMenuItem>
+        <DropdownMenuItem className="font-bold text-sm" onClick={() => setDialogOpen(true)}>
+          LOGOUT
+        </DropdownMenuItem>
       </DropdownMenuContent>
-      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+
+      <Dialog open={isDialogOpen} onOpenChange={(open) => !loading && setDialogOpen(open)}>
         <DialogContent className="max-w-[450px] p-6 space-y-3">
-          <DialogTitle className="text-xl text-black font-semibold text-center">
+          <DialogTitle className="text-sm font-bold text-black text-center">
             Logout
           </DialogTitle>
           <DialogDescription className="text-sm text-black text-center">
@@ -126,18 +131,26 @@ export function UserNav() {
           <DialogFooter className="flex md:justify-center gap-4 sm:gap-0">
             <Button
               variant="default"
-              size={"lg"}
+              size="lg"
               className="flex-1 text-xs sm:flex-none"
               onClick={handleLogout}
               disabled={loading}
             >
-              {loading ? "Logging out..." : "LOGOUT"}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <LoaderCircle size={12} className="rotation-loader animate-spin" />
+                  Logging out...
+                </div>
+              ) : (
+                "LOGOUT"
+              )}
             </Button>
             <DialogClose asChild>
               <Button
                 type="button"
                 variant="ghost"
                 className="flex-1 text-xs text-primary sm:flex-none"
+                disabled={loading}
               >
                 CANCEL
               </Button>

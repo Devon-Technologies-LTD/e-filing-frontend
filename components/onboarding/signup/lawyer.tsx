@@ -13,8 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SignupAction } from "@/lib/actions/login";
-import DragDropUploader from "./DragDropUploaderComponent";
+import DragDropUploader from "./DragDropUploaderNIN";
 import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import { LoginPasswordField } from "@/components/auth/password-component";
+import DragDropUploaderNIN from "./DragDropUploaderNIN";
+import DragDropUploaderIPN from "./DragDropUploaderIPN";
 
 const LawyerComponent = () => {
   const { toast } = useToast();
@@ -55,10 +58,8 @@ const LawyerComponent = () => {
     setLoading(true);
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-
     dispatch(formData);
   };
-
 
   useEffect(() => {
     if (state) {
@@ -110,7 +111,7 @@ const LawyerComponent = () => {
 
             <div className="mt-6">
               <Select onValueChange={(value) => setSelectedMethod(value)}>
-                <SelectTrigger className="w-full border-0 border-b-2 font-bold text-neutral-700">
+                <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
                   <SelectValue
                     className="text-neutral-700 text-md font-bold"
                     placeholder="Select an Identification Method"
@@ -149,7 +150,26 @@ const LawyerComponent = () => {
                   UPLOAD NATIONAL IDENTITY CARD*
                 </p>
               </div>
-              <DragDropUploader />
+              <DragDropUploaderNIN />
+            </div>
+          )}
+          {selectedMethod === "IPN" && (
+            <div className="space-y-6">
+              <div>
+                <InputField
+                  id="ipn"
+                  type="text"
+                  label="International Password Number (IPN)*"
+                  name="ipn"
+                  placeholder="e.g. 09876543212345"
+                  required
+                  error={errors.ipn?.[0]}
+                />
+                <p className="text-sm font-bold mt-4 text-neutral-600">
+                  UPLOAD INTERNATIONAL PASSPORT BIOPAGE*
+                </p>
+              </div>
+              <DragDropUploaderIPN />
             </div>
           )}
           <div className="space-y-6">
@@ -171,25 +191,10 @@ const LawyerComponent = () => {
               required
               error={errors.phone_number?.[0]}
             />
-            <InputField
-              id="password"
-              type="password"
-              label="PASSWORD"
-              name="password"
-              placeholder="********"
-              error={errors.password?.[0]}
-              required
-            />
 
-            <InputField
-              id="confirm_password"
-              type="password"
-              label="CONFIRM PASSWORD"
-              name="confirm_password"
-              placeholder="********"
-              error={errors.confirm_password?.[0]}
-              required
-            />
+            <LoginPasswordField label="PASSWORD" name="password" placeholder="Enter Password" />
+            <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
+
           </div>
         </div>
         {/* Loading State */}

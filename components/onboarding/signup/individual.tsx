@@ -13,7 +13,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import DragDropUploader from "./DragDropUploaderComponent";
+import { LoginPasswordField } from "@/components/auth/password-component";
+import DragDropUploader from "./DragDropUploaderNIN";
+import DragDropUploaderIPN from "./DragDropUploaderIPN";
 
 
 const IndividualComponent = () => {
@@ -101,7 +103,7 @@ const IndividualComponent = () => {
                             />
                             <div className="mt-6">
                                 <Select onValueChange={(value) => setSelectedMethod(value)}>
-                                    <SelectTrigger className="w-full border-0 border-b-2 font-bold text-neutral-700">
+                                    <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
                                         <SelectValue
                                             className="text-neutral-700 text-md font-bold"
                                             placeholder="Select an Identification Method"
@@ -144,6 +146,25 @@ const IndividualComponent = () => {
                                 <DragDropUploader />
                             </div>
                         )}
+                        {selectedMethod === "IPN" && (
+                            <div className="space-y-6">
+                                <div>
+                                    <InputField
+                                        id="ipn"
+                                        type="text"
+                                        label="International Password Number (IPN)"
+                                        name="ipn"
+                                        placeholder="e.g. 09876543212345"
+                                        required
+                                        error={errors.ipn?.[0]}
+                                    />
+                                    <p className="text-sm font-bold mt-4 text-neutral-600">
+                                        UPLOAD INTERNATIONAL PASSPORT BIOPAGE*
+                                    </p>
+                                </div>
+                                <DragDropUploaderIPN />
+                            </div>
+                        )}
                         <div className="space-y-6">
                             <InputField
                                 id="phone"
@@ -154,22 +175,9 @@ const IndividualComponent = () => {
                                 required
                                 error={errors.phone_number?.[0]}
                             />
-                            <InputField
-                                id="password"
-                                type="password"
-                                label="PASSWORD"
-                                name="password"
-                                placeholder="********"
-                                required
-                            />
-                            <InputField
-                                id="password"
-                                type="password"
-                                label="CONFIRM PASSWORD"
-                                name="confirm_password"
-                                placeholder="********"
-                                required
-                            />
+                            <LoginPasswordField label="PASSWORD" name="password" placeholder="Enter Password" />
+                            <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
+
                         </div>
                     </div>
                     {/* Loading State */}

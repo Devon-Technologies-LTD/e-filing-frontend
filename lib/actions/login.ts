@@ -4,6 +4,7 @@ import {
   EMailFormSchema,
   LoginFormSchema,
   OTPFormSchema,
+  ResetPasswordScheme,
   SignupFormSchema,
 } from "@/lib/_definitions";
 import authService from "@/lib/_services/auth-service";
@@ -161,7 +162,6 @@ export async function googleLoginAction(email: string) {
   redirect(defaultLoginRedirect(role));
 }
 
-
 export async function SignupAction(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
 
@@ -305,6 +305,9 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
       },
       token: responseData.token,
     };
+
+    console.log(updatedSessionData);
+
     role = updatedSessionData.user.role;
     await createSession(updatedSessionData);
 
@@ -418,13 +421,12 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
       otp: result.data.otp,
       email: email,
     });
-
     const data = res.data as LoginResponseData; //Cast to the expected type
-
+    cookies().set("TempToken", data.token);
+    console.log(data);
     console.log(data.token);
   } catch (err: any) {
     console.error("Failed to verify OTP:", err);
-
     return {
       status: err?.response?.status || 500,
       message: err?.response?.data?.message || "Failed to verify OTP.",
@@ -484,17 +486,7 @@ export async function changePassword(_prevState: unknown, formData: FormData) {
 
 export async function resetPassword(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
-  const result = z
-    .object({
-      confirmPassword: z
-        .string()
-        .min(1, { message: "Password field must not be empty." }),
-      newPassword: z
-        .string()
-        .min(1, { message: "Password field must not be empty." }),
-    })
-    .safeParse(data);
-
+  const result = ResetPasswordScheme.safeParse(data);
   if (!result.success) {
     return {
       status: 400,
@@ -503,7 +495,6 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       success: false,
     };
   }
-
   try {
     const email = cookies().get("otpEmail")?.value;
     if (!email) {
@@ -514,24 +505,22 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
         success: false,
       };
     }
-
+    // const email = cookies().get("TempToken")?.value; // Ensure correct cookie handling
     // API call
     await authService.resetPassword({
       new_password: result.data.newPassword,
       confirm_password: result.data.confirmPassword,
       email: email,
     });
-
     cookies().delete("otpEmail");
-
-    return {
-      status: 200,
-      message: "Password has been successfully reset.",
-      success: true,
-    };
+    cookies().delete("TempToken");
+    // return {
+    //   status: 200,
+    //   message: "Password has been successfully reset.",
+    //   success: true,
+    // };
   } catch (err: any) {
     console.error("Failed to reset password:", err);
-
     return {
       status: err?.response?.status || 500,
       message: err?.response?.data?.message || "Failed to reset password.",
@@ -539,4 +528,5 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       success: false,
     };
   }
+  redirect("/login");
 }

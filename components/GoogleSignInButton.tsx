@@ -3,6 +3,7 @@ import { useAuth } from "../lib/auth";
 import { Button } from "@/components/ui/button";
 import { GogleIcon } from "@/components/svg/gogle-icon";
 import { googleLoginAction } from "@/lib/actions/login";
+import { LoaderCircle } from "lucide-react";
 
 const GoogleSignInButton: React.FC = () => {
     const { signInWithGoogle, user, signOut } = useAuth();
@@ -44,7 +45,9 @@ const GoogleSignInButton: React.FC = () => {
                     className="w-full h-12 mt-2 rounded-lg bg-app-primary px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
                 >
                     {loading ? (
-                        <span className="animate-pulse">Signing in...</span> // Show loading text
+                        <span className="flex items-center gap-2">
+                            <LoaderCircle size={12} className="rotation-loader animate-spin" />
+                            Signing in...</span>
                     ) : (
                         <>
                             <GogleIcon className="size-8" />
@@ -59,7 +62,10 @@ const GoogleSignInButton: React.FC = () => {
                     className="w-full h-12 mt-2 rounded-lg bg-app-primary px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
                 >
                     {loading ? (
-                        <span className="animate-pulse">Signing out...</span> // Show loading text
+                        <span className="flex items-center gap-2">
+                            <LoaderCircle size={12} className="rotation-loader animate-spin" />
+                            Signing out...
+                        </span> // Show loading text
                     ) : (
                         "Sign Out"
                     )}
