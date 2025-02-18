@@ -20,7 +20,7 @@ const MoreInfoComponent = () => {
                     </Link>
                 </Button>
 
-                <TransformingLineLink href="/logn" text="CONTACT IT PORTAL SUPPORT" />
+                <TransformingLineLink href="/logIn" text="CONTACT IT PORTAL SUPPORT" />
             </div>
         </>
     )

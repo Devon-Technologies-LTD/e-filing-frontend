@@ -2,6 +2,8 @@
 import { SubmitButton } from "@/components/ui/submit-button"
 import InputField from '@/components/ui/InputField';
 import TransformingLineLink from "../ui/animation-link";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Label } from "../ui/label";
 
 const RecoverComponent = () => {
     return (
@@ -14,19 +16,43 @@ const RecoverComponent = () => {
             </div>
 
             <form className="w-full space-y-6">
-                <InputField
+                <div className="mt-6">
+                    <Label className="text-sm font-bold text-neutral-600">
+                        SELECT IDENTIFICATION  METHOD
+                    </Label>
+                    <Select>
+                        <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
+                            <SelectValue className="text-neutral-400 text-md text-muted" placeholder="Choose a method" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white text-zinc-900">
+                            <SelectItem
+                                value="NIN"
+                                className="text-sm font-semibold text-zinc-900 hover:text-gray-600"
+                            >
+                                National Identity Number (NIN)
+                            </SelectItem>
+                            <SelectItem
+                                value="IPN"
+                                className="text-sm font-semibold text-zinc-900"
+                            >
+                                International Passport Number (IPN)
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                {/* <InputField
                     id="SELECT IDENTIFICATION METHOD"
                     type="text"
                     label="SELECT IDENTIFICATION METHOD"
                     name="idnumber"
                     placeholder="CHOOSE A METHOD"
                     required
-                />
+                /> */}
                 <InputField
-                    id="ID NUMBER"
+                    id="id_number"
                     type="text"
-                    label="PASWORD"
-                    name="ID NUMBER"
+                    label="ID NUMBER"
+                    name="id_number"
                     placeholder="ID NUMBER"
                     required
                 />

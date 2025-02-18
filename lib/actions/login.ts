@@ -75,6 +75,7 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
     // };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
+    console.log(error);
     if (error?.response) {
       return {
         status: error.response.status,
@@ -113,7 +114,7 @@ export async function googleLoginAction(email: string) {
   try {
     const res = await authService.googleLoginUser(email);
     console.log(res);
-    const data = res.data as LoginResponseData; //Cast to the expected type
+    const data = res.data as LoginResponseData;
     const sessionData = {
       user: {
         id: data.ID,
@@ -129,6 +130,7 @@ export async function googleLoginAction(email: string) {
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
+    console.log(error);
     if (error?.response) {
       return {
         status: error.response.status,
@@ -514,11 +516,11 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
     });
     cookies().delete("otpEmail");
     cookies().delete("TempToken");
-    // return {
-    //   status: 200,
-    //   message: "Password has been successfully reset.",
-    //   success: true,
-    // };
+    return {
+      status: 200,
+      message: "Password has been successfully, Please Login.",
+      success: true,
+    };
   } catch (err: any) {
     console.error("Failed to reset password:", err);
     return {
@@ -528,5 +530,5 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       success: false,
     };
   }
-  redirect("/login");
+  // redirect("/login");
 }
