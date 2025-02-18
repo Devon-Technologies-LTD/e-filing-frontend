@@ -10,12 +10,12 @@ import {
 
 import {
   CustomSelect,
-  DirectCriminalComplaintForm,
   FileInputField,
 } from "./forms/civil";
 import { FamilyComplaintForm } from "./forms/family";
 import { CivilSpecific } from "./forms/civil-specific";
 import { CivlDefault } from "./forms/civil-default";
+import { DirectCriminalComplaintForm } from "./case-type-form/direct-complaint-form";
 
 // const WorthValue = ({ id, label }: FileInputProps) => (
 //     <Select>
