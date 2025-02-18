@@ -23,7 +23,7 @@ export const navigationLinks: NavItem[] = [
   {
     title: "Overview",
     href: "/overview/case",
-    roles: [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES, ROLES.CHIEF_JUDGE],
+    roles: [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES, ROLES.CHIEF_JUDGE, ROLES.CENTRAL_REGISTRY],
     isActive: (pathname) => pathname?.startsWith("/overview"),
   },
   {
@@ -31,6 +31,18 @@ export const navigationLinks: NavItem[] = [
     href: "/your-cases/case",
     roles: [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES],
     isActive: (pathname) => pathname?.startsWith("/your-cases"),
+  },
+  {
+    title: "Case Reviews",
+    href: "/reviews/case",
+    roles: [ROLES.CENTRAL_REGISTRY],
+    isActive: (pathname) => pathname?.startsWith("/reviews"),
+  },
+  {
+    title: "Audit Logs",
+    href: "/audit/case",
+    roles: [ROLES.CENTRAL_REGISTRY],
+    isActive: (pathname) => pathname?.startsWith("/audit"),
   },
   {
     title: "Case Monitoring",

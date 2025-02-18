@@ -1,17 +1,28 @@
-import React from 'react'
+import React from "react";
 import { YearSelector } from "@/components/year-selector";
 import { AllCasesFilter, AllFiledCasesFilter } from "@/components/filters/all-cases";
 import Histogram from "../Histogram";
-import { caseMetric } from "@/lib/dummy-data";
 
-export default function CaseDistributionBarChart() {
+interface CaseMetric {
+  histogram: {
+    labels: string[];
+    data: number[];
+    label: string;
+    histogramTitle: string;
+  };
+}
+
+interface CaseDistributionBarChartProps {
+  caseMetric: CaseMetric;
+  heading: string;
+}
+
+export default function CaseDistributionBarChart({ caseMetric, heading }: CaseDistributionBarChartProps) {
   return (
-    <div className=" space-y-4">
-      <div className="  bg-white border-b border-zinc-200 py-6">
+    <div className="space-y-4">
+      <div className="bg-white border-b border-zinc-200 py-6">
         <div className="container flex items-center justify-between">
-          <p className=" font-bold">
-            CASE DISTRIBUTION ACROSS DIVISIONS (ABUJA)
-          </p>
+          <p className="font-bold ">{heading}</p>
           <section className="flex gap-2">
             <YearSelector />
             <AllFiledCasesFilter />

@@ -5,23 +5,15 @@ import { useToast } from "@/hooks/use-toast";
 import InputField from "@/components/ui/InputField";
 import { useFormState } from "react-dom";
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { SignupAction } from "@/lib/actions/login";
-import DragDropUploader from "./DragDropUploaderNIN";
 import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
 import { LoginPasswordField } from "@/components/auth/password-component";
 import DragDropUploaderNIN from "./DragDropUploaderNIN";
-import DragDropUploaderIPN from "./DragDropUploaderIPN";
+// import DragDropUploaderIPN from "./DragDropUploaderIPN";
 
 const LawyerComponent = () => {
   const { toast } = useToast();
-  const [selectedMethod, setSelectedMethod] = useState<string>("");
+  // const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [state, dispatch] = useFormState(SignupAction, undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -33,7 +25,6 @@ const LawyerComponent = () => {
 
   const errors =
     state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
-
   useEffectAfterMount(() => {
     if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
       toast({
@@ -88,16 +79,6 @@ const LawyerComponent = () => {
               Fields marked with an asterisk (*) are required.
             </p>
 
-            <p className="text-sm text-red-500 h-2 text-center">
-              {typeof state?.errors === "string"
-                ? state.errors
-                : Object.values(state?.errors || {}).flat().join(", ")}
-            </p>
-
-            <p className="text-xs text-red-500 h-2 mt-3 text-center">
-              {state && state?.message}
-            </p>
-
             <br />
             <InputField
               id="email"
@@ -109,7 +90,7 @@ const LawyerComponent = () => {
               error={errors.email?.[0]}
             />
 
-            <div className="mt-6">
+            {/* <div className="mt-6">
               <Select onValueChange={(value) => setSelectedMethod(value)}>
                 <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
                   <SelectValue
@@ -132,28 +113,28 @@ const LawyerComponent = () => {
                   </SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
           </div>
-          {selectedMethod === "NIN" && (
-            <div className="space-y-6">
-              <div>
-                <InputField
-                  id="nin"
-                  type="text"
-                  label="National Identity Number (NIN)"
-                  name="nin"
-                  placeholder="e.g. 09876543212345"
-                  required
-                  error={errors.nin?.[0]}
-                />
-                <p className="text-sm font-bold mt-4 text-neutral-600">
-                  UPLOAD NATIONAL IDENTITY CARD*
-                </p>
-              </div>
-              <DragDropUploaderNIN />
+          {/* {selectedMethod === "NIN" && ( */}
+          <div className="space-y-6">
+            <div>
+              <InputField
+                id="nin"
+                type="text"
+                label="National Identity Number (NIN)"
+                name="nin"
+                placeholder="e.g. 09876543212345"
+                required
+                error={errors.nin?.[0]}
+              />
+              <p className="text-sm font-bold mt-4 text-neutral-600">
+                UPLOAD NATIONAL IDENTITY CARD*
+              </p>
             </div>
-          )}
-          {selectedMethod === "IPN" && (
+            <DragDropUploaderNIN />
+          </div>
+          {/* )} */}
+          {/* {selectedMethod === "IPN" && (
             <div className="space-y-6">
               <div>
                 <InputField
@@ -171,7 +152,7 @@ const LawyerComponent = () => {
               </div>
               <DragDropUploaderIPN />
             </div>
-          )}
+          )} */}
           <div className="space-y-6">
             <InputField
               id="court"
@@ -191,13 +172,21 @@ const LawyerComponent = () => {
               required
               error={errors.phone_number?.[0]}
             />
-
-            <LoginPasswordField label="PASSWORD" name="password" placeholder="Enter Password" />
+            <LoginPasswordField showStrength={true} label="PASSWORD" name="password" placeholder="Enter Password" />
             <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
 
           </div>
         </div>
+        <p className="text-sm text-red-500 h-2 text-center">
+          {typeof state?.errors === "string"
+            ? state.errors
+            : Object.values(state?.errors || {}).flat().join(", ")}
+        </p>
         {/* Loading State */}
+        <p className="text-xs text-red-500 h-2 mt-3 text-center">
+          {state && state?.message}
+        </p>
+
         {loading && (
           <div className="flex justify-center items-center mt-4">
             <div className="spinner"></div> {/* Add spinner */}

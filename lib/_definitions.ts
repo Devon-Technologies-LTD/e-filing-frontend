@@ -25,7 +25,7 @@ export const SignupFormSchema = z
       .string()
       .min(2, { message: "First name must be at least 2 characters long." })
       .trim(),
-    nin: z.string().optional(),
+    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).min(12, { message: "NIN must be at most 11 digit" }),
     ipn: z.string().optional(),
     role: z.string().optional(),
     gender: z.string().optional(),
@@ -48,9 +48,9 @@ export const SignupFormSchema = z
     email: z.string().email({ message: "Please enter a valid email." }).trim(),
     password: z
       .string()
-      .min(8, { message: "Be at least 8 characters long" })
-      .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
-      .regex(/[0-9]/, { message: "Contain at least one number." })
+      .min(8, { message: "Passwword Must contain at least 8 characters long" })
+      .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
+      .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
       .trim(),
     confirm_password: z.string().trim(),
   })
@@ -375,6 +375,6 @@ export const ResetPasswordScheme = z.object({
   confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
 })
   .refine((data) => data.newPassword === data.confirmPassword, {
-      message: "Passwords must match",
-      path: ["confirm_password"],
+    message: "Passwords must match",
+    path: ["confirm_password"],
   });
