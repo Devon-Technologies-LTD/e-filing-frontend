@@ -17,7 +17,7 @@ interface Iprops {
   labelName: string;
   documents: IDocumentFileType[];
   caseType?: string;
-  subCase: string;
+  subCase?: string;
   title: string;
   subTitle: string;
   onSuccess?: (data: any) => void;
@@ -28,7 +28,6 @@ interface Iprops {
 export default function DocumentUploadComponent({
   labelName,
   caseType,
-  subCase,
   title,
   subTitle,
   onDelete,

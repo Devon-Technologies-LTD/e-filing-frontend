@@ -8,11 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/svg/icons";
-import { useDocumentUpload } from "@/hooks/use-document-upload";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { OtherDocuments } from "../../constants";
 import { useDispatch } from "react-redux";

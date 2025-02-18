@@ -4,15 +4,20 @@ import type { CaseOverViewData, FormStep } from "@/types/file-case";
 import { DocumentFileType, Exhibit } from "@/types/exhibit";
 
 interface FormContextType {
+  currentStep: FormStep;
   exhibitFormData: Exhibit[];
   documentUpload: DocumentFileType[];
+  setCurrentStep: (step: FormStep) => void;
   updateExhibitFormData: (data: Exhibit[]) => void;
+  goToNextStep: () => void;
+  goToPreviousStep: () => void;
   addDocumentUpload: (data: DocumentFileType) => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export function FormProvider({ children }: { children: React.ReactNode }) {
+  const [currentStep, setCurrentStep] = useState<FormStep>(1);
   const [exhibitFormData, setExhibitFormData] = useState<Exhibit[]>([
     { id: 1, title: "", file: undefined },
   ]);
@@ -26,13 +31,29 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     setDocumentUpload((prev) => [...prev, data]);
   }, []);
 
+  const goToNextStep = () => {
+    if (currentStep < 4) {
+      setCurrentStep((prev) => (prev + 1) as FormStep);
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep((prev) => (prev - 1) as FormStep);
+    }
+  };
+
   return (
     <FormContext.Provider
       value={{
+        currentStep,
         documentUpload,
         addDocumentUpload,
         exhibitFormData,
+        setCurrentStep,
         updateExhibitFormData,
+        goToNextStep,
+        goToPreviousStep,
       }}
     >
       {children}
