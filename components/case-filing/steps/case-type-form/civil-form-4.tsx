@@ -24,6 +24,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
+import { CaseTypeData } from "../../constants";
 
 export const CivilCaseForm4 = () => {
   const dispatch = useDispatch();
@@ -420,6 +421,7 @@ export const CivilCaseForm4 = () => {
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
                 labelName={"E-SIGNATURE"}
+                subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
                 caseType={case_type}
                 subCase={sub_case_type}
@@ -439,6 +441,7 @@ export const CivilCaseForm4 = () => {
           />
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
+              subTitle={CaseTypeData.CIVIL_CASE}
               labelName={"OTHER PARTICULARS OF PLAINT"}
               title={"PARTICULARS OF PLAINT"}
               caseType={case_type}

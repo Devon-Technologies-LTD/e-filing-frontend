@@ -57,6 +57,7 @@ interface Claimant {
 
 export interface IDraftFilter {
   casetype?: string | null;
+  casefile_title?: string | null;
   court_division_id?: string | null;
   end_date?: string | null;
   start_data?: string | null;

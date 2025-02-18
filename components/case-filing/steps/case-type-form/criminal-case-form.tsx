@@ -1,7 +1,7 @@
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useCallback } from "react";
-import { CriminalCaseSubType } from "../../constants";
+import { CaseTypeData, CriminalCaseSubType } from "../../constants";
 import { DirectCriminalComplaintForm } from "./direct-complaint-form";
 import { useDispatch } from "react-redux";
 import { updateCriminalCaseDocument } from "@/redux/slices/case-filing-slice";
@@ -26,6 +26,7 @@ export default function CriminalCaseForm() {
         return (
           <div className="lg:w-1/2">
             <DocumentUploadComponent
+              subTitle={CaseTypeData.CRIMINAL_CASE}
               labelName={CriminalCaseSubType.FIRST_INFORMATION_REPORT}
               title={CriminalCaseSubType.FIRST_INFORMATION_REPORT}
               caseType={case_type}
@@ -40,6 +41,7 @@ export default function CriminalCaseForm() {
         return (
           <div className="lg:w-1/2">
             <DocumentUploadComponent
+              subTitle={CaseTypeData.CRIMINAL_CASE}
               labelName={CriminalCaseSubType.REQUEST_FOR_REMAND_ORDER}
               title={CriminalCaseSubType.REQUEST_FOR_REMAND_ORDER}
               caseType={case_type}

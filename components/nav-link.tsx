@@ -6,6 +6,8 @@ import { cn, getAuthorizedLinks } from "@/lib/utils";
 import { NavItem } from "@/types/nav";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
+import { clearForm } from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
 
 interface NavLinkProps extends Omit<NavItem, "roles"> {
   className?: string;
@@ -39,7 +41,7 @@ export function NavLink({ href, title, isActive, className }: NavLinkProps) {
 export function Navigation() {
   const { data: user } = useAppSelector((state) => state.profile);
   const navLinks = getAuthorizedLinks(user?.role as ROLES);
-
+  const dispatch = useDispatch();
   if (!user?.role) return null;
 
   return (
@@ -47,7 +49,9 @@ export function Navigation() {
       {" "}
       {/* Horizontal layout */}
       {navLinks.map((link) => (
-        <NavLink key={link.href} {...link} />
+        <div onClick={() => dispatch(clearForm())}>
+          <NavLink key={link.href} {...link} />
+        </div>
       ))}
     </nav>
   );

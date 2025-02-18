@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { toast } from "sonner";
 import {
-    IDocumentFileType,
+  IDocumentFileType,
   removeFamilyCaseDocument,
   updateFamilyCaseDocument,
 } from "@/redux/slices/case-filing-slice";
@@ -50,7 +50,7 @@ export default function FamilyCaseForm() {
   };
 
   const handleDeleteDocument = (id: string) => {
-    console.log("id enteringgg", id)
+    console.log("id enteringgg", id);
     dispatch(removeFamilyCaseDocument(id));
   };
 
@@ -60,6 +60,7 @@ export default function FamilyCaseForm() {
         <div className="space-y-6">
           {uploadedDocuments.map((data: IDocumentFileType) => (
             <DocumentUploadComponent
+              subTitle={CaseTypeData.FAMILY_CASE}
               key={data.id}
               labelName={data.sub_title}
               title={data.sub_title}
@@ -76,6 +77,7 @@ export default function FamilyCaseForm() {
 
       {selectedDocType && (
         <DocumentUploadComponent
+          subTitle={CaseTypeData.FAMILY_CASE}
           labelName={selectedDocType}
           title={selectedDocType}
           caseType={case_type}

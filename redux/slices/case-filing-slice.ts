@@ -142,6 +142,21 @@ const formSlice = createSlice({
       const { field, value } = action.payload;
       state.caseFile[field] = value;
     },
+    updateLegalCounsels: (state, action: any) => {
+      state.legal_counsels = action.payload;
+    },
+    updateMultipleCaseFileFields: (
+      state,
+      action: PayloadAction<{ fields: Partial<CaseFileState> }>
+    ) => {
+      Object.assign(state.caseFile, action.payload.fields);
+    },
+    updateMultipleCaseTypeFields: (
+      state,
+      action: PayloadAction<{ fields: Partial<ICaseTypes> }>
+    ) => {
+      Object.assign(state.caseType, action.payload.fields);
+    },
     addCaseFileError: (
       state,
       action: PayloadAction<Partial<Record<keyof CaseFileState, string>>>
@@ -235,6 +250,37 @@ const formSlice = createSlice({
         state.criminalCaseDocuments.push(action.payload);
       }
     },
+    replaceCriminalCaseDocument: (
+      state,
+      action: PayloadAction<IDocumentFileType[]>
+    ) => {
+      state.criminalCaseDocuments = action.payload;
+    },
+    replaceCivilCaseDocument: (
+      state,
+      action: PayloadAction<IDocumentFileType[]>
+    ) => {
+      state.civilCaseDocuments = action.payload;
+    },
+    replaceFamilyCaseDocument: (
+      state,
+      action: PayloadAction<IDocumentFileType[]>
+    ) => {
+      state.familyCaseDocuments = action.payload;
+    },
+    replaceExhibitsCaseDocument: (
+      state,
+      action: PayloadAction<IDocumentFileType[]>
+    ) => {
+      state.submittedExhibitsDocument = action.payload;
+      state.exhibits = action.payload;
+    },
+    replaceOtherDocuments: (
+      state,
+      action: PayloadAction<IDocumentFileType[]>
+    ) => {
+      state.otherDocuments = action.payload;
+    },
     updateCivilCaseDocument: (
       state,
       action: PayloadAction<IDocumentFileType>
@@ -306,11 +352,26 @@ const formSlice = createSlice({
     removeAllCriminalCaseDocument: (state) => {
       state.criminalCaseDocuments = initialState.criminalCaseDocuments;
     },
+    clearForm: (state) => {
+      state.current_step = initialState.current_step;
+      state.caseFile = initialState.caseFile;
+      state.caseFileErrors = initialState.caseFileErrors;
+      state.caseType = initialState.caseType;
+      state.legal_counsels = initialState.legal_counsels;
+      state.documents = initialState.documents;
+      state.otherDocuments = initialState.otherDocuments;
+      state.exhibits = initialState.exhibits;
+      state.submittedExhibitsDocument = initialState.submittedExhibitsDocument;
+      state.civilCaseDocuments = initialState.civilCaseDocuments;
+      state.criminalCaseDocuments = initialState.criminalCaseDocuments;
+      state.familyCaseDocuments = initialState.familyCaseDocuments;
+    },
   },
 });
 
 export const {
   updateCaseFileField,
+  updateLegalCounsels,
   updateFamilyCaseDocument,
   updateCivilCaseDocument,
   addExhibit,
@@ -328,10 +389,18 @@ export const {
   resetStep,
   markForDeletion,
   addDocument,
+  clearForm,
   updateDocument,
   updateCriminalCaseDocument,
   removeAllCriminalCaseDocument,
   updateSubmittedExhibitsDocument,
   clearCaseType,
+  updateMultipleCaseFileFields,
+  updateMultipleCaseTypeFields,
+  replaceCriminalCaseDocument,
+  replaceCivilCaseDocument,
+  replaceOtherDocuments,
+  replaceExhibitsCaseDocument,
+  replaceFamilyCaseDocument
 } = formSlice.actions;
 export default formSlice.reducer;

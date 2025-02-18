@@ -8,6 +8,7 @@ import { useAppSelector } from "@/hooks/redux";
 import {
   clearCaseFile,
   clearCaseType,
+  clearForm,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
@@ -31,9 +32,7 @@ export function MainNav({
           {[ROLES.LAWYER].includes(data?.role) && (
             <Button
               onClick={() => {
-                dispatch(updateStep(1));
-                dispatch(clearCaseFile());
-                dispatch(clearCaseType());
+                dispatch(clearForm());
                 router.push("/case-filing");
               }}
               variant="default"

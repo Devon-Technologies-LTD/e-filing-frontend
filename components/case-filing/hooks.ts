@@ -1,4 +1,3 @@
-// import { axiosInstance } from "@/lib/axios-helper";
 import {
   createCaseFile,
   createCaseType,
@@ -8,9 +7,11 @@ import {
 import { dateFormatter } from "@/lib/utils";
 import {
   CaseFileState,
-  clearCaseFile,
+  clearForm,
   ICaseTypes,
   ILegalCounsels,
+  updateCaseFileField,
+  updateStep,
 } from "@/redux/slices/case-filing-slice";
 import {
   useMutation,
@@ -30,7 +31,6 @@ interface Claimant {
 }
 
 interface SaveFormParams {
-  step: number | string;
   case_file_id?: string | null;
   data: CaseFileState & ICaseTypes;
   legal_counsels?: ILegalCounsels[];
@@ -55,137 +55,128 @@ export function useCreateCaseFile(
   });
 }
 
-export const useSaveFormAsDraft = () => {
+export const useSaveForm = ({
+  step,
+  isDraft = false,
+}: {
+  step: number;
+  isDraft?: boolean;
+}) => {
   const queryClient = useQueryClient();
   const navigate = useRouter();
   const dispatch = useDispatch();
+
   const mutation = useMutation({
     mutationFn: async ({
-      step,
       case_file_id,
       data,
       legal_counsels,
     }: SaveFormParams) => {
+      const saveStep1 = async () => {
+        const payload = {
+          claimant: {
+            name: data.claimant_name,
+            phone_number: data.claimant_phone_number,
+            email_address: data.claimant_email_address,
+            address: data.claimant_address,
+            whats_app: data.claimant_whats_app,
+          },
+          court_division_id: data.court_division,
+          defendant: {
+            name: data.defendant_name,
+            phone_number: data.defendant_phone_number,
+            email_address: data.defendant_email_address,
+            address: data.defendant_address,
+            whats_app: data.defendant_whats_app,
+          },
+          title: data.title,
+          description: "",
+        };
+        if (case_file_id) {
+          return updateCaseFile({ payload, caseFileId: case_file_id });
+        } else {
+          return createCaseFile(payload);
+        }
+      };
+
+      const saveStep2 = async () => {
+        const payload = {
+          case_type_name: data.case_type,
+          casefile_id: data.case_file_id,
+          claimant: {
+            address: data.claimant_name,
+            email_address: data.claimant_email_address,
+            name: data.claimant_name,
+            phone_number: data.claimant_phone_number,
+            whats_app: data.claimant_whats_app,
+          },
+          cost_claimed: +data.cost_claimed,
+          defendant: {
+            address: data.defendant_address,
+            email_address: data.defendant_email_address,
+            name: data.defendant_name,
+            phone_number: data.defendant_name,
+            whats_app: data.defendant_whats_app,
+          },
+          direct_complain: data.direct_complain,
+          interest_claimed: +data.interest_claimed,
+          sum_claimed: +data.sum_claimed,
+          relief_sought: data.relief_sought,
+          sub_case_type_name: data.sub_case_type,
+          property_description: data.property_description,
+          value_worth: data.value_worth,
+          rental_value: data.rental_value,
+          dated_this: data.dated_this
+            ? dateFormatter(data.dated_this).isoFormat
+            : null,
+          summon_details: {
+            court_description: data.summon_court_description,
+            date: data.summon_date
+              ? dateFormatter(data.summon_date).isoFormat
+              : null,
+            state_location: data.summon_state_location,
+            time: data.summon_time,
+          },
+          notes: data.notes,
+          reovery_amount: data.recovery_amount,
+          legal_counsels,
+          registrar: data.registrar,
+          status: "",
+        };
+
+        if (step === 5) {
+          payload.status = "pending";
+        }
+        console.log("111data", payload);
+        return data.case_type_id
+          ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
+          : createCaseType(payload);
+      };
+
       if (step === 1) {
-        return case_file_id
-          ? updateCaseFile({
-              payload: {
-                claimant: {
-                  name: data.claimant_name,
-                },
-                court_division_id: data.court_division,
-                defendant: {
-                  name: data.defendant_name,
-                },
-                title: data.title,
-                description: "",
-              },
-              caseFileId: case_file_id,
-            })
-          : createCaseFile({
-              claimant: {
-                name: data.claimant_name,
-              },
-              court_division_id: data.court_division,
-              defendant: {
-                name: data.defendant_name,
-              },
-              title: data.title,
-              description: "",
-            });
+        return saveStep1();
       } else {
-        return !data.case_type_id
-          ? createCaseType({
-              case_type_name: data.case_type,
-              casefile_id: data.case_file_id,
-              claimant: {
-                address: data.claimant_name,
-                email_address: data.claimant_email_address,
-                name: data.claimant_name,
-                phone_number: data.claimant_phone_number,
-                whats_app: data.claimant_whats_app,
-              },
-              cost_claimed: +data.cost_claimed,
-              defendant: {
-                address: data.defendant_address,
-                email_address: data.defendant_email_address,
-                name: data.defendant_name,
-                phone_number: data.defendant_name,
-                whats_app: data.defendant_whats_app,
-              },
-              direct_complain: data.direct_complain,
-              interest_claimed: +data.interest_claimed,
-              sum_claimed: +data.sum_claimed,
-              relief_sought: data.relief_sought,
-              sub_case_type_name: data.sub_case_type,
-              property_description: data.property_description,
-              value_worth: data.value_worth,
-              rental_value: data.rental_value,
-              // dated_this: data.dated_this
-              //   ? dateFormatter(data.dated_this).isoFormat
-              //   : null,
-              summon_details: {
-                court_description: data.summon_court_description,
-                // date: data.summon_date ? dateFormatter(data.summon_date).isoFormat : null,
-                state_location: data.summon_state_location,
-                // time: data.summon_time,
-              },
-              notes: data.notes,
-              reovery_amount: data.recovery_amount,
-              legal_counsels,
-              registrar: data.registrar,
-            })
-          : createCaseType({
-              case_type_name: data.case_type,
-              casefile_id: data.case_file_id,
-              claimant: {
-                address: data.claimant_name,
-                email_address: data.claimant_email_address,
-                name: data.claimant_name,
-                phone_number: data.claimant_phone_number,
-                whats_app: data.claimant_whats_app,
-              },
-              cost_claimed: +data.cost_claimed,
-              defendant: {
-                address: data.defendant_address,
-                email_address: data.defendant_email_address,
-                name: data.defendant_name,
-                phone_number: data.defendant_name,
-                whats_app: data.defendant_whats_app,
-              },
-              direct_complain: data.direct_complain,
-              interest_claimed: +data.interest_claimed,
-              sum_claimed: +data.sum_claimed,
-              relief_sought: data.relief_sought,
-              sub_case_type_name: data.sub_case_type,
-              property_description: data.property_description,
-              value_worth: data.value_worth,
-              rental_value: data.rental_value,
-              // dated_this: data.dated_this
-              //   ? dateFormatter(data.dated_this).isoFormat
-              //   : null,
-              summon_details: {
-                court_description: data.summon_court_description,
-                // date: data.summon_date ? dateFormatter(data.summon_date).isoFormat : null,
-                state_location: data.summon_state_location,
-                // time: data.summon_time,
-              },
-              notes: data.notes,
-              reovery_amount: data.recovery_amount,
-              legal_counsels,
-              registrar: data.registrar,
-            });
+        return saveStep2();
       }
     },
     onSuccess: (data) => {
       if (data?.success) {
-        toast.success(data.message || "Form saved successfully!");
-        queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
-        navigate.push("/drafts");
-        dispatch(clearCaseFile());
+        toast.success(data?.message || "Form saved successfully!");
+        if (isDraft) {
+          queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
+          navigate.push("/drafts");
+          dispatch(clearForm());
+        } else {
+          dispatch(
+            updateCaseFileField({ field: "case_file_id", value: data?.id })
+          );
+          dispatch(updateStep(step + 1));
+        }
       } else {
         console.log("first", data);
-        toast.error(data.message || "An error occurred while saving the form.");
+        toast.error(
+          data?.message || "An error occurred while saving the form."
+        );
       }
     },
     onError: (error) => {

@@ -19,6 +19,7 @@ interface Iprops {
   caseType?: string;
   subCase: string;
   title: string;
+  subTitle: string;
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
   onDelete?: () => void;
@@ -29,6 +30,7 @@ export default function DocumentUploadComponent({
   caseType,
   subCase,
   title,
+  subTitle,
   onDelete,
   onSuccess,
   onError,
@@ -77,7 +79,7 @@ export default function DocumentUploadComponent({
     formData.append("casefile_id", case_file_id);
     formData.append("case_type_name", caseType || title);
     formData.append("file", file);
-    formData.append("sub_title", subCase || title);
+    formData.append("sub_title", subTitle);
     formData.append("title", title);
 
     if (existingDocument) {

@@ -7,119 +7,71 @@ import { FORM_STEPS } from "@/constants/form";
 import { MoveLeft } from "lucide-react";
 import { useAppSelector } from "@/hooks/redux";
 import { useCaseOverviewFormValidator } from "./validators/useCaseOverviewValidator";
-import { useCreateCaseFile, useSaveFormAsDraft } from "./hooks";
-import {
-  updateCaseFileField,
-  updateStep,
-} from "@/redux/slices/case-filing-slice";
+import { useSaveForm } from "./hooks";
+import { updateStep } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ConfirmationModal } from "../confirmation-modal";
 import { Icons } from "../svg/icons";
-import {
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogFooter,
-} from "../ui/alert-dialog";
+import { AlertDialogCancel, AlertDialogFooter } from "../ui/alert-dialog";
 import { useState } from "react";
 
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const saveForm = useSaveFormAsDraft();
 
   const dispatch = useDispatch();
   const {
     caseFile: caseFileStateValues,
     current_step,
     caseType,
-    legal_counsels
+    legal_counsels,
   } = useAppSelector((store) => store.caseFileForm);
   const { validate } = useCaseOverviewFormValidator({
     store: caseFileStateValues,
   });
-  // const { toast } = useToast();
+
+  const { mutate: saveAsDraft, isPending: draftPending } = useSaveForm({
+    step: current_step,
+    isDraft: true,
+  });
+  const { mutate: saveForm, isPending: formPending } = useSaveForm({
+    step: current_step,
+  });
 
   const router = useRouter();
-
-  const createCaseFile = useCreateCaseFile();
 
   const handleNextStep = async () => {
     if (current_step === 1) {
       await validate(() =>
-        createCaseFile.mutate(
-          {
-            claimant: {
-              address: caseFileStateValues.claimant_address,
-              email_address: caseFileStateValues.claimant_email_address,
-              name: caseFileStateValues.claimant_name,
-              phone_number: caseFileStateValues.claimant_phone_number,
-            },
-            defendant: {
-              name: caseFileStateValues.defendant_name,
-            },
-            court_division_id: caseFileStateValues.court_division,
-            title: caseFileStateValues.title,
+        saveForm({
+          case_file_id: caseFileStateValues.case_file_id,
+          data: {
+            ...caseFileStateValues,
+            ...caseType,
           },
-          {
-            onSuccess: (data) => {
-              console.log("case file id data", data);
-              if (!data.success) {
-                return;
-              } else {
-                dispatch(
-                  updateCaseFileField({
-                    field: "case_file_id",
-                    value: data?.id,
-                  })
-                );
-
-                dispatch(updateStep(current_step + 1));
-              }
-            },
-          }
-        )
+          legal_counsels,
+        })
       );
+    } else if (current_step === 5) {
+      saveForm({
+        case_file_id: caseFileStateValues.case_file_id,
+        data: {
+          ...caseFileStateValues,
+          ...caseType,
+        },
+        legal_counsels,
+      });
     } else {
       dispatch(updateStep(current_step + 1));
     }
   };
   const handleSaveAndContinue = async () => {
-    // if (current_step === 1) {
-    //   await validate(() =>
-    //     createCaseFile.mutate(
-    //       {
-    //         claimant: {
-    //           address: caseFileStateValues.claimant_address,
-    //           email_address: caseFileStateValues.claimant_email_address,
-    //           name: caseFileStateValues.claimant_name,
-    //           phone_number: caseFileStateValues.claimant_phone_number,
-    //         },
-    //         defendant: {
-    //           name: caseFileStateValues.defendant_name,
-    //         },
-    //         court_division_id: caseFileStateValues.court_division,
-    //         title: caseFileStateValues.title,
-    //       },
-    //       {
-    //         onSuccess: (data) => {
-    //           dispatch(
-    //             updateCaseFileField({ field: "case_file_id", value: data?.id })
-    //           );
-    //         },
-    //       }
-    //     )
-    //   );
-    // } else {
-    //   dispatch(updateStep(current_step + 1));
-    // }
-
-    saveForm.mutate({
-      step: current_step,
+    saveAsDraft({
       case_file_id: caseFileStateValues.case_file_id,
       data: {
         ...caseFileStateValues,
         ...caseType,
       },
-      legal_counsels
+      legal_counsels,
     });
   };
 
@@ -179,9 +131,9 @@ export function StepperNavigation() {
                   e.stopPropagation();
                   handleSaveAndContinue();
                 }}
-                disabled={saveForm.isPending}
+                disabled={draftPending}
               >
-                {saveForm.isPending ? "Saving..." : "SAVE PROGRESS"}
+                {draftPending ? "Saving..." : "SAVE PROGRESS"}
               </Button>
 
               <AlertDialogCancel
@@ -200,11 +152,9 @@ export function StepperNavigation() {
           size={"lg"}
           className="font-bold flex-end text-sm h-11"
           onClick={handleNextStep}
-          disabled={
-            current_step === FORM_STEPS.length || createCaseFile.isPending
-          }
+          disabled={current_step === FORM_STEPS.length || formPending}
         >
-          {createCaseFile.isPending ? <>Loading...</> : "  Next"}
+          {formPending ? <>Loading...</> : "  Next"}
         </Button>
       </div>
     </CardFooter>

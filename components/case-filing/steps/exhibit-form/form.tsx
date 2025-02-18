@@ -115,6 +115,7 @@ export default function ExhibitFormFields() {
               />
 
               <DocumentUploadComponent
+                subTitle={"EXHIBITS"}
                 labelName={"exhibit file"}
                 title={exhibit.title}
                 caseType={case_type}

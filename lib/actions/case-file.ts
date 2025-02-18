@@ -193,8 +193,10 @@ export async function updateCaseFile({
   payload: ICreateCaseFileData;
   caseFileId: string;
 }) {
+  console.log("entering update case");
   try {
     const data = await CaseFileService.patchCaseFile({ payload, caseFileId });
+    console.log("response from updating case", data);
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -319,10 +321,13 @@ export async function getCaseTypes(payload: any, id: string) {
   }
 }
 
-export async function updateCaseType(
-  payload: ICreateCaseFileData,
-  caseFileId: string
-) {
+export async function updateCaseType({
+  payload,
+  caseFileId,
+}: {
+  payload: ICreateCaseFileData;
+  caseFileId: string;
+}) {
   try {
     const data = await CaseFileService.patchCaseType({ payload, caseFileId });
     return { ...data, success: true };
