@@ -83,14 +83,6 @@ const IndividualComponent = () => {
                             <p className="font-bold text-sm text-neutral-500">
                                 Fields marked with an asterisk (*) are required.
                             </p>
-                            <p className="text-sm text-red-500 h-2 text-center">
-                                {typeof state?.errors === "string"
-                                    ? state.errors
-                                    : Object.values(state?.errors || {}).flat().join(", ")}
-                            </p>
-                            <p className="text-sm text-red-500 h-2 mt-3 text-center">
-                                {state?.message}
-                            </p>
                             <br />
                             <InputField
                                 id="email"
@@ -101,7 +93,7 @@ const IndividualComponent = () => {
                                 required
                                 error={errors.email?.[0]}
                             />
-                            <div className="mt-6">
+                            {/* <div className="mt-6">
                                 <Select onValueChange={(value) => setSelectedMethod(value)}>
                                     <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
                                         <SelectValue
@@ -124,28 +116,28 @@ const IndividualComponent = () => {
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
+                            </div> */}
                         </div>
 
-                        {selectedMethod === "NIN" && (
-                            <div className="space-y-6">
-                                <div>
-                                    <InputField
-                                        id="nin"
-                                        type="text"
-                                        label="National Identity Number (NIN)"
-                                        name="nin"
-                                        placeholder="e.g. 09876543212345"
-                                        required
-                                        error={errors.nin?.[0]}
-                                    />
-                                    <p className="text-sm font-bold mt-4 text-neutral-600">
-                                        UPLOAD NATIONAL IDENTITY CARD*
-                                    </p>
-                                </div>
-                                <DragDropUploader />
+                        {/* {selectedMethod === "NIN" && ( */}
+                        <div className="space-y-6">
+                            <div>
+                                <InputField
+                                    id="nin"
+                                    type="text"
+                                    label="National Identity Number (NIN)"
+                                    name="nin"
+                                    placeholder="e.g. 09876543212345"
+                                    required
+                                    error={errors.nin?.[0]}
+                                />
+                                <p className="text-sm font-bold mt-4 text-neutral-600">
+                                    UPLOAD NATIONAL IDENTITY CARD*
+                                </p>
                             </div>
-                        )}
+                            <DragDropUploader />
+                        </div>
+                        {/* )} */}
                         {selectedMethod === "IPN" && (
                             <div className="space-y-6">
                                 <div>
@@ -175,11 +167,19 @@ const IndividualComponent = () => {
                                 required
                                 error={errors.phone_number?.[0]}
                             />
-                            <LoginPasswordField label="PASSWORD" name="password" placeholder="Enter Password" />
+                            <LoginPasswordField showStrength={true} label="PASSWORD" name="password" placeholder="Enter Password" />
                             <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
 
                         </div>
                     </div>
+                    <p className="text-sm text-red-500 h-2 text-center">
+                        {typeof state?.errors === "string"
+                            ? state.errors
+                            : Object.values(state?.errors || {}).flat().join(", ")}
+                    </p>
+                    <p className="text-sm text-red-500 h-2 mt-3 text-center">
+                        {state?.message}
+                    </p>
                     {/* Loading State */}
                     {loading && (
                         <div className="flex justify-center items-center mt-4">

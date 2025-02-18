@@ -45,13 +45,11 @@ export const apiPrefix = "/api";
 export const DEFAULT_LOGIN_REDIRECT = "/case-filing";
 export const defaultLoginRedirect = (role?: ROLES) => {
   switch (role) {
-    case "ASSIGNING_MAGISTRATES":
-      return "/overview/case";
-    case "ADMIN":
-      return "/case-filing";
+    case "ADMIN": return "/case-filing";
     case ROLES.CHIEF_JUDGE:
     case ROLES.DIRECTOR_MAGISTRATES:
     case ROLES.ASSIGNING_MAGISTRATES:
+    case ROLES.CENTRAL_REGISTRY:
       return "/overview/case";
     case "LAWYER":
       return "/cases/recent";

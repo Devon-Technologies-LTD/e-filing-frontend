@@ -41,11 +41,11 @@ const AuthLayout = ({ children, headerContent }: AuthLayoutProps) => {
                     <div className="container mx-auto flex items-center justify-center">
                         <div className="w-full max-w-sm md:max-w-md lg:max-w-lg flex flex-col gap-4 items-center justify-center">
                             {children}
-                            <TermsAndPrivacy />
                         </div>
                     </div>
                 </section>
             </div>
+            <TermsAndPrivacy />
         </main>
     );
 };

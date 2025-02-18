@@ -132,4 +132,57 @@ export const presidingdata = [
 
 ];
 
+export const centraldata = [
+  {
+    id: 1,
+    title: "Case Filling Under Review",
+    total: "5675000",
+    lastYear: "12200",
+    variant: "total",
+    color: "bg-neutral-200",
+    description:
+      "The total number of cases filed under Abuja broken down into various division",
+    districts: [
+      { name: "Wuse Zone 1", cases: 4500 },
+      { name: "Wuse Zone 2", cases: 3200 },
+      { name: "Wuse Zone 3", cases: 6000 },
+      { name: "Wuse Zone 1", cases: 4500 },
+      { name: "Wuse Zone 2", cases: 3200 },
+      { name: "Wuse Zone 3", cases: 6000 },
+      { name: "Wuse Zone 1", cases: 4500 },
+      { name: "Wuse Zone 2", cases: 3200 },
+      { name: "Wuse Zone 3", cases: 6000 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Case Filling Approved",
+    total: "3890000",
+    lastYear: "9450",
+    variant: "active",
+    color: "bg-green-50",
+    description: "Cases that are still ongoing in Wuse division.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+  {
+    id: 3,
+    title: "Case Filling denied",
+    total: "1890000",
+    variant: "concluded",
+    lastYear: "2450",
+    color: "bg-orange-50",
+    description: "The total number of cases  filed under wuse zone 2.",
+    districts: [
+      { name: "Wuse Zone 1", cases: 2000 },
+      { name: "Wuse Zone 2", cases: 1500 },
+      { name: "Wuse Zone 3", cases: 3000 },
+    ],
+  },
+
+];
+
 

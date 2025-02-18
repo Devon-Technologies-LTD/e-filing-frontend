@@ -8,6 +8,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { useMemo } from "react";
 
 const defaultTabs: { id: MCaseFilterType; label: string }[] = [];
+
 const assigningMTabs: { id: MCaseFilterType; label: string }[] = [
   { id: "case", label: "Cases Metrics" },
   { id: "magistrate", label: "Magistrate Cases" },
@@ -42,14 +43,16 @@ export default function LayoutPage({
 
   return (
     <div className="bg-zinc-100 min-h-dh">
-      <header className="bg-white shadow-md pt-6 sticky top-0 z-10">
+      <header className="bg-white shadow-md pt-4 sticky top-0 z-10">
         <div className="container space-y-3">
-          <h1 className="text-xl font-bold uppercase">Overview</h1>
-          <ReusableTabs
-            tabs={tabs}
-            onTabChange={handleTabChange}
-            activeTab={activeTab}
-          />
+          <h1 className="text-xl pb-4 font-bold uppercase">Overview</h1>
+          {tabs.length > 0 && (
+            <ReusableTabs
+              tabs={tabs}
+              onTabChange={handleTabChange}
+              activeTab={activeTab}
+            />
+          )}
         </div>
       </header>
       <div className=" overflow-y-auto min-h-dvh">

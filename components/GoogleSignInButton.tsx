@@ -4,35 +4,57 @@ import { Button } from "@/components/ui/button";
 import { GogleIcon } from "@/components/svg/gogle-icon";
 import { googleLoginAction } from "@/lib/actions/login";
 import { LoaderCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import Link from "next/link";
 
 const GoogleSignInButton: React.FC = () => {
+    const { toast } = useToast();
     const { signInWithGoogle, user, signOut } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [showDialog, setShowDialog] = useState(false);
 
     const handleSignIn = async () => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const result = await signInWithGoogle();
             if (!result.email) {
-                console.error("No email returned from Google authentication.");
+                toast({
+                    title: "An error occurred",
+                    description: "No email returned from Google authentication.",
+                    variant: "destructive",
+                    style: {
+                        backgroundColor: "#f44336",
+                        color: "#fff",
+                        borderRadius: "8px",
+                        padding: "12px",
+                    },
+                });
                 return;
             }
-            await googleLoginAction(result.email);
+            const data = await googleLoginAction(result.email);
+            if (!data.success) {
+                await signOut();
+                console.log("modal should open");
+                setShowDialog(true);
+            }
         } catch (error) {
-            console.error("Failed to sign in:", error);
+            console.log(error);
+            setShowDialog(true);
+            await signOut();
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
     const handleSignOut = async () => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             await signOut();
         } catch (error) {
             console.error("Failed to sign out:", error);
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
@@ -41,13 +63,14 @@ const GoogleSignInButton: React.FC = () => {
             {!user ? (
                 <Button
                     onClick={handleSignIn}
-                    disabled={loading} // Disable button when loading
+                    disabled={loading}
                     className="w-full h-12 mt-2 rounded-lg bg-app-primary px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
                 >
                     {loading ? (
                         <span className="flex items-center gap-2">
                             <LoaderCircle size={12} className="rotation-loader animate-spin" />
-                            Signing in...</span>
+                            Signing in...
+                        </span>
                     ) : (
                         <>
                             <GogleIcon className="size-8" />
@@ -58,19 +81,42 @@ const GoogleSignInButton: React.FC = () => {
             ) : (
                 <Button
                     onClick={handleSignOut}
-                    disabled={loading} // Disable button when loading
+                    disabled={loading}
                     className="w-full h-12 mt-2 rounded-lg bg-app-primary px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
                 >
                     {loading ? (
                         <span className="flex items-center gap-2">
                             <LoaderCircle size={12} className="rotation-loader animate-spin" />
                             Signing out...
-                        </span> // Show loading text
+                        </span>
                     ) : (
                         "Sign Out"
                     )}
                 </Button>
             )}
+
+            {/* Dialog for registration prompt */}
+            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                <DialogContent className="max-w-sm">
+                    <DialogTitle className="text-sm">Account Not Found</DialogTitle>
+                    <DialogDescription className="text-center">
+                        We didn't find an account with that email address. <br /> Do you want to create an account?
+                    </DialogDescription>
+                    <DialogFooter>
+                        <div className="flex w-full justify-between">
+                            <div className="hidden md:flex items-center text-app-primary group relative">
+                                <Link href="/signup" className="text-sm font-bold text-app-primary relative z-10">
+                                    Create Account
+                                </Link>
+                                <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-24 group-hover:bg-app-secondary"></div>
+                            </div>
+                            <span>
+                                <Button variant="ghost" className="text-app-primary" onClick={() => setShowDialog(false)}>Cancel</Button>
+                            </span>
+                        </div>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };
