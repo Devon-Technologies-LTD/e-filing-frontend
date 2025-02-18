@@ -2,6 +2,10 @@
 import { useParams, useRouter } from "next/navigation";
 import { TCaseFilterType } from "@/types/case";
 import ReusableTabs from "@/components/ui/reusable-tabs";
+import { RoleToTabs } from "@/types/general";
+import { ROLES } from "@/types/auth";
+import { useMemo } from "react";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function LayoutPage({
   children,
@@ -11,16 +15,29 @@ export default function LayoutPage({
   const router = useRouter();
   const params = useParams();
   const activeTab = params?.tab as string;
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const handleTabChange = (newTab: string) => {
     router.push(`/cases/${newTab}`);
   };
-  const tabs: { id: TCaseFilterType; label: string }[] = [
+  const defaultTabs: { id: TCaseFilterType; label: string }[] = [
     { id: "recent", label: "Recent Cases" },
     { id: "active", label: "Active Cases" },
     { id: "unassigned", label: "Unassigned Cases" },
     { id: "concluded", label: "Concluded Cases" },
   ];
+    const directorTabs = [
+      { id: "assigned", label: "Assigned To Me" },
+      { id: "submitted", label: "Submitted Cases" },
+      { id: "concluded", label: "Concluded Cases" },
+    ];
+
+    const roleToTabs: RoleToTabs = {
+      [ROLES.DIRECTOR_MAGISTRATES]: directorTabs,
+    };
+    const tabs = useMemo(() => {
+      return roleToTabs[user?.role as string] || defaultTabs;
+    }, [user?.role]);
 
   return (
     <div className="container mx-auto space-y-8 py-4">

@@ -3,33 +3,31 @@ import { Plus, X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icons } from "@/components/svg/icons";
-import useExhibits from "@/hooks/use-exhibit-form";
+import DocumentUploadComponent from "@/components/ui/document-upload";
+import { useAppSelector } from "@/hooks/redux";
+import { addExhibit, updateExhibitDocument, updateExhibitTitle, updateSubmittedExhibitsDocument } from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
 
 export default function ExhibitFormFields() {
+  const dispatch = useDispatch();
   const {
-    exhibits,
-    addExhibit,
-    removeExhibit,
-    updateExhibitTitle,
-    handleFileChange,
-    updateExhibitFile,
-  } = useExhibits();
+    caseType: { case_type, sub_case_type },
+    exhibits: exhibitsDocument,
+    submittedExhibitsDocument,
+  } = useAppSelector((data) => data.caseFileForm);
 
-  const handleAddExhibit = () => {
-    const newId = Math.max(...exhibits.map((e) => e.id), 0) + 1; 
-    addExhibit({ id: newId, title: "" });
+  const handleSuccess = (data: any) => {
+    dispatch(updateSubmittedExhibitsDocument(data.data));
   };
 
-  const handleDownloadSample = (id: number) => {
-    //trigger a download of the sample document
-    console.log("Downloading sample document for exhibit:", id);
+  const handleError = (error: any) => {
+    console.error("Upload/Update failed:", error);
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-6">
       <div className="space-y-6">
-        {exhibits.map((exhibit, index) => (
+        {exhibitsDocument.map((exhibit, index) => (
           <div key={exhibit.id} className="">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -40,7 +38,7 @@ export default function ExhibitFormFields() {
                 </Label>
               </div>
 
-              {exhibits.length > 1 && (
+              {/* {exhibitsDocument.length > 1 && (
                 <Button
                   type="button"
                   variant="ghost"
@@ -49,11 +47,11 @@ export default function ExhibitFormFields() {
                 >
                   <Icons.bin className="h-4 w-4" />
                 </Button>
-              )}
+              )} */}
             </div>
 
             <div className="grid gap-4">
-              <Input
+              {/* <Input
                 id={`title-${exhibit.id}`}
                 value={exhibit.title}
                 variant="underlined"
@@ -100,16 +98,31 @@ export default function ExhibitFormFields() {
                     </Button>
                   )}
                 </div>
-              </div>
+              </div> */}
+              <Input
+                id={`title-${exhibit.id}`}
+                value={exhibit.title}
+                variant="underlined"
+                onChange={(e) =>
+                  dispatch(
+                    updateExhibitTitle({
+                      exhibitId: exhibit.id,
+                      title: e.target.value,
+                    })
+                  )
+                }
+                placeholder="e.g evidence documents"
+              />
 
-              <Button
-                type="button"
-                variant="link"
-                className="flex justify-start w-min text-app-secondary hover:text-app-secondary/90 p-0 text-sm font-bold"
-                onClick={() => handleDownloadSample(exhibit.id)}
-              >
-                DOWNLOAD SAMPLE DOCUMENT
-              </Button>
+              <DocumentUploadComponent
+                labelName={"exhibit file"}
+                title={exhibit.title}
+                caseType={case_type}
+                subCase={sub_case_type}
+                onSuccess={(data) => handleSuccess(data)}
+                onError={handleError}
+                documents={submittedExhibitsDocument}
+              />
             </div>
           </div>
         ))}
@@ -120,7 +133,9 @@ export default function ExhibitFormFields() {
         variant="outline"
         size={"lg"}
         className="w-auto hover:bg-red-50 px-2 border-2"
-        onClick={handleAddExhibit}
+        onClick={() => {
+          dispatch(addExhibit());
+        }}
       >
         <Plus className="h-4 w-4 " />
         ADD NEW EXHIBIT

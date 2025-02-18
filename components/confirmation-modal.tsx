@@ -5,22 +5,29 @@ import {
   AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 
 interface ConfirmationModalProps {
   trigger: React.ReactNode;
   children: React.ReactNode;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
 export const ConfirmationModal = ({
   trigger,
   children,
+  isOpen,
+  setIsOpen,
 }: ConfirmationModalProps) => {
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger
         onClick={(e) => {
           e.stopPropagation();
+          setIsOpen(true);
         }}
         asChild
       >
@@ -32,8 +39,12 @@ export const ConfirmationModal = ({
         }}
         className="bg-white"
       >
-        <AlertDialogHeader>{children}</AlertDialogHeader>
-        
+        <AlertDialogHeader>
+          <AlertDialogTitle className="sr-only">
+            Are you absolutely sure you want to save as draft?
+          </AlertDialogTitle>
+          <AlertDialogDescription>{children}</AlertDialogDescription>
+        </AlertDialogHeader>
       </AlertDialogContent>
     </AlertDialog>
   );

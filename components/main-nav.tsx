@@ -3,15 +3,22 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Navigation } from "./nav-link";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
+import {
+  clearCaseFile,
+  clearCaseType,
+  updateStep,
+} from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const { data } = useAppSelector((state) => state.profile);
-
+  const dispatch = useDispatch();
+  const router = useRouter();
   // TODO: this should be dynamic and changed to database user role enum
   return (
     <nav
@@ -22,11 +29,19 @@ export function MainNav({
       {data?.role && (
         <>
           {[ROLES.LAWYER].includes(data?.role) && (
-            <Link href="/case-filing">
-              <Button variant="default" size="sm" className="h-10 uppercase">
-                File a Case
-              </Button>
-            </Link>
+            <Button
+              onClick={() => {
+                dispatch(updateStep(1));
+                dispatch(clearCaseFile());
+                dispatch(clearCaseType());
+                router.push("/case-filing");
+              }}
+              variant="default"
+              size="medium"
+              className="h-10 uppercase"
+            >
+              File a Case
+            </Button>
           )}
         </>
       )}

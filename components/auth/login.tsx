@@ -55,6 +55,7 @@ const LoginComponent = () => {
             <SelectItem value="ADMIN" className="text-sm font-semibold text-zinc-900">ADMIN</SelectItem>
             <SelectItem value="ASSIGNING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">ASSIGNING MAGISTRATES</SelectItem>
             <SelectItem value="PRESIDING_MAGISTRATES" className="text-sm font-semibold text-zinc-900">PRESIDING MAGISTRATES</SelectItem>
+            <SelectItem value="DIRECTOR_MAGISTRATES" className="text-sm font-semibold text-zinc-900">DIRECTOR MAGISTRATE</SelectItem>
             <SelectItem value="CHIEF_JUDGE" className="text-sm font-semibold text-zinc-900">CHIEF JUDGE</SelectItem>
           </SelectContent>
         </Select>

@@ -8,28 +8,29 @@ import { LucideIcon, HelpCircle } from 'lucide-react';
 import clsx from 'clsx';
 
 interface InputFieldProps {
-    id: string;
-    name: string;
-    label: string;
-    type?: string;
-    placeholder?: string;
-    required?: boolean;
-    disabled?: boolean;
-    error?: string;
-    value?: string;
-    icon?: LucideIcon;
-    tooltipText?: string;
-    tooltipIcon?: LucideIcon;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    bottomText?: React.ReactNode;
-    onIconClick?: () => void;
-    className?: string;
-    autoFocus?: boolean;
-    state?: {
-        status?: any;
-        message?: any;
-        errors: any;
-    };
+  id: string;
+  name: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  error?: string;
+  value?: string;
+  icon?: LucideIcon;
+  tooltipText?: string;
+  tooltipContent?: React.ReactNode;
+  tooltipIcon?: LucideIcon;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  bottomText?: React.ReactNode;
+  onIconClick?: () => void;
+  className?: string;
+  autoFocus?: boolean;
+  state?: {
+    status?: any;
+    message?: any;
+    errors: any;
+  };
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -44,6 +45,7 @@ const InputField: React.FC<InputFieldProps> = ({
     value,
     icon: Icon,
     tooltipText,
+    tooltipContent,
     tooltipIcon: TooltipIcon = HelpCircle,
     onChange,
     bottomText,
@@ -55,7 +57,7 @@ const InputField: React.FC<InputFieldProps> = ({
     return (
         <div className="relative w-full space-y-1">
             <div className="flex items-center gap-1">
-                {tooltipText && (
+                {(tooltipText || tooltipContent )&& (
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -64,8 +66,10 @@ const InputField: React.FC<InputFieldProps> = ({
                                     aria-label={tooltipText}
                                 />
                             </TooltipTrigger>
-                            <TooltipContent className="mb-12">
-                                <p className="text-sm">{tooltipText}</p>
+                            <TooltipContent className="mb-12 p-0">
+                                {tooltipContent ? tooltipContent:
+                                    <p className="text-sm">{tooltipText}</p>
+                                }
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
@@ -84,6 +88,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
             <div className="relative">
                 <Input
+                    variant="underlined"
                     id={id}
                     name={name}
                     type={type}
@@ -95,7 +100,7 @@ const InputField: React.FC<InputFieldProps> = ({
                     autoComplete="off"
                     autoFocus={autoFocus}
                     className={clsx(
-                        "w-full p-2 border-0 border-b-[1px] placeholder:text-sm placeholder:font-semibold placeholder:text-zinc-500 shadow-none focus:outline-none focus:border-b-2  border-app-secondary",
+                        "w-full p-2 border-0 border-b-[1px] placeholder:text-sm placeholder:font-semibold placeholder:text-zinc-400 shadow-none focus:outline-none focus:border-b-2  border-app-secondary",
                         error ? "border-red-500 focus:border-red-500" : "border-neutral-200 ",
                         disabled && "opacity-50 cursor-not-allowed",
                         Icon && "pr-10",

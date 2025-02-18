@@ -1,3 +1,4 @@
+import { CaseFileState } from '@/redux/slices/case-filing-slice';
 import { LockIcon, InfoIcon } from 'lucide-react';
 
 
@@ -7,14 +8,14 @@ export type Location = {
 }
 
 export interface FormField {
-    id: string;
-    name: string;
-    label: string;
-    placeholder: string;
-    tooltipText?: string;
-    icon?: typeof LockIcon | typeof InfoIcon;
-    tooltipIcon?: typeof InfoIcon;
-    required?: boolean;
+  id: string;
+  name: keyof CaseFileState;
+  label: string;
+  placeholder: string;
+  tooltipText?: string;
+  icon?: typeof LockIcon | typeof InfoIcon;
+  tooltipIcon?: typeof InfoIcon;
+  required?: boolean;
 }
 
 
@@ -29,56 +30,56 @@ export const FILING_LOCATIONS: Location[] = [
 ];
 
 export const FORM_FIELDS: FormField[] = [
-    {
-        id: "claimant",
-        name: "claimant",
-        label: "CLAIMANT*",
-        tooltipText: "Enter the name of the claimant",
-        tooltipIcon: InfoIcon,
-        placeholder: "Prince Joe",
-        icon: LockIcon,
-        required: true,
-    },
-    {
-        id: "defendant",
-        name: "defendant",
-        label: "DEFENDANT*",
-        tooltipText: "Enter the name of the defendant",
-        tooltipIcon: InfoIcon,
-        placeholder: "Prince Joe",
-        required: true,
-    },
-    {
-        id: "case-title",
-        name: "caseTitle",
-        label: "CASE TITLE*",
-        tooltipText: "Enter the title of the case",
-        placeholder: "Prince Joe",
-        required: true,
-    },
-    {
-        id: "claimant-phone",
-        name: "claimantPhone",
-        label: "CLAIMANT PHONE NUMBER*",
-        placeholder: "Prince Joe",
-        required: true,
-    },
-    {
-        id: "claimant-email",
-        name: "claimantEmail",
-        label: "CLAIMANT EMAIL ADDRESS*",
-        placeholder: "Prince Joe",
-        icon: LockIcon,
-        required: true,
-    },
-    {
-        id: "claimant-address",
-        name: "claimantAddress",
-        label: "CLAIMANT PHYSICAL ADDRESS*",
-        tooltipText: "Enter the physical address of the claimant",
-        placeholder: "Prince Joe",
-        required: true,
-    },
+  {
+    id: "claimant",
+    name: "claimant_name",
+    label: "CLAIMANT*",
+    tooltipText: "Enter the name of the claimant",
+    tooltipIcon: InfoIcon,
+    placeholder: "Prince Joe",
+    icon: LockIcon,
+    required: true,
+  },
+  {
+    id: "defendant",
+    name: "defendant_name",
+    label: "DEFENDANT*",
+    tooltipText: "Enter the name of the defendant",
+    tooltipIcon: InfoIcon,
+    placeholder: "Prince Joe",
+    required: true,
+  },
+  {
+    id: "case-title",
+    name: "title",
+    label: "CASE TITLE*",
+    tooltipText: "Enter the title of the case",
+    placeholder: "Prince Joe",
+    required: true,
+  },
+  {
+    id: "claimant-phone",
+    name: "claimant_phone_number",
+    label: "CLAIMANT PHONE NUMBER*",
+    placeholder: "Prince Joe",
+    required: true,
+  },
+  {
+    id: "claimant-email",
+    name: "claimant_email_address",
+    label: "CLAIMANT EMAIL ADDRESS*",
+    placeholder: "Prince Joe",
+    icon: LockIcon,
+    required: true,
+  },
+  {
+    id: "claimant-address",
+    name: "claimant_address",
+    label: "CLAIMANT PHYSICAL ADDRESS*",
+    tooltipText: "Enter the physical address of the claimant",
+    placeholder: "Prince Joe",
+    required: true,
+  },
 ];
 
 // Additional type for form state
