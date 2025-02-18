@@ -92,7 +92,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
 
         <SheetContent
           side="right"
-          className="bg-white md:!w-[505px] min-w-[505px] h-4/5 !max-w-none"
+          className="bg-white md:!w-[505px] min-w-[505px] h-full !max-w-none"
         >
     
           <div className=" mx-auto space-y-8">

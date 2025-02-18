@@ -77,54 +77,54 @@ export const FileInputField = ({ id, label }: FileInputProps) => (
 
 
 
-export const DirectCriminalComplaintForm = () => {
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    return (
-        <div className="space-y-1">
-            <div className="flex justify-between items-center">
-                <p className="text-xs">FORM DETAILS</p>
-                <p className="text-xs text-app-primary">DOWNLOAD SAMPLE DOCUMENT</p>
-            </div>
-            <div className="border-0 w-full border-t-2 space-y-6 border-black bg-neutral-100 p-4">
-                <p className="text-xs font-bold">BETWEEEN</p>
-                <InputField
-                    id="claimant"
-                    name="claimant"
-                    type="text"
-                    label="CLAIMANT"
-                    tooltipText="Enter the name of the claimant"
-                    tooltipIcon={InfoIcon}
-                    placeholder="eg. John Doe"
-                />
-                <p className="text-xs font-bold">AND</p>
-                <InputField
-                    id="defendant"
-                    name="defendant"
-                    type="text"
-                    label="DEFENDANT"
-                    tooltipText="Enter the name of the defendant"
-                    tooltipIcon={InfoIcon}
-                    placeholder="eg. John Doe"
-                />
-                <div className="text-xs font-bold">
-                    <p>THE REGISTRAR</p>
-                    <p>CHIEF JUSTICE COURT</p>
-                </div>
-                <div className="flex  bg-zinc-200 p-2 justify-between items-center">
-                    <p className="text-xs font-bold">WUSE ZONE 2 DISTRICT</p>
-                    <InfoIcon />
-                </div>
-                <div className="text-xs font-bold">
-                    <p>DIRECT CRIMINAL COMPLAINT AGAINST</p>
-                </div>
-                <RichTextEditor
-                    editorState={editorState}
-                    setEditorState={setEditorState}
-                />
-            </div>
-        </div>
-    );
-};
+// export const DirectCriminalComplaintForm = () => {
+//     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+//     return (
+//         <div className="space-y-1">
+//             <div className="flex justify-between items-center">
+//                 <p className="text-xs">FORM DETAILS</p>
+//                 <p className="text-xs text-app-primary">DOWNLOAD SAMPLE DOCUMENT</p>
+//             </div>
+//             <div className="border-0 w-full border-t-2 space-y-6 border-black bg-neutral-100 p-4">
+//                 <p className="text-xs font-bold">BETWEEEN</p>
+//                 <InputField
+//                     id="claimant"
+//                     name="claimant"
+//                     type="text"
+//                     label="CLAIMANT"
+//                     tooltipText="Enter the name of the claimant"
+//                     tooltipIcon={InfoIcon}
+//                     placeholder="eg. John Doe"
+//                 />
+//                 <p className="text-xs font-bold">AND</p>
+//                 <InputField
+//                     id="defendant"
+//                     name="defendant"
+//                     type="text"
+//                     label="DEFENDANT"
+//                     tooltipText="Enter the name of the defendant"
+//                     tooltipIcon={InfoIcon}
+//                     placeholder="eg. John Doe"
+//                 />
+//                 <div className="text-xs font-bold">
+//                     <p>THE REGISTRAR</p>
+//                     <p>CHIEF JUSTICE COURT</p>
+//                 </div>
+//                 <div className="flex  bg-zinc-200 p-2 justify-between items-center">
+//                     <p className="text-xs font-bold">WUSE ZONE 2 DISTRICT</p>
+//                     <InfoIcon />
+//                 </div>
+//                 <div className="text-xs font-bold">
+//                     <p>DIRECT CRIMINAL COMPLAINT AGAINST</p>
+//                 </div>
+//                 <RichTextEditor
+//                     editorState={editorState}
+//                     setEditorState={setEditorState}
+//                 />
+//             </div>
+//         </div>
+//     );
+// };
 
 
 export const CustomSelect = ({

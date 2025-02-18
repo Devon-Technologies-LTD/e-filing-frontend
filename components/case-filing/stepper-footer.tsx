@@ -4,42 +4,159 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { FORM_STEPS } from "@/constants/form";
-import { useCaseFilingForm } from "@/context/file-case";
 import { MoveLeft } from "lucide-react";
+import { useAppSelector } from "@/hooks/redux";
+import { useCaseOverviewFormValidator } from "./validators/useCaseOverviewValidator";
+import { useSaveForm } from "./hooks";
+import { updateStep } from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
+import { ConfirmationModal } from "../confirmation-modal";
+import { Icons } from "../svg/icons";
+import { AlertDialogCancel, AlertDialogFooter } from "../ui/alert-dialog";
+import { useState } from "react";
 
 export function StepperNavigation() {
-  const router = useRouter();
-  const { currentStep, goToNextStep, goToPreviousStep } = useCaseFilingForm();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleNextStep = () => {
-    goToNextStep();
-    router.push(`/case-filing/${currentStep + 1}`);
+  const dispatch = useDispatch();
+  const {
+    caseFile: caseFileStateValues,
+    current_step,
+    caseType,
+    legal_counsels,
+  } = useAppSelector((store) => store.caseFileForm);
+  const { validate } = useCaseOverviewFormValidator({
+    store: caseFileStateValues,
+  });
+
+  const { mutate: saveAsDraft, isPending: draftPending } = useSaveForm({
+    step: current_step,
+    isDraft: true,
+  });
+  const { mutate: saveForm, isPending: formPending } = useSaveForm({
+    step: current_step,
+  });
+
+  const router = useRouter();
+
+  const handleNextStep = async () => {
+    if (current_step === 1) {
+      await validate(() =>
+        saveForm({
+          case_file_id: caseFileStateValues.case_file_id,
+          data: {
+            ...caseFileStateValues,
+            ...caseType,
+          },
+          legal_counsels,
+        })
+      );
+    } else if (current_step === 5) {
+      saveForm({
+        case_file_id: caseFileStateValues.case_file_id,
+        data: {
+          ...caseFileStateValues,
+          ...caseType,
+        },
+        legal_counsels,
+      });
+    } else {
+      dispatch(updateStep(current_step + 1));
+    }
+  };
+  const handleSaveAndContinue = async () => {
+    saveAsDraft({
+      case_file_id: caseFileStateValues.case_file_id,
+      data: {
+        ...caseFileStateValues,
+        ...caseType,
+      },
+      legal_counsels,
+    });
   };
 
   const handlePreviousStep = () => {
-    goToPreviousStep();
-    router.push(`/case-filing/${currentStep - 1}`);
+    if (current_step === 1) {
+      router.push(`/cases`);
+      dispatch(updateStep(1));
+    } else {
+      dispatch(updateStep(current_step - 1));
+    }
   };
 
   return (
     <CardFooter className="flex h-20 container py-0 justify-between">
-      <Button
-        variant="outline"
-        className="font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11"
-        onClick={handlePreviousStep}
-        disabled={currentStep === 1}
-      >
-        <MoveLeft /> Back
-      </Button>
-      
-      <Button
-        size={"lg"}
-        className="font-bold text-sm h-11"
-        onClick={handleNextStep}
-        disabled={currentStep === FORM_STEPS.length}
-      >
-        Next
-      </Button>
+      <div className="w-1/2">
+        <Button
+          variant="outline"
+          className="font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11"
+          onClick={handlePreviousStep}
+        >
+          <MoveLeft /> Back
+        </Button>
+      </div>
+      <div className="w-1/2 flex justify-end ">
+        <ConfirmationModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          trigger={
+            <Button
+              size={"lg"}
+              variant={"ghost"}
+              className="font-bold flex-end text-sm h-11"
+              disabled={current_step === FORM_STEPS.length}
+            >
+              Save and continue later
+            </Button>
+          }
+        >
+          <section className="space-y-8">
+            <div className="flex flex-col items-center gap-1 pt-2">
+              <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
+                <Icons.saveIcon />
+              </div>
+              <div className="text-center text-primary space-y-2">
+                <p className="font-bold text-xl">Save Your Progress</p>
+                <p className="text-black font-semibold text-sm text-center max-w-sm mx-auto">
+                  You can return anytime to complete your case filing. Remember
+                  to submit it before the deadline to avoid delays.
+                </p>
+              </div>
+            </div>
+
+            <AlertDialogFooter className="flex items-center sm:justify-center w-full">
+              <Button
+                className=" text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500 disabled:font-bold"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSaveAndContinue();
+                }}
+                disabled={draftPending}
+              >
+                {draftPending ? "Saving..." : "SAVE PROGRESS"}
+              </Button>
+
+              <AlertDialogCancel
+                className="font-extrabold text-red-800 text-xs uppercase"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                RETURN TO FILING{" "}
+              </AlertDialogCancel>
+            </AlertDialogFooter>
+          </section>
+        </ConfirmationModal>
+
+        <Button
+          size={"lg"}
+          className="font-bold flex-end text-sm h-11"
+          onClick={handleNextStep}
+          disabled={current_step === FORM_STEPS.length || formPending}
+        >
+          {formPending ? <>Loading...</> : "  Next"}
+        </Button>
+      </div>
     </CardFooter>
   );
 }

@@ -18,9 +18,11 @@ function ConfirmInvite({ trigger, formValues }: props) {
   const handleDelete = () => {
     console.log("Deleting user...");
   };
+    const [isOpen, setIsOpen] = useState(false);
+
 
   return (
-    <ConfirmationModal trigger={trigger}>
+    <ConfirmationModal isOpen={isOpen} setIsOpen={setIsOpen} trigger={trigger}>
       <div className="space-y-8">
         <div className="flex flex-col items-center gap-1 pt-2">
           <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">

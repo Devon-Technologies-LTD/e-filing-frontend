@@ -58,20 +58,7 @@ export const management: TManagement[] = [
   },
 ];
 
-export const mockDrafts: IDraftsColumn[] = [
-  {
-    id: "1",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    type: "CRIMINAL CASE",
-    lastEdit: "12/02/2025",
-  },
-  {
-    id: "2",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    type: "CRIMINAL CASE",
-    lastEdit: "12/02/2025",
-  },
-];
+
 export const mockUsers: IUsersColumn[] = [
   {
     id: "1",

@@ -1,28 +1,17 @@
 "use client";
-
-import { FormStep } from "@/types/file-case";
-// import { GeneralOverview } from "./steps/general-overview";
-import { useCaseFilingForm } from "@/context/file-case";
-// import { CaseType } from "./steps/case-type";
 import ExhibitForm from "./steps/exhibit-form";
 import DocumentUpload from "./steps/document-upload";
 import GenerateSeal from "./steps/generate-seal";
 import CaseOverview from "./steps/case-overview";
 import CaseTypes from "./steps/case-type-form";
 import PreviewPage from "./steps/preview-form";
-import { useEffect } from "react";
+import { useAppSelector } from "@/hooks/redux";
 
-export function CaseForm({ initialStep }: { initialStep?: number }) {
-  const { currentStep, setCurrentStep } = useCaseFilingForm();
-
-   useEffect(() => {
-     if (currentStep !== initialStep) {
-       setCurrentStep(initialStep as FormStep);
-     }
-   }, [initialStep, currentStep, setCurrentStep]);
+export function CaseForm() {
+  const { current_step } = useAppSelector((data) => data.caseFileForm);
 
   const renderStep = () => {
-    switch (currentStep) {
+    switch (current_step) {
       case 1:
         return <CaseOverview />;
       case 2:

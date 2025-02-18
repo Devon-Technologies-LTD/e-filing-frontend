@@ -16,8 +16,6 @@ export function CaseFilingStepper({
   currentStep,
   className = "",
 }: StepperProps) {
-  const pathname = usePathname();
-
   return (
     <div className={`space-y-6 ${className}`}>
       <div className="space-y-2">
@@ -31,20 +29,18 @@ export function CaseFilingStepper({
       <nav className="space-y-3 flex flex-col">
         {steps.map((step, index) => {
           const stepNumber = (index + 1) as FormStep;
-          const isActive = pathname === `/case-filing/${stepNumber}`;
+          const isActive = currentStep === stepNumber;
 
           return (
-            <Link
+            <p
               key={index}
-              href={`/case-filing/${stepNumber}`}
               className={cn(
-                "block text-neutral-400 w-fit font-bold text-left px-0 py-1 text-sm transition-colors",
-                "hover:text-primary hover:border-b-2 hover:border-primary",
+                "block cursor-default cursor- text-neutral-400 w-fit font-bold text-left px-0 py-1 text-sm transition-colors",
                 isActive && "border-primary border-b-2 text-primary"
               )}
             >
               {step}
-            </Link>
+            </p>
           );
         })}
       </nav>
