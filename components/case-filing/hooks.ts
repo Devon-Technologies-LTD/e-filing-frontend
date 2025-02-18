@@ -138,16 +138,11 @@ export const useSaveForm = ({
             time: data.summon_time,
           },
           notes: data.notes,
-          reovery_amount: data.recovery_amount,
+          recovery_amount: data.recovery_amount,
           legal_counsels,
           registrar: data.registrar,
-          status: "",
+          status: isDraft ? "draft" : "pending",
         };
-
-        if (step === 5) {
-          payload.status = "pending";
-        }
-        console.log("111data", payload);
         return data.case_type_id
           ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
           : createCaseType(payload);
@@ -175,7 +170,8 @@ export const useSaveForm = ({
       } else {
         console.log("first", data);
         toast.error(
-          data?.message || "An error occurred while saving the form."
+          `${data?.message}: ${data.errors.error}` ||
+            "An error occurred while saving the form."
         );
       }
     },

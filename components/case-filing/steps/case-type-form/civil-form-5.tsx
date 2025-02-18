@@ -11,7 +11,6 @@ import { useAppSelector } from "@/hooks/redux";
 import {
   updateCaseFileField,
   updateCaseTypeName,
-  updateCriminalCaseDocument,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { TextwithToolTip, ToolTipCard } from "@/components/ui/tool-tip-card";
@@ -54,7 +53,6 @@ export const CivilCaseForm5 = () => {
       sub_case_type,
       dated_this,
     },
-    civilCaseDocuments,
   } = useAppSelector((data) => data.caseFileForm);
   const [propertyDescription, setPropertyDescripton] = useState(() =>
     EditorState.createWithContent(
@@ -66,12 +64,6 @@ export const CivilCaseForm5 = () => {
       ContentState?.createFromText(relief_sought ?? "")
     )
   );
-  const handleSuccess = (data: any) => {
-    dispatch(updateCriminalCaseDocument(data.data));
-  };
-  const handleError = (error: any) => {
-    console.error("Upload/Update failed:", error);
-  };
 
   const handleDescriptionChange: any = useCallback(
     (newEditorState: any) => {
@@ -229,15 +221,15 @@ export const CivilCaseForm5 = () => {
               VALUE IN FIGURES (VALUE AT THE TIME RELEVANT TO THE FACT){" "}
             </p>
             <InputField
-              id="defendant"
-              name="defendant"
-              type="number"
+              id="rental_value"
+              name="rental_value"
+              type="string"
               label=""
               value={rental_value}
               onChange={({ target }) => {
                 dispatch(
                   updateCaseTypeName({
-                    relief_sought: target.value,
+                    rental_value: target.value,
                   })
                 );
               }}
@@ -460,13 +452,9 @@ export const CivilCaseForm5 = () => {
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
                 subTitle={CaseTypeData.CIVIL_CASE}
-                labelName={"E-SIGNATURE"}
                 title={"E-SIGNATURE"}
                 caseType={case_type}
                 subCase={sub_case_type}
-                onSuccess={(data) => handleSuccess(data)}
-                onError={handleError}
-                documents={civilCaseDocuments}
               />
             </div>
           </div>
@@ -476,19 +464,15 @@ export const CivilCaseForm5 = () => {
             name="defendant"
             type="email"
             label="NAME"
-            placeholder="e.g claimanr/counsel name"
+            placeholder="e.g claimant/counsel name"
           />
 
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
               subTitle={CaseTypeData.CIVIL_CASE}
-              labelName={"UPLOAD WITNESS STATEMENT OF OATH*"}
               title={"WITNESS STATEMENT OF OATH"}
               caseType={case_type}
               subCase={sub_case_type}
-              onSuccess={(data) => handleSuccess(data)}
-              onError={handleError}
-              documents={civilCaseDocuments}
             />
           </div>
         </div>

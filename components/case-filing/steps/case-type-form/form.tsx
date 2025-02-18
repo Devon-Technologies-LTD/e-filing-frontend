@@ -8,10 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/redux";
-import {
-  removeAllCriminalCaseDocument,
-  updateCaseTypeName,
-} from "@/redux/slices/case-filing-slice";
+import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CriminalCaseForm from "./criminal-case-form";
 import {
@@ -110,7 +107,6 @@ export default function CaseTypesForm() {
                   direct_complain: "",
                 })
               );
-              dispatch(removeAllCriminalCaseDocument());
             }}
             value={sub_case_type}
           >

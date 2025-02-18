@@ -63,12 +63,6 @@ interface FormState {
   legal_counsels: ILegalCounsels[];
   caseType: ICaseTypes;
   documents: IDocumentFileType[];
-  otherDocuments: IDocumentFileType[];
-  exhibits: IDocumentFileType[];
-  submittedExhibitsDocument: IDocumentFileType[];
-  civilCaseDocuments: IDocumentFileType[];
-  criminalCaseDocuments: IDocumentFileType[];
-  familyCaseDocuments: IDocumentFileType[];
   caseFileErrors: Partial<Record<keyof CaseFileState, string>>;
 }
 
@@ -111,23 +105,6 @@ const initialState: FormState = {
     recovery_amount: "",
   },
   legal_counsels: [],
-  civilCaseDocuments: [],
-  familyCaseDocuments: [],
-  criminalCaseDocuments: [],
-  otherDocuments: [],
-  submittedExhibitsDocument: [],
-  exhibits: [
-    {
-      title: "",
-      sub_title: "",
-      case_type_name: "",
-      casefile_id: "",
-      id: "1",
-      status: "",
-      sequence_number: "",
-      user_id: "",
-    },
-  ],
   documents: [],
 };
 
@@ -183,175 +160,25 @@ const formSlice = createSlice({
     resetStep: (state) => {
       state.current_step = initialState.current_step;
     },
-    markForDeletion: (state, action: PayloadAction<string>) => {
-      const doc = state.documents.find((d) => d.id === action.payload);
-      if (doc) doc.status = "to_be_deleted";
+    addDocument: (state, action: PayloadAction<IDocumentFileType[]>) => {
+      state.documents = action.payload;
     },
-    addDocument: (state, action: PayloadAction<IDocumentFileType>) => {
-      state.documents.push(action.payload);
-    },
-    updateDocument: (
-      state,
-      action: PayloadAction<Partial<IDocumentFileType> & { id: string }>
-    ) => {
+    updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
       const index = state.documents.findIndex(
-        (d) => d.id === action.payload.id
-      );
-      if (index >= 0) {
-        state.documents[index] = {
-          ...state.documents[index],
-          ...action.payload,
-        };
-      }
-    },
-    updateFamilyCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType>
-    ) => {
-      const existingIndex = state.familyCaseDocuments.findIndex(
-        (d) => d.id === action.payload.id
-      );
-      if (existingIndex !== -1) {
-        state.familyCaseDocuments[existingIndex] = action.payload;
-      } else {
-        state.familyCaseDocuments.push(action.payload);
-      }
-    },
-    updateOtherDocument: (state, action: PayloadAction<IDocumentFileType>) => {
-      const existingIndex = state.otherDocuments.findIndex(
-        (d) => d.id === action.payload.id
-      );
-      if (existingIndex !== -1) {
-        state.otherDocuments[existingIndex] = action.payload;
-      } else {
-        state.otherDocuments.push(action.payload);
-      }
-    },
-    removeFamilyCaseDocument: (state, action: PayloadAction<string>) => {
-      state.familyCaseDocuments = state.familyCaseDocuments.filter(
-        (d) => d.id !== action.payload
-      );
-    },
-    removeOtherDocument: (state, action: PayloadAction<string>) => {
-      state.familyCaseDocuments = state.familyCaseDocuments.filter(
-        (d) => d.id !== action.payload
-      );
-    },
-    updateCriminalCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType>
-    ) => {
-      const existingIndex = state.criminalCaseDocuments.findIndex(
         (d) => d.title === action.payload.title
       );
-      if (existingIndex !== -1) {
-        state.criminalCaseDocuments[existingIndex] = action.payload;
+      if (index !== -1) {
+        state.documents[index] = action.payload;
       } else {
-        state.criminalCaseDocuments.push(action.payload);
+        state.documents.push(action.payload);
       }
     },
-    replaceCriminalCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType[]>
-    ) => {
-      state.criminalCaseDocuments = action.payload;
-    },
-    replaceCivilCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType[]>
-    ) => {
-      state.civilCaseDocuments = action.payload;
-    },
-    replaceFamilyCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType[]>
-    ) => {
-      state.familyCaseDocuments = action.payload;
-    },
-    replaceExhibitsCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType[]>
-    ) => {
-      state.submittedExhibitsDocument = action.payload;
-      state.exhibits = action.payload;
-    },
-    replaceOtherDocuments: (
-      state,
-      action: PayloadAction<IDocumentFileType[]>
-    ) => {
-      state.otherDocuments = action.payload;
-    },
-    updateCivilCaseDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType>
-    ) => {
-      const existingIndex = state.civilCaseDocuments.findIndex(
-        (d) => d.title === action.payload.title
-      );
-      if (existingIndex !== -1) {
-        state.civilCaseDocuments[existingIndex] = action.payload;
-      } else {
-        state.civilCaseDocuments.push(action.payload);
-      }
-    },
-    updateSubmittedExhibitsDocument: (
-      state,
-      action: PayloadAction<IDocumentFileType>
-    ) => {
-      const existingIndex = state.submittedExhibitsDocument.findIndex(
-        (d) => d.title === action.payload.title
-      );
-      if (existingIndex !== -1) {
-        state.submittedExhibitsDocument[existingIndex] = action.payload;
-      } else {
-        state.submittedExhibitsDocument.push(action.payload);
-      }
-    },
-    addExhibit: (state) => {
-      state.exhibits.push({
-        id: crypto.randomUUID(),
-        title: "",
-        sub_title: "",
-        case_type_name: "",
-        casefile_id: "",
-        status: "",
-        sequence_number: "",
-        user_id: "",
-      });
-    },
-    removeExhibit: (state, action: PayloadAction<string>) => {
-      state.exhibits = state.exhibits.filter(
-        (exhibit) => exhibit.id !== action.payload
+    deleteDocument: (state, action: PayloadAction<string>) => {
+      state.documents = state.documents.filter(
+        (document) => document.title !== action.payload
       );
     },
-    updateExhibitTitle: (
-      state,
-      action: PayloadAction<{ exhibitId: string; title: string }>
-    ) => {
-      const exhibit = state.exhibits.find(
-        (ex) => ex.id === action.payload.exhibitId
-      );
-      if (exhibit) {
-        exhibit.title = action.payload.title;
-      }
-    },
-    updateExhibitDocument: (
-      state,
-      action: PayloadAction<{ exhibitId: string; document: any; title: string }>
-    ) => {
-      state.exhibits = state.exhibits.map((exhibit) =>
-        exhibit.id === action.payload.exhibitId
-          ? {
-              ...exhibit,
-              document: action.payload.document,
-              title: action.payload.title,
-            }
-          : exhibit
-      );
-    },
-    removeAllCriminalCaseDocument: (state) => {
-      state.criminalCaseDocuments = initialState.criminalCaseDocuments;
-    },
+
     clearForm: (state) => {
       state.current_step = initialState.current_step;
       state.caseFile = initialState.caseFile;
@@ -359,12 +186,6 @@ const formSlice = createSlice({
       state.caseType = initialState.caseType;
       state.legal_counsels = initialState.legal_counsels;
       state.documents = initialState.documents;
-      state.otherDocuments = initialState.otherDocuments;
-      state.exhibits = initialState.exhibits;
-      state.submittedExhibitsDocument = initialState.submittedExhibitsDocument;
-      state.civilCaseDocuments = initialState.civilCaseDocuments;
-      state.criminalCaseDocuments = initialState.criminalCaseDocuments;
-      state.familyCaseDocuments = initialState.familyCaseDocuments;
     },
   },
 });
@@ -372,35 +193,18 @@ const formSlice = createSlice({
 export const {
   updateCaseFileField,
   updateLegalCounsels,
-  updateFamilyCaseDocument,
-  updateCivilCaseDocument,
-  addExhibit,
-  removeExhibit,
-  updateExhibitTitle,
-  updateExhibitDocument,
-  updateOtherDocument,
-  removeFamilyCaseDocument,
-  removeOtherDocument,
   addCaseFileError,
   clearCaseFile,
   clearCaseFileError,
   updateStep,
   updateCaseTypeName,
   resetStep,
-  markForDeletion,
   addDocument,
   clearForm,
   updateDocument,
-  updateCriminalCaseDocument,
-  removeAllCriminalCaseDocument,
-  updateSubmittedExhibitsDocument,
   clearCaseType,
   updateMultipleCaseFileFields,
   updateMultipleCaseTypeFields,
-  replaceCriminalCaseDocument,
-  replaceCivilCaseDocument,
-  replaceOtherDocuments,
-  replaceExhibitsCaseDocument,
-  replaceFamilyCaseDocument
+  deleteDocument,
 } = formSlice.actions;
 export default formSlice.reducer;

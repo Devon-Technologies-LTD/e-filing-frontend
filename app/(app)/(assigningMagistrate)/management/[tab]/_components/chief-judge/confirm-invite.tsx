@@ -15,11 +15,8 @@ interface props {
   formValues: z.infer<typeof formSchema>;
 }
 function ConfirmInvite({ trigger, formValues }: props) {
-  const handleDelete = () => {
-    console.log("Deleting user...");
-  };
-    const [isOpen, setIsOpen] = useState(false);
-
+  const handleDelete = () => {};
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <ConfirmationModal isOpen={isOpen} setIsOpen={setIsOpen} trigger={trigger}>

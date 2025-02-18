@@ -12,7 +12,7 @@ export interface CaseTypeDetails {
   casefile_id?: string;
   case_type_name?: string;
   sub_case_type_name?: string;
-  reovery_amount?: string;
+  recovery_amount?: string;
   claimant?: Partial<Claimant>;
   defendant?: Partial<Claimant>;
   registrar?: string;
