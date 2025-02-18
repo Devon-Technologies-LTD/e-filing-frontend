@@ -7,30 +7,17 @@ interface FormContextType {
   currentStep: FormStep;
   exhibitFormData: Exhibit[];
   documentUpload: DocumentFileType[];
-  caseOverviewFormData: CaseOverViewData;
   setCurrentStep: (step: FormStep) => void;
   updateExhibitFormData: (data: Exhibit[]) => void;
-  updateDocumentUpload: (data: DocumentFileType[]) => void;
-  updateCaseOverViewFormData: (data: Partial<CaseOverViewData>) => void;
   goToNextStep: () => void;
   goToPreviousStep: () => void;
+  addDocumentUpload: (data: DocumentFileType) => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export function FormProvider({ children }: { children: React.ReactNode }) {
   const [currentStep, setCurrentStep] = useState<FormStep>(1);
-  const [caseOverviewFormData, setCaseOverviewFormData] =
-    useState<CaseOverViewData>({
-      filingLocation: "",
-      claimant: "",
-      defendant: "",
-      caseTitle: "",
-      claimantPhone: "",
-      claimantEmail: "",
-      claimantAddress: "",
-    });
-
   const [exhibitFormData, setExhibitFormData] = useState<Exhibit[]>([
     { id: 1, title: "", file: undefined },
   ]);
@@ -39,16 +26,10 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
   const updateExhibitFormData = useCallback((data: Exhibit[]) => {
     setExhibitFormData(data);
   }, []);
-  const updateDocumentUpload = useCallback((data: DocumentFileType[]) => {
-    setDocumentUpload(data);
+  
+  const addDocumentUpload = useCallback((data: DocumentFileType) => {
+    setDocumentUpload((prev) => [...prev, data]);
   }, []);
-
-  const updateCaseOverViewFormData = useCallback(
-    (data: Partial<CaseOverViewData>) => {
-      setCaseOverviewFormData((prev) => ({ ...prev, ...data }));
-    },
-    []
-  );
 
   const goToNextStep = () => {
     if (currentStep < 4) {
@@ -67,14 +48,12 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
       value={{
         currentStep,
         documentUpload,
-        updateDocumentUpload,
+        addDocumentUpload,
         exhibitFormData,
         setCurrentStep,
         updateExhibitFormData,
-        updateCaseOverViewFormData,
         goToNextStep,
         goToPreviousStep,
-        caseOverviewFormData,
       }}
     >
       {children}

@@ -3,6 +3,7 @@ import React from "react";
 import { MetricCard } from "../metric-card";
 import CaseDistributionBarChart from "./case-distribution-chart";
 
+
 const data = [
   {
     id: 1,
@@ -75,12 +76,12 @@ export default function FinancialMetrics() {
       <div className="bg-white py-12">
         <div className="container grid bg-white  grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {data.map((metric) => (
-            <MetricCard type="finances" key={metric.id} metric={metric} />
+            <MetricCard type="finances" key={metric.id} metric={metric} rightModal={undefined} />
           ))}
         </div>
       </div>
       <div className="bg-white">
-        <CaseDistributionBarChart />
+        <CaseDistributionBarChart caseMetric={caseMetric} heading={"PERFORMANCE METRIC"} />
       </div>
     </>
   );

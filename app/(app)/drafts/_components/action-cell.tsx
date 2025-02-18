@@ -5,21 +5,50 @@ import {
   AlertDialogCancel,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import React from "react";
+import { Button } from "@/components/ui/button";
+import { deleteCase } from "@/lib/actions/case-file";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 interface ActionCellProps {
-  row: any; // You can replace 'any' with a more specific type if needed
+  row: any;
 }
 
 const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
-  const handleDelete = (e: any) => {
-    console.log(row);
-    e.stopPropagation();
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteCase(id),
+    onSuccess: (data) => {
+      console.log("first", data);
+      if (data?.success) {
+        toast.success(data.message);
+        setIsOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
+      } else {
+        toast.error(data.message);
+        setIsOpen(false);
+      }
+    },
+    onError: (error) => {
+      console.log("error", error);
+    },
+  });
+
+  const handleDelete = () => {
+    console.log("first", row.original);
+    deleteMutation.mutate(row.original.id);
   };
 
   return (
     <div>
-      <ConfirmationModal trigger={<Icons.bin />}>
+      <ConfirmationModal
+        trigger={<Icons.bin />}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      >
         <div className="space-y-8">
           <div className="flex flex-col items-center gap-1 pt-2">
             <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
@@ -35,14 +64,20 @@ const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
             </div>
           </div>
           <AlertDialogFooter className="flex items-center sm:justify-center w-full">
-            <AlertDialogAction
+            <Button
+              type="button"
               className="font-medium text-sm bg-red-600 h-12"
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
+              disabled={deleteMutation.isPending}
             >
-              DELETE THIS DRAFT
-            </AlertDialogAction>
+              {deleteMutation.isPending ? "loading..." : " DELETE THIS DRAFT"}
+            </Button>
 
             <AlertDialogCancel
+              disabled={deleteMutation.isPending}
               className="font-extrabold text-red-800 text-xs uppercase"
               onClick={(e) => {
                 e.stopPropagation();

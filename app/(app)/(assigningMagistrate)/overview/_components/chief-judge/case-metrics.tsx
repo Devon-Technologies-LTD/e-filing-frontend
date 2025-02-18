@@ -2,31 +2,24 @@ import React from "react";
 import { MetricCard } from "../metric-card";
 import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
-import { data, presidingdata } from "./type";
+import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
-import { caseMetric, presidingmetric, hearings } from "@/lib/dummy-data";
+import { caseMetric, presidingmetric, hearings, centralMetric } from "@/lib/dummy-data";
 import UpcomingHearing from "../upcoming-hearing";
 
 export default function CaseMetrics() {
   const { data: user } = useAppSelector((state) => state.profile);
-  const isPresiding =
-    user?.role &&
-    [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
-  const isHearing =
-    user?.role &&
-    [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(
-      user.role
-    );
-  const rightModal =
-    user?.role &&
-    [ROLES.CENTRAL_REGISTRY, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
-  const caseData = isPresiding ? presidingdata : data;
-  const caseMetrics = isPresiding ? presidingmetric : caseMetric;
+  const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
+  const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
+  const rightModal = user?.role && [ROLES.CENTRAL_REGISTRY, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
+  const centeral = user?.role && [ROLES.CENTRAL_REGISTRY].includes(user.role);
+  const caseData = isPresiding ? presidingdata : (centeral) ? centraldata : data;
+  const caseMetrics = isPresiding ? presidingmetric : (centeral) ? centralMetric : caseMetric;
 
   return (
     <>
       <div className="bg-white py-6 sm:py-8">
-        <div className="w-full  px-4 sm:px-8 grid gap-6 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+        <div className="w-full container  px-4 sm:px-8 grid gap-6 grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
           {caseData.map((metric) => (
             <MetricCard
               type="case"
@@ -51,47 +44,3 @@ export default function CaseMetrics() {
     </>
   );
 }
-
-
-// import React from "react";
-// import { MetricCard } from "../metric-card";
-// import CaseDistributionBarChart from "./case-distribution-chart";
-// import { ROLES } from "@/types/auth";
-// import { data, presidingdata } from "./type";
-// import { useAppSelector } from "@/hooks/redux";
-// import { caseMetric, presidingmetric, hearings } from "@/lib/dummy-data";
-// import UpcomingHearing from "../upcoming-hearing";
-
-// export default function CaseMetrics() {
-//   const { data: user } = useAppSelector((state) => state.profile);
-//   const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
-//   const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
-//   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRY, ROLES.PRESIDING_MAGISTRATES].includes(user.role);
-//   const caseData = isPresiding ? presidingdata : data;
-//   const caseMetrics = isPresiding ? presidingmetric : caseMetric;
-
-//   return (
-//     <>
-//       <div className="bg-white py-12">
-//         <div
-//           className="container grid bg-white gap-6"
-//           style={{
-//             gridTemplateColumns: `repeat(${caseData.length}, 1fr)`,
-//           }}
-//         >
-//           {caseData.map((metric) => (
-//             <MetricCard type="case" key={metric.id} metric={metric} rightModal={rightModal} />
-//           ))}
-//         </div>
-//       </div>
-//       <div className="bg-white">
-//         <CaseDistributionBarChart heading="PERFORMANCE METRIC" caseMetric={caseMetrics} />
-//       </div>
-//       {isHearing && (
-//         <div className="bg-white py-6">
-//           <UpcomingHearing hearings={hearings} />
-//         </div>
-//       )}
-//     </>
-//   );
-// }

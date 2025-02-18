@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { AppProvider } from "@/lib/provider";
 import NextTopLoader from "nextjs-toploader";
 import Head from "next/head";
-import { ToastContainer, Zoom } from "react-toastify";
 import React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 

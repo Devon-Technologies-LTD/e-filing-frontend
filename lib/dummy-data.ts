@@ -58,20 +58,7 @@ export const management: TManagement[] = [
   },
 ];
 
-export const mockDrafts: IDraftsColumn[] = [
-  {
-    id: "1",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    type: "CRIMINAL CASE",
-    lastEdit: "12/02/2025",
-  },
-  {
-    id: "2",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
-    type: "CRIMINAL CASE",
-    lastEdit: "12/02/2025",
-  },
-];
+
 export const mockUsers: IUsersColumn[] = [
   {
     id: "1",
@@ -315,6 +302,19 @@ export const caseMetric = {
       ],
     },
   ],
+};
+export const centralMetric = {
+  histogram: {
+    labels: [
+      "Total Cases Reviewed",
+      "Pending Reviews",
+      "Approved Reviews",
+      "Denied Reviews",
+    ],
+    data: [4500, 3200, 6000, 2500, 4000],
+    label: "No of cases",
+    histogramTitle: "REviewed Status",
+  },
 };
 export const presidingmetric = {
   histogram: {

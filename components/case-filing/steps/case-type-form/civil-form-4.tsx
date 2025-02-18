@@ -1,0 +1,458 @@
+"use client";
+import { CalendarIcon, InfoIcon } from "lucide-react";
+import InputField from "@/components/ui/InputField";
+import "draft-js/dist/Draft.css";
+import { LocationSelect } from "../case-overview/form";
+import { getUserDivision } from "@/lib/actions/division";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useAppSelector } from "@/hooks/redux";
+import {
+  updateCaseFileField,
+  updateCaseTypeName,
+  updateCivilCaseDocument,
+} from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
+import { ToolTipCard } from "@/components/ui/tool-tip-card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import DocumentUploadComponent from "@/components/ui/document-upload";
+import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
+import { CaseTypeData } from "../../constants";
+
+export const CivilCaseForm4 = () => {
+  const dispatch = useDispatch();
+
+  const {
+    caseFile: {
+      claimant_name,
+      defendant_name,
+      court_division,
+      claimant_phone_number,
+      claimant_address,
+      claimant_email_address,
+      claimant_whats_app,
+      defendant_address,
+      defendant_email_address,
+      defendant_phone_number,
+      defendant_whats_app,
+    },
+    caseType: {
+      case_type,
+      sub_case_type,
+      sum_claimed,
+      dated_this,
+      cost_claimed,
+      interest_claimed,
+    },
+    civilCaseDocuments,
+  } = useAppSelector((data) => data.caseFileForm);
+
+  const handleSuccess = (data: any) => {
+    dispatch(updateCivilCaseDocument(data.data));
+  };
+
+  const handleError = (error: any) => {
+    console.error("Upload/Update failed:", error);
+  };
+
+  const { data, isLoading: divisionFetching } = useQuery({
+    queryKey: ["divisions"],
+    queryFn: async () => {
+      return await getUserDivision();
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 50000,
+  });
+  const divisions: any = data?.data || [];
+
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between items-center">
+        <p className="text-sm font-bold text-neutral-600">CIVIL FORM 4</p>
+        <DownloadSampleButton
+          fileName="sample_civil_form_4"
+          imageSrc={"/downloadable-images/civil-form-4.png"}
+        />
+      </div>
+      <div className="border-0 w-full border-t-2 space-y-8 border-black bg-neutral-100 p-4">
+        <div className="space-y-2">
+          <p className="text-base font-bold">
+            IN THE DISTRICT COURT OF THE FEDERAL CAPITAL TERRITORY HOLDEN IN THE
+          </p>
+          <div className="flex lg:w-1/2">
+            <LocationSelect
+              loading={divisionFetching}
+              data={divisions?.data || []}
+              value={court_division}
+              onChange={(value) => {
+                dispatch(
+                  updateCaseFileField({ field: "court_division", value: value })
+                );
+              }}
+            />
+          </div>
+        </div>
+        <div className="space-y-3">
+          <p className="text-base font-semibold">BETWEEEN</p>
+          <InputField
+            id="claimant"
+            name="claimant"
+            type="text"
+            label="CLAIMANT"
+            value={claimant_name}
+            tooltipContent={
+              <ToolTipCard
+                className="p-"
+                title="WHO IS A COMPLAINT"
+                description="the person who officially reports a problem or wrongdoing, usually to the police or a court, asking for action to be taken. They are the one making the complaint in a case."
+              />
+            }
+            tooltipIcon={InfoIcon}
+            placeholder="eg. John Doe"
+            onChange={({ target }) => {
+              dispatch(
+                updateCaseFileField({
+                  field: "claimant_name",
+                  value: target.value,
+                })
+              );
+            }}
+          />
+        </div>
+        <div className="space-y-3">
+          <p className="text-base font-semibold">AND</p>
+          <InputField
+            id="defendant"
+            name="defendant"
+            type="text"
+            label="DEFENDANT"
+            value={defendant_name}
+            tooltipContent={
+              <ToolTipCard
+                title="WHO IS A DEFENDANT?"
+                description="The person or persons who responds to a claim or accusation, you made against them"
+              />
+            }
+            tooltipIcon={InfoIcon}
+            placeholder="eg. John Doe"
+            onChange={({ target }) => {
+              dispatch(
+                updateCaseFileField({
+                  field: "defendant_name",
+                  value: target.value,
+                })
+              );
+            }}
+          />
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-lg font-bold">
+            At the suit of this complaint, this plaint is taking out with the
+            following monetary claim(s):
+          </p>
+          <div className="space-y-6">
+            <InputField
+              id="sum_claimed"
+              name="sum_claimed"
+              value={sum_claimed}
+              type="text"
+              onChange={({ target }) => {
+                dispatch(
+                  updateCaseTypeName({
+                    sum_claimed: target.value,
+                  })
+                );
+              }}
+              tooltipContent={
+                <ToolTipCard
+                  className="p-"
+                  title="SUM CLAIMED IN WORDS"
+                  description="This is where you write the total amount of money being claimed in words instead of numbers. It ensures clarity and prevents errors or disputes about the exact amount being requested. <br /> <br/> Example:<br /> If the sum claimed is ₦1,500,000, you would write: “One million, five hundred thousand naira only."
+                />
+              }
+              tooltipIcon={InfoIcon}
+              label="SUM CLAIMED IN WORDS AND FIGURES"
+              placeholder="e.g eight hundred thousand Naira. (800,000) "
+            />
+            <InputField
+              id="cost_claimed"
+              name="cost_claimed"
+              value={cost_claimed}
+              type="text"
+              onChange={({ target }) => {
+                dispatch(
+                  updateCaseTypeName({
+                    cost_claimed: target.value,
+                  })
+                );
+              }}
+              tooltipContent={
+                <ToolTipCard
+                  className="p-"
+                  title="COST CLAIMED"
+                  description="This refers to additional expenses incurred while pursuing the case, which the claimant is asking the court to order the defendant to pay. It can include legal fees, court filing fees, and other related costs. <br/> <br/> Example: <br/> The claimant seeks ₦50,000 as reimbursement for legal and court filing expenses."
+                />
+              }
+              tooltipIcon={InfoIcon}
+              label="COST CLAIMED (IF ANY)"
+              placeholder="e.g eight hundred thousand Naira. (800,000) "
+            />{" "}
+            <InputField
+              id="interest_claimed"
+              name="interest_claimed"
+              value={interest_claimed}
+              type="text"
+              onChange={({ target }) => {
+                dispatch(
+                  updateCaseTypeName({
+                    interest_claimed: target.value,
+                  })
+                );
+              }}
+              tooltipContent={
+                <ToolTipCard
+                  className="p-"
+                  title="INTEREST CLAIMED"
+                  description="This refers to any extra amount being requested on top of the main sum, usually as compensation for delays in payment. It can be a fixed amount or a percentage applied over a period of time. <br/> <br/> Example:<br/> The claimant seeks 10% interest per annum on the outstanding amount from the due date until full payment is made."
+                />
+              }
+              tooltipIcon={InfoIcon}
+              label="INTEREST CLAIMED (IF ANY)"
+              placeholder="e.g 10% Percent"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          <p className="text-lg font-bold">
+            The Address for Service, Phone Numbers and email Addresses of the
+            Parties are:
+          </p>
+          <div className="flex ">
+            <div className=" w-full text-neutral-600 space-y-6">
+              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <InputField
+                id="claimant_address"
+                name="claimant_address"
+                value={claimant_address}
+                type="text"
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "claimant_address",
+                      value: target.value,
+                    })
+                  );
+                }}
+                label="PHYSICAL ADDRESS"
+                placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
+              />
+              <InputField
+                id="claimant_phone_number"
+                name="claimant_phone_number"
+                value={claimant_phone_number}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "claimant_phone_number",
+                      value: target.value,
+                    })
+                  );
+                }}
+                type="text"
+                label="PHONE NUMBERS"
+                placeholder="eg. 2347030338024"
+              />
+              <InputField
+                id="claimant_email_address"
+                name="claimant_email_address"
+                type="email"
+                label="Email Address"
+                value={claimant_email_address}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "claimant_email_address",
+                      value: target.value,
+                    })
+                  );
+                }}
+                placeholder="eg. johndoe@gmail.com"
+              />
+              <InputField
+                id="claimant_whats_app"
+                name="claimant_whats_app"
+                type="text"
+                label="Whatsapp Number"
+                value={claimant_whats_app}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "claimant_whats_app",
+                      value: target.value,
+                    })
+                  );
+                }}
+                placeholder="eg. 2347030338024"
+              />
+            </div>
+            <div className=" w-full space-y-6">
+              <p className="text-base font-bold">DEFENDANT DETAILS</p>
+              <InputField
+                id="defendant_address"
+                name="defendant_address"
+                value={defendant_address}
+                type="text"
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "defendant_address",
+                      value: target.value,
+                    })
+                  );
+                }}
+                label="PHYSICAL ADDRESS"
+                placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
+              />
+              <InputField
+                id="defendant_phone_number"
+                name="defendant_phone_number"
+                value={defendant_phone_number}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "defendant_phone_number",
+                      value: target.value,
+                    })
+                  );
+                }}
+                type="text"
+                label="PHONE NUMBERS"
+                placeholder="eg. 2347030338024"
+              />
+              <InputField
+                id="defendant_email_address"
+                name="defendant_email_address"
+                type="email"
+                label="Email Address"
+                value={defendant_email_address}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "defendant_email_address",
+                      value: target.value,
+                    })
+                  );
+                }}
+                placeholder="eg. johndoe@gmail.com"
+              />
+              <InputField
+                id="defendant_whats_app"
+                name="defendant_whats_app"
+                type="text"
+                label="Whatsapp Number"
+                value={defendant_whats_app}
+                onChange={({ target }) => {
+                  dispatch(
+                    updateCaseFileField({
+                      field: "defendant_whats_app",
+                      value: target.value,
+                    })
+                  );
+                }}
+                placeholder="eg. 2347030338024"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-lg font-bold">
+            This plaint was taken out by claimant/counsel as the case may be
+          </p>
+          <p className="text-base font-bold text-neutral-600">DATED THIS</p>
+          <div className="flex items-end justify-start text-center">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
+                    !dated_this && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon />
+                  {dated_this ? (
+                    format(dated_this, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}{" "}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={dated_this}
+                  onSelect={(date) => {
+                    dispatch(
+                      updateCaseTypeName({
+                        dated_this: date,
+                      })
+                    );
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <p className="text-base text-neutral-600 font-bold">SIGNATURE</p>
+            <div className="bg-white p-4 lg:w-1/2 w-full">
+              <DocumentUploadComponent
+                labelName={"E-SIGNATURE"}
+                subTitle={CaseTypeData.CIVIL_CASE}
+                title={"E-SIGNATURE"}
+                caseType={case_type}
+                subCase={sub_case_type}
+                onSuccess={(data) => handleSuccess(data)}
+                onError={handleError}
+                documents={civilCaseDocuments}
+              />
+            </div>
+          </div>
+
+          <InputField
+            id="defendant"
+            name="defendant"
+            type="email"
+            label="NAME"
+            placeholder="e.g claimant/counsel name"
+          />
+          <div className="mt-3 lg:w-1/2">
+            <DocumentUploadComponent
+              subTitle={CaseTypeData.CIVIL_CASE}
+              labelName={"OTHER PARTICULARS OF PLAINT"}
+              title={"PARTICULARS OF PLAINT"}
+              caseType={case_type}
+              subCase={sub_case_type}
+              onSuccess={(data) => handleSuccess(data)}
+              onError={handleError}
+              documents={civilCaseDocuments}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

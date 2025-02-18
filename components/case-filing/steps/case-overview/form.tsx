@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Select,
   SelectContent,
@@ -7,53 +6,105 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FILING_LOCATIONS, FORM_FIELDS } from "@/types/files/general";
+import { FORM_FIELDS } from "@/types/files/general";
 import InputField from "@/components/ui/InputField";
-import { useCaseFilingForm } from "@/context/file-case";
-import { CaseOverViewData } from "@/types/file-case";
+import { getUserDivision } from "@/lib/actions/division";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { IDivision } from "@/lib/_services/divisions-service";
+import { useAppSelector } from "@/hooks/redux";
+import {
+  addCaseFileError,
+  CaseFileState,
+  updateCaseFileField,
+} from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
 
-const LocationSelect = ({
+export const LocationSelect = ({
   value,
   onChange,
+  error,
+  data,
+  loading,
 }: {
+  data: IDivision[] | any;
   value: string;
   onChange: (value: string) => void;
+  error?: string;
+  loading: boolean;
 }) => (
-  <Select onValueChange={onChange} value={value}>
-    <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
-      <SelectValue
-        className="text-neutral-700 text-xs"
-        placeholder="Select A Filing Location"
-      />
-    </SelectTrigger>
-    <SelectContent className="bg-white text-zinc-900">
-      {FILING_LOCATIONS.map((location) => (
-        <SelectItem
-          key={location.value}
-          value={location.value}
-          className="text-xs font-semibold text-zinc-900 hover:text-gray-600"
-        >
-          {location.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
+  <div className="w-full">
+    <Select onValueChange={onChange} value={value}>
+      <SelectTrigger
+        loading={loading}
+        disabled={loading}
+        variant={error ? "error" : "underlined"}
+      >
+        <SelectValue
+          className="text-neutral-700 text-xs"
+          placeholder="Select A Filing Location"
+        />
+      </SelectTrigger>
+      <SelectContent className="bg-white text-zinc-900">
+        {data?.length > 0 ? (
+          <>
+            {data?.map((location: any) => (
+              <SelectItem
+                variant="underlined"
+                key={location.id}
+                value={location.id}
+                className="py-2"
+              >
+                {location.title}
+              </SelectItem>
+            ))}
+          </>
+        ) : (
+          ""
+        )}
+      </SelectContent>
+    </Select>
+  </div>
 );
 
 export default function CaseOverviewForm() {
-  const { caseOverviewFormData, updateCaseOverViewFormData } =
-    useCaseFilingForm();
-  const handleInputChange = (name: string, value: string) => {
-    updateCaseOverViewFormData({ [name]: value });
+  const { caseFile, caseFileErrors } = useAppSelector(
+    (data) => data.caseFileForm
+  );
+  const dispatch = useDispatch();
+  const handleInputChange = (name: keyof CaseFileState, value: string) => {
+    dispatch(updateCaseFileField({ field: name, value: value }));
   };
+
+  const handleSelectChange = (name: keyof CaseFileState, value: string) => {
+    dispatch(updateCaseFileField({ field: name, value: value }));
+  };
+
+  const { data, isLoading: divisionFetching } = useQuery({
+    queryKey: ["divisions"],
+    queryFn: async () => {
+      return await getUserDivision();
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 50000,
+  });
+
+  const divisions: any = data?.data || [];
 
   return (
     <div className="w-full space-y-8 ">
       <LocationSelect
-        value={caseOverviewFormData.filingLocation}
+        loading={divisionFetching}
+        data={divisions?.data}
+        value={caseFile.court_division}
         onChange={(value) => {
-          handleInputChange("filingLocation", value);
+          handleSelectChange("court_division", value);
+          dispatch(
+            addCaseFileError({
+              court_division: "",
+            })
+          );
         }}
+        error={caseFileErrors?.court_division}
       />
 
       {FORM_FIELDS.map((field) => (
@@ -66,10 +117,16 @@ export default function CaseOverviewForm() {
           tooltipIcon={field.tooltipIcon}
           placeholder={field.placeholder}
           icon={field.icon}
-          value={
-            caseOverviewFormData[field.name as keyof CaseOverViewData] || ""
-          }
-          onChange={(e) => handleInputChange(field.name, e.target.value)}
+          value={caseFile[field.name as keyof CaseFileState] || ""}
+          onChange={(e) => {
+            handleInputChange(field.name, e.target.value);
+            dispatch(
+              addCaseFileError({
+                [field.name]: "",
+              })
+            );
+          }}
+          error={caseFileErrors[field.name] ?? ""}
         />
       ))}
     </div>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Loader } from "lucide-react"; // Import Loader icon
 
 import { cn } from "@/lib/utils";
 
@@ -18,6 +18,8 @@ export const selectTriggerVariants = {
       "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
     outline:
       "border-2 border-app-tertiary bg-background hover:border-primary text-neutral-600 font-bold text-xs",
+    error:
+      "border-b border-red-500 bg-red-300/40 hover:border-primary text-red-600 font-bold text-sm",
     ghost:
       "border-none bg-transparent hover:bg-accent hover:text-accent-foreground",
     secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
@@ -58,10 +60,12 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
     variant?: keyof typeof selectTriggerVariants.variant;
     size?: keyof typeof selectTriggerVariants.size;
+    loading?: boolean;
+    tooltip?:boolean
   }
 >(
   (
-    { className, children, variant = "default", size = "default", ...props },
+    { className, children, variant = "default", size = "default", loading = false, tooltip=false, ...props },
     ref
   ) => (
     <SelectPrimitive.Trigger
@@ -75,13 +79,18 @@ const SelectTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </SelectPrimitive.Icon>
+     {tooltip? "": <SelectPrimitive.Icon asChild>
+        {loading ? (
+          <Loader className="h-4 w-4 animate-spin" /> // Render spinner if loading
+        ) : (
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        )}
+      </SelectPrimitive.Icon>}
     </SelectPrimitive.Trigger>
   )
 );
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
+
 const SelectScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>

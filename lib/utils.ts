@@ -116,7 +116,46 @@ export const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-
 export const formatNumber = (num: number) => {
   return new Intl.NumberFormat().format(num);
 };
+
+export function dateFormatter(dateString: string | Date) {
+  const date = new Date(dateString);
+
+  return {
+    fullDateTime: date.toLocaleString(), // 2/17/2025, 10:23:35 AM
+    isoFormat: date.toISOString(), // 2025-02-17T09:23:35.493Z
+    humanFriendly: date.toDateString(), // Mon Feb 17 2025
+    ddmmyyyy_hhmmss: `${date.getDate().toString().padStart(2, "0")}/${(
+      date.getMonth() + 1
+    )
+      .toString()
+      .padStart(
+        2,
+        "0"
+      )}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+    relativeTime: (() => {
+      const now = new Date();
+      const diff = now.getTime() - date.getTime();
+      const minutesAgo = Math.floor(diff / 60000);
+      return `${minutesAgo} minutes ago`;
+    })(),
+    amPmFormat: (() => {
+      const hours = date.getHours() % 12 || 12;
+      const ampm = date.getHours() >= 12 ? "PM" : "AM";
+      return `${hours}:${date
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")} ${ampm}, ${date.toDateString()}`;
+    })(),
+    timeOnly: date.toLocaleTimeString(), // 10:23:35 AM
+    fullLongFormat: date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }), // Monday, February 17, 2025
+    unixTimestamp: Math.floor(date.getTime() / 1000), // 1739793815 (Unix seconds)
+  };
+}
