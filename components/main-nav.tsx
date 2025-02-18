@@ -5,12 +5,7 @@ import { Navigation } from "./nav-link";
 import { Button } from "./ui/button";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
-import {
-  clearCaseFile,
-  clearCaseType,
-  clearForm,
-  updateStep,
-} from "@/redux/slices/case-filing-slice";
+import { clearForm } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 export function MainNav({

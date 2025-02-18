@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/hooks/redux";
 import React, { useCallback } from "react";
-import { CivilCaseSubType } from "../../constants";
+import { CivilCaseSubType } from "@/constants";
 import { CivilCaseForm5 } from "./civil-form-5";
 import { CivilCaseForm4 } from "./civil-form-4";
 import { CivilCaseForm8 } from "./civil-form-8";

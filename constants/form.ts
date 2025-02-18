@@ -25,3 +25,4 @@ export const STEP_TITLES: Record<number, string> = {
   5: "Review all case details before payment",
   6: "Generating your case seal and QR Code",
 };
+

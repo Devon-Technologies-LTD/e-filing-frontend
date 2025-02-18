@@ -17,6 +17,10 @@ interface UploadDocumentResponse {
   updated_at: string;
 }
 
+export type DeleteDocumentPayload = {
+  document_ids: string[];
+};
+
 const DocumentService = {
   async uploadDocument(formData: FormData): Promise<UploadDocumentResponse> {
     try {
@@ -30,7 +34,6 @@ const DocumentService = {
           },
         }
       );
-      console.log("responesss", response);
       return response.data;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
@@ -50,6 +53,21 @@ const DocumentService = {
         }
       );
       console.log("responesss", response);
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading document:", (error as any).response.data);
+      throw error;
+    }
+  },
+  async deleteDocument(payload: DeleteDocumentPayload): Promise<any> {
+    try {
+      console.log("entering delete payload");
+      const response = await axiosInstance.request<any>({
+        method: "DELETE",
+        url: "/document",
+        data: payload,
+      });
+      console.log("responesss from delete finished", response);
       return response.data;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);

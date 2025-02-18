@@ -9,11 +9,11 @@ import { getCaseFiles } from "@/lib/actions/case-file";
 import { DateRange } from "react-day-picker";
 import { dateFormatter } from "@/lib/utils";
 import Pagination from "@/components/ui/pagination";
+import { DEFAULT_PAGE_SIZE } from "@/constants";
 
 export default function Page() {
   const router = useRouter();
   const handleRowClick = (row: any) => {
-    console.log("first", row);
     router.push(`/case-filing/drafts/${row?.id}`);
   };
   const [date, setDate] = React.useState<DateRange | undefined>({
@@ -21,7 +21,6 @@ export default function Page() {
     to: new Date(new Date().getFullYear(), 11, 31),
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
 
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
@@ -30,18 +29,19 @@ export default function Page() {
         startDate: date?.from,
         endDate: date?.to,
         search: "",
-        currentPage
+        currentPage,
       },
     ],
     queryFn: async () => {
       return await getCaseFiles({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
         start_data: date?.from
           ? dateFormatter(date?.from as Date).isoFormat
           : null,
         end_date: date?.to ? dateFormatter(date?.to as Date).isoFormat : null,
       });
     },
-    placeholderData: keepPreviousData,
     staleTime: 50000,
   });
 
@@ -55,14 +55,16 @@ export default function Page() {
           loading={draftsLoading}
           data={data?.data}
         />
-        <Pagination
-          currentPage={currentPage}
-          total={data?.total_rows ?? 0}
-          rowsPerPage={rowsPerPage}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-          }}
-        />
+        <div className="flex justify-end">
+          <Pagination
+            currentPage={currentPage}
+            total={data?.total_rows ?? 0}
+            rowsPerPage={DEFAULT_PAGE_SIZE}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

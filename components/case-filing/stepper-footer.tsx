@@ -110,7 +110,7 @@ export function StepperNavigation() {
             </Button>
           }
         >
-          <section className="space-y-8">
+          <div className="space-y-8">
             <div className="flex flex-col items-center gap-1 pt-2">
               <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
                 <Icons.saveIcon />
@@ -145,7 +145,7 @@ export function StepperNavigation() {
                 RETURN TO FILING{" "}
               </AlertDialogCancel>
             </AlertDialogFooter>
-          </section>
+          </div>
         </ConfirmationModal>
 
         <Button
@@ -154,7 +154,13 @@ export function StepperNavigation() {
           onClick={handleNextStep}
           disabled={current_step === FORM_STEPS.length || formPending}
         >
-          {formPending ? <>Loading...</> : "  Next"}
+          {formPending ? (
+            <>Loading...</>
+          ) : current_step === 5 ? (
+            "Submit"
+          ) : (
+            "Next"
+          )}
         </Button>
       </div>
     </CardFooter>

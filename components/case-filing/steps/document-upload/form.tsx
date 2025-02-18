@@ -9,33 +9,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DocumentUploadComponent from "@/components/ui/document-upload";
-import { OtherDocuments } from "../../constants";
-import { useDispatch } from "react-redux";
+import { OtherDocuments } from "@/constants";
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
-import {
-  IDocumentFileType,
-  removeOtherDocument,
-  updateOtherDocument,
-} from "@/redux/slices/case-filing-slice";
+import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 
 export default function DocumentUploadForm() {
-  const dispatch = useDispatch();
   const [selectedDocType, setSelectedDocType] = useState<OtherDocuments | "">(
     ""
   );
   const {
-    otherDocuments: uploadedDocuments,
-    caseType: { case_type, sub_case_type },
+    caseType: { case_type },
   } = useAppSelector((state) => state.caseFileForm);
 
-  const availableDocTypes = Object.values(OtherDocuments).filter(
-    (doc) => !uploadedDocuments?.some((uploaded) => uploaded.sub_title === doc)
+  const uploadedDocuments = useAppSelector((state) =>
+    state.caseFileForm.documents.filter(
+      (doc) => Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
+    )
   );
-  const handleError = (error: any) => {
-    toast.error("error");
-    console.error("Upload/Update failed:", error);
-  };
+
+
+  const availableDocTypes = Object.values(OtherDocuments).filter(
+    (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
+  );
+
   const handleDocTypeSelect = (value: OtherDocuments) => {
     setSelectedDocType(value);
   };
@@ -43,46 +40,35 @@ export default function DocumentUploadForm() {
   const handleSuccess = (data: any) => {
     if (selectedDocType) {
       toast.success("Upload successful");
-      dispatch(updateOtherDocument(data?.data));
       setSelectedDocType("");
     }
   };
 
-  const handleDeleteDocument = (id: string) => {
-    console.log("id enteringgg", id);
-    dispatch(removeOtherDocument(id));
-  };
   return (
     <div className="space-y-6">
-      {uploadedDocuments?.length > 0 && (
+      {/* {uploadedDocuments?.length > 0 && ( */}
         <div className="space-y-6">
           {uploadedDocuments?.map((data: IDocumentFileType) => (
             <DocumentUploadComponent
               subTitle={"OTHER DOCUMENTS"}
               key={data.id}
-              labelName={data.sub_title}
-              title={data.sub_title}
+              title={data.title}
               caseType={case_type}
               subCase={selectedDocType}
+              canDelete={true}
               onSuccess={(data) => handleSuccess(data)}
-              onError={handleError}
-              onDelete={() => handleDeleteDocument(data.id)}
-              documents={uploadedDocuments}
             />
           ))}
         </div>
-      )}
+      {/* )} */}
 
       {selectedDocType && (
         <DocumentUploadComponent
           subTitle={"OTHER DOCUMENTS"}
-          labelName={selectedDocType}
           title={selectedDocType}
           caseType={case_type}
           subCase={selectedDocType}
           onSuccess={(data) => handleSuccess(data)}
-          onError={handleError}
-          documents={uploadedDocuments}
         />
       )}
 

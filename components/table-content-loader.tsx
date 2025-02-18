@@ -18,21 +18,21 @@ const TableContentLoader = <TData, TValue>({
 }: TableContentLoaderProps<TData, TValue>) => {
   return (
     <Table>
-      <TableHeader>
+      <TableHeader className="h-12">
         <TableRow>
           {columns.map((_, index) => (
             <TableHead key={index}>
-              <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
             </TableHead>
           ))}
         </TableRow>
       </TableHeader>
       <TableBody>
         {Array.from({ length: 5 }).map((_, rowIndex) => (
-          <TableRow key={rowIndex}>
+          <TableRow className="h-16" key={rowIndex}>
             {columns.map((_, cellIndex) => (
               <TableCell key={cellIndex}>
-                <div className="h-4 bg-gray-100 rounded animate-pulse"></div>
+                <div className="h-8 bg-gray-100 rounded animate-pulse"></div>
               </TableCell>
             ))}
           </TableRow>

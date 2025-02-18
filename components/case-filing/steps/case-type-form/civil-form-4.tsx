@@ -9,7 +9,6 @@ import { useAppSelector } from "@/hooks/redux";
 import {
   updateCaseFileField,
   updateCaseTypeName,
-  updateCivilCaseDocument,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
@@ -24,7 +23,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData } from "../../constants";
+import { CaseTypeData } from "@/constants";
 
 export const CivilCaseForm4 = () => {
   const dispatch = useDispatch();
@@ -51,11 +50,10 @@ export const CivilCaseForm4 = () => {
       cost_claimed,
       interest_claimed,
     },
-    civilCaseDocuments,
   } = useAppSelector((data) => data.caseFileForm);
 
   const handleSuccess = (data: any) => {
-    dispatch(updateCivilCaseDocument(data.data));
+    console.log("first", data);
   };
 
   const handleError = (error: any) => {
@@ -420,14 +418,12 @@ export const CivilCaseForm4 = () => {
             <p className="text-base text-neutral-600 font-bold">SIGNATURE</p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
-                labelName={"E-SIGNATURE"}
                 subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
                 caseType={case_type}
                 subCase={sub_case_type}
                 onSuccess={(data) => handleSuccess(data)}
                 onError={handleError}
-                documents={civilCaseDocuments}
               />
             </div>
           </div>
@@ -442,13 +438,11 @@ export const CivilCaseForm4 = () => {
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
               subTitle={CaseTypeData.CIVIL_CASE}
-              labelName={"OTHER PARTICULARS OF PLAINT"}
               title={"PARTICULARS OF PLAINT"}
               caseType={case_type}
               subCase={sub_case_type}
               onSuccess={(data) => handleSuccess(data)}
               onError={handleError}
-              documents={civilCaseDocuments}
             />
           </div>
         </div>
