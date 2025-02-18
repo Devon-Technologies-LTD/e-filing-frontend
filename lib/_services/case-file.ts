@@ -63,6 +63,8 @@ export interface IDraftFilter {
   start_data?: string | null;
   status?: string | null;
   user_id?: string | null;
+  page?: number;
+  size?: number;
 }
 
 const CaseFileService = {

@@ -20,7 +20,7 @@ import {
   CivilCaseSubTypeValueWorth,
   CriminalCaseSubType,
   FamilyCaseSubType,
-} from "../../constants";
+} from "@/constants";
 import CivilCaseForm from "./civil-case-form";
 import FamilyCaseForm from "./family-case-form";
 import {

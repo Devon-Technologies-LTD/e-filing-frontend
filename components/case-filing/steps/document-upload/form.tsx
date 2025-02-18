@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DocumentUploadComponent from "@/components/ui/document-upload";
-import { OtherDocuments } from "../../constants";
+import { OtherDocuments } from "@/constants";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";

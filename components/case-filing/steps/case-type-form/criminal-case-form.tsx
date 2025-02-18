@@ -1,7 +1,7 @@
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useCallback } from "react";
-import { CaseTypeData, CriminalCaseSubType } from "../../constants";
+import { CaseTypeData, CriminalCaseSubType } from "@/constants";
 import { DirectCriminalComplaintForm } from "./direct-complaint-form";
 import { useDispatch } from "react-redux";
 import { updateCriminalCaseDocument } from "@/redux/slices/case-filing-slice";

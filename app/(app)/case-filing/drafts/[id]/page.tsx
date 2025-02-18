@@ -1,6 +1,6 @@
 "use client";
 import { CaseForm } from "@/components/case-filing/case-form";
-import { CaseTypeData } from "@/components/case-filing/constants";
+import { CaseTypeData } from "@/constants";
 import { getCaseFilesById } from "@/lib/actions/case-file";
 import {
   replaceCivilCaseDocument,
@@ -8,8 +8,6 @@ import {
   replaceExhibitsCaseDocument,
   replaceFamilyCaseDocument,
   replaceOtherDocuments,
-  updateCaseFileField,
-  updateCriminalCaseDocument,
   updateLegalCounsels,
   updateMultipleCaseFileFields,
   updateMultipleCaseTypeFields,
@@ -59,6 +57,7 @@ const CaseFilingPage = () => {
         updateMultipleCaseTypeFields({
           fields: {
             case_type: data.casetype[0]?.case_type_name ?? "",
+            case_type_id: data.casetype[0]?.id ?? "",
             cost_claimed: data.casetype[0].cost_claimed ?? "",
             dated_this: data.casetype[0].dated_this ?? "",
             direct_complain: data.casetype[0].direct_complain ?? "",

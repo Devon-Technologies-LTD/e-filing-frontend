@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "./label";
 import { Button } from "./button";
 import { Icons } from "../svg/icons";
@@ -38,13 +38,23 @@ export default function DocumentUploadComponent({
   const {
     caseFile: { case_file_id },
   } = useAppSelector((state) => state.caseFileForm);
-  const existingDocument =
-    documents?.find((doc) => doc.title === title) || null;
+  const [existingDocument, setExistingDocuments] =
+    useState<IDocumentFileType | null>(
+      documents?.find((doc) => doc.title === title) || null
+    );
+
+  useEffect(() => {
+    setExistingDocuments(documents?.find((doc) => doc.title === title) || null);
+  }, [documents]);
+
+
+  console.log("existingDocument", existingDocument);
   const uploadMutation = useMutation({
     mutationFn: (data: FormData) => uploadDocumentAction(data),
     onSuccess: (data) => {
       if (data?.success) {
         if (onSuccess) onSuccess(data);
+        
       } else {
         throw new Error(JSON.stringify(data));
       }

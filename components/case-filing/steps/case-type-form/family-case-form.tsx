@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CaseTypeData, FamilyCaseSubType } from "../../constants";
+import { CaseTypeData, FamilyCaseSubType } from "@/constants";
 import { useDispatch } from "react-redux";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { toast } from "sonner";
@@ -62,7 +62,7 @@ export default function FamilyCaseForm() {
             <DocumentUploadComponent
               subTitle={CaseTypeData.FAMILY_CASE}
               key={data.id}
-              labelName={data.sub_title}
+              labelName={CaseTypeData.FAMILY_CASE}
               title={data.sub_title}
               caseType={case_type}
               subCase={selectedDocType}

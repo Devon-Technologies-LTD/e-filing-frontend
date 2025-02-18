@@ -9,7 +9,7 @@ import {
   CriminalCaseSubType,
   CivilCaseSubType,
   CaseTypeData,
-} from "../../constants";
+} from "@/constants";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
 
 type TooltipData = {

@@ -27,7 +27,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData } from "../../constants";
+import { CaseTypeData } from "@/constants";
 
 export const CivilCaseForm8 = () => {
   const dispatch = useDispatch();
