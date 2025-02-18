@@ -4,15 +4,9 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import TransformingLineLink from "../ui/animation-link";
 import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
-import { LoginPasswordField } from "./login-component";
+import { LoginPasswordField } from "./password-component";
 import InputField from "../ui/InputField";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import GoogleSignInButton from "../GoogleSignInButton";
 
 const LoginComponent = () => {

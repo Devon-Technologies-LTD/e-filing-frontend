@@ -25,7 +25,6 @@ const userConfig = axios.create({
 //   return Promise.reject(error)
 // })
 
-
 // let refreshing_token: any = null
 
 userConfig.interceptors.response.use(

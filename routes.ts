@@ -56,7 +56,7 @@ export const defaultLoginRedirect = (role?: ROLES) => {
     case "LAWYER":
       return "/cases/recent";
     case "USER":
-      return "/case-filing";
+      return "/cases/recent";
     default:
       return "/cases/recent";
   }
