@@ -72,7 +72,7 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
         <StatusBadge
           tooltip={""}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status}
+          status={row.original.status as any}
         />
       );
     },
