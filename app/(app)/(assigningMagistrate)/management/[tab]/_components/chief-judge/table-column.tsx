@@ -33,7 +33,9 @@ export const createUserColumns = (
         return (
           <div className="flex items-center gap-1">
             <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-secondary-foreground text-black">{initials}</AvatarFallback>
+              <AvatarFallback className="bg-secondary-foreground text-black">
+                {initials}
+              </AvatarFallback>
             </Avatar>
             <p>{name}</p>
           </div>
@@ -54,7 +56,7 @@ export const createUserColumns = (
           <StatusBadge
             tooltip={""}
             tooltipProps={{ delayDuration: 200 }}
-            status={row.original.status}
+            status={row.original.status as any}
           />
         );
       },
