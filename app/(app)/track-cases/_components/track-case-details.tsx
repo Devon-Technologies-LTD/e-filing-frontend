@@ -8,6 +8,7 @@ import { useState } from "react";
 import AllActivities from "./all-activities";
 import { Hearings } from "./hearings";
 import { useRouter } from "next/navigation";
+import { CaseStatus } from "@/constants";
 
 export function TrackCaseDetails() {
   const tabs: { id: any; label: string }[] = [
@@ -26,13 +27,13 @@ export function TrackCaseDetails() {
         <div className="">
           <div className="flex items-center gap-4">
             <h2 className="font-bold text-lg">CV/Wuse/233456789/2024</h2>
-            <StatusBadge status="CRIMINAL CASE">
+            <StatusBadge status={CaseStatus.Approved}>
               CRIMINAL CASE - CLAIMANT
             </StatusBadge>
             <StatusBadge
               tooltip="A Presiding Magistrate is attached to this case"
               tooltipProps={{ delayDuration: 200 }}
-              status="IN PROGRESS"
+              status={CaseStatus.UnderReview}
             />
           </div>
           <p className="text-black font-medium text-sm">John Doe vs Jane Doe</p>

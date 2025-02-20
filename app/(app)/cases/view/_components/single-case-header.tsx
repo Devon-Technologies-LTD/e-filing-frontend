@@ -4,6 +4,7 @@ import Link from "next/link";
 import { QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { CaseStatus } from "@/constants";
 
 export function SingleCaseHeader({ params }: { params: { id: string } }) {
   const id = decodeURIComponent(params.id);
@@ -25,10 +26,10 @@ export function SingleCaseHeader({ params }: { params: { id: string } }) {
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-medium text-primary">{id}</h1>
               <div className="flex items-center gap-3">
-                <StatusBadge status="CRIMINAL CASE">
+                <StatusBadge status={CaseStatus.Approved}>
                   CRIMINAL CASE - CLAIMANT
                 </StatusBadge>
-                <StatusBadge status="FIRST HEARING SCHEDULED" />
+                <StatusBadge status={CaseStatus.Approved} />
               </div>
             </div>
 
@@ -45,7 +46,6 @@ export function SingleCaseHeader({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-      
       </div>
     </div>
   );

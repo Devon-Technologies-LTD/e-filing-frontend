@@ -59,6 +59,8 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
   }
 }
 export async function getCaseFiles(payload: IDraftFilter) {
+  console.log("this is the payload", payload);
+
   try {
     const data = await CaseFileService.getCaseFiles(payload);
     console.log("this is from the server function", data);
@@ -328,6 +330,7 @@ export async function updateCaseType({
   payload: ICreateCaseFileData;
   caseFileId: string;
 }) {
+  console.log("first entering update case type")
   try {
     const data = await CaseFileService.patchCaseType({ payload, caseFileId });
     return { ...data, success: true };

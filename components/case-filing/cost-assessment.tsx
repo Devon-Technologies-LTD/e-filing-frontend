@@ -1,37 +1,68 @@
-interface CostItem {
-  name: string;
-  amount: number;
-  category?: string;
-}
-
-const costItems: CostItem[] = [
-  {
-    name: "First Information Report Document",
-    amount: 0,
-  },
-  {
-    name: "Charge Sheet",
-    amount: 0,
-  },
-  {
-    name: "Car Light Picture",
-    amount: 500,
-    category: "Exhibits",
-  },
-  {
-    name: "Seal Generation",
-    amount: 0,
-  },
-];
+import {
+  CaseTypeData,
+  CivilCaseSubType,
+  CriminalCaseSubType,
+  FamilyCaseSubType,
+  OtherDocuments,
+} from "@/constants";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function CostAssessment() {
-  const total = costItems.reduce((sum, item) => sum + item.amount, 0);
+  const {
+    documents,
+    caseType: { case_type },
+  } = useAppSelector((data) => data.caseFileForm);
+
+  const filteredCriminalDocuments = documents?.filter((doc) =>
+    Object.values(CriminalCaseSubType).includes(
+      doc.title as CriminalCaseSubType
+    )
+  );
+  const filteredCivilDocuments = documents?.filter((doc) =>
+    Object.values(CivilCaseSubType).includes(doc.title as CivilCaseSubType)
+  );
+  const filteredFamilyDocuments = documents?.filter((doc) =>
+    Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
+  );
+  const filteredOtherDocuments = documents?.filter((doc) =>
+    Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
+  );
+  const filteredExhibitsDocuments = documents?.filter(
+    (doc) => doc.case_type_name === "EXHIBITS"
+  );
+  const costCriminalItems = filteredCriminalDocuments?.map((doc) => ({
+    category: doc.case_type_name,
+    name: doc.title,
+    amount: doc.amount,
+  }));
+  const costCivilItems = filteredCivilDocuments?.map((doc) => ({
+    category: doc.case_type_name,
+    name: doc.title,
+    amount: doc.amount,
+  }));
+  const costFamilyItems = filteredFamilyDocuments?.map((doc) => ({
+    category: doc.case_type_name,
+    name: doc.title,
+    amount: doc.amount,
+  }));
+  const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
+    category: doc.case_type_name,
+    name: doc.title,
+    amount: doc.amount,
+  }));
+  const costOtherDocuments = filteredOtherDocuments?.map((doc) => ({
+    category: doc.case_type_name,
+    name: doc.title,
+    amount: doc.amount,
+  }));
 
   return (
     <div className="">
       <div className="space-y-4">
         <h1 className="text-base font-bold text-primary">Cost Assessment</h1>
-        <h2 className="text-sm font-bold">Criminal Case</h2>
+        <h2 className="text-sm font-bold capitalize">
+          {case_type?.toLowerCase()}
+        </h2>
 
         <div className="space-y-4">
           <div className="flex justify-between text-xs font-semibold">
@@ -41,32 +72,127 @@ export default function CostAssessment() {
 
           <div className="space-y-3">
             <div className="space-y-1">
-              {costItems.map((item, index) => (
-                <div key={index}>
-                  {item.category && (
-                    <h4 className="text-xs font-semibold text-primary mb-2">
-                      {item.category}
-                    </h4>
+              {filteredCriminalDocuments?.length > 0 && (
+                <>
+                  {case_type === CaseTypeData.CRIMINAL_CASE && (
+                    <>
+                      {costCriminalItems.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center text-sm"
+                        >
+                          <span className="text-xs">{item.name}</span>
+                          <span className="text-base font-medium">
+                            ₦{" "}
+                            {item.amount &&
+                              item?.amount.toLocaleString("en-US", {
+                                minimumFractionDigits: 3,
+                                maximumFractionDigits: 3,
+                              })}
+                          </span>
+                        </div>
+                      ))}
+                    </>
                   )}
-                  <div className="flex justify-between items-center text-sm">
+                </>
+              )}
+
+              {filteredCivilDocuments?.length > 0 && (
+                <>
+                  {case_type === CaseTypeData.CIVIL_CASE && (
+                    <>
+                      {costCivilItems.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center text-sm"
+                        >
+                          <span className="text-xs">{item.name}</span>
+                          <span className="text-base font-medium">
+                            ₦{" "}
+                            {item.amount &&
+                              item?.amount.toLocaleString("en-US", {
+                                minimumFractionDigits: 3,
+                                maximumFractionDigits: 3,
+                              })}
+                          </span>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
+              {filteredFamilyDocuments?.length > 0 && (
+                <>
+                  {case_type === CaseTypeData.FAMILY_CASE && (
+                    <>
+                      {costFamilyItems.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center text-sm"
+                        >
+                          <span className="text-xs">{item.name}</span>
+                          <span className="text-base font-medium">
+                            ₦{" "}
+                            {item.amount &&
+                              item?.amount.toLocaleString("en-US", {
+                                minimumFractionDigits: 3,
+                                maximumFractionDigits: 3,
+                              })}
+                          </span>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
+              {filteredOtherDocuments?.length > 0 && (
+                <>
+                  {costOtherDocuments?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center text-sm"
+                    >
+                      <span className="text-xs">{item.name}</span>
+                      <span className="text-base font-medium">
+                        ₦{" "}
+                        {item.amount &&
+                          item?.amount.toLocaleString("en-US", {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3,
+                          })}
+                      </span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+            {filteredExhibitsDocuments?.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-primary text-xs font-semibold">Exhibits</p>
+                {costExhibitsItems?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center text-sm"
+                  >
                     <span className="text-xs">{item.name}</span>
                     <span className="text-base font-medium">
                       ₦{" "}
-                      {item.amount.toLocaleString("en-US", {
-                        minimumFractionDigits: 3,
-                        maximumFractionDigits: 3,
-                      })}
+                      {item.amount &&
+                        item?.amount.toLocaleString("en-US", {
+                          minimumFractionDigits: 3,
+                          maximumFractionDigits: 3,
+                        })}
                     </span>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             <div className="flex justify-between items-center font-medium">
               <span className="text-xs font-bold">TOTAL</span>
               <span className="text-base font-medium">
                 ₦{" "}
-                {total.toLocaleString("en-US", {
+                {[0].toLocaleString("en-US", {
                   minimumFractionDigits: 3,
                   maximumFractionDigits: 3,
                 })}

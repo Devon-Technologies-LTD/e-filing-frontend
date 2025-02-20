@@ -23,11 +23,10 @@ export default function DocumentUploadForm() {
   } = useAppSelector((state) => state.caseFileForm);
 
   const uploadedDocuments = useAppSelector((state) =>
-    state.caseFileForm.documents.filter(
-      (doc) => Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
+    state.caseFileForm.documents?.filter((doc) =>
+      Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
     )
   );
-
 
   const availableDocTypes = Object.values(OtherDocuments).filter(
     (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
@@ -46,21 +45,19 @@ export default function DocumentUploadForm() {
 
   return (
     <div className="space-y-6">
-      {/* {uploadedDocuments?.length > 0 && ( */}
-        <div className="space-y-6">
-          {uploadedDocuments?.map((data: IDocumentFileType) => (
-            <DocumentUploadComponent
-              subTitle={"OTHER DOCUMENTS"}
-              key={data.id}
-              title={data.title}
-              caseType={case_type}
-              subCase={selectedDocType}
-              canDelete={true}
-              onSuccess={(data) => handleSuccess(data)}
-            />
-          ))}
-        </div>
-      {/* )} */}
+      <div className="space-y-6">
+        {uploadedDocuments?.map((data: IDocumentFileType) => (
+          <DocumentUploadComponent
+            subTitle={"OTHER DOCUMENTS"}
+            key={data.id}
+            title={data.title}
+            caseType={case_type}
+            subCase={selectedDocType}
+            canDelete={true}
+            onSuccess={(data) => handleSuccess(data)}
+          />
+        ))}
+      </div>
 
       {selectedDocType && (
         <DocumentUploadComponent

@@ -22,28 +22,28 @@ export type DeleteDocumentPayload = {
 };
 
 const DocumentService = {
-  async uploadDocument(formData: FormData): Promise<UploadDocumentResponse> {
+  async uploadDocument(formData: FormData): Promise<any> {
     try {
       console.log("entering form data");
-      const response = await axiosInstance.post<UploadDocumentResponse>(
-        "/documents",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return response.data;
+      console.log("entering form data payload", formData);
+      const response = await axiosInstance.post<any>("/documents", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("response from api direct", response?.data);
+      return response ? response.data : null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;
     }
   },
-  async updateDocument(formData: FormData): Promise<UploadDocumentResponse> {
+  async updateDocument(
+    formData: FormData
+  ): Promise<UploadDocumentResponse | null> {
     try {
       console.log("entering form data");
-      const response = await axiosInstance.patch<UploadDocumentResponse>(
+      const response = await axiosInstance.patch<UploadDocumentResponse | null>(
         "/documents/",
         formData,
         {
@@ -53,7 +53,7 @@ const DocumentService = {
         }
       );
       console.log("responesss", response);
-      return response.data;
+      return response ? response.data : null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;
@@ -68,7 +68,7 @@ const DocumentService = {
         data: payload,
       });
       console.log("responesss from delete finished", response);
-      return response.data;
+      return response ? response.data : null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;

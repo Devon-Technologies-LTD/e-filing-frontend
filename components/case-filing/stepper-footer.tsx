@@ -6,35 +6,48 @@ import { CardFooter } from "@/components/ui/card";
 import { FORM_STEPS } from "@/constants/form";
 import { MoveLeft } from "lucide-react";
 import { useAppSelector } from "@/hooks/redux";
-import { useCaseOverviewFormValidator } from "./validators/useCaseOverviewValidator";
+import { useCaseOverviewFormValidator } from "./validators/case-overview-validator";
 import { useSaveForm } from "./hooks";
-import { updateStep } from "@/redux/slices/case-filing-slice";
+import { addCaseTypeError, updateStep } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ConfirmationModal } from "../confirmation-modal";
 import { Icons } from "../svg/icons";
 import { AlertDialogCancel, AlertDialogFooter } from "../ui/alert-dialog";
 import { useState } from "react";
+import { useCivilCaseFormValidator } from "./validators/civil-case-form-validator";
+import { CaseTypeData } from "@/constants";
+import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
+import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
+import { toast } from "sonner";
 
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const {
-    caseFile: caseFileStateValues,
-    current_step,
-    caseType,
-    legal_counsels,
-  } = useAppSelector((store) => store.caseFileForm);
+  const { current_step, caseType, legal_counsels, documents } = useAppSelector(
+    (store) => store.caseFileForm
+  );
   const { validate } = useCaseOverviewFormValidator({
-    store: caseFileStateValues,
+    store: caseType,
   });
-
+  const { validate: validateCivilCase } = useCivilCaseFormValidator({
+    store: caseType,
+    documents,
+  });
+  const { validate: validateCriminalCase } = useCriminalCaseFormValidator({
+    store: caseType,
+    documents,
+  });
+  const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
+    documents,
+  });
   const { mutate: saveAsDraft, isPending: draftPending } = useSaveForm({
     step: current_step,
     isDraft: true,
   });
   const { mutate: saveForm, isPending: formPending } = useSaveForm({
     step: current_step,
+    isDraft: false,
   });
 
   const router = useRouter();
@@ -43,19 +56,36 @@ export function StepperNavigation() {
     if (current_step === 1) {
       await validate(() =>
         saveForm({
-          case_file_id: caseFileStateValues.case_file_id,
+          case_file_id: caseType.case_file_id,
           data: {
-            ...caseFileStateValues,
             ...caseType,
           },
           legal_counsels,
         })
       );
+    } else if (current_step === 2) {
+      if (!caseType.case_type) {
+        dispatch(
+          addCaseTypeError({
+            case_type: "Please select a case type",
+          })
+        );
+      }
+      if (caseType.case_type === CaseTypeData.CIVIL_CASE) {
+        await validateCivilCase(() => dispatch(updateStep(current_step + 1)));
+      }
+      if (caseType.case_type === CaseTypeData.CRIMINAL_CASE) {
+        await validateCriminalCase(() =>
+          dispatch(updateStep(current_step + 1))
+        );
+      }
+      if (caseType.case_type === CaseTypeData.FAMILY_CASE) {
+        await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
+      }
     } else if (current_step === 5) {
       saveForm({
-        case_file_id: caseFileStateValues.case_file_id,
+        case_file_id: caseType.case_file_id,
         data: {
-          ...caseFileStateValues,
           ...caseType,
         },
         legal_counsels,
@@ -65,14 +95,16 @@ export function StepperNavigation() {
     }
   };
   const handleSaveAndContinue = async () => {
-    saveAsDraft({
-      case_file_id: caseFileStateValues.case_file_id,
-      data: {
-        ...caseFileStateValues,
-        ...caseType,
-      },
-      legal_counsels,
-    });
+    if ((current_step === 1 && !caseType.title) || !caseType.court_division) {
+      toast.error("Case title and division is required before saving as draft");
+    } else
+      saveAsDraft({
+        case_file_id: caseType.case_file_id,
+        data: {
+          ...caseType,
+        },
+        legal_counsels,
+      });
   };
 
   const handlePreviousStep = () => {

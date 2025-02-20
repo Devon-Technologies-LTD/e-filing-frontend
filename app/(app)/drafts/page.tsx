@@ -1,20 +1,30 @@
 "use client";
 import { DataTable } from "@/components/data-table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DraftsDataTableToolbar } from "./_components/data-table-toolbar";
 import { DraftsColumns } from "./_components/table-columns";
 import { useRouter } from "next/navigation";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getCaseFiles } from "@/lib/actions/case-file";
+import { useQuery } from "@tanstack/react-query";
+import { getCaseFiles, getCaseFilesById } from "@/lib/actions/case-file";
 import { DateRange } from "react-day-picker";
-import { dateFormatter } from "@/lib/utils";
+import { dateFormatter, getCaseTypeFields } from "@/lib/utils";
 import Pagination from "@/components/ui/pagination";
-import { DEFAULT_PAGE_SIZE } from "@/constants";
+import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
+import {
+  addDocument,
+  updateLegalCounsels,
+  updateMultipleCaseTypeFields,
+} from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 export default function Page() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [selectedRow, setSelectedRow] = useState(null);
   const handleRowClick = (row: any) => {
-    router.push(`/case-filing/drafts/${row?.id}`);
+    setSelectedRow(row.id);
   };
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -36,6 +46,7 @@ export default function Page() {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        status: [CaseStatus.Draft],
         start_data: date?.from
           ? dateFormatter(date?.from as Date).isoFormat
           : null,
@@ -45,6 +56,42 @@ export default function Page() {
     staleTime: 50000,
   });
 
+  const {
+    data: singleDraftData,
+    isLoading: singleDraftsLoading,
+    isError: singleDraftError,
+  } = useQuery({
+    queryKey: ["get_case_draft_by_id"],
+    queryFn: async () => {
+      if (!selectedRow) return Promise.reject("No selected row"); // Prevent API call
+      return await getCaseFilesById(selectedRow);
+    },
+    enabled: !!selectedRow,
+  });
+
+  console.log("firstin client", data);
+  useEffect(() => {
+    if (singleDraftError) {
+      toast.error("Unable to fetch draft details");
+    }
+  }, [singleDraftError]);
+
+  useEffect(() => {
+    if (singleDraftData && selectedRow) {
+      console.log("singleDraft", singleDraftData)
+      const caseTypeFields = getCaseTypeFields(singleDraftData);
+      dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
+      dispatch(
+        updateLegalCounsels(
+          data?.casetype?.length > 0 ? data?.casetype[0]?.legal_counsels : []
+        )
+      );
+      dispatch(addDocument(data.documents));
+      setSelectedRow(null)
+      router.push(`/case-filing`);
+    }
+  }, [singleDraftData, dispatch]);
+
   return (
     <div className="container py-8">
       <div className="bg-white p-4 space-y-6">
@@ -52,7 +99,7 @@ export default function Page() {
         <DataTable
           onRowClick={handleRowClick}
           columns={DraftsColumns}
-          loading={draftsLoading}
+          loading={draftsLoading || singleDraftsLoading}
           data={data?.data}
         />
         <div className="flex justify-end">

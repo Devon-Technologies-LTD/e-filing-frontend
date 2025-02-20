@@ -15,29 +15,28 @@ import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 export default function FamilyCaseForm() {
   const {
     caseType: { case_type },
+    caseTypeErrors,
   } = useAppSelector((value) => value.caseFileForm);
   const [selectedDocType, setSelectedDocType] = useState<
     FamilyCaseSubType | ""
   >("");
   const uploadedDocuments = useAppSelector((state) =>
-    state.caseFileForm.documents.filter(
-      (doc) => doc.case_type_name === case_type
+    state.caseFileForm.documents?.filter((doc) =>
+      Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
     )
   );
 
+  console.log("first", uploadedDocuments)
+
   const availableDocTypes = Object.values(FamilyCaseSubType).filter(
-    (doc) => !uploadedDocuments.some((uploaded) => uploaded.title === doc)
+    (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
   );
-  const handleError = (error: any) => {
-    toast.error("error");
-    console.error("Upload/Update failed:", error);
-  };
 
   const handleDocTypeSelect = (value: FamilyCaseSubType) => {
     setSelectedDocType(value);
   };
 
-  const handleSuccess = (data: any) => {
+  const handleSuccess = () => {
     if (selectedDocType) {
       toast.success("Upload successful");
       setSelectedDocType("");
@@ -47,15 +46,15 @@ export default function FamilyCaseForm() {
   return (
     <div className="space-y-10 lg:w-1/2">
       <div className="space-y-4">
-        {uploadedDocuments.map((data: IDocumentFileType) => (
+        {uploadedDocuments?.map((data: IDocumentFileType) => (
           <DocumentUploadComponent
+            errorMessage={caseTypeErrors.familyDoc}
             subTitle={CaseTypeData.FAMILY_CASE}
             key={data.id}
             title={data.title}
             caseType={case_type}
             subCase={selectedDocType}
-            onSuccess={(data) => handleSuccess(data)}
-            onError={handleError}
+            onSuccess={() => handleSuccess()}
             canDelete={true}
           />
         ))}
@@ -68,8 +67,7 @@ export default function FamilyCaseForm() {
             title={selectedDocType}
             caseType={case_type}
             subCase={selectedDocType}
-            onSuccess={(data) => handleSuccess(data)}
-            onError={handleError}
+            onSuccess={() => handleSuccess()}
           />
         )}
 

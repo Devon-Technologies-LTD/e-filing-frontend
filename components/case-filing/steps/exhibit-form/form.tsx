@@ -39,7 +39,7 @@ export default function ExhibitFormFields() {
   const [isOpen, setIsOpen] = useState(false);
 
   const exhibitsDocument = useAppSelector((state) =>
-    state.caseFileForm.documents.filter(
+    state.caseFileForm.documents?.filter(
       (doc) => doc.case_type_name === "EXHIBITS"
     )
   );
@@ -50,7 +50,7 @@ export default function ExhibitFormFields() {
   );
 
   const [exhibits, setExhibits] = useState(
-    memoizedExhibitsDocument.length > 0
+    memoizedExhibitsDocument?.length > 0
       ? memoizedExhibitsDocument
       : defaultExhibit
   );
@@ -62,7 +62,7 @@ export default function ExhibitFormFields() {
   const exhibitsRef = useRef(exhibits);
 
   useEffect(() => {
-    if (memoizedExhibitsDocument.length > 0) {
+    if (memoizedExhibitsDocument?.length > 0) {
       // Only update if exhibits have changed
       if (
         JSON.stringify(memoizedExhibitsDocument) !==

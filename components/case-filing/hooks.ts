@@ -1,16 +1,17 @@
+import { CaseStatus } from "@/constants";
 import {
   createCaseFile,
   createCaseType,
   updateCaseFile,
   updateCaseType,
 } from "@/lib/actions/case-file";
-import { dateFormatter } from "@/lib/utils";
+import { dateFormatter, formatErrors } from "@/lib/utils";
 import {
-  CaseFileState,
+  clearCaseTypeError,
   clearForm,
   ICaseTypes,
   ILegalCounsels,
-  updateCaseFileField,
+  updateCaseTypeName,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import {
@@ -32,7 +33,7 @@ interface Claimant {
 
 interface SaveFormParams {
   case_file_id?: string | null;
-  data: CaseFileState & ICaseTypes;
+  data: ICaseTypes;
   legal_counsels?: ILegalCounsels[];
 }
 
@@ -141,9 +142,9 @@ export const useSaveForm = ({
           recovery_amount: data.recovery_amount,
           legal_counsels,
           registrar: data.registrar,
-          status: isDraft ? "draft" : "pending",
+          status: isDraft ? CaseStatus.Draft : CaseStatus.Pending,
         };
-        return data.case_type_id
+        return data?.case_type_id
           ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
           : createCaseType(payload);
       };
@@ -155,22 +156,30 @@ export const useSaveForm = ({
       }
     },
     onSuccess: (data) => {
+      console.log("data on save ", data);
       if (data?.success) {
         toast.success(data?.message || "Form saved successfully!");
         if (isDraft) {
           queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
           navigate.push("/drafts");
           dispatch(clearForm());
+          dispatch(clearCaseTypeError());
         } else {
           dispatch(
-            updateCaseFileField({ field: "case_file_id", value: data?.id })
+            updateCaseTypeName({
+              case_file_id: data.id,
+            })
           );
-          dispatch(updateStep(step + 1));
+          if (step === 5) {
+            navigate.push("/cases");
+          } else {
+            dispatch(updateStep(step + 1));
+          }
         }
       } else {
-        console.log("first", data);
+        const errorMessage: any = formatErrors(data.errors);
         toast.error(
-          `${data?.message}: ${data.errors.error}` ||
+          `${data?.message}: ${errorMessage}` ||
             "An error occurred while saving the form."
         );
       }

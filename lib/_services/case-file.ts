@@ -1,3 +1,4 @@
+import { CaseStatus, CaseTypeData } from "@/constants";
 import { axiosInstance } from "../_api/axios-config";
 
 export interface ICreateCaseFileData {
@@ -61,10 +62,26 @@ export interface IDraftFilter {
   court_division_id?: string | null;
   end_date?: string | null;
   start_data?: string | null;
-  status?: string | null;
+  status?: CaseStatus[] | null;
   user_id?: string | null;
   page?: number;
   size?: number;
+}
+
+export interface CaseDetailsResponse {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  court_division_id: string;
+  case_type_name: CaseTypeData;
+  sub_case_type_name: string;
+  division_name: string;
+  claimant: Claimant;
+  defendant: Claimant;
+  status: CaseStatus;
+  created_at: string;
+  updated_at: string;
 }
 
 const CaseFileService = {
@@ -143,7 +160,7 @@ const CaseFileService = {
     caseFileId: string;
   }): Promise<any> {
     const response = await axiosInstance.patch<ICreateCaseFileData>(
-      `casefile/${caseFileId}`,
+      `casetype/${caseFileId}`,
       payload
     );
 

@@ -66,7 +66,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                 <StatusBadge
                   tooltip={""}
                   tooltipProps={{ delayDuration: 200 }}
-                  status={row.status}
+                  status={row.status as any}
                 />
               </div>
               <div className="flex items-center divide-x-2 gap-3">

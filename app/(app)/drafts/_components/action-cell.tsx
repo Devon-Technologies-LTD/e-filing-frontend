@@ -22,13 +22,15 @@ const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteCase(id),
     onSuccess: (data) => {
-      console.log("first", data);
       if (data?.success) {
         toast.success(data.message);
         setIsOpen(false);
         queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
       } else {
-        toast.error(data.message);
+        toast.error(
+          `${data?.message}: ${data.errors ? data.errors.error : ""}` ||
+            "An error occurred while saving the form."
+        );
         setIsOpen(false);
       }
     },
@@ -45,7 +47,11 @@ const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
   return (
     <div>
       <ConfirmationModal
-        trigger={<Icons.bin />}
+        trigger={
+          <button>
+            <Icons.bin />
+          </button>
+        }
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >

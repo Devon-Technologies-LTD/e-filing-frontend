@@ -7,7 +7,8 @@ import { getUserDivision } from "@/lib/actions/division";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/redux";
 import {
-  updateCaseFileField,
+  addCaseTypeError,
+  ICaseTypes,
   updateCaseTypeName,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
@@ -27,9 +28,8 @@ import { CaseTypeData } from "@/constants";
 
 export const CivilCaseForm4 = () => {
   const dispatch = useDispatch();
-
   const {
-    caseFile: {
+    caseType: {
       claimant_name,
       defendant_name,
       court_division,
@@ -41,8 +41,6 @@ export const CivilCaseForm4 = () => {
       defendant_email_address,
       defendant_phone_number,
       defendant_whats_app,
-    },
-    caseType: {
       case_type,
       sub_case_type,
       sum_claimed,
@@ -50,14 +48,20 @@ export const CivilCaseForm4 = () => {
       cost_claimed,
       interest_claimed,
     },
+    caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
 
-  const handleSuccess = (data: any) => {
-    console.log("first", data);
-  };
-
-  const handleError = (error: any) => {
-    console.error("Upload/Update failed:", error);
+  const handleChange = (name: keyof ICaseTypes, value: string | Date) => {
+    dispatch(
+      updateCaseTypeName({
+        [name]: value,
+      })
+    );
+    dispatch(
+      addCaseTypeError({
+        [name]: "",
+      })
+    );
   };
 
   const { data, isLoading: divisionFetching } = useQuery({
@@ -90,10 +94,9 @@ export const CivilCaseForm4 = () => {
               data={divisions?.data || []}
               value={court_division}
               onChange={(value) => {
-                dispatch(
-                  updateCaseFileField({ field: "court_division", value: value })
-                );
+                handleChange("court_division", value);
               }}
+              error={caseTypeErrors?.court_division ?? ""}
             />
           </div>
         </div>
@@ -115,13 +118,9 @@ export const CivilCaseForm4 = () => {
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
             onChange={({ target }) => {
-              dispatch(
-                updateCaseFileField({
-                  field: "claimant_name",
-                  value: target.value,
-                })
-              );
+              handleChange("claimant_name", target.value);
             }}
+            error={caseTypeErrors?.claimant_name ?? ""}
           />
         </div>
         <div className="space-y-3">
@@ -141,13 +140,9 @@ export const CivilCaseForm4 = () => {
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
             onChange={({ target }) => {
-              dispatch(
-                updateCaseFileField({
-                  field: "defendant_name",
-                  value: target.value,
-                })
-              );
+              handleChange("defendant_name", target.value);
             }}
+            error={caseTypeErrors?.defendant_name ?? ""}
           />
         </div>
 
@@ -163,12 +158,9 @@ export const CivilCaseForm4 = () => {
               value={sum_claimed}
               type="text"
               onChange={({ target }) => {
-                dispatch(
-                  updateCaseTypeName({
-                    sum_claimed: target.value,
-                  })
-                );
+                handleChange("sum_claimed", target.value);
               }}
+              error={caseTypeErrors?.sum_claimed ?? ""}
               tooltipContent={
                 <ToolTipCard
                   className="p-"
@@ -186,12 +178,9 @@ export const CivilCaseForm4 = () => {
               value={cost_claimed}
               type="text"
               onChange={({ target }) => {
-                dispatch(
-                  updateCaseTypeName({
-                    cost_claimed: target.value,
-                  })
-                );
+                handleChange("cost_claimed", target.value);
               }}
+              error={caseTypeErrors?.cost_claimed ?? ""}
               tooltipContent={
                 <ToolTipCard
                   className="p-"
@@ -209,12 +198,9 @@ export const CivilCaseForm4 = () => {
               value={interest_claimed}
               type="text"
               onChange={({ target }) => {
-                dispatch(
-                  updateCaseTypeName({
-                    interest_claimed: target.value,
-                  })
-                );
+                handleChange("interest_claimed", target.value);
               }}
+              error={caseTypeErrors?.interest_claimed ?? ""}
               tooltipContent={
                 <ToolTipCard
                   className="p-"
@@ -243,13 +229,9 @@ export const CivilCaseForm4 = () => {
                 value={claimant_address}
                 type="text"
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_address", target.value);
                 }}
+                error={caseTypeErrors?.claimant_address ?? ""}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
               />
@@ -258,13 +240,9 @@ export const CivilCaseForm4 = () => {
                 name="claimant_phone_number"
                 value={claimant_phone_number}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_phone_number",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_phone_number", target.value);
                 }}
+                error={caseTypeErrors?.claimant_phone_number ?? ""}
                 type="text"
                 label="PHONE NUMBERS"
                 placeholder="eg. 2347030338024"
@@ -276,13 +254,9 @@ export const CivilCaseForm4 = () => {
                 label="Email Address"
                 value={claimant_email_address}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_email_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_email_address", target.value);
                 }}
+                error={caseTypeErrors?.claimant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
               <InputField
@@ -292,13 +266,9 @@ export const CivilCaseForm4 = () => {
                 label="Whatsapp Number"
                 value={claimant_whats_app}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_whats_app",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_whats_app", target.value);
                 }}
+                error={caseTypeErrors?.claimant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
               />
             </div>
@@ -310,13 +280,9 @@ export const CivilCaseForm4 = () => {
                 value={defendant_address}
                 type="text"
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_address", target.value);
                 }}
+                error={caseTypeErrors?.defendant_address ?? ""}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
               />
@@ -325,13 +291,9 @@ export const CivilCaseForm4 = () => {
                 name="defendant_phone_number"
                 value={defendant_phone_number}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_phone_number",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_phone_number", target.value);
                 }}
+                error={caseTypeErrors?.defendant_phone_number ?? ""}
                 type="text"
                 label="PHONE NUMBERS"
                 placeholder="eg. 2347030338024"
@@ -343,13 +305,9 @@ export const CivilCaseForm4 = () => {
                 label="Email Address"
                 value={defendant_email_address}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_email_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_email_address", target.value);
                 }}
+                error={caseTypeErrors?.defendant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
               <InputField
@@ -359,13 +317,9 @@ export const CivilCaseForm4 = () => {
                 label="Whatsapp Number"
                 value={defendant_whats_app}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_whats_app",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_whats_app", target.value);
                 }}
+                error={caseTypeErrors?.defendant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
               />
             </div>
@@ -376,7 +330,12 @@ export const CivilCaseForm4 = () => {
           <p className="text-lg font-bold">
             This plaint was taken out by claimant/counsel as the case may be
           </p>
-          <p className="text-base font-bold text-neutral-600">DATED THIS</p>
+          <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
+            DATED THIS
+            <span className="text-xs text-red-500 ">
+              {caseTypeErrors?.dated_this ?? ""}
+            </span>
+          </p>
           <div className="flex items-end justify-start text-center">
             <Popover>
               <PopoverTrigger asChild>
@@ -400,11 +359,7 @@ export const CivilCaseForm4 = () => {
                   mode="single"
                   selected={dated_this}
                   onSelect={(date) => {
-                    dispatch(
-                      updateCaseTypeName({
-                        dated_this: date,
-                      })
-                    );
+                    if (date) handleChange("dated_this", date);
                   }}
                   initialFocus
                 />
@@ -415,15 +370,18 @@ export const CivilCaseForm4 = () => {
 
         <div className="space-y-6">
           <div className="space-y-3">
-            <p className="text-base text-neutral-600 font-bold">SIGNATURE</p>
+            <p className="text-base items-center gap-3 text-neutral-600 font-bold">
+              SIGNATURE{" "}
+              <span className="text-xs text-red-500 ">
+                {caseTypeErrors?.signature ?? ""}
+              </span>
+            </p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
                 subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
                 caseType={case_type}
                 subCase={sub_case_type}
-                onSuccess={(data) => handleSuccess(data)}
-                onError={handleError}
               />
             </div>
           </div>
@@ -436,13 +394,14 @@ export const CivilCaseForm4 = () => {
             placeholder="e.g claimant/counsel name"
           />
           <div className="mt-3 lg:w-1/2">
+            <span className="text-xs text-red-500 ">
+              {caseTypeErrors?.plaintParticulars ?? ""}
+            </span>
             <DocumentUploadComponent
               subTitle={CaseTypeData.CIVIL_CASE}
               title={"PARTICULARS OF PLAINT"}
               caseType={case_type}
               subCase={sub_case_type}
-              onSuccess={(data) => handleSuccess(data)}
-              onError={handleError}
             />
           </div>
         </div>

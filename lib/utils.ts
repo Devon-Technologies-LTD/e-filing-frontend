@@ -125,6 +125,7 @@ export function dateFormatter(dateString: string | Date) {
 
   return {
     fullDateTime: date.toLocaleString(), // 2/17/2025, 10:23:35 AM
+    fullDate: date.toLocaleDateString(), // 2/17/2025, 10:23:35 AM
     isoFormat: date.toISOString(), // 2025-02-17T09:23:35.493Z
     humanFriendly: date.toDateString(), // Mon Feb 17 2025
     ddmmyyyy_hhmmss: `${date.getDate().toString().padStart(2, "0")}/${(
@@ -160,12 +161,12 @@ export function dateFormatter(dateString: string | Date) {
   };
 }
 
-export const getCaseFileFields = (data: any) => ({
+export const getCaseTypeFields = (data: any) => ({
   case_file_id: data?.id ?? "",
-  claimant_address: data?.claimant?.name ?? "",
-  claimant_email_address: data?.claimant?.email_address ?? "",
-  claimant_name: data?.claimant?.name ?? "",
-  claimant_phone_number: data?.claimant?.phone_number ?? "",
+  claimant_address: data?.casetype?.[0]?.claimant?.address ?? "",
+  claimant_email_address: data?.casetype?.[0]?.claimant?.email_address ?? "",
+  claimant_name: data?.casetype?.[0]?.claimant?.name ?? "",
+  claimant_phone_number: data?.casetype?.[0]?.claimant?.phone_number ?? "",
   claimant_whats_app: data?.casetype?.[0]?.claimant?.whats_app ?? "",
   court_division: data?.court_division_id ?? "",
   defendant_address: data?.casetype?.[0]?.defendant?.address ?? "",
@@ -175,9 +176,6 @@ export const getCaseFileFields = (data: any) => ({
   defendant_phone_number: data?.casetype?.[0]?.defendant?.phone_number ?? "",
   defendant_whats_app: data?.casetype?.[0]?.defendant?.whats_app ?? "",
   title: data?.title ?? "",
-});
-
-export const getCaseTypeFields = (data: any) => ({
   case_type: data?.casetype?.[0]?.case_type_name ?? "",
   case_type_id: data?.casetype?.[0]?.id ?? "",
   cost_claimed: data?.casetype?.[0]?.cost_claimed ?? "",
@@ -200,3 +198,9 @@ export const getCaseTypeFields = (data: any) => ({
   summon_time: data?.casetype?.[0]?.summon_details?.time ?? "",
   value_worth: data?.casetype?.[0]?.value_worth ?? "",
 });
+
+export const formatErrors = (errors: any) => {
+  return Object.entries(errors)
+    .map(([key, message]) => `${key}: ${message}`)
+    .join("\n");
+};

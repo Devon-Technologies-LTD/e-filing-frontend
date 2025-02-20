@@ -13,11 +13,12 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { IDivision } from "@/lib/_services/divisions-service";
 import { useAppSelector } from "@/hooks/redux";
 import {
-  addCaseFileError,
-  CaseFileState,
-  updateCaseFileField,
+  addCaseTypeError,
+  ICaseTypes,
+  updateCaseTypeName,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
+import { ToolTipCard } from "@/components/ui/tool-tip-card";
 
 export const LocationSelect = ({
   value,
@@ -67,16 +68,12 @@ export const LocationSelect = ({
 );
 
 export default function CaseOverviewForm() {
-  const { caseFile, caseFileErrors } = useAppSelector(
+  const { caseType, caseTypeErrors } = useAppSelector(
     (data) => data.caseFileForm
   );
   const dispatch = useDispatch();
-  const handleInputChange = (name: keyof CaseFileState, value: string) => {
-    dispatch(updateCaseFileField({ field: name, value: value }));
-  };
-
-  const handleSelectChange = (name: keyof CaseFileState, value: string) => {
-    dispatch(updateCaseFileField({ field: name, value: value }));
+  const handleChange = (name: keyof ICaseTypes, value: string) => {
+    dispatch(updateCaseTypeName({ [name]: value }));
   };
 
   const { data, isLoading: divisionFetching } = useQuery({
@@ -95,16 +92,16 @@ export default function CaseOverviewForm() {
       <LocationSelect
         loading={divisionFetching}
         data={divisions?.data}
-        value={caseFile.court_division}
+        value={caseType.court_division}
         onChange={(value) => {
-          handleSelectChange("court_division", value);
+          handleChange("court_division", value);
           dispatch(
-            addCaseFileError({
+            addCaseTypeError({
               court_division: "",
             })
           );
         }}
-        error={caseFileErrors?.court_division}
+        error={caseTypeErrors?.court_division}
       />
 
       {FORM_FIELDS.map((field) => (
@@ -113,20 +110,26 @@ export default function CaseOverviewForm() {
           id={field.id}
           name={field.name}
           label={field.label}
-          tooltipText={field.tooltipText}
           tooltipIcon={field.tooltipIcon}
+          tooltipContent={
+            <ToolTipCard
+              title={field.tooltipTitle ?? ""}
+              description={field.tooltipText ?? ""}
+            />
+          }
           placeholder={field.placeholder}
-          icon={field.icon}
-          value={caseFile[field.name as keyof CaseFileState] || ""}
+          icon={undefined}
+          value={(caseType[field.name as keyof ICaseTypes] as any) || ""}
           onChange={(e) => {
-            handleInputChange(field.name, e.target.value);
+            handleChange(field.name, e.target.value);
             dispatch(
-              addCaseFileError({
+              addCaseTypeError({
                 [field.name]: "",
               })
             );
           }}
-          error={caseFileErrors[field.name] ?? ""}
+          required={field.required}
+          error={caseTypeErrors[field.name] ?? ""}
         />
       ))}
     </div>
