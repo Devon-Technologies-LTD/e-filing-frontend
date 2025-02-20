@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { inter } from "@/app/fonts";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { AppProvider } from "@/lib/provider";
 import NextTopLoader from "nextjs-toploader";
 import Head from "next/head";
 import React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner"
+
+
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -42,11 +44,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${inter.variable} font-inter antialiased bg-background min-h-dvh overflow-hidden w-full`}
       >
+        <Toaster richColors expand={true} position="top-center"  />
         <TooltipProvider>
           <AppProvider>{children}</AppProvider>
           <NextTopLoader showSpinner={false} color="#6F4E37" />
-          <Toaster
-          />
         </TooltipProvider>
       </body>
     </html>

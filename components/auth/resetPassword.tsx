@@ -4,10 +4,9 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import TransformingLineLink from "../ui/animation-link";
 import { useFormState } from "react-dom";
 import { resetPassword } from "@/lib/actions/login";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner"
 import { redirect } from "next/navigation";
-import { LoginPasswordField } from "./password-component";
+import { LoginPasswordField } from "@/components/passwordField";
 
 const ResetPaswordComponent = () => {
     const [state, dispatch] = useFormState(resetPassword, undefined);

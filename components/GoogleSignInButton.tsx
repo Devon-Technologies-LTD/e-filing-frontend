@@ -4,46 +4,30 @@ import { Button } from "@/components/ui/button";
 import { GogleIcon } from "@/components/svg/gogle-icon";
 import { googleLoginAction } from "@/lib/actions/login";
 import { LoaderCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner"
+
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Link from "next/link";
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
 
 const GoogleSignInButton: React.FC = () => {
-    const { toast } = useToast();
     const { signInWithGoogle, user, signOut } = useAuth();
     const [loading, setLoading] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
 
     const handleSignIn = async () => {
         setLoading(true);
-        try {
-            const result = await signInWithGoogle();
-            if (!result.email) {
-                toast({
-                    title: "An error occurred",
-                    description: "No email returned from Google authentication.",
-                    variant: "destructive",
-                    style: {
-                        backgroundColor: "#f44336",
-                        color: "#fff",
-                        borderRadius: "8px",
-                        padding: "12px",
-                    },
-                });
-                return;
-            }
-            const data = await googleLoginAction(result.email);
-            if (!data.success) {
-                await signOut();
-                console.log("modal should open");
-                setShowDialog(true);
-            }
-        } catch (error) {
-            console.log(error);
-            setShowDialog(true);
+        const result = await signInWithGoogle();
+        if (!result.email) {
+            toast.error("An error occurred", {
+                description: "No email returned from Google authentication."
+            });
+            return;
+        }
+        const data = await googleLoginAction(result.email);
+        if (CLIENT_ERROR_STATUS.includes(data?.status)) {
             await signOut();
-        } finally {
-            setLoading(false);
+            setShowDialog(true);
         }
     };
 

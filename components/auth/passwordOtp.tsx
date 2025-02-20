@@ -8,11 +8,9 @@ import { verifyOTP } from "@/lib/actions/login";
 import { SubmitButton } from "@/components/ui/submit-button"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 
-
-
 export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
     const [state, dispatch] = useFormState(verifyOTP, undefined);
-    const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(5 * 60); // 15 minutes in seconds
 
     useEffect(() => {
         if (timeLeft <= 0) return;

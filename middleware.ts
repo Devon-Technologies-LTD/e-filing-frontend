@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import  { getUser, verifySession } from "@/lib/server/auth";
+import { getUser, verifySession } from "@/lib/server/auth";
 
 import {
   defaultLoginRedirect,
   apiAuthPrefix,
   apiPrefix,
   authRoutes,
-  publicRoutes,
 } from '@/routes'
 
 export async function middleware(request: NextRequest) {
@@ -17,14 +16,6 @@ export async function middleware(request: NextRequest) {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-
-  const isPublicRoute = publicRoutes.some(route => {
-    if (route === '/login') {
-      return nextUrl.pathname === '/login'; 
-    }
-    return nextUrl.pathname.startsWith(route); 
-  });
-
   if (isApiAuthRoute) {
     return NextResponse.next()
   }
@@ -32,16 +23,15 @@ export async function middleware(request: NextRequest) {
   if (isApiRoute) {
     return NextResponse.next()
   }
-
+  console.log(isAuthRoute);
   if (isAuthRoute) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL(defaultLoginRedirect(user?.role), nextUrl))
-      // return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
     return NextResponse.next()
   }
 
-  if (!isPublicRoute && !isLoggedIn) {
+  if (!isLoggedIn) {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }
 

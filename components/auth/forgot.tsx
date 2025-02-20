@@ -1,11 +1,11 @@
 "use client";
 import { SubmitButton } from "@/components/ui/submit-button";
 import InputField from "@/components/ui/InputField";
-import TransformingLineLink from "../ui/animation-link";
 import { useFormState } from "react-dom";
 import { ForgotPasswordAction } from "@/lib/actions/login";
-import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { toast } from "sonner"
+
 
 const FORGOT = () => {
     const [state, dispatch] = useFormState(ForgotPasswordAction, undefined);
@@ -21,10 +21,6 @@ const FORGOT = () => {
         ? state.errors
         : state?.errors?.email;
     useEffect(() => {
-        // if (state?.success) {
-        //     toast.success(state.success);
-        //     redirect("/case-filing");
-        // }
         if (state?.message && !state.success) {
             toast.error(state.message);
         }
@@ -69,7 +65,7 @@ const FORGOT = () => {
                     pendingValue="Processing..."
                     className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2"
                 />
-                <TransformingLineLink href="recover" text="FORGOT THE EMAIL ADDRESS?" />
+                {/* <TransformingLineLink href="recover" text="FORGOT THE EMAIL ADDRESS?" /> */}
             </form>
         </>
     );
