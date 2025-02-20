@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import {
   Table,
   TableBody,
@@ -45,7 +44,7 @@ export const mainColumns: ColumnDef<ICase>[] = [
       };
 
       return (
-        <span className={`px-2 py-1 rounded-md text-sm font-medium ${statusColors[status] || "bg-gray-100 text-gray-800"}`}>
+        <span className={`px-2 py-1 rounded-md text-sm font-bold ${statusColors[status] || "bg-gray-100 text-gray-800"}`}>
           {status}
         </span>
       );
@@ -60,6 +59,7 @@ interface DataTableProps {
   onRowClick: (caseId: string) => void;
 }
 
+
 export const DataTable: React.FC<DataTableProps> = ({ columns, data, loading, onRowClick }) => {
   const table = useReactTable({
     data,
@@ -68,13 +68,16 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, data, loading, on
   });
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
+    <div className="rounded-md">
+      <Table className="space-y-2">
+        {/* Table Header */}
+        <TableHeader className="bg-zinc-50 h-12">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id}
+                  className="uppercase font-bold text-sm"
+                >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
@@ -86,9 +89,10 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, data, loading, on
         </TableHeader>
         <TableBody>
           {loading ? (
-            <TableRow 
+            <TableRow
               className="h-16 hover:border-b-2 transition-colors duration-500 hover:bg-zinc-50 hover:border-b-app-secondary">
-              <TableCell colSpan={columns.length} className="h-24 text-center  font-semibold text-black text-sm ">
+              <TableCell colSpan={columns.length}
+                className="h-24 text-center  font-semibold text-black text-sm ">
                 Loading...
               </TableCell>
             </TableRow>
@@ -108,7 +112,7 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, data, loading, on
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}    className="h-24 text-center">
+                  <TableCell key={cell.id} className="h-24 text-left font-bold">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

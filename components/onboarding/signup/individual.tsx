@@ -2,51 +2,26 @@
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import InputField from '@/components/ui/InputField';
-import { SignupAction } from "@/lib/actions/login";
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
 import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
-import { useToast } from "@/hooks/use-toast";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { LoginPasswordField } from "@/components/auth/password-component";
+import { toast } from "sonner"
+import { LoginPasswordField } from "@/components/passwordField";
 import DragDropUploader from "./DragDropUploaderNIN";
-import DragDropUploaderIPN from "./DragDropUploaderIPN";
-
+import { SignupAction } from "@/lib/actions/signup";
+import { isFieldErrorObject } from "@/types/auth";
 
 const IndividualComponent = () => {
-    const { toast } = useToast();
-    const [selectedMethod, setSelectedMethod] = useState<string>("");
     const [state, dispatch] = useFormState(SignupAction, undefined);
     const [loading, setLoading] = useState<boolean>(false);
-
-
-    function isFieldErrorObject(
-        error: string | Record<string, string[]>
-    ): error is Record<string, string[]> {
-        return typeof error !== "string";
-    }
-    const errors =
-        state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
+    const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
     useEffectAfterMount(() => {
         if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
-            toast({
-                title: state?.message,
-                description:
-                    typeof state.errors === "string"
-                        ? state.errors
-                        : Object.values(state.errors || {}).flat().join(", ") || "An error occurred.",
-                variant: "destructive",
-                style: {
-                    backgroundColor: "#f44336",
-                    color: "#fff",
-                    borderRadius: "8px",
-                    padding: "12px",
-                },
+            toast.error(state?.message, {
+                description: typeof state?.errors === "string"
+                    ? state.errors
+                    : state?.errors
+                        ? Object.values(state.errors).flat().join(", ")
+                        : undefined,
             });
         }
     }, [state]);
@@ -63,7 +38,6 @@ const IndividualComponent = () => {
             setLoading(false);
         }
     }, [state]);
-
 
     return (
         <>
@@ -93,33 +67,7 @@ const IndividualComponent = () => {
                                 required
                                 error={errors.email?.[0]}
                             />
-                            {/* <div className="mt-6">
-                                <Select onValueChange={(value) => setSelectedMethod(value)}>
-                                    <SelectTrigger className="w-full border-0 border-b-[1px] border-slate-300 font-bold text-neutral-700">
-                                        <SelectValue
-                                            className="text-neutral-700 text-md font-bold"
-                                            placeholder="Select an Identification Method"
-                                        />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-white text-zinc-900">
-                                        <SelectItem
-                                            value="NIN"
-                                            className="text-sm font-semibold text-zinc-900 hover:text-gray-600"
-                                        >
-                                            National Identity Number (NIN)
-                                        </SelectItem>
-                                        <SelectItem
-                                            value="IPN"
-                                            className="text-sm font-semibold text-zinc-900"
-                                        >
-                                            International Passport Number (IPN)
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div> */}
                         </div>
-
-                        {/* {selectedMethod === "NIN" && ( */}
                         <div className="space-y-6">
                             <div>
                                 <InputField
@@ -137,26 +85,6 @@ const IndividualComponent = () => {
                             </div>
                             <DragDropUploader />
                         </div>
-                        {/* )} */}
-                        {selectedMethod === "IPN" && (
-                            <div className="space-y-6">
-                                <div>
-                                    <InputField
-                                        id="ipn"
-                                        type="text"
-                                        label="International Password Number (IPN)"
-                                        name="ipn"
-                                        placeholder="e.g. 09876543212345"
-                                        required
-                                        error={errors.ipn?.[0]}
-                                    />
-                                    <p className="text-sm font-bold mt-4 text-neutral-600">
-                                        UPLOAD INTERNATIONAL PASSPORT BIOPAGE*
-                                    </p>
-                                </div>
-                                <DragDropUploaderIPN />
-                            </div>
-                        )}
                         <div className="space-y-6">
                             <InputField
                                 id="phone"
@@ -172,17 +100,8 @@ const IndividualComponent = () => {
 
                         </div>
                     </div>
-                    <p className="text-sm text-red-500 h-2 text-center">
-                        {typeof state?.errors === "string"
-                            ? state.errors
-                            : Object.values(state?.errors || {}).flat().join(", ")}
-                    </p>
-                    <p className="text-sm text-red-500 h-2 mt-3 text-center">
-                        {state?.message}
-                    </p>
-                    {/* Loading State */}
                     {loading && (
-                        <div className="flex justify-center items-center mt-4">
+                        <div className="flex justify-center items-center mt-1">
                             <div className="spinner"></div> {/* Add spinner */}
                         </div>
                     )}

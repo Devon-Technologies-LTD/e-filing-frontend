@@ -72,12 +72,13 @@ const CaseActions: React.FC<{ handlePreviousStep: () => void }> = ({ handlePrevi
     );
 };
 
-const SideBarComponent: React.FC = () => {
+export default function SideBarComponent({ params }: { params: { id: string } }) {
+    const { id } = params;
     return (
         <div>
             <div className="sticky top-0 bg-white z-10 space-y-2">
                 <div className="text-xs font-semibold text-gray-600">
-                    STEP {1} OF 3
+                    CASE REVIEWS / {id}
                 </div>
                 <div className="text-3xl font-medium leading-8 text-primary">
                     This is awesome

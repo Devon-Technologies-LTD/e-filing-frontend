@@ -4,13 +4,35 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import TransformingLineLink from "../ui/animation-link";
 import { LoginAction } from "@/lib/actions/login";
 import { useFormState } from "react-dom";
-import { LoginPasswordField } from "./password-component";
 import InputField from "../ui/InputField";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import GoogleSignInButton from "../GoogleSignInButton";
+import { toast } from "sonner"
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { isFieldErrorObject } from "@/types/auth";
+import { LoginPasswordField } from "../passwordField";
+
 
 const LoginComponent = () => {
   const [state, dispatch] = useFormState(LoginAction, undefined);
+  // const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
+  const errors = isFieldErrorObject(state?.errors) 
+  ? state.errors 
+  : {} as Record<string, string[]>;
+
+  useEffectAfterMount(() => {
+    if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
+      toast.error(state?.message, {
+        description: typeof state?.errors === "string" 
+          ? state.errors 
+          : state?.errors 
+            ? Object.values(state.errors).flat().join(", ") 
+            : undefined,
+      });
+    }
+  }, [state]);
+  
   return (
     <>
       <div className="heading">
@@ -36,9 +58,11 @@ const LoginComponent = () => {
           label="EMAIL ADDRESS"
           name="email"
           placeholder="name@gmail.com"
+          error={errors.email?.[0]}
           required
         />
-        <LoginPasswordField />
+        {/* <LoginPasswordField /> */}
+        <LoginPasswordField error={errors.password?.[0]} />
         <Select name="userType">
           <SelectTrigger className="border-0 border-b-[1px] text-neutral-700">
             <SelectValue className="text-neutral-700" placeholder="Please Select User type" />
@@ -54,9 +78,6 @@ const LoginComponent = () => {
             <SelectItem value="CENTRAL_REGISTRY" className="text-sm font-semibold text-zinc-900">CENTRAL REGISTRY</SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-red-500 h-2 text-center">
-          {state && state?.message}
-        </p>
         <SubmitButton
           value="LOG IN"
           pendingValue="Processing..."

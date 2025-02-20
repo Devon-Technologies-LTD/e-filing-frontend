@@ -5,7 +5,6 @@ import { ROLES } from "./types/auth";
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/menus", "/categories"];
 
 /**
  * An array of routes used for authentication
