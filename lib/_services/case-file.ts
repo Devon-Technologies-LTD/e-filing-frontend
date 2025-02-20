@@ -94,9 +94,10 @@ const CaseFileService = {
     return response.data;
   },
   async getCaseFiles(payload: IDraftFilter): Promise<any> {
+    const { page, size, ...rest } = payload;
     const response = await axiosInstance.post<IDraftFilter>(
-      `casefile/case-filter`,
-      payload
+      `casefile/case-filter?page=${payload.page}&size=${payload.size}`,
+      rest
     );
     console.log("case filter response", response.data);
     return response.data;

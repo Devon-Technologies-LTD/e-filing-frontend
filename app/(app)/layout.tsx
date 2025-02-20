@@ -20,7 +20,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
   }, []);
   return (
     <div data-wrapper="" className="border-grid flex flex-1 h-dvh flex-col">
-      <Toaster richColors />
       <DashboardHeader />
       <main className="flex flex-1 flex-col min-h-[calc(100dvh - 10rem)] max-h-[calc(100dvh - 10rem)] overflow-scroll">
         {children}

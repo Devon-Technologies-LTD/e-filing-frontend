@@ -4,7 +4,6 @@ import {
   unassignedColumns,
 } from "@/app/(app)/cases/[tab]/_components/table-columns";
 import { DataTable } from "@/components/data-table";
-import { mockCases } from "@/lib/dummy-data";
 import { TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
@@ -57,7 +56,7 @@ export default function FilteredCases() {
     }
   };
   const columns = getColumns();
-
+  console.log("first data ", data);
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
