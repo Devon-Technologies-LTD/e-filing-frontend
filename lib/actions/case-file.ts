@@ -330,6 +330,7 @@ export async function updateCaseType({
   payload: ICreateCaseFileData;
   caseFileId: string;
 }) {
+  console.log("first entering update case type")
   try {
     const data = await CaseFileService.patchCaseType({ payload, caseFileId });
     return { ...data, success: true };

@@ -13,44 +13,44 @@ export default function CostAssessment() {
     caseType: { case_type },
   } = useAppSelector((data) => data.caseFileForm);
 
-  const filteredCriminalDocuments = documents.filter((doc) =>
+  const filteredCriminalDocuments = documents?.filter((doc) =>
     Object.values(CriminalCaseSubType).includes(
       doc.title as CriminalCaseSubType
     )
   );
-  const filteredCivilDocuments = documents.filter((doc) =>
+  const filteredCivilDocuments = documents?.filter((doc) =>
     Object.values(CivilCaseSubType).includes(doc.title as CivilCaseSubType)
   );
-  const filteredFamilyDocuments = documents.filter((doc) =>
+  const filteredFamilyDocuments = documents?.filter((doc) =>
     Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
   );
-  const filteredOtherDocuments = documents.filter((doc) =>
+  const filteredOtherDocuments = documents?.filter((doc) =>
     Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
   );
-  const filteredExhibitsDocuments = documents.filter(
+  const filteredExhibitsDocuments = documents?.filter(
     (doc) => doc.case_type_name === "EXHIBITS"
   );
-  const costCriminalItems = filteredCriminalDocuments.map((doc) => ({
+  const costCriminalItems = filteredCriminalDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
     amount: doc.amount,
   }));
-  const costCivilItems = filteredCivilDocuments.map((doc) => ({
+  const costCivilItems = filteredCivilDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
     amount: doc.amount,
   }));
-  const costFamilyItems = filteredFamilyDocuments.map((doc) => ({
+  const costFamilyItems = filteredFamilyDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
     amount: doc.amount,
   }));
-  const costExhibitsItems = filteredExhibitsDocuments.map((doc) => ({
+  const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
     amount: doc.amount,
   }));
-  const costOtherDocuments = filteredOtherDocuments.map((doc) => ({
+  const costOtherDocuments = filteredOtherDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
     amount: doc.amount,
@@ -72,7 +72,7 @@ export default function CostAssessment() {
 
           <div className="space-y-3">
             <div className="space-y-1">
-              {filteredCriminalDocuments.length > 0 && (
+              {filteredCriminalDocuments?.length > 0 && (
                 <>
                   {case_type === CaseTypeData.CRIMINAL_CASE && (
                     <>
@@ -97,7 +97,7 @@ export default function CostAssessment() {
                 </>
               )}
 
-              {filteredCivilDocuments.length > 0 && (
+              {filteredCivilDocuments?.length > 0 && (
                 <>
                   {case_type === CaseTypeData.CIVIL_CASE && (
                     <>
@@ -121,7 +121,7 @@ export default function CostAssessment() {
                   )}
                 </>
               )}
-              {filteredFamilyDocuments.length > 0 && (
+              {filteredFamilyDocuments?.length > 0 && (
                 <>
                   {case_type === CaseTypeData.FAMILY_CASE && (
                     <>
@@ -145,9 +145,9 @@ export default function CostAssessment() {
                   )}
                 </>
               )}
-              {filteredOtherDocuments.length > 0 && (
+              {filteredOtherDocuments?.length > 0 && (
                 <>
-                  {costOtherDocuments.map((item, index) => (
+                  {costOtherDocuments?.map((item, index) => (
                     <div
                       key={index}
                       className="flex justify-between items-center text-sm"
@@ -166,7 +166,7 @@ export default function CostAssessment() {
                 </>
               )}
             </div>
-            {filteredExhibitsDocuments.length > 0 && (
+            {filteredExhibitsDocuments?.length > 0 && (
               <div className="space-y-1">
                 <p className="text-primary text-xs font-semibold">Exhibits</p>
                 {costExhibitsItems?.map((item, index) => (

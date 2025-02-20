@@ -23,7 +23,7 @@ export function StepNav() {
         <div className="space-y-3 ">
           <CaseFilingStepper steps={FORM_STEPS} currentStep={current_step} />
         </div>{" "}
-        {current_step > 1 && documents.length > 0 && (
+        {current_step > 1 && documents?.length > 0 && (
           <div className="space-y-3 ">
             <CostAssessment />
           </div>

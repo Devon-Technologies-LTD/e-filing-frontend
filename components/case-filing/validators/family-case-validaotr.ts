@@ -11,8 +11,8 @@ const useFamilyCaseFormValidator = ({ documents }: HookProps) => {
   const dispatch = useDispatch();
   const checkDocuments = (callback: () => void) => {
     const requiredDocuments = Object.values(FamilyCaseSubType);
-    const isAtLeastOnePresent = documents.some((doc: any) =>
-      requiredDocuments.includes(doc.title as FamilyCaseSubType)
+    const isAtLeastOnePresent = documents?.some((doc: any) =>
+      requiredDocuments?.includes(doc.title as FamilyCaseSubType)
     );
 
     if (isAtLeastOnePresent) {

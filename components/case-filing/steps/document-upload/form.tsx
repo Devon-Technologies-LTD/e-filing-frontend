@@ -23,7 +23,7 @@ export default function DocumentUploadForm() {
   } = useAppSelector((state) => state.caseFileForm);
 
   const uploadedDocuments = useAppSelector((state) =>
-    state.caseFileForm.documents.filter((doc) =>
+    state.caseFileForm.documents?.filter((doc) =>
       Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
     )
   );

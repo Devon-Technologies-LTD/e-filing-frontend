@@ -148,17 +148,17 @@ const formSlice = createSlice({
       state.documents = action.payload;
     },
     updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
-      const index = state.documents.findIndex(
+      const index = state.documents?.findIndex(
         (d) => d.title === action.payload.title
       );
       if (index !== -1) {
         state.documents[index] = action.payload;
       } else {
-        state.documents.push(action.payload);
+        state.documents?.push(action.payload);
       }
     },
     deleteDocument: (state, action: PayloadAction<string>) => {
-      state.documents = state.documents.filter(
+      state.documents = state.documents?.filter(
         (document) => document.title !== action.payload
       );
     },

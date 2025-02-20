@@ -6,7 +6,7 @@ import { cn, getAuthorizedLinks } from "@/lib/utils";
 import { NavItem } from "@/types/nav";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
-import { clearForm } from "@/redux/slices/case-filing-slice";
+import { clearCaseTypeError, clearForm } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 
 interface NavLinkProps extends Omit<NavItem, "roles"> {
@@ -49,7 +49,13 @@ export function Navigation() {
       {" "}
       {/* Horizontal layout */}
       {navLinks.map((link) => (
-        <div onClick={() => dispatch(clearForm())}>
+        <div
+          onClick={() => {
+            dispatch(clearForm());
+            dispatch(clearCaseTypeError());
+            
+          }}
+        >
           <NavLink key={link.href} {...link} />
         </div>
       ))}

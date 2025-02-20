@@ -18,6 +18,7 @@ import { useCivilCaseFormValidator } from "./validators/civil-case-form-validato
 import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
 import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
+import { toast } from "sonner";
 
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,13 +95,16 @@ export function StepperNavigation() {
     }
   };
   const handleSaveAndContinue = async () => {
-    saveAsDraft({
-      case_file_id: caseType.case_file_id,
-      data: {
-        ...caseType,
-      },
-      legal_counsels,
-    });
+    if ((current_step === 1 && !caseType.title) || !caseType.court_division) {
+      toast.error("Case title and division is required before saving as draft");
+    } else
+      saveAsDraft({
+        case_file_id: caseType.case_file_id,
+        data: {
+          ...caseType,
+        },
+        legal_counsels,
+      });
   };
 
   const handlePreviousStep = () => {

@@ -21,7 +21,7 @@ export default function FamilyCaseForm() {
     FamilyCaseSubType | ""
   >("");
   const uploadedDocuments = useAppSelector((state) =>
-    state.caseFileForm.documents.filter((doc) =>
+    state.caseFileForm.documents?.filter((doc) =>
       Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
     )
   );
@@ -29,7 +29,7 @@ export default function FamilyCaseForm() {
   console.log("first", uploadedDocuments)
 
   const availableDocTypes = Object.values(FamilyCaseSubType).filter(
-    (doc) => !uploadedDocuments.some((uploaded) => uploaded.title === doc)
+    (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
   );
 
   const handleDocTypeSelect = (value: FamilyCaseSubType) => {
@@ -46,7 +46,7 @@ export default function FamilyCaseForm() {
   return (
     <div className="space-y-10 lg:w-1/2">
       <div className="space-y-4">
-        {uploadedDocuments.map((data: IDocumentFileType) => (
+        {uploadedDocuments?.map((data: IDocumentFileType) => (
           <DocumentUploadComponent
             errorMessage={caseTypeErrors.familyDoc}
             subTitle={CaseTypeData.FAMILY_CASE}

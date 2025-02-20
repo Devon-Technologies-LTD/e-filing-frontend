@@ -160,7 +160,7 @@ const CaseFileService = {
     caseFileId: string;
   }): Promise<any> {
     const response = await axiosInstance.patch<ICreateCaseFileData>(
-      `casefile/${caseFileId}`,
+      `casetype/${caseFileId}`,
       payload
     );
 

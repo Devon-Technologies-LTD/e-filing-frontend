@@ -5,7 +5,7 @@ import { Navigation } from "./nav-link";
 import { Button } from "./ui/button";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
-import { clearForm } from "@/redux/slices/case-filing-slice";
+import { clearCaseTypeError, clearForm } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 export function MainNav({
@@ -28,6 +28,7 @@ export function MainNav({
             <Button
               onClick={() => {
                 dispatch(clearForm());
+                dispatch(clearCaseTypeError());
                 router.push("/case-filing");
               }}
               variant="default"
