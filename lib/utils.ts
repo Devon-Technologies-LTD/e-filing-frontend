@@ -125,6 +125,7 @@ export function dateFormatter(dateString: string | Date) {
 
   return {
     fullDateTime: date.toLocaleString(), // 2/17/2025, 10:23:35 AM
+    fullDate: date.toLocaleDateString(), // 2/17/2025, 10:23:35 AM
     isoFormat: date.toISOString(), // 2025-02-17T09:23:35.493Z
     humanFriendly: date.toDateString(), // Mon Feb 17 2025
     ddmmyyyy_hhmmss: `${date.getDate().toString().padStart(2, "0")}/${(

@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { DraftsDataTableToolbar } from "./_components/data-table-toolbar";
 import { DraftsColumns } from "./_components/table-columns";
 import { useRouter } from "next/navigation";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/case-file";
 import { DateRange } from "react-day-picker";
 import { dateFormatter } from "@/lib/utils";
 import Pagination from "@/components/ui/pagination";
-import { DEFAULT_PAGE_SIZE } from "@/constants";
+import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
 
 export default function Page() {
   const router = useRouter();
@@ -36,6 +36,7 @@ export default function Page() {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        status: [CaseStatus.Draft], 
         start_data: date?.from
           ? dateFormatter(date?.from as Date).isoFormat
           : null,

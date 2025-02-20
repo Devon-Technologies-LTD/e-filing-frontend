@@ -5,18 +5,20 @@ import { InfoIcon } from "lucide-react";
 import { RichTextEditor } from "../forms/civil";
 import { useAppSelector } from "@/hooks/redux";
 import { useDispatch } from "react-redux";
-import {
-  updateCaseFileField,
-  updateCaseTypeName,
-} from "@/redux/slices/case-filing-slice";
+import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { LocationSelect } from "../case-overview/form";
 import { getUserDivision } from "@/lib/actions/division";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 export const DirectCriminalComplaintForm = () => {
   const {
-    caseFile: { claimant_name, defendant_name, court_division },
-    caseType: { direct_complain },
+    caseType: {
+      direct_complain,
+      claimant_name,
+      defendant_name,
+      court_division,
+    },
+    caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(
@@ -70,9 +72,8 @@ export const DirectCriminalComplaintForm = () => {
           placeholder="eg. John Doe"
           onChange={({ target }) => {
             dispatch(
-              updateCaseFileField({
-                field: "claimant_name",
-                value: target.value,
+              updateCaseTypeName({
+                claimant_name: target.value,
               })
             );
           }}
@@ -89,9 +90,8 @@ export const DirectCriminalComplaintForm = () => {
           placeholder="eg. John Doe"
           onChange={({ target }) => {
             dispatch(
-              updateCaseFileField({
-                field: "defendant_name",
-                value: target.value,
+              updateCaseTypeName({
+                defendant_name: target.value,
               })
             );
           }}
@@ -106,14 +106,15 @@ export const DirectCriminalComplaintForm = () => {
             data={divisions?.data || []}
             value={court_division}
             onChange={(value) => {
-              dispatch(
-                updateCaseFileField({ field: "court_division", value: value })
-              );
+              dispatch(updateCaseTypeName({ court_division: value }));
             }}
           />
         </div>
-        <div className="text-base font-bold">
+        <div className="text-base flex items-center gap-3 font-bold">
           <p>DIRECT CRIMINAL COMPLAINT AGAINST</p>
+          <span className="text-xs text-red-500 ">
+            {caseTypeErrors?.direct_complain ?? ""}
+          </span>
         </div>
         <RichTextEditor
           editorState={editorState}

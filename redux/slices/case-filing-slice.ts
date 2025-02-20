@@ -17,7 +17,7 @@ export interface IDocumentFileType {
   updated_at?: string;
 }
 
-export interface CaseFileState {
+export interface ICaseTypes {
   case_file_id: string;
   court_division: string;
   claimant_address: string;
@@ -31,9 +31,6 @@ export interface CaseFileState {
   defendant_email_address: string;
   defendant_phone_number: string;
   title: string;
-}
-
-export interface ICaseTypes {
   case_type_id?: string;
   case_type: string;
   sub_case_type: string;
@@ -53,22 +50,28 @@ export interface ICaseTypes {
   notes: string;
   recovery_amount: string;
   registrar: string;
+  signature?: string;
+  witness?: string;
+  plaintParticulars?: string;
+  exparte?: string;
+  firDoc?: string;
+  familyDoc?: string;
 }
 
 export interface ILegalCounsels {}
 
 interface FormState {
   current_step: number;
-  caseFile: CaseFileState;
   legal_counsels: ILegalCounsels[];
   caseType: ICaseTypes;
   documents: IDocumentFileType[];
-  caseFileErrors: Partial<Record<keyof CaseFileState, string>>;
+  caseTypeErrors: Partial<Record<keyof ICaseTypes, string>>;
 }
 
 const initialState: FormState = {
   current_step: 1,
-  caseFile: {
+  caseTypeErrors: {},
+  caseType: {
     court_division: "",
     claimant_address: "",
     claimant_name: "",
@@ -82,9 +85,6 @@ const initialState: FormState = {
     defendant_phone_number: "",
     title: "",
     case_file_id: "",
-  },
-  caseFileErrors: {},
-  caseType: {
     case_type: "",
     sub_case_type: "",
     direct_complain: "",
@@ -112,21 +112,8 @@ const formSlice = createSlice({
   name: "case-filing-form",
   initialState,
   reducers: {
-    updateCaseFileField: (
-      state,
-      action: PayloadAction<{ field: keyof CaseFileState; value: string }>
-    ) => {
-      const { field, value } = action.payload;
-      state.caseFile[field] = value;
-    },
     updateLegalCounsels: (state, action: any) => {
       state.legal_counsels = action.payload;
-    },
-    updateMultipleCaseFileFields: (
-      state,
-      action: PayloadAction<{ fields: Partial<CaseFileState> }>
-    ) => {
-      Object.assign(state.caseFile, action.payload.fields);
     },
     updateMultipleCaseTypeFields: (
       state,
@@ -134,21 +121,18 @@ const formSlice = createSlice({
     ) => {
       Object.assign(state.caseType, action.payload.fields);
     },
-    addCaseFileError: (
+    addCaseTypeError: (
       state,
-      action: PayloadAction<Partial<Record<keyof CaseFileState, string>>>
+      action: PayloadAction<Partial<Record<keyof ICaseTypes, string>>>
     ) => {
       const tempErrors = action.payload;
-      state.caseFileErrors = { ...state.caseFileErrors, ...tempErrors };
+      state.caseTypeErrors = { ...state.caseTypeErrors, ...tempErrors };
     },
-    clearCaseFile: (state) => {
-      state.caseFile = initialState.caseFile;
+    clearCaseTypeError: (state) => {
+      state.caseTypeErrors = initialState.caseTypeErrors;
     },
     clearCaseType: (state) => {
       state.caseType = initialState.caseType;
-    },
-    clearCaseFileError: (state) => {
-      state.caseFileErrors = initialState.caseFileErrors;
     },
     updateStep: (state, action: PayloadAction<number>) => {
       state.current_step = action.payload;
@@ -181,8 +165,6 @@ const formSlice = createSlice({
 
     clearForm: (state) => {
       state.current_step = initialState.current_step;
-      state.caseFile = initialState.caseFile;
-      state.caseFileErrors = initialState.caseFileErrors;
       state.caseType = initialState.caseType;
       state.legal_counsels = initialState.legal_counsels;
       state.documents = initialState.documents;
@@ -191,11 +173,7 @@ const formSlice = createSlice({
 });
 
 export const {
-  updateCaseFileField,
   updateLegalCounsels,
-  addCaseFileError,
-  clearCaseFile,
-  clearCaseFileError,
   updateStep,
   updateCaseTypeName,
   resetStep,
@@ -203,8 +181,9 @@ export const {
   clearForm,
   updateDocument,
   clearCaseType,
-  updateMultipleCaseFileFields,
   updateMultipleCaseTypeFields,
   deleteDocument,
+  addCaseTypeError,
+  clearCaseTypeError,
 } = formSlice.actions;
 export default formSlice.reducer;

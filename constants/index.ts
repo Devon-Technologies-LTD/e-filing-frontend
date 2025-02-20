@@ -8,6 +8,18 @@ export const allowedUploadTypes = [
 ];
 export const DOCUMENT_MAX_SIZE = 10 * 1024 * 1024;
 
+export enum CaseStatus {
+  Draft = "draft",
+  Pending = "pending",
+  ToBeAssigned = "to be assigned",
+  JudgementDelivered = "judgement delivered",
+  StruckOut = "struck out",
+  Approved = "approved",
+  UnderReview = "under review",
+  Denied = "denied",
+  Assigned = "assigned",
+}
+
 export enum CaseTypeData {
   CIVIL_CASE = "CIVIL CASE",
   FAMILY_CASE = "FAMILY CASE",

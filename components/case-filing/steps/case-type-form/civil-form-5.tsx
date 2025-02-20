@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { EditorState, Editor, ContentState } from "draft-js";
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
@@ -9,7 +9,8 @@ import { getUserDivision } from "@/lib/actions/division";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/redux";
 import {
-  updateCaseFileField,
+  addCaseTypeError,
+  ICaseTypes,
   updateCaseTypeName,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
@@ -29,10 +30,14 @@ import { CaseTypeData } from "@/constants";
 
 export const CivilCaseForm5 = () => {
   const dispatch = useDispatch();
-  const [date, setDate] = useState<Date>();
-
   const {
-    caseFile: {
+    caseType: {
+      property_description,
+      rental_value,
+      relief_sought,
+      case_type,
+      sub_case_type,
+      dated_this,
       claimant_name,
       defendant_name,
       court_division,
@@ -45,14 +50,7 @@ export const CivilCaseForm5 = () => {
       defendant_phone_number,
       defendant_whats_app,
     },
-    caseType: {
-      property_description,
-      rental_value,
-      relief_sought,
-      case_type,
-      sub_case_type,
-      dated_this,
-    },
+    caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
   const [propertyDescription, setPropertyDescripton] = useState(() =>
     EditorState.createWithContent(
@@ -74,6 +72,11 @@ export const CivilCaseForm5 = () => {
           property_description: content,
         })
       );
+      dispatch(
+        addCaseTypeError({
+          property_description: "",
+        })
+      );
     },
     [dispatch]
   );
@@ -86,9 +89,27 @@ export const CivilCaseForm5 = () => {
           relief_sought: content,
         })
       );
+      dispatch(
+        addCaseTypeError({
+          relief_sought: "",
+        })
+      );
     },
     [dispatch]
   );
+
+  const handleChange = (name: keyof ICaseTypes, value: string | Date) => {
+    dispatch(
+      updateCaseTypeName({
+        [name]: value,
+      })
+    );
+    dispatch(
+      addCaseTypeError({
+        [name]: "",
+      })
+    );
+  };
 
   const { data, isLoading: divisionFetching } = useQuery({
     queryKey: ["divisions"],
@@ -120,10 +141,9 @@ export const CivilCaseForm5 = () => {
               data={divisions?.data || []}
               value={court_division}
               onChange={(value) => {
-                dispatch(
-                  updateCaseFileField({ field: "court_division", value: value })
-                );
+                handleChange("court_division", value);
               }}
+              error={caseTypeErrors?.court_division ?? ""}
             />
           </div>
         </div>
@@ -145,13 +165,9 @@ export const CivilCaseForm5 = () => {
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
             onChange={({ target }) => {
-              dispatch(
-                updateCaseFileField({
-                  field: "claimant_name",
-                  value: target.value,
-                })
-              );
+              handleChange("claimant_name", target.value);
             }}
+            error={caseTypeErrors?.claimant_name ?? ""}
           />
         </div>
         <div className="space-y-3">
@@ -171,13 +187,9 @@ export const CivilCaseForm5 = () => {
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
             onChange={({ target }) => {
-              dispatch(
-                updateCaseFileField({
-                  field: "defendant_name",
-                  value: target.value,
-                })
-              );
+              handleChange("defendant_name", target.value);
             }}
+            error={caseTypeErrors?.defendant_name ?? ""}
           />
         </div>
         <div className="space-y-3">
@@ -185,16 +197,21 @@ export const CivilCaseForm5 = () => {
             At the suit of this complainat, this plaint is taking out with
             respect to
           </div>
-          <p className="flex items-center gap-1 text-sm font-bold  text-neutral-600">
-            <TextwithToolTip
-              tooltipContent={
-                <ToolTipCard
-                  title="DESCRIPTION/LOCATION OF PROPERTY"
-                  description={`This section is for providing details about the property involved in the case. Include a clear description (e.g., type of property, size, features) and the exact location (e.g., address, landmarks) to help identify it. <br /> <br/>  Example: “A three-bedroom apartment located at No. 10, Maple Street, Lagos, with a blue gate and a fenced compound."`}
-                />
-              }
-            />{" "}
-            GIVE DESCRIPTION AND ADDRESS/LOCATION OF PROPERTY
+          <p className="flex justify-between items-center gap-1 text-sm font-bold  text-neutral-600">
+            <span className="flex items-center gap-1 ">
+              <TextwithToolTip
+                tooltipContent={
+                  <ToolTipCard
+                    title="DESCRIPTION/LOCATION OF PROPERTY"
+                    description={`This section is for providing details about the property involved in the case. Include a clear description (e.g., type of property, size, features) and the exact location (e.g., address, landmarks) to help identify it. <br /> <br/>  Example: “A three-bedroom apartment located at No. 10, Maple Street, Lagos, with a blue gate and a fenced compound."`}
+                  />
+                }
+              />{" "}
+              GIVE DESCRIPTION AND ADDRESS/LOCATION OF PROPERTY
+            </span>
+            <span className="text-xs text-red-500 ">
+              {caseTypeErrors?.property_description ?? ""}
+            </span>{" "}
           </p>
           <div className="p-2 bg-white h-40">
             <Editor
@@ -227,13 +244,10 @@ export const CivilCaseForm5 = () => {
               label=""
               value={rental_value}
               onChange={({ target }) => {
-                dispatch(
-                  updateCaseTypeName({
-                    rental_value: target.value,
-                  })
-                );
+                handleChange("rental_value", target.value);
               }}
               placeholder="eg. 800m, 000"
+              error={caseTypeErrors?.rental_value ?? ""}
             />
           </div>
         </div>
@@ -241,17 +255,22 @@ export const CivilCaseForm5 = () => {
           <div className="text-lg font-bold">
             The relief(s) sought by the complainat are
           </div>
-          <p className="flex items-center gap-1 text-sm font-bold  text-neutral-600">
-            <TextwithToolTip
-              tooltipContent={
-                <ToolTipCard
-                  className="max-w-[22rem]"
-                  title="DESCRIBE/LIST RELIEFS"
-                  description={`This is where you state what you are asking the court to do in your case. Reliefs are the specific legal remedies or actions you want the court to grant, such as payment of debts, eviction of a tenant, compensation for damages, or enforcement of an agreement. <br /> <br /> Example:  <li> An order for the tenant to vacate the premises.</li> <li>Payment of outstanding rent and damages.</li> <li> Refund of money owed. </li> <li>Enforcement of a contract agreement. </li>`}
-                />
-              }
-            />{" "}
-            LIST/DESCRIBE RELIEF BY CLAIMANT
+          <p className="flex justify-between  items-center gap-1 text-sm font-bold  text-neutral-600">
+            <span className="flex items-center gap-1 ">
+              <TextwithToolTip
+                tooltipContent={
+                  <ToolTipCard
+                    className="max-w-[22rem]"
+                    title="DESCRIBE/LIST RELIEFS"
+                    description={`This is where you state what you are asking the court to do in your case. Reliefs are the specific legal remedies or actions you want the court to grant, such as payment of debts, eviction of a tenant, compensation for damages, or enforcement of an agreement. <br /> <br /> Example:  <li> An order for the tenant to vacate the premises.</li> <li>Payment of outstanding rent and damages.</li> <li> Refund of money owed. </li> <li>Enforcement of a contract agreement. </li>`}
+                  />
+                }
+              />{" "}
+              LIST/DESCRIBE RELIEF BY CLAIMANT
+            </span>
+            <span className="text-xs text-red-500 ">
+              {caseTypeErrors?.relief_sought ?? ""}
+            </span>
           </p>
           <div className="p-2 bg-white h-40">
             <Editor
@@ -276,31 +295,23 @@ export const CivilCaseForm5 = () => {
                 value={claimant_address}
                 type="text"
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_address", target.value);
                 }}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
+                error={caseTypeErrors?.claimant_address ?? ""}
               />
               <InputField
                 id="claimant_phone_number"
                 name="claimant_phone_number"
                 value={claimant_phone_number}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_phone_number",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_phone_number", target.value);
                 }}
                 type="text"
                 label="PHONE NUMBERS"
                 placeholder="eg. 2347030338024"
+                error={caseTypeErrors?.claimant_phone_number ?? ""}
               />
               <InputField
                 id="claimant_email_address"
@@ -309,13 +320,9 @@ export const CivilCaseForm5 = () => {
                 label="Email Address"
                 value={claimant_email_address}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_email_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_email_address", target.value);
                 }}
+                error={caseTypeErrors?.claimant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
               <InputField
@@ -325,13 +332,9 @@ export const CivilCaseForm5 = () => {
                 label="Whatsapp Number"
                 value={claimant_whats_app}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "claimant_whats_app",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("claimant_whats_app", target.value);
                 }}
+                error={caseTypeErrors?.claimant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
               />
             </div>
@@ -343,13 +346,9 @@ export const CivilCaseForm5 = () => {
                 value={defendant_address}
                 type="text"
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_address", target.value);
                 }}
+                error={caseTypeErrors?.defendant_address ?? ""}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
               />
@@ -358,13 +357,9 @@ export const CivilCaseForm5 = () => {
                 name="defendant_phone_number"
                 value={defendant_phone_number}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_phone_number",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_phone_number", target.value);
                 }}
+                error={caseTypeErrors?.defendant_phone_number ?? ""}
                 type="text"
                 label="PHONE NUMBERS"
                 placeholder="eg. 2347030338024"
@@ -376,13 +371,9 @@ export const CivilCaseForm5 = () => {
                 label="Email Address"
                 value={defendant_email_address}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_email_address",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_email_address", target.value);
                 }}
+                error={caseTypeErrors?.defendant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
               <InputField
@@ -392,13 +383,9 @@ export const CivilCaseForm5 = () => {
                 label="Whatsapp Number"
                 value={defendant_whats_app}
                 onChange={({ target }) => {
-                  dispatch(
-                    updateCaseFileField({
-                      field: "defendant_whats_app",
-                      value: target.value,
-                    })
-                  );
+                  handleChange("defendant_whats_app", target.value);
                 }}
+                error={caseTypeErrors?.defendant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
               />
             </div>
@@ -409,7 +396,12 @@ export const CivilCaseForm5 = () => {
           <p className="text-lg font-bold">
             This plaint was taken out by claimant/counsel as the case may be
           </p>
-          <p className="text-base font-bold text-neutral-600">DATED THIS</p>
+          <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
+            DATED THIS
+            <span className="text-xs text-red-500 ">
+              {caseTypeErrors?.dated_this ?? ""}
+            </span>
+          </p>
           <div className="flex items-end justify-start text-center">
             <Popover>
               <PopoverTrigger asChild>
@@ -433,11 +425,7 @@ export const CivilCaseForm5 = () => {
                   mode="single"
                   selected={dated_this}
                   onSelect={(date) => {
-                    dispatch(
-                      updateCaseTypeName({
-                        dated_this: date,
-                      })
-                    );
+                    if (date) handleChange("dated_this", date);
                   }}
                   initialFocus
                 />
@@ -448,9 +436,12 @@ export const CivilCaseForm5 = () => {
 
         <div className="space-y-6">
           <div className="space-y-3">
-            <p className="text-base text-neutral-600 font-bold">SIGNATURE</p>
+            <p className="text-base items-center gap-3 text-neutral-600 font-bold">
+              SIGNATURE
+            </p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
+                errorMessage={caseTypeErrors?.signature ?? ""}
                 subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
                 caseType={case_type}
@@ -469,6 +460,7 @@ export const CivilCaseForm5 = () => {
 
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
+              errorMessage={caseTypeErrors?.witness ?? ""}
               subTitle={CaseTypeData.CIVIL_CASE}
               title={"WITNESS STATEMENT OF OATH"}
               caseType={case_type}

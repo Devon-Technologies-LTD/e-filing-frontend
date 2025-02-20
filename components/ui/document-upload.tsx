@@ -18,11 +18,7 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-import {
-  allowedUploadTypes,
-  CaseTypeData,
-  DOCUMENT_MAX_SIZE,
-} from "@/constants";
+import { allowedUploadTypes, DOCUMENT_MAX_SIZE } from "@/constants";
 import { DeleteDocumentPayload } from "@/lib/_services/document-service";
 import { ConfirmationModal } from "../confirmation-modal";
 import { AlertDialogCancel, AlertDialogFooter } from "./alert-dialog";
@@ -36,22 +32,25 @@ interface Iprops {
   subTitle: string;
   canDelete?: boolean;
   disabled?: boolean;
+  required?: boolean;
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
+  errorMessage?: string;
 }
 
 export default function DocumentUploadComponent({
   caseType,
   title,
-  subTitle,
   disabled = false,
   notes,
   onSuccess,
   onError,
+  required,
+  errorMessage,
   canDelete = false,
 }: Iprops) {
   const {
-    caseFile: { case_file_id },
+    caseType: { case_file_id },
     documents,
   } = useAppSelector((state) => state.caseFileForm);
 
@@ -64,6 +63,7 @@ export default function DocumentUploadComponent({
   const uploadMutation = useMutation({
     mutationFn: (data: FormData) => uploadDocumentAction(data),
     onSuccess: (data) => {
+      console.log("data", data);
       if (data?.success) {
         if (onSuccess) onSuccess(data);
         dispatch(updateDocument(data?.data as any));
@@ -78,6 +78,7 @@ export default function DocumentUploadComponent({
   const deleteMutation = useMutation({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {
+      console.log("ghjdkhfgjd", data);
       if (data?.success) {
         dispatch(deleteDocument(title));
       } else {
@@ -86,7 +87,9 @@ export default function DocumentUploadComponent({
       setIsOpen(false);
     },
     onError: (error) => {
+      toast.error(error.message);
       if (onError) onError(error);
+      setIsOpen(false);
     },
   });
 
@@ -151,11 +154,17 @@ export default function DocumentUploadComponent({
     <div className="space-y-1">
       <div className="flex items-center justify-between">
         <Label
-          variant={"underline"}
-          className="uppercase"
+          variant={errorMessage ? "error" : "underline"}
+          className="uppercase flex justify-between w-full items-center gap-3"
           htmlFor={`file-upload-${title}`}
         >
-          Upload {title}
+          <span>
+            {" "}
+            Upload {title} {required ? <span className="text-red-600">*</span> : ""}
+          </span>
+          <span className="text-xs capitalize">
+            {errorMessage ? errorMessage : ""}
+          </span>
         </Label>
         {canDelete && (
           <Button

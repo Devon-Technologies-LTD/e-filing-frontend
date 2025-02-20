@@ -19,7 +19,7 @@ export async function uploadDocumentAction(formData: FormData) {
   console.log("server call of uploadDocumentAction");
   try {
     const data = await DocumentService.uploadDocument(formData);
-    console.log("data from use server to use client", data);
+    console.log("upload data from use server to use client", data);
     return { data: data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -8,7 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/redux";
-import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
+import {
+  addCaseTypeError,
+  clearCaseTypeError,
+  updateCaseTypeName,
+} from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CriminalCaseForm from "./criminal-case-form";
 import {
@@ -32,7 +36,6 @@ import CaseTypeTooltip from "./case-type-tooltip";
 
 export default function CaseTypesForm() {
   const dispatch = useDispatch();
-
   const caseTypeComponentMap: { [key: string]: React.ComponentType<any> } = {
     [CaseTypeData.CIVIL_CASE]: CivilCaseForm,
     [CaseTypeData.FAMILY_CASE]: FamilyCaseForm,
@@ -40,14 +43,9 @@ export default function CaseTypesForm() {
   };
   const {
     caseType: { case_type, sub_case_type, recovery_amount },
-  } = useAppSelector((value) => value.caseFileForm) as {
-    caseType: {
-      case_type: keyof typeof caseSubTypesMap;
-      sub_case_type: string;
-      recovery_amount: string;
-    };
-  };
-  const caseSubTypesMap = {
+    caseTypeErrors,
+  } = useAppSelector((value) => value.caseFileForm);
+  const caseSubTypesMap: any = {
     [CaseTypeData.CIVIL_CASE]: Object.values(CivilCaseSubType),
     [CaseTypeData.FAMILY_CASE]: Object.values(FamilyCaseSubType),
     [CaseTypeData.CRIMINAL_CASE]: Object.values(CriminalCaseSubType),
@@ -59,7 +57,6 @@ export default function CaseTypesForm() {
     if (CaseComponent) {
       return <CaseComponent />;
     }
-
     return null;
   }, [case_type, sub_case_type]);
 
@@ -75,10 +72,13 @@ export default function CaseTypesForm() {
                 direct_complain: "",
               })
             );
+            dispatch(clearCaseTypeError());
           }}
           value={case_type}
         >
-          <SelectTrigger variant={"underlined"}>
+          <SelectTrigger
+            variant={caseTypeErrors.case_type ? "error" : "underlined"}
+          >
             <SelectValue
               className="text-neutral-700 text-xs"
               placeholder="Select a Case Type"
@@ -107,6 +107,11 @@ export default function CaseTypesForm() {
                   direct_complain: "",
                 })
               );
+              dispatch(
+                addCaseTypeError({
+                  sub_case_type: "",
+                })
+              );
             }}
             value={sub_case_type}
           >
@@ -115,7 +120,7 @@ export default function CaseTypesForm() {
                 sub_case_type === CriminalCaseSubType.DIRECT_COMPLAIN ||
                 case_type === CaseTypeData.CIVIL_CASE
               }
-              variant={"underlined"}
+              variant={caseTypeErrors.sub_case_type ? "error" : "underlined"}
             >
               <SelectValue
                 className="text-neutral-700 text-xs"
@@ -128,12 +133,12 @@ export default function CaseTypesForm() {
                   .join(" ")}`}
               />
               <CaseTypeTooltip
-                caseType={case_type}
+                caseType={case_type as any}
                 subCaseType={sub_case_type}
               />
             </SelectTrigger>
             <SelectContent className="bg-white text-zinc-900">
-              {caseSubTypesMap[case_type]?.map((subCase) => (
+              {caseSubTypesMap[case_type]?.map((subCase: any) => (
                 <SelectItem
                   variant="underlined"
                   key={subCase}
@@ -156,10 +161,18 @@ export default function CaseTypesForm() {
                   direct_complain: "",
                 })
               );
+              dispatch(
+                addCaseTypeError({
+                  recovery_amount: "",
+                })
+              );
             }}
             value={recovery_amount}
           >
-            <SelectTrigger tooltip={true} variant={"underlined"}>
+            <SelectTrigger
+              tooltip={true}
+              variant={caseTypeErrors.recovery_amount ? "error" : "underlined"}
+            >
               <SelectValue
                 className="text-neutral-700 text-xs"
                 placeholder={`Select the Value (Worth) Of Recovery`}

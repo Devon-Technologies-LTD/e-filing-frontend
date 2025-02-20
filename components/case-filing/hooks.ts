@@ -1,3 +1,4 @@
+import { CaseStatus } from "@/constants";
 import {
   createCaseFile,
   createCaseType,
@@ -6,11 +7,10 @@ import {
 } from "@/lib/actions/case-file";
 import { dateFormatter } from "@/lib/utils";
 import {
-  CaseFileState,
   clearForm,
   ICaseTypes,
   ILegalCounsels,
-  updateCaseFileField,
+  updateCaseTypeName,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import {
@@ -32,7 +32,7 @@ interface Claimant {
 
 interface SaveFormParams {
   case_file_id?: string | null;
-  data: CaseFileState & ICaseTypes;
+  data: ICaseTypes;
   legal_counsels?: ILegalCounsels[];
 }
 
@@ -141,7 +141,7 @@ export const useSaveForm = ({
           recovery_amount: data.recovery_amount,
           legal_counsels,
           registrar: data.registrar,
-          status: isDraft ? "draft" : "pending",
+          status: isDraft ? CaseStatus.Draft : CaseStatus.Pending,
         };
         return data.case_type_id
           ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
@@ -163,9 +163,15 @@ export const useSaveForm = ({
           dispatch(clearForm());
         } else {
           dispatch(
-            updateCaseFileField({ field: "case_file_id", value: data?.id })
+            updateCaseTypeName({
+              case_file_id: data.id,
+            })
           );
-          dispatch(updateStep(step + 1));
+          if (step === 5) {
+            navigate.push("/drafts");
+          } else {
+            dispatch(updateStep(step + 1));
+          }
         }
       } else {
         console.log("first", data);

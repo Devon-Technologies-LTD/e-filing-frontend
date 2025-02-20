@@ -1,8 +1,5 @@
 "use client";
-
 import { CalendarIcon, Search } from "lucide-react";
-import { CaseTypes } from "@/types/files/case-type";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -15,11 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 
 export function DraftsDataTableToolbar({ date, setDate }: any) {
-  const [selectedCase, setSelectedCase] = useState<CaseTypes | "">("");
-  const handleCaseTypeChange = (value: string) => {
-    setSelectedCase(value as CaseTypes);
-  };
-  const caseFilter = [{ value: "all", label: "ALL CASE TYPE" }];
+ 
   return (
     <div className="flex items-center justify-between">
       <div className="relative">
