@@ -25,11 +25,17 @@ export const SignupFormSchema = z
       .string()
       .min(2, { message: "First name must be at least 2 characters long." })
       .trim(),
-    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).min(12, { message: "NIN must be at most 11 digit" }),
+    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
     ipn: z.string().optional(),
     role: z.string().optional(),
     gender: z.string().optional(),
     scn: z.string().optional(),
+    // scn: z
+    //   .string()
+    //   .nonempty("SCN is required")
+    //   .refine((val) => /^SCN\d{6}$/.test(val), {
+    //     message: "SCN must start with 'SCN' followed by exactly 6 digits",
+    //   }),
     // image: z
     // .instanceof(File, { message: "Image must be a file" }) // Ensure it's a file
     // .refine((file) => file.size < 5 * 1024 * 1024, { message: "Image must be less than 5MB" }) // Limit size
@@ -66,13 +72,13 @@ export type TUpdateType =
   | "updateInput"
   | "updateAddArray"
   | "updateRemoveArray";
+
 export const LoginFormSchema = z.object({
   email: z.string().min(1, { message: "Email field must not be empty." }),
   password: z.string().min(1, { message: "Password field must not be empty." }),
 });
 
 export type TLoginFormPayload = z.infer<typeof LoginFormSchema>;
-
 export type FormState =
   | {
     errors?: {
