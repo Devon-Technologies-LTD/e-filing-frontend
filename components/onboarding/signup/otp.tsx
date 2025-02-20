@@ -12,6 +12,10 @@ import { useFormState } from "react-dom";
 import { OTPAction } from "@/lib/actions/signup";
 import { useRouter } from "next/navigation";
 import { getOtpEmail } from "@/lib/getCookies";
+import { toast } from "sonner"
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { isFieldErrorObject } from "@/types/auth";
 
 const OtpComponent = () => {
     const [state, dispatch] = useFormState(OTPAction, undefined);
@@ -21,6 +25,23 @@ const OtpComponent = () => {
     const [email, setEmail] = useState<string>("");
 
     const router = useRouter();
+
+    const errors = isFieldErrorObject(state?.errors)
+        ? state.errors
+        : {} as Record<string, string[]>;
+
+    useEffectAfterMount(() => {
+        if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
+            toast.error(state?.message, {
+                description: typeof state?.errors === "string"
+                    ? state.errors
+                    : state?.errors
+                        ? Object.values(state.errors).flat().join(", ")
+                        : undefined,
+            });
+        }
+    }, [state]);
+
 
     useEffect(() => {
         const fetchEmail = async () => {
@@ -58,9 +79,15 @@ const OtpComponent = () => {
         setLoading(true);
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
-        await dispatch(formData);
-        setLoading(false);
+        dispatch(formData);
     };
+    useEffect(() => {
+        if (state) {
+            setLoading(false);
+        }
+    }, [state]);
+
+
 
     return (
         <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
@@ -68,13 +95,9 @@ const OtpComponent = () => {
                 <form id="otp-form" onSubmit={handleSubmit} className="space-y-6 text-center">
                     <p className="text-app-primary text-3xl font-bold">Check your email for a code</p>
                     <p className="text-sm font-semibold">
-                        We&apos;ve sent a 6-character code to {email}.<br />
+                        We&apos;ve sent a 6-character code to <b>{email}</b>.<br />
                         The code expires shortly, so please enter it soon.
                     </p>
-                    <p className="text-xs text-red-500 h-2 mt-3 text-center">
-                        {state?.message}
-                    </p>
-
                     <InputOTP name="otp" maxLength={6}>
                         <InputOTPGroup className="gap-2">
                             {[...Array(3)].map((_, index) => (
@@ -96,7 +119,6 @@ const OtpComponent = () => {
                             ))}
                         </InputOTPGroup>
                     </InputOTP>
-
                     <div className="space-y-2 mt-6">
                         <p className="text-sm font-semibold">Didn&apos;t get the code?</p>
                         <p className="text-xl font-bold text-gray-500">{formatTime()}</p>
@@ -106,8 +128,8 @@ const OtpComponent = () => {
                     </div>
 
                     {loading && (
-                        <div className="flex justify-center items-center mt-2">
-                            <div className="spinner"></div> {/* Add spinner */}
+                        <div className="flex justify-center items-center">
+                            <div className="spinner"></div>
                         </div>
                     )}
                 </form>
