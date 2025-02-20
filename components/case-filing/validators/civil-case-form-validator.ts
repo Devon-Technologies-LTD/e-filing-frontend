@@ -41,11 +41,13 @@ export const civilCaseSchema = z
     claimant_phone_number: z
       .string()
       .nonempty("Claimant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
+      .regex(/^\d+$/, "Phone number must contain only numbers")
+      .min(11, "Phone number must be at least 11 digits"),
     claimant_whats_app: z
       .string()
       .nonempty("Claimant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
+      .regex(/^\d+$/, "Phone number must contain only numbers")
+      .min(11, "Phone number must be at least 11 digits"),
     claimant_email_address: z.string().email("Invalid email address"),
     claimant_address: z
       .string()
@@ -56,16 +58,19 @@ export const civilCaseSchema = z
       .regex(
         /^[A-Za-z-' ]+$/,
         "Name can only contain letters, hyphens, apostrophes, and spaces"
-      ),
+      )
+      .min(11, "Phone number must be at least 11 digits"),
     defendant_phone_number: z
       .string()
       .nonempty("Defendant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
+      .regex(/^\d+$/, "Phone number must contain only numbers")
+      .min(11, "Phone number must be at least 11 digits"),
     defendant_email_address: z.string().email("Invalid email address"),
     defendant_whats_app: z
       .string()
       .nonempty("Defendant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
+      .regex(/^\d+$/, "Phone number must contain only numbers")
+      .min(11, "Phone number must be at least 11 digits"),
     defendant_address: z
       .string()
       .min(2, "Defendant address must be at least 2 characters"),
@@ -189,4 +194,3 @@ const validateDocuments = (store: ICaseTypes, documents: any, errors: any) => {
 };
 
 export { useCivilCaseFormValidator };
-

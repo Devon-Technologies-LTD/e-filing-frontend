@@ -168,7 +168,7 @@ export const useSaveForm = ({
             })
           );
           if (step === 5) {
-            navigate.push("/drafts");
+            navigate.push("/cases");
           } else {
             dispatch(updateStep(step + 1));
           }
