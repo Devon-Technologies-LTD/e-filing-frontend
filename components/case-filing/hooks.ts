@@ -116,7 +116,7 @@ export const useSaveForm = ({
             address: data.defendant_address,
             email_address: data.defendant_email_address,
             name: data.defendant_name,
-            phone_number: data.defendant_name,
+            phone_number: data.defendant_phone_number,
             whats_app: data.defendant_whats_app,
           },
           direct_complain: data.direct_complain,
