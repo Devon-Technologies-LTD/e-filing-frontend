@@ -17,19 +17,19 @@ export const navigationLinks: NavItem[] = [
   {
     title: "Your Cases",
     href: "/cases",
-    roles: [ROLES.LAWYER, ROLES.DIRECTOR_MAGISTRATES],
+    roles: [ROLES.LAWYER, ROLES.USER, ROLES.DIRECTOR_MAGISTRATES],
     isActive: (pathname) => pathname === "/cases",
   },
   {
     title: "Drafts",
     href: "/drafts",
-    roles: [ROLES.LAWYER],
+    roles: [ROLES.LAWYER, ROLES.USER],
     isActive: (pathname) => pathname?.startsWith("/docs/drafts"),
   },
   {
     title: "Track Cases",
     href: "/track-cases",
-    roles: [ROLES.LAWYER],
+    roles: [ROLES.LAWYER, ROLES.USER],
     isActive: (pathname) => pathname?.startsWith("/track"),
   },
 
