@@ -69,7 +69,6 @@ export default function Page() {
     enabled: !!selectedRow,
   });
 
-  console.log("firstin client", data);
   useEffect(() => {
     if (singleDraftError) {
       toast.error("Unable to fetch draft details");
@@ -78,15 +77,16 @@ export default function Page() {
 
   useEffect(() => {
     if (singleDraftData && selectedRow) {
-      console.log("singleDraft", singleDraftData)
       const caseTypeFields = getCaseTypeFields(singleDraftData);
       dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
       dispatch(
         updateLegalCounsels(
-          data?.casetype?.length > 0 ? data?.casetype[0]?.legal_counsels : []
+          singleDraftData?.casetype?.length > 0
+            ? singleDraftData?.casetype[0]?.legal_counsels
+            : []
         )
       );
-      dispatch(addDocument(data.documents));
+      dispatch(addDocument(singleDraftData.documents));
       setSelectedRow(null)
       router.push(`/case-filing`);
     }

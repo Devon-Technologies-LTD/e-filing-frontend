@@ -24,7 +24,7 @@ export function MainNav({
       <Navigation />
       {data?.role && (
         <>
-          {[ROLES.LAWYER].includes(data?.role) && (
+          {[ROLES.LAWYER, ROLES.USER].includes(data?.role) && (
             <Button
               onClick={() => {
                 dispatch(clearForm());

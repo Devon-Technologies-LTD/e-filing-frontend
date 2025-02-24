@@ -56,6 +56,7 @@ export default function FilteredCases() {
     }
   };
   const columns = getColumns();
+  console.log("first data ", data);
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
