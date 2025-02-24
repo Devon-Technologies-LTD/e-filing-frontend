@@ -11,6 +11,8 @@ export default function ChiefJudgeUserManagement() {
     switch (tab) {
       case "all":
         return AllMagistrates;
+      case "registerars":
+        return AllMagistrates;
       default:
         return PendingInvites;
     }

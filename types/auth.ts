@@ -21,10 +21,13 @@ export type ErrorResponse = {
   request?: unknown;
   message?: string;
 }
+
+
 export enum ROLES {
   USER = "USER",
   LAWYER = "LAWYER",
   ADMIN = "ADMIN",
+  SUPERADMIN = "SUPER_ADMIN",
   ASSIGNING_MAGISTRATES = "ASSIGNING_MAGISTRATES",
   PRESIDING_MAGISTRATES = "PRESIDING_MAGISTRATES",
   DIRECTOR_MAGISTRATES = "DIRECTOR_MAGISTRATES",

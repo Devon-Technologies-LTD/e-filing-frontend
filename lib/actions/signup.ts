@@ -9,62 +9,6 @@ import { createSession } from "../server/auth";
 import { defaultLoginRedirect } from "@/routes";
 import { NEXT_BASE_URL } from "@/lib/_constants"
 
-// export async function SignupAction(_prevState: unknown, formData: FormData) {
-//     const data = Object.fromEntries(formData.entries());
-//     const image = formData.get("image") as File | null;
-//     const imageValidationResult = validateImage(image);
-//     if (imageValidationResult.status !== 200) {
-//         return imageValidationResult;
-//     }
-//     // Validate the form data with image included
-//     const result = SignupFormSchema.safeParse({ ...data });
-//     if (!result.success) {
-//         return {
-//             status: 400,
-//             errors: result.error.flatten().fieldErrors,
-//             message: "Validation failed, please check input fields",
-//         };
-//     }
-//     try {
-//         const url = `${NEXT_BASE_URL as string}/auth/signup`;
-
-//         const response = await fetch(url, {
-//             method: "POST",
-//             body: formData,
-//         });
-//         if (!response.ok) {
-//             const errorData = await response.json();
-//             throw {
-//                 response: {
-//                     status: response.status,
-//                     data: errorData,
-//                 },
-//             } as ErrorResponse;
-//         }
-//         const responseData = (await response.json()) as LoginResponseData;
-//         console.log(responseData);
-//         // Prepare session data
-//         const sessionData = {
-//             user: {
-//                 id: responseData.ID,
-//                 email: responseData.email,
-//                 first_name: responseData.first_name,
-//                 last_name: responseData.last_name,
-//                 phone_number: responseData.phone_number,
-//                 role: responseData.role as ROLES,
-//             },
-//             token: responseData.token,
-//         };
-
-//         // Store session data
-//         cookies().set("otpEmail", result.data.email);
-//         cookies().set("AuthData", JSON.stringify(sessionData));
-
-//         return redirect("/otp");
-//     } catch (err: unknown) {
-//         return handleError(err);
-//     }
-// }
 
 export async function OTPAction(_prevState: unknown, formData: FormData) {
     const dataz = Object.fromEntries(formData);
@@ -119,11 +63,8 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
             token: responseData.token,
         };
 
-        console.log(updatedSessionData);
-
         role = updatedSessionData.user.role;
         await createSession(updatedSessionData);
-
     } catch (err: unknown) {
         return handleError(err);
     }
@@ -174,12 +115,10 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
 
     try {
         const url = `${NEXT_BASE_URL}/auth/signup`;
-        console.log(url);
         const signupResponse = await fetch(url, {
             method: "POST",
             body: formData,
         });
-        console.log(signupResponse);
         if (!signupResponse.ok) {
             const errorData = await signupResponse.json();
             throw {
@@ -207,7 +146,6 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
         cookies().set("otpEmail", result.data.email);
         cookies().set("AuthData", JSON.stringify(sessionData));
     } catch (err: unknown) {
-        console.log(err);
         return handleError(err);
     }
     // Redirect to OTP page

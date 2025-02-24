@@ -67,6 +67,8 @@ export async function getCaseFiles(payload: IDraftFilter) {
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
+    console.log(error);
+    
     if (error?.response) {
       return {
         status: error.response.status,

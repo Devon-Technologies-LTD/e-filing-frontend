@@ -78,7 +78,6 @@ export default function DocumentUploadComponent({
   const deleteMutation = useMutation({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {
-      console.log("ghjdkhfgjd", data);
       if (data?.success) {
         dispatch(deleteDocument(title));
       } else {

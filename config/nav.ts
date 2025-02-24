@@ -11,44 +11,44 @@ export const navigationLinks: NavItem[] = [
       ROLES.PRESIDING_MAGISTRATES,
       ROLES.CHIEF_JUDGE,
       ROLES.CENTRAL_REGISTRY,
+
     ],
     isActive: (pathname) => pathname?.startsWith("/overview"),
   },
   {
-    title: "Your Cases",
+    title: "Your Cases", //adewale
     href: "/cases",
     roles: [ROLES.LAWYER, ROLES.DIRECTOR_MAGISTRATES],
     isActive: (pathname) => pathname === "/cases",
   },
   {
-    title: "Drafts",
+    title: "Drafts", //adewale
     href: "/drafts",
     roles: [ROLES.LAWYER],
     isActive: (pathname) => pathname?.startsWith("/docs/drafts"),
   },
   {
-    title: "Track Cases",
+    title: "Track Cases", //adewale
     href: "/track-cases",
     roles: [ROLES.LAWYER],
     isActive: (pathname) => pathname?.startsWith("/track"),
   },
-
   {
     title: "Your Cases",
     href: "/your-cases/case",
-    roles: [ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES],
+    roles: [ROLES.ASSIGNING_MAGISTRATES],
     isActive: (pathname) => pathname?.startsWith("/your-cases"),
   },
   {
     title: "Case Reviews",
     href: "/reviews/under-review",
-    roles: [ROLES.CENTRAL_REGISTRY],
+    roles: [ROLES.CENTRAL_REGISTRY,  ROLES.CHIEF_JUDGE], //mote remove cheif judge role
     isActive: (pathname) => pathname?.startsWith("/reviews"),
   },
   {
     title: "Audit Logs",
     href: "/audit",
-    roles: [ROLES.CENTRAL_REGISTRY],
+    roles: [ROLES.CENTRAL_REGISTRY, ],
     isActive: (pathname) => pathname?.startsWith("/audit"),
   },
   {
@@ -57,7 +57,7 @@ export const navigationLinks: NavItem[] = [
     roles: [
       ROLES.ASSIGNING_MAGISTRATES,
       ROLES.CHIEF_JUDGE,
-      ROLES.DIRECTOR_MAGISTRATES,
+      ROLES.DIRECTOR_MAGISTRATES, 
     ],
     isActive: (pathname) => pathname?.startsWith("/monitoring"),
   },
@@ -67,7 +67,7 @@ export const navigationLinks: NavItem[] = [
     roles: [
       ROLES.ASSIGNING_MAGISTRATES,
       ROLES.CHIEF_JUDGE,
-      ROLES.DIRECTOR_MAGISTRATES,
+      ROLES.DIRECTOR_MAGISTRATES, 
     ],
     isActive: (pathname) => pathname?.startsWith("/oversight"),
   },
@@ -75,9 +75,9 @@ export const navigationLinks: NavItem[] = [
     title: "User Management",
     href: "/management/all",
     roles: [
-      ROLES.ASSIGNING_MAGISTRATES,
       ROLES.CHIEF_JUDGE,
       ROLES.DIRECTOR_MAGISTRATES,
+      ROLES.ASSIGNING_MAGISTRATES, 
     ],
     isActive: (pathname) => pathname?.startsWith("/management"),
   },

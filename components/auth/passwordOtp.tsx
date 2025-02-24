@@ -1,16 +1,19 @@
 'use client'
+
 import { useEffect, useState } from "react";
 import AuthLayout from "@/components/AuthLayout";
 import Link from "next/link";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useFormState } from "react-dom";
-import { verifyOTP } from "@/lib/actions/login";
-import { SubmitButton } from "@/components/ui/submit-button"
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
+// import { verifyOTP, reSendOTP } from "@/lib/actions/login";  // Ensure reSendOTP is correctly imported
+import { verifyOTP } from "@/lib/actions/login";  // Ensure reSendOTP is correctly imported
+import { SubmitButton } from "@/components/ui/submit-button";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
     const [state, dispatch] = useFormState(verifyOTP, undefined);
-    const [timeLeft, setTimeLeft] = useState(5 * 60); // 15 minutes in seconds
+    // const [otpState, dispatchOTP] = useFormState(reSendOTP, undefined);  // Renamed to avoid conflict
+    const [timeLeft, setTimeLeft] = useState(5 * 60); // 5 minutes in seconds
 
     useEffect(() => {
         if (timeLeft <= 0) return;
@@ -43,12 +46,11 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
                         Check your email for a code
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500">
-                        We&apos;ve sent a 6-character code to {email}. <br />
+                        We&apos;ve sent a 6-character code to <b>{email}</b>. <br />
                         The code expires shortly, so please enter it soon.
                     </p>
-                    <InputOTP maxLength={6} name="otp"
-                        pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
 
+                    <InputOTP maxLength={6} name="otp" pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
                         <InputOTPGroup className="gap-2">
                             {[...Array(3)].map((_, i) => (
                                 <InputOTPSlot
@@ -80,14 +82,20 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
                             Didn&apos;t get the code?
                         </p>
                         <p className="text-xl font-bold text-gray-500">{formatTime(timeLeft)}</p>
-                        <div className="flex items-center justify-center ">
+                        <div className="flex items-center justify-center">
                             <div className="items-center text-app-primary group relative">
-                                <p
-                                    className={`text-xs text-center font-bold mt-3 z-10 cursor-pointer ${timeLeft > 0 ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'}`}
-                                    onClick={() => timeLeft <= 0 && setTimeLeft(15 * 60)}
-                                >
-                                    Resend Code
-                                </p>
+                                {/* <form action={dispatchOTP}> */}
+                                    <button
+                                        type="submit"
+                                        className={`text-xs text-center font-bold mt-3 z-10 cursor-pointer ${
+                                            timeLeft > 0 ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'
+                                        }`}
+                                        disabled={timeLeft > 0}
+                                        onClick={() => timeLeft <= 0 && setTimeLeft(5 * 60)}
+                                    >
+                                        Resend Code
+                                    </button>
+                                {/* </form> */}
                                 <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-32 group-hover:bg-app-secondary"></div>
                             </div>
                         </div>

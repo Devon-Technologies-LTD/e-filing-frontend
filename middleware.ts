@@ -23,7 +23,6 @@ export async function middleware(request: NextRequest) {
   if (isApiRoute) {
     return NextResponse.next()
   }
-  console.log(isAuthRoute);
   if (isAuthRoute) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL(defaultLoginRedirect(user?.role), nextUrl))

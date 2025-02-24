@@ -14,12 +14,8 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { ErrorResponse, handleError, LoginResponseData, ROLES } from "@/types/auth";
 
-
-
-
 export async function LoginAction(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
-  const userType = data.userType;
   const result = LoginFormSchema.safeParse(data);
   if (!result.success) {
     return {
@@ -39,8 +35,7 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         first_name: data.first_name,
         last_name: data.last_name,
         phone_number: data.phone_number,
-        role: userType as ROLES,
-        // role: data.role as ROLES,
+        role: data.role as ROLES,
       },
       token: data.token,
     };
@@ -48,7 +43,6 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
-    console.log(error);
     if (error?.response) {
       return {
         status: error.response.status,
@@ -82,7 +76,6 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
   redirect(defaultLoginRedirect(role));
 }
 
-
 export interface LoginResponseData2 {
   user: {
     id: string;
@@ -100,7 +93,6 @@ export async function googleLoginAction(email: string) {
   let role: ROLES;
   try {
     const res = await authService.googleLoginUser(email);
-    console.log(res.data);
     const data = res.data as LoginResponseData2;
     const sessionData = {
       user: {
@@ -143,7 +135,6 @@ export async function ForgotPasswordAction(
     // Store email in cookie/session
     cookies().set("otpEmail", result.data.email);
   } catch (err: any) {
-    console.log(err);
     if (err?.response) {
       return {
         status: err.response.status,
@@ -204,8 +195,6 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
     });
     const data = res.data as LoginResponseData; //Cast to the expected type
     cookies().set("TempToken", data.token);
-    console.log(data);
-    console.log(data.token);
   } catch (err: any) {
     console.error("Failed to verify OTP:", err);
     return {
@@ -286,11 +275,13 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
         success: false,
       };
     }
-    // const email = cookies().get("TempToken")?.value; // Ensure correct cookie handling
+    const token = cookies().get("TempToken")?.value;
+    console.log("This token  " + token);
+
     // API call
-    await authService.resetPassword({
+    await authService.changePassword({
       new_password: result.data.newPassword,
-      confirm_password: result.data.confirmPassword,
+      old_password: result.data.confirmPassword,
       email: email,
     });
     cookies().delete("otpEmail");

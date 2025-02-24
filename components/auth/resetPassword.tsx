@@ -30,7 +30,7 @@ const ResetPaswordComponent = () => {
             </div>
 
             <form className="w-full space-y-6" action={dispatch}>
-                <LoginPasswordField label="NEW PASSWORD" name="newPassword" id="newPassword" placeholder="Enter Password" />
+                <LoginPasswordField label="NEW PASSWORD" name="newPassword" id="newPassword" placeholder="Enter Password" showStrength={true} />
                 <LoginPasswordField label="CONFIRM PASSWORD" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" />
                 <p className="text-xs text-red-500 h-2 text-center">
                     {state && state?.message}
@@ -40,7 +40,6 @@ const ResetPaswordComponent = () => {
             </form>
         </>
     );
-
 };
 
 export { ResetPaswordComponent };

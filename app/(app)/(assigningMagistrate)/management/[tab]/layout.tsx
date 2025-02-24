@@ -15,8 +15,14 @@ const directorMagostrateTabs = [
   { id: "all", label: "All (Assigning) Magistrates" },
   { id: "pending", label: "Pending Invitation" },
 ];
-const defaultTabs = [
+const assigningMagostrateTabs = [
   { id: "all", label: "All (Presiding) Magistrates" },
+  { id: "registerars", label: "Central Registerars" },
+  { id: "pending", label: "Pending Invitation" },
+];
+const defaultTab = [
+  { id: "all", label: "All (Presiding) Magistrates" },
+  { id: "registerars", label: "Central Registerars" },
   { id: "pending", label: "Pending Invitation" },
 ];
 
@@ -32,14 +38,16 @@ export default function LayoutPage({
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
     [ROLES.DIRECTOR_MAGISTRATES]: directorMagostrateTabs,
+    [ROLES.ASSIGNING_MAGISTRATES]: assigningMagostrateTabs,
   };
 
   const handleTabChange = (newTab: string) => {
     router.push(`/management/${newTab}`);
   };
   const { data: user } = useAppSelector((state) => state.profile);
+
   const tabs = useMemo(() => {
-    return roleToTabs[user?.role as string] || defaultTabs; 
+    return roleToTabs[user?.role as string] ?? defaultTab;
   }, [user?.role]);
 
   return (

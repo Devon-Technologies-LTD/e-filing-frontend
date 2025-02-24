@@ -69,7 +69,6 @@ export async function deleteSession() {
 
 export async function getUser() {
   const session = await verifySession();
-  console.log(session);
   return session?.user?.id;
 }
 

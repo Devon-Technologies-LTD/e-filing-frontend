@@ -4,7 +4,6 @@ import { getSession } from "@/lib/getSession";
 import { setProfile } from "@/redux/slices/profile-slice";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Toaster } from "sonner";
 interface AppLayoutProps {
   children: React.ReactNode;
 }
@@ -20,7 +19,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
   }, []);
   return (
     <div data-wrapper="" className="border-grid flex flex-1 h-dvh flex-col">
-      <Toaster richColors />
       <DashboardHeader />
       <main className="flex flex-1 flex-col min-h-[calc(100dvh - 10rem)] max-h-[calc(100dvh - 10rem)] overflow-scroll">
         {children}

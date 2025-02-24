@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
-                    className="uppercase font-bold text-sm"
+                    className="uppercase font-bold text-left text-sm"
                   >
                     {!header.isPlaceholder &&
                       flexRender(
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="h-24 text-center  font-semibold text-black text-sm "
+                      className="h-24 text-left  font-semibold text-black text-sm "
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
