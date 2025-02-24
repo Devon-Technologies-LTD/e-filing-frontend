@@ -29,7 +29,7 @@ export function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full"
+        className="max-w-3xl w-full"
       >
         <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
           <div className="flex items-start space-x-4">
@@ -71,7 +71,7 @@ export function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="mt-4 space-y-2"
+                          className="mt-4 space-y-2 max-h-96 overflow-y-auto"
                         >
                           <div className="rounded-md bg-gray-50 p-4">
                             <div className="text-sm font-medium text-gray-900 mb-1">

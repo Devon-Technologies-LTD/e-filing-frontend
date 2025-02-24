@@ -5,9 +5,11 @@ import CostAssessment from "./cost-assessment";
 import { useAppSelector } from "@/hooks/redux";
 
 export function StepNav() {
-  const { current_step, documents } = useAppSelector(
-    (data) => data.caseFileForm
-  );
+  const {
+    current_step,
+    documents,
+    caseType: { case_type },
+  } = useAppSelector((data) => data.caseFileForm);
 
   return (
     <div className=" max-h-screen bg-white border-r pr-12">
@@ -25,7 +27,7 @@ export function StepNav() {
         </div>{" "}
         {current_step > 1 && documents?.length > 0 && (
           <div className="space-y-3 ">
-            <CostAssessment />
+            <CostAssessment documents={documents} case_type={case_type} />
           </div>
         )}
       </div>

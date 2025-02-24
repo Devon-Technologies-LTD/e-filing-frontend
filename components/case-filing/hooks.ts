@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
-interface Claimant {
+export interface Claimant {
   name: string;
   phone_number: string;
   email_address: string;

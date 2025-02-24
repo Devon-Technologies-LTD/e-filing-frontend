@@ -24,9 +24,8 @@ export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const { current_step, caseType, legal_counsels, documents } = useAppSelector(
-    (store) => store.caseFileForm
-  );
+  const { current_step, caseType, legal_counsels, documents, totalAmount } =
+    useAppSelector((store) => store.caseFileForm);
   const { validate } = useCaseOverviewFormValidator({
     store: caseType,
   });
@@ -189,7 +188,10 @@ export function StepperNavigation() {
           {formPending ? (
             <>Loading...</>
           ) : current_step === 5 ? (
-            "Submit"
+            `Pay ₦ ${totalAmount?.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`
           ) : (
             "Next"
           )}

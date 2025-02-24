@@ -4,6 +4,8 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import { jwtDecode } from "jwt-decode";
+import { TCaseFilterType } from "@/types/case";
+import { CaseStatus } from "@/constants";
 
 // interface DecodedToken {
 //   exp: number;
@@ -203,4 +205,28 @@ export const formatErrors = (errors: any) => {
   return Object.entries(errors)
     .map(([key, message]) => `${key}: ${message}`)
     .join("\n");
+};
+
+export const getStatusByTab = (tab: TCaseFilterType) => {
+  switch (tab) {
+    case "pending":
+      return [CaseStatus.Pending, CaseStatus.UnderReview];
+    case "active":
+      return [CaseStatus.Approved, CaseStatus.Assigned];
+    case "unassigned":
+      return [CaseStatus.UnderReview, CaseStatus.ToBeAssigned];
+    case "concluded":
+      return [CaseStatus.JudgementDelivered];
+    default:
+      return [
+        CaseStatus.Approved,
+        CaseStatus.Assigned,
+        CaseStatus.Denied,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.Pending,
+        CaseStatus.StruckOut,
+        CaseStatus.ToBeAssigned,
+        CaseStatus.UnderReview,
+      ];
+  }
 };

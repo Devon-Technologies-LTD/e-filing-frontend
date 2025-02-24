@@ -103,7 +103,7 @@ const CaseFileService = {
     return response.data;
   },
   async getCaseFilesbyId(id: string): Promise<any> {
-    const response = await axiosInstance.get<any>(`casefile/${id}`);
+    const response = await axiosInstance.get<any>(`CaseFile/${id}`);
     console.log("case filter by id response", response.data);
     return response.data;
   },

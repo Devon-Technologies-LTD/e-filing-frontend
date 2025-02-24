@@ -26,18 +26,18 @@ export default function LayoutPage({
     { id: "unassigned", label: "Unassigned Cases" },
     { id: "concluded", label: "Concluded Cases" },
   ];
-    const directorTabs = [
-      { id: "assigned", label: "Assigned To Me" },
-      { id: "submitted", label: "Submitted Cases" },
-      { id: "concluded", label: "Concluded Cases" },
-    ];
+  const directorTabs = [
+    { id: "assigned", label: "Assigned To Me" },
+    { id: "submitted", label: "Submitted Cases" },
+    { id: "concluded", label: "Concluded Cases" },
+  ];
 
-    const roleToTabs: RoleToTabs = {
-      [ROLES.DIRECTOR_MAGISTRATES]: directorTabs,
-    };
-    const tabs = useMemo(() => {
-      return roleToTabs[user?.role as string] || defaultTabs;
-    }, [user?.role]);
+  const roleToTabs: RoleToTabs = {
+    [ROLES.DIRECTOR_MAGISTRATES]: directorTabs,
+  };
+  const tabs = useMemo(() => {
+    return roleToTabs[user?.role as string] || defaultTabs;
+  }, [user?.role]);
 
   return (
     <div className="container mx-auto space-y-8 py-4">
