@@ -26,29 +26,11 @@ import { generateRRR } from "@/lib/actions/payment";
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { triggerPayment } = useRemitaPayment({
-    onSuccess: (response) => {
-      console.log("first",response)
-      toast.success("payment successful");
-      dispatch(updateStep(current_step + 1));
-    },
-    onError: (response) => console.log("Payment Error:", response),
-  });
-
   const dispatch = useDispatch();
   const { current_step, caseType, legal_counsels, documents, totalAmount } =
     useAppSelector((store) => store.caseFileForm);
   const { validate } = useCaseOverviewFormValidator({
     store: caseType,
-  });
-  const generateRRRMutation = useMutation({
-    mutationFn: () => generateRRR(caseType.case_file_id, totalAmount),
-    onSuccess: (data) => {
-      console.log("first in client", data);
-      if (data?.success) {
-        triggerPayment(data.data?.RRR, totalAmount);
-      }
-    },
   });
 
   const { validate: validateCivilCase } = useCivilCaseFormValidator({
@@ -70,7 +52,7 @@ export function StepperNavigation() {
   });
   const {
     mutation: { mutate: saveForm, isPending: formPending },
-    // generateRRRMutation,
+    generateRRRMutation,
   } = useSaveForm({
     step: current_step,
     isDraft: false,
@@ -110,16 +92,15 @@ export function StepperNavigation() {
         await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
       }
     } else if (current_step === 5) {
-      // saveForm({
-      //   case_file_id: caseType.case_file_id,
-      //   data: {
-      //     ...caseType,
-      //   },
-      //   legal_counsels,
-      // });
-      generateRRRMutation.mutate();
-      // const value = await generateRRR(caseType.case_file_id, totalAmount);
-      // console.log("value", value);
+      saveForm({
+        case_file_id: caseType.case_file_id,
+        data: {
+          ...caseType,
+        },
+        legal_counsels,
+      });
+    } else if (current_step === 6) {
+      router.push("/cases");
     } else {
       dispatch(updateStep(current_step + 1));
     }
@@ -153,6 +134,7 @@ export function StepperNavigation() {
           variant="outline"
           className="font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11"
           onClick={handlePreviousStep}
+          disabled={current_step === FORM_STEPS.length}
         >
           <MoveLeft /> Back
         </Button>
@@ -214,11 +196,7 @@ export function StepperNavigation() {
           size={"lg"}
           className="font-bold flex-end text-sm h-11"
           onClick={handleNextStep}
-          disabled={
-            current_step === FORM_STEPS.length ||
-            formPending ||
-            generateRRRMutation.isPending
-          }
+          disabled={formPending || generateRRRMutation.isPending}
         >
           {formPending || generateRRRMutation.isPending ? (
             <>Loading...</>
