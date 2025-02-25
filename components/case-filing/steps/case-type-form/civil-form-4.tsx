@@ -24,7 +24,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData } from "@/constants";
+import { CaseTypeData, CivilCaseSubTypeValueWorth, DocumentTitlesEnum } from "@/constants";
 
 export const CivilCaseForm4 = () => {
   const dispatch = useDispatch();
@@ -47,6 +47,7 @@ export const CivilCaseForm4 = () => {
       dated_this,
       cost_claimed,
       interest_claimed,
+      recovery_amount
     },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
@@ -222,7 +223,7 @@ export const CivilCaseForm4 = () => {
           </p>
           <div className="flex ">
             <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
               <InputField
                 id="claimant_address"
                 name="claimant_address"
@@ -399,7 +400,17 @@ export const CivilCaseForm4 = () => {
             </span>
             <DocumentUploadComponent
               subTitle={CaseTypeData.CIVIL_CASE}
-              title={"PARTICULARS OF PLAINT"}
+              title={
+                recovery_amount === CivilCaseSubTypeValueWorth.LessThanOne
+                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises1M
+                  : recovery_amount ===
+                    CivilCaseSubTypeValueWorth.BetweenOneAndThree
+                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises1M3M
+                  : recovery_amount ===
+                    CivilCaseSubTypeValueWorth.BetweenThreeAndSeven
+                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises3M7M
+                  : ""
+              }
               caseType={case_type}
               subCase={sub_case_type}
             />

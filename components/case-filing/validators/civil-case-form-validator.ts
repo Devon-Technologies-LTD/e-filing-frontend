@@ -169,9 +169,9 @@ const validateDocuments = (store: ICaseTypes, documents: any, errors: any) => {
   const witness =
     documents?.find((doc: any) => doc.title === "WITNESS STATEMENT OF OATH") ||
     null;
-  const plaintParticulars =
-    documents?.find((doc: any) => doc.title === "PARTICULARS OF PLAINT") ||
-    null;
+  // const plaintParticulars =
+  //   documents?.find((doc: any) => [].includes(doc.title)) ||
+  //   null;
 
   if (store.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
     if (!eSignature) errors.signature = "E-Signature is required";
@@ -183,8 +183,8 @@ const validateDocuments = (store: ICaseTypes, documents: any, errors: any) => {
     store.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
   ) {
     if (!eSignature) errors.signature = "E-Signature is required";
-    if (!plaintParticulars)
-      errors.plaintParticulars = "Particulars of plaint is required";
+    // if (!plaintParticulars)
+    //   errors.plaintParticulars = "Particulars of plaint is required";
   }
 };
 

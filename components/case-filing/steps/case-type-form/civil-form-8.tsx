@@ -253,7 +253,7 @@ export const CivilCaseForm8 = () => {
           </p>
           <div className="flex ">
             <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
               <InputField
                 id="claimant_address"
                 name="claimant_address"

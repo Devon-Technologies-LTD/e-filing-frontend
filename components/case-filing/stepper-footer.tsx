@@ -19,9 +19,21 @@ import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
 import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 import { toast } from "sonner";
+import { useRemitaPayment } from "@/hooks/use-remita-payment";
+import { useMutation } from "@tanstack/react-query";
+import { generateRRR } from "@/lib/actions/payment";
 
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { triggerPayment } = useRemitaPayment({
+    onSuccess: (response) => {
+      console.log("first",response)
+      toast.success("payment successful");
+      dispatch(updateStep(current_step + 1));
+    },
+    onError: (response) => console.log("Payment Error:", response),
+  });
 
   const dispatch = useDispatch();
   const { current_step, caseType, legal_counsels, documents, totalAmount } =
@@ -29,6 +41,16 @@ export function StepperNavigation() {
   const { validate } = useCaseOverviewFormValidator({
     store: caseType,
   });
+  const generateRRRMutation = useMutation({
+    mutationFn: () => generateRRR(caseType.case_file_id, totalAmount),
+    onSuccess: (data) => {
+      console.log("first in client", data);
+      if (data?.success) {
+        triggerPayment(data.data?.RRR, totalAmount);
+      }
+    },
+  });
+
   const { validate: validateCivilCase } = useCivilCaseFormValidator({
     store: caseType,
     documents,
@@ -40,13 +62,19 @@ export function StepperNavigation() {
   const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
     documents,
   });
-  const { mutate: saveAsDraft, isPending: draftPending } = useSaveForm({
+  const {
+    mutation: { mutate: saveAsDraft, isPending: draftPending },
+  } = useSaveForm({
     step: current_step,
     isDraft: true,
   });
-  const { mutate: saveForm, isPending: formPending } = useSaveForm({
+  const {
+    mutation: { mutate: saveForm, isPending: formPending },
+    // generateRRRMutation,
+  } = useSaveForm({
     step: current_step,
     isDraft: false,
+    amount: totalAmount,
   });
 
   const router = useRouter();
@@ -82,13 +110,16 @@ export function StepperNavigation() {
         await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
       }
     } else if (current_step === 5) {
-      saveForm({
-        case_file_id: caseType.case_file_id,
-        data: {
-          ...caseType,
-        },
-        legal_counsels,
-      });
+      // saveForm({
+      //   case_file_id: caseType.case_file_id,
+      //   data: {
+      //     ...caseType,
+      //   },
+      //   legal_counsels,
+      // });
+      generateRRRMutation.mutate();
+      // const value = await generateRRR(caseType.case_file_id, totalAmount);
+      // console.log("value", value);
     } else {
       dispatch(updateStep(current_step + 1));
     }
@@ -183,9 +214,13 @@ export function StepperNavigation() {
           size={"lg"}
           className="font-bold flex-end text-sm h-11"
           onClick={handleNextStep}
-          disabled={current_step === FORM_STEPS.length || formPending}
+          disabled={
+            current_step === FORM_STEPS.length ||
+            formPending ||
+            generateRRRMutation.isPending
+          }
         >
-          {formPending ? (
+          {formPending || generateRRRMutation.isPending ? (
             <>Loading...</>
           ) : current_step === 5 ? (
             `Pay ₦ ${totalAmount?.toLocaleString("en-US", {
