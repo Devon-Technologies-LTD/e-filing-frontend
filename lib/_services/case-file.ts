@@ -23,9 +23,9 @@ export interface CaseTypeDetails {
   rental_value?: string;
   relief_sought?: string;
   legal_counsels?: LegalCounsel[];
-  sum_claimed?: number;
-  cost_claimed?: number;
-  interest_claimed?: number;
+  sum_claimed?: string;
+  cost_claimed?: string;
+  interest_claimed?: string;
   summon_details?: SummonDetails;
   notes?: string;
   dated_this?: string | null;

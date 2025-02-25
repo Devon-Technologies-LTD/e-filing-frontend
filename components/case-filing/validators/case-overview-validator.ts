@@ -27,8 +27,7 @@ export const caseOverviewSchema = z.object({
   claimant_phone_number: z
     .string()
     .nonempty("Claimant phone number is required")
-    .regex(/^\d+$/, "Phone number must contain only numbers")
-    .min(11, "Phone number must be at least 11 digits"),
+    .regex(/^\d+$/, "Phone number must contain only numbers"),
   claimant_email_address: z.string().email("Invalid email address"),
   claimant_address: z
     .string()

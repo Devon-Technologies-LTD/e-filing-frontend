@@ -63,7 +63,6 @@ export default function DocumentUploadComponent({
   const uploadMutation = useMutation({
     mutationFn: (data: FormData) => uploadDocumentAction(data),
     onSuccess: (data) => {
-      console.log("data", data);
       if (data?.success) {
         if (onSuccess) onSuccess(data);
         dispatch(updateDocument(data?.data as any));
@@ -78,7 +77,6 @@ export default function DocumentUploadComponent({
   const deleteMutation = useMutation({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {
-      console.log("ghjdkhfgjd", data);
       if (data?.success) {
         dispatch(deleteDocument(title));
       } else {
@@ -96,7 +94,6 @@ export default function DocumentUploadComponent({
   const updateMutation = useMutation({
     mutationFn: (data: FormData) => updateDocumentAction(data),
     onSuccess: (data) => {
-      console.log("first", data);
       if (data?.success) {
         if (onSuccess) onSuccess(data);
       } else {
@@ -114,7 +111,7 @@ export default function DocumentUploadComponent({
     if (!file) return;
     if (!allowedUploadTypes.includes(file.type)) {
       toast.error(
-        "Invalid file type. Allowed types: .pdf, .docx, .txt, .jpg, .png"
+        "Invalid file type. Only PDFs and images are allowed for upload."
       );
       e.target.value = "";
       return;
@@ -202,7 +199,13 @@ export default function DocumentUploadComponent({
                 {existingDocument?.sub_title}
               </span>
             ) : (
-              "Choose File"
+              <span>
+                Choose File{" "}
+                <span className="text-xs text-gray-500">
+                  (Max size: {DOCUMENT_MAX_SIZE / (1024 * 1024)}MB, Allowed
+                  types: PNG, PDF, JPEG, JPG)
+                </span>
+              </span>
             )}
             {uploadMutation.isSuccess ||
             updateMutation.isSuccess ||
@@ -221,7 +224,9 @@ export default function DocumentUploadComponent({
         <p className="text-xs font-semibold text-red-900">
           Error Uploading File:{" "}
           {uploadMutation?.error
-            ? JSON.parse(uploadMutation?.error?.message)?.message
+            ? `${JSON.parse(uploadMutation?.error?.message)?.message} ${
+                JSON.parse(uploadMutation?.error?.message)?.errors?.error ?? ""
+              }`
             : updateMutation?.error
             ? JSON.parse(updateMutation?.error?.message)?.message
             : ""}

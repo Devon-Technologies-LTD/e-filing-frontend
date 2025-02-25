@@ -230,3 +230,33 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
       ];
   }
 };
+
+export const handleApiError = (error: any) => {
+  if (error?.response) {
+    return {
+      data:null,
+      status: error.response.status,
+      message: error.response.data?.message || "An error occurred.",
+      errors: error.response.data?.data || null,
+      success: false,
+    };
+  }
+
+  if (error?.request) {
+    return {
+      data: null,
+      status: 504,
+      message: "Something went wrong. Please try again.",
+      errors: "Unable to process request.",
+      success: false,
+    };
+  }
+
+  return {
+    data: null,
+    status: 500,
+    message: error?.message || "An unexpected error occurred.",
+    errors: error?.message || "Unknown error.",
+    success: false,
+  };
+};
