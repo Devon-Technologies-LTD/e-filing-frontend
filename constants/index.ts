@@ -62,7 +62,6 @@ export enum CriminalCaseSubType {
   FIRST_INFORMATION_REPORT = "FIRST INFORMATION REPORT (FIR)",
   DIRECT_COMPLAIN = "DIRECT COMPLAIN",
   REQUEST_FOR_REMAND_ORDER = "REQUEST FOR REMAND ORDER (EXPARTE)",
-  toLowerCase = "toLowerCase",
 }
 
 export enum CriminalDocumentTitles {
