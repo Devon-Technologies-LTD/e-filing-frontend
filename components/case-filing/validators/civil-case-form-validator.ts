@@ -17,7 +17,6 @@ type HookProps = {
   documents?: any;
 };
 
-// Define the schema for civil case validation
 export const civilCaseSchema = z
   .object({
     case_type: z.nativeEnum(CaseTypeData),

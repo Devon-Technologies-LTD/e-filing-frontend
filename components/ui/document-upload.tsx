@@ -187,11 +187,11 @@ export default function DocumentUploadComponent({
             type="file"
             accept=".png,.pdf,.doc,.jpeg,.jpg"
             onChange={handleFileChange}
-            className="opacity-0 absolute inset-0 w-full h-full cursor-pointer disabled:border-0 disabled:ring-0"
+            className="hidden opacity-0 absolute inset-0 w-full h-full cursor-pointer disabled:border-0 disabled:ring-0"
           />
           <Label
             htmlFor={`file-${title}`}
-            className="flex px-2 justify-between font-semibold  items-center w-full rounded-md shadow-sm transition-colors border-0 border-b-2 border-app-secondary bg-zinc-100 h-10 focus:outline-none focus-visible:ring-b focus-visible:ring-input text-neutral-950 placeholder:text-zinc-400"
+            className=" flex px-2 justify-between font-semibold  items-center w-full rounded-md shadow-sm transition-colors border-0 border-b-2 border-app-secondary bg-zinc-100 h-10 focus:outline-none focus-visible:ring-b focus-visible:ring-input text-neutral-950 placeholder:text-zinc-400"
           >
             {existingDocument ? (
               <span className="flex items-center gap-2">
