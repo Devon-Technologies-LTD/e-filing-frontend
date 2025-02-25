@@ -64,12 +64,14 @@ interface FormState {
   current_step: number;
   legal_counsels: ILegalCounsels[];
   caseType: ICaseTypes;
+  totalAmount: number;
   documents: IDocumentFileType[];
   caseTypeErrors: Partial<Record<keyof ICaseTypes, string>>;
 }
 
 const initialState: FormState = {
   current_step: 1,
+  totalAmount: 0,
   caseTypeErrors: {},
   caseType: {
     court_division: "",
@@ -114,6 +116,9 @@ const formSlice = createSlice({
   reducers: {
     updateLegalCounsels: (state, action: any) => {
       state.legal_counsels = action.payload;
+    },
+    setTotalAmount: (state, action: PayloadAction<number>) => {
+      state.totalAmount = action.payload;
     },
     updateMultipleCaseTypeFields: (
       state,
@@ -185,5 +190,6 @@ export const {
   deleteDocument,
   addCaseTypeError,
   clearCaseTypeError,
+  setTotalAmount,
 } = formSlice.actions;
 export default formSlice.reducer;

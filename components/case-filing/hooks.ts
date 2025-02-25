@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
-interface Claimant {
+export interface Claimant {
   name: string;
   phone_number: string;
   email_address: string;
@@ -111,7 +111,7 @@ export const useSaveForm = ({
             phone_number: data.claimant_phone_number,
             whats_app: data.claimant_whats_app,
           },
-          cost_claimed: +data.cost_claimed,
+          cost_claimed: data.cost_claimed,
           defendant: {
             address: data.defendant_address,
             email_address: data.defendant_email_address,
@@ -120,8 +120,8 @@ export const useSaveForm = ({
             whats_app: data.defendant_whats_app,
           },
           direct_complain: data.direct_complain,
-          interest_claimed: +data.interest_claimed,
-          sum_claimed: +data.sum_claimed,
+          interest_claimed: data.interest_claimed,
+          sum_claimed: data.sum_claimed,
           relief_sought: data.relief_sought,
           sub_case_type_name: data.sub_case_type,
           property_description: data.property_description,
@@ -144,6 +144,7 @@ export const useSaveForm = ({
           registrar: data.registrar,
           status: isDraft ? CaseStatus.Draft : CaseStatus.Pending,
         };
+        console.log("payload to save", payload);
         return data?.case_type_id
           ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
           : createCaseType(payload);
@@ -156,7 +157,6 @@ export const useSaveForm = ({
       }
     },
     onSuccess: (data) => {
-      console.log("data on save ", data);
       if (data?.success) {
         toast.success(data?.message || "Form saved successfully!");
         if (isDraft) {

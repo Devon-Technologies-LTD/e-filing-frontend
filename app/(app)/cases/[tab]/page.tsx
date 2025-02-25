@@ -11,10 +11,17 @@ import Pagination from "@/components/ui/pagination";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/case-file";
-import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
+import { DEFAULT_PAGE_SIZE } from "@/constants";
+import { getStatusByTab } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { CaseTypes } from "@/types/files/case-type";
 
 export default function FilteredCases() {
   const params = useParams();
+  const tab = params.tab as TCaseFilterType;
+  const router = useRouter();
+  const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
@@ -22,31 +29,21 @@ export default function FilteredCases() {
       {
         search: "",
         currentPage,
+        status: getStatusByTab(tab),
+        selectedCase,
       },
     ],
     queryFn: async () => {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
-        status: [
-          CaseStatus.Approved,
-          CaseStatus.Assigned,
-          CaseStatus.Denied,
-          CaseStatus.JudgementDelivered,
-          CaseStatus.Pending,
-          CaseStatus.StruckOut,
-          CaseStatus.ToBeAssigned,
-          CaseStatus.UnderReview,
-        ],
-        // start_data: date?.from
-        //   ? dateFormatter(date?.from as Date).isoFormat
-        //   : null,
-        // end_date: date?.to ? dateFormatter(date?.to as Date).isoFormat : null,
+        status: getStatusByTab(tab),
+        casetype: selectedCase === "all" ? null : selectedCase,
       });
     },
     staleTime: 50000,
   });
-  const tab = params.tab as TCaseFilterType;
+
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
@@ -56,11 +53,21 @@ export default function FilteredCases() {
     }
   };
   const columns = getColumns();
-  console.log("first data ", data);
+  const handleRowClick = (row: any) => {
+    router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+  };
   return (
     <div className="space-y-12">
-      <CasesDataTableToolbar />
-      <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
+      <CasesDataTableToolbar
+        selectedCase={selectedCase}
+        setSelectedCase={setSelectedCase}
+      />
+      <DataTable
+        onRowClick={handleRowClick}
+        columns={columns}
+        loading={draftsLoading}
+        data={data?.data}
+      />
       <div className="flex justify-end">
         <Pagination
           currentPage={currentPage}

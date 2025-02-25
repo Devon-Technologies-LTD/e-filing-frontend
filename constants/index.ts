@@ -1,9 +1,8 @@
 export const DEFAULT_PAGE_SIZE = 10;
 export const allowedUploadTypes = [
   "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "text/plain",
-  "image/jpg",
+  "image/jpeg",
+  "image/pjpeg",
   "image/png",
 ];
 export const DOCUMENT_MAX_SIZE = 10 * 1024 * 1024;

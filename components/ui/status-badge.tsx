@@ -47,7 +47,7 @@ export function StatusBadge({
         className
       )}
     >
-      {children || status.toLowerCase()}
+      {children || status?.toLowerCase()}
     </Badge>
   );
 
