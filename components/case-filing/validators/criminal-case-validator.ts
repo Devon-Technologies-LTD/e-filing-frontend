@@ -42,7 +42,9 @@ const useCriminalCaseFormValidator = ({ store, documents }: HookProps) => {
     docTitle: CriminalCaseSubType,
     errorKey: string
   ) => {
-    const doc = documents?.find((doc: any) => doc.title === docTitle);
+    const doc = documents?.find(
+      (doc: any) => doc.title.toLowerCase() === docTitle.toLowerCase()
+    );
     if (!doc) {
       dispatch(addCaseTypeError({ [errorKey]: "Required" }));
       return false;
