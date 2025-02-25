@@ -72,17 +72,22 @@ export const useSaveForm = ({
   const dispatch = useDispatch();
 
   const { triggerPayment } = useRemitaPayment({
-    onSuccess: (response) => console.log("Payment Success:", response),
+    onSuccess: (response) => {
+      toast.success("payment successful");
+      dispatch(updateStep(step + 1));
+    },
     onError: (response) => console.log("Payment Error:", response),
   });
 
   const generateRRRMutation = useMutation({
     mutationFn: async ({ caseFileId }: { caseFileId: string }) => {
-      return await generateRRR(caseFileId);
+      return await generateRRR(caseFileId, amount);
     },
     onSuccess: (data) => {
       console.log("first in client", data);
-      // triggerPayment(data.rrr, amount);
+      if (data?.success) {
+        triggerPayment(data.data?.RRR, amount);
+      }
     },
   });
 
@@ -192,7 +197,6 @@ export const useSaveForm = ({
           );
           if (step === 5) {
             // navigate.push("/cases");
-            console.log("data sendign to the casefile", data);
             generateRRRMutation.mutate({ caseFileId: data.id });
           } else {
             dispatch(updateStep(step + 1));

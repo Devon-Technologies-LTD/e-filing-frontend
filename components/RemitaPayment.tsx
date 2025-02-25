@@ -40,7 +40,7 @@ const RemitaPayment = () => {
         ],
       },
       onSuccess: (response: any) => {
-        console.log("Payment Successful:", response);
+        console.log(response)
       },
       onError: (response: any) => {
         console.error("Payment Failed:", response);
