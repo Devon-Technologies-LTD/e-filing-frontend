@@ -114,7 +114,6 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
                                     {isResending ? 'Resending...' : 'Resend Code'}
                                 </button>
                             </form>
-
                             <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-32 group-hover:bg-app-secondary"></div>
                         </div>
                     </div>
