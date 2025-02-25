@@ -26,7 +26,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData } from "@/constants";
+import { CaseTypeData, DocumentTitlesEnum } from "@/constants";
 
 export const CivilCaseForm5 = () => {
   const dispatch = useDispatch();
@@ -194,7 +194,7 @@ export const CivilCaseForm5 = () => {
         </div>
         <div className="space-y-3">
           <div className="text-lg font-bold">
-            At the suit of this complainat, this plaint is taking out with
+            At the suit of this complainant, this plaint is taking out with
             respect to
           </div>
           <p className="flex justify-between items-center gap-1 text-sm font-bold  text-neutral-600">
@@ -253,7 +253,7 @@ export const CivilCaseForm5 = () => {
         </div>
         <div className="space-y-3">
           <div className="text-lg font-bold">
-            The relief(s) sought by the complainat are
+            The relief(s) sought by the complainant are
           </div>
           <p className="flex justify-between  items-center gap-1 text-sm font-bold  text-neutral-600">
             <span className="flex items-center gap-1 ">
@@ -288,7 +288,7 @@ export const CivilCaseForm5 = () => {
           </p>
           <div className="flex ">
             <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
               <InputField
                 id="claimant_address"
                 name="claimant_address"
@@ -462,7 +462,7 @@ export const CivilCaseForm5 = () => {
             <DocumentUploadComponent
               errorMessage={caseTypeErrors?.witness ?? ""}
               subTitle={CaseTypeData.CIVIL_CASE}
-              title={"WITNESS STATEMENT OF OATH"}
+              title={DocumentTitlesEnum.WitnessStatementOnOath}
               caseType={case_type}
               subCase={sub_case_type}
             />

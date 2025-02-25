@@ -1,6 +1,7 @@
 import {
   CaseTypeData,
   CivilCaseSubType,
+  CivilDocumentTitles,
   CriminalCaseSubType,
   FamilyCaseSubType,
   OtherDocuments,
@@ -53,22 +54,32 @@ export default function CostAssessment({
   };
 
   const filteredCriminalDocuments = documents?.filter((doc) =>
-    Object.values(CriminalCaseSubType).includes(
-      doc.title as CriminalCaseSubType
+    Object.values(CriminalCaseSubType).some(
+      (caseType) => caseType.toLowerCase() === doc.title.toLowerCase()
     )
   );
   const filteredCivilDocuments = documents?.filter((doc) =>
-    Object.values(CivilCaseSubType).includes(doc.title as CivilCaseSubType)
+    Object.values(CivilDocumentTitles).some(
+      (value) => value.toLowerCase() === doc.title.toLowerCase()
+    )
   );
+
   const filteredFamilyDocuments = documents?.filter((doc) =>
-    Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
+    Object.values(FamilyCaseSubType).some(
+      (value) => value.toLowerCase() === doc.title.toLowerCase()
+    )
   );
+
   const filteredOtherDocuments = documents?.filter((doc) =>
-    Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
+    Object.values(OtherDocuments).some(
+      (value) => value.toLowerCase() === doc.title.toLowerCase()
+    )
   );
+
   const filteredExhibitsDocuments = documents?.filter(
-    (doc) => doc.case_type_name === "EXHIBITS"
+    (doc) => doc.case_type_name.toLowerCase() === "exhibits"
   );
+
   const costCriminalItems = filteredCriminalDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
@@ -89,12 +100,12 @@ export default function CostAssessment({
   const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
-    amount: doc.amount,
+    amount: 500,
   }));
   const costOtherDocuments = filteredOtherDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
-    amount: doc.amount,
+    amount: 500,
   }));
   console.log("cost assessment other docs", costOtherDocuments);
 

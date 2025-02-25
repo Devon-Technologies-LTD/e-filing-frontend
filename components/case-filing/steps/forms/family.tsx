@@ -78,7 +78,7 @@ export const FamilyComplaintForm = () => {
         <p className="text-xs font-bold">AND</p>
         <>
           <div className="text-sm font-bold">
-            At the suit of this complainat, this plaint is taking out with
+            At the suit of this complainant, this plaint is taking out with
             respect to
           </div>
           <p className="text-sm">
@@ -108,7 +108,7 @@ export const FamilyComplaintForm = () => {
         </>
         <>
           <div className="text-sm font-bold">
-            The relief(s) sought by the complainat are
+            The relief(s) sought by the complainant are
           </div>
           <p className="text-xs">LIST/DESCRIBE RELIEF BY CLAIMANT</p>
           <div className="p-2 bg-white h-40">
@@ -127,7 +127,7 @@ export const FamilyComplaintForm = () => {
           </p>
           <div className="flex  p-2">
             <div className="p-2 w-full space-y-6">
-              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
               <InputField
                 id="defendant"
                 name="defendant"

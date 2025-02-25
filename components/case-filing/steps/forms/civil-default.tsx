@@ -87,7 +87,7 @@ export const CivlDefault = () => {
           </p>
           <div className="flex  p-2">
             <div className="p-2 w-full space-y-6">
-              <p className="text-base font-bold">COMPLAINAT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
               <InputField
                 id="defendant"
                 name="defendant"

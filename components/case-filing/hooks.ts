@@ -1,10 +1,12 @@
 import { CaseStatus } from "@/constants";
+import { useRemitaPayment } from "@/hooks/use-remita-payment";
 import {
   createCaseFile,
   createCaseType,
   updateCaseFile,
   updateCaseType,
 } from "@/lib/actions/case-file";
+import { generateRRR } from "@/lib/actions/payment";
 import { dateFormatter, formatErrors } from "@/lib/utils";
 import {
   clearCaseTypeError,
@@ -59,13 +61,30 @@ export function useCreateCaseFile(
 export const useSaveForm = ({
   step,
   isDraft = false,
+  amount,
 }: {
   step: number;
   isDraft?: boolean;
+  amount?: any;
 }) => {
   const queryClient = useQueryClient();
   const navigate = useRouter();
   const dispatch = useDispatch();
+
+  const { triggerPayment } = useRemitaPayment({
+    onSuccess: (response) => console.log("Payment Success:", response),
+    onError: (response) => console.log("Payment Error:", response),
+  });
+
+  const generateRRRMutation = useMutation({
+    mutationFn: async ({ caseFileId }: { caseFileId: string }) => {
+      return await generateRRR(caseFileId);
+    },
+    onSuccess: (data) => {
+      console.log("first in client", data);
+      // triggerPayment(data.rrr, amount);
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: async ({
@@ -157,6 +176,7 @@ export const useSaveForm = ({
       }
     },
     onSuccess: (data) => {
+      console.log("respinse from submit", data);
       if (data?.success) {
         toast.success(data?.message || "Form saved successfully!");
         if (isDraft) {
@@ -171,7 +191,9 @@ export const useSaveForm = ({
             })
           );
           if (step === 5) {
-            navigate.push("/cases");
+            // navigate.push("/cases");
+            console.log("data sendign to the casefile", data);
+            generateRRRMutation.mutate({ caseFileId: data.id });
           } else {
             dispatch(updateStep(step + 1));
           }
@@ -190,5 +212,5 @@ export const useSaveForm = ({
     },
   });
 
-  return mutation;
+  return { mutation, generateRRRMutation };
 };
