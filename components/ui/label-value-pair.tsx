@@ -10,8 +10,8 @@ export default function LabelValuePair({
 }) {
   return (
     <div className="px-2">
-      <label className="text-sm font-bold">{label}</label>
-      <div className="text-sm font-medium">{value}</div>
+      <label className="text-sm font-bold break-words">{label}</label>
+      <div className="text-sm font-medium break-words">{value}</div>
     </div>
   );
 }

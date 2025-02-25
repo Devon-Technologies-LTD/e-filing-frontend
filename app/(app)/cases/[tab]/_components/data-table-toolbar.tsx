@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Search } from "lucide-react";
 import { CASE_TYPES, CaseTypes } from "@/types/files/case-type";
 import { useState } from "react";
@@ -7,12 +7,17 @@ import { Input } from "@/components/ui/input";
 import { YearSelector } from "@/components/year-selector";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
 
-export function CasesDataTableToolbar() {
-  const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+export function CasesDataTableToolbar({
+  selectedCase,
+  setSelectedCase,
+}: {
+  selectedCase: string;
+  setSelectedCase: Dispatch<SetStateAction<CaseTypes | "all">>;
+}) {
   const handleCaseTypeChange = (value: string) => {
     setSelectedCase(value as CaseTypes);
   };
-  const caseFilter = [{value: 'all', label: 'ALL CASE TYPE'}, ...CASE_TYPES];
+  const caseFilter = [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES];
   return (
     <div className="flex items-center justify-between">
       <div className="relative">

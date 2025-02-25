@@ -25,7 +25,7 @@ const DocumentService = {
   async uploadDocument(formData: FormData): Promise<any> {
     try {
       console.log("entering form data");
-      console.log("entering form data payload", formData);
+      console.log("form data payload", formData);
       const response = await axiosInstance.post<any>("/documents", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

@@ -23,9 +23,9 @@ export interface CaseTypeDetails {
   rental_value?: string;
   relief_sought?: string;
   legal_counsels?: LegalCounsel[];
-  sum_claimed?: number;
-  cost_claimed?: number;
-  interest_claimed?: number;
+  sum_claimed?: string;
+  cost_claimed?: string;
+  interest_claimed?: string;
   summon_details?: SummonDetails;
   notes?: string;
   dated_this?: string | null;
@@ -103,7 +103,7 @@ const CaseFileService = {
     return response.data;
   },
   async getCaseFilesbyId(id: string): Promise<any> {
-    const response = await axiosInstance.get<any>(`casefile/${id}`);
+    const response = await axiosInstance.get<any>(`CaseFile/${id}`);
     console.log("case filter by id response", response.data);
     return response.data;
   },

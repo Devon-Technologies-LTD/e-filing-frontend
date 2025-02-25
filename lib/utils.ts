@@ -4,6 +4,8 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import { jwtDecode } from "jwt-decode";
+import { TCaseFilterType } from "@/types/case";
+import { CaseStatus } from "@/constants";
 
 // interface DecodedToken {
 //   exp: number;
@@ -203,4 +205,58 @@ export const formatErrors = (errors: any) => {
   return Object.entries(errors)
     .map(([key, message]) => `${key}: ${message}`)
     .join("\n");
+};
+
+export const getStatusByTab = (tab: TCaseFilterType) => {
+  switch (tab) {
+    case "pending":
+      return [CaseStatus.Pending, CaseStatus.UnderReview];
+    case "active":
+      return [CaseStatus.Approved, CaseStatus.Assigned];
+    case "unassigned":
+      return [CaseStatus.UnderReview, CaseStatus.ToBeAssigned];
+    case "concluded":
+      return [CaseStatus.JudgementDelivered];
+    default:
+      return [
+        CaseStatus.Approved,
+        CaseStatus.Assigned,
+        CaseStatus.Denied,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.Pending,
+        CaseStatus.StruckOut,
+        CaseStatus.ToBeAssigned,
+        CaseStatus.UnderReview,
+      ];
+  }
+};
+
+export const handleApiError = (error: any) => {
+  if (error?.response) {
+    return {
+      data:null,
+      status: error.response.status,
+      message: error.response.data?.message || "An error occurred.",
+      errors: error.response.data?.data || null,
+      success: false,
+    };
+  }
+
+  if (error?.request) {
+    return {
+      data: null,
+      status: 504,
+      message: "Something went wrong. Please try again.",
+      errors: "Unable to process request.",
+      success: false,
+    };
+  }
+
+  return {
+    data: null,
+    status: 500,
+    message: error?.message || "An unexpected error occurred.",
+    errors: error?.message || "Unknown error.",
+    success: false,
+  };
 };

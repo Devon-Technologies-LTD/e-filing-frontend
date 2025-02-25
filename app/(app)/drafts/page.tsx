@@ -76,6 +76,7 @@ export default function Page() {
   }, [singleDraftError]);
 
   useEffect(() => {
+    console.log("single draft response", singleDraftData)
     if (singleDraftData && selectedRow) {
       const caseTypeFields = getCaseTypeFields(singleDraftData);
       dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));

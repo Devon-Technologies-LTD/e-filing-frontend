@@ -40,7 +40,6 @@ const DraftTableActionCell: React.FC<ActionCellProps> = ({ row }) => {
   });
 
   const handleDelete = () => {
-    console.log("first", row.original);
     deleteMutation.mutate(row.original.id);
   };
 
