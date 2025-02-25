@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { ICase } from "@/types/case";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import TableContentLoader from "@/components/table-content-loader";
 
 // Define columns
 export const mainColumns: ColumnDef<ICase>[] = [
@@ -69,64 +70,61 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, data, loading, on
 
   return (
     <div className="rounded-md">
-      <Table className="space-y-2">
-        {/* Table Header */}
-        <TableHeader className="bg-zinc-50 h-12">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}
-                  className="uppercase font-bold text-sm"
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <TableRow
-              className="h-16 hover:border-b-2 transition-colors duration-500 hover:bg-zinc-50 hover:border-b-app-secondary">
-              <TableCell colSpan={columns.length}
-                className="h-24 text-center  font-semibold text-black text-sm ">
-                Loading...
-              </TableCell>
-            </TableRow>
-          ) : table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                onClick={() => onRowClick(row.original.caseId)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    onRowClick(row.original.caseId);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
-                className="cursor-pointer hover:bg-gray-50 transition-colors"
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="h-24 text-left font-bold">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+      {loading ? (
+        <TableContentLoader columns={columns} />
+
+      ) : (
+        <Table className="space-y-2">
+          {/* Table Header */}
+          <TableHeader className="bg-zinc-50 h-12">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}
+                    className="uppercase font-bold text-sm"
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  onClick={() => onRowClick(row.original.caseId)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      onRowClick(row.original.caseId);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="h-24 text-left font-bold">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };

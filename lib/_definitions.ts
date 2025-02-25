@@ -384,3 +384,6 @@ export const ResetPasswordScheme = z.object({
     message: "Passwords must match",
     path: ["confirm_password"],
   });
+
+
+  export type TaddAdmin = z.infer<typeof EMailFormSchema>;

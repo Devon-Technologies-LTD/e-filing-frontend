@@ -4,7 +4,6 @@ import { getSession } from "@/lib/getSession";
 import { setProfile } from "@/redux/slices/profile-slice";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Toaster } from "sonner";
 interface AppLayoutProps {
   children: React.ReactNode;
 }

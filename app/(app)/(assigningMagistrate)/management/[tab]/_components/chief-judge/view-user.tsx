@@ -63,11 +63,11 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   <h1 className="text-xl font-bold">{row.name}</h1>
                   <p className="text-sm font-medium">{row.email}</p>
                 </div>
-                <StatusBadge
+                {/* <StatusBadge
                   tooltip={""}
                   tooltipProps={{ delayDuration: 200 }}
                   status={row.status as any}
-                />
+                /> */}
               </div>
               <div className="flex items-center divide-x-2 gap-3">
                 <div>
@@ -83,7 +83,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                     Date Invited
                   </p>
                   <p className="text-sm text-primary font-extrabold uppercase">
-                    12th January 2025
+                    {row.created_at}
                   </p>
                 </div>
               </div>
@@ -115,7 +115,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                     variant="danger"
                     size={"medium"}
                     className="h-12 px-5"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     DELETE USER
                   </Button>
@@ -127,11 +127,14 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   <Button
                     variant="ghost"
                     className="font-semibold"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
-                    {row.status === "ACTIVE"
-                      ? "DE-ACTIVATE USER"
-                      : "ACTIVATE USER"}
+                    {
+                      // row.status === "ACTIVE"
+                      row.status === "true"
+                        ? "DE-ACTIVATE USER"
+                        : "ACTIVATE USER"
+                    }
                   </Button>
                 }
               />

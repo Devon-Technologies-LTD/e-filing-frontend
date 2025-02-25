@@ -82,7 +82,7 @@ export function DataTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
-                    className="uppercase font-bold text-sm"
+                    className="uppercase font-bold text-left text-sm"
                   >
                     {!header.isPlaceholder &&
                       flexRender(

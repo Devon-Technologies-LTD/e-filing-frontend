@@ -93,6 +93,14 @@ const CaseFileService = {
 
     return response.data;
   },
+  async getCaseFilesAdmin(payload: IDraftFilter): Promise<any> {
+    const response = await axiosInstance.post<IDraftFilter>(
+      `admin/casefile/case-filter`,
+      payload
+    );
+    console.log("case filter response", response.data);
+    return response.data;
+  },
   async getCaseFiles(payload: IDraftFilter): Promise<any> {
     const { page, size, ...rest } = payload;
     const response = await axiosInstance.post<IDraftFilter>(
