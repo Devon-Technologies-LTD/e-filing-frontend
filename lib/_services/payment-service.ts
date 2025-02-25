@@ -7,7 +7,7 @@ const PaymentService = {
         `/transactions/generate-rrr/${caseFileId}/${amount}`
       );
       console.log("response from genreatingsss rrr", response?.data);
-      return response ? response : null;
+      return response ? response?.data : null;
     } catch (error) {
       console.error("Error paymentsss:", (error as any).response.data);
       throw error;

@@ -156,8 +156,8 @@ export default function CostAssessment({
               <h3>Amount</h3>
             </div>
 
-            <div className="space-y-3">
-              <div className="space-y-1">
+            <div className="space-y-3 uppercase">
+              <div className="space-y-1 uppercase">
                 {filteredCriminalDocuments?.length > 0 && (
                   <>
                     {case_type === CaseTypeData.CRIMINAL_CASE && (
