@@ -4,11 +4,42 @@ import { ICase, TCaseFilterType } from "@/types/case";
 import { useParams, useRouter } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
 import { mainColumns, DataTable } from "./_components/table-columns";
-import { mockCases } from "@/lib/dummy-data";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getCaseFiles } from "@/lib/actions/case-file";
+import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
 
 export default function FilteredCases() {
   const params = useParams();
   const router = useRouter();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading: draftsLoading } = useQuery({
+    queryKey: [
+      "get_cases",
+      {
+        search: "",
+        currentPage,
+      },
+    ],
+    queryFn: async () => {
+      return await getCaseFiles({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+        status: [
+          CaseStatus.Approved,
+          CaseStatus.Assigned,
+          CaseStatus.Denied,
+          CaseStatus.JudgementDelivered,
+          CaseStatus.Pending,
+          CaseStatus.StruckOut,
+          CaseStatus.ToBeAssigned,
+          CaseStatus.UnderReview,
+        ],
+      });
+    },
+    staleTime: 50000,
+  });
 
   const tab = params.tab as TCaseFilterType;
   console.log(tab);
@@ -25,7 +56,7 @@ export default function FilteredCases() {
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
-      <DataTable columns={columns} data={mockCases} loading={false} onRowClick={handleRowClick} />
+      <DataTable columns={columns} data={data?.data} loading={draftsLoading} onRowClick={handleRowClick} />
     </div>
   );
 }

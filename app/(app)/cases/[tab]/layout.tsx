@@ -52,4 +52,5 @@ export default function LayoutPage({
       <div>{children}</div>
     </div>
   );
+  
 }

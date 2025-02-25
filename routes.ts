@@ -48,13 +48,16 @@ export const defaultLoginRedirect = (role?: ROLES) => {
     case ROLES.CHIEF_JUDGE:
     case ROLES.DIRECTOR_MAGISTRATES:
     case ROLES.ASSIGNING_MAGISTRATES:
-    case ROLES.CENTRAL_REGISTRY:
       return "/overview/case";
     case "LAWYER":
       return "/cases/recent";
     case "USER":
       return "/cases/recent";
+    case ROLES.SUPERADMIN:
+      return "/reviews/under-review";
     default:
       return "/cases/recent";
   }
 };
+
+

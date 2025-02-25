@@ -5,6 +5,7 @@ export type TCaseFilterType =
   | "recent"
   | "active"
   | "reassigned"
+  | "registerars"
   | "under-review"
   | "approved-review"
   | "denied-review"

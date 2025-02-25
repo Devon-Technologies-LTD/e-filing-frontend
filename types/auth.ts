@@ -21,10 +21,13 @@ export type ErrorResponse = {
   request?: unknown;
   message?: string;
 }
+
+
 export enum ROLES {
   USER = "USER",
   LAWYER = "LAWYER",
   ADMIN = "ADMIN",
+  SUPERADMIN = "SUPER_ADMIN",
   ASSIGNING_MAGISTRATES = "ASSIGNING_MAGISTRATES",
   PRESIDING_MAGISTRATES = "PRESIDING_MAGISTRATES",
   DIRECTOR_MAGISTRATES = "DIRECTOR_MAGISTRATES",
@@ -65,6 +68,7 @@ export function handleError(err: unknown) {
   if (error?.name === "AbortError") {
     return {
       status: 408,
+      success: false,
       message: "Request timeout. Please try again.",
       errors: "The request took too long to respond.",
     };
@@ -73,6 +77,8 @@ export function handleError(err: unknown) {
   if (error?.response) {
     return {
       status: error.response.status,
+      success: false,
+
       message: error.response.data?.message || "An error occurred",
       errors:
         typeof error.response.data?.data === "string"
@@ -82,12 +88,15 @@ export function handleError(err: unknown) {
   } else if (error?.request) {
     return {
       status: 504,
+      success: false,
+
       message: "Something went wrong. Please try again.",
       errors: "Unable to process request.",
     };
   } else {
     return {
       status: 500,
+      success: false,
       message: error?.message || "An unexpected error occurred.",
       errors: error?.message || "Unknown error.",
     };

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState, useMemo } from "react";
+import { EyeIcon, EyeOffIcon, CircleCheck, XCircle } from "lucide-react";
 import zxcvbn from "zxcvbn";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import clsx from "clsx"; // Import clsx for conditional class names
+import clsx from "clsx";
 
 interface LoginPasswordFieldProps {
   state?: { status: any; message: any; errors: any };
@@ -15,7 +15,7 @@ interface LoginPasswordFieldProps {
   id?: string;
   error?: string;
   placeholder?: string;
-  showStrength?: boolean; // Optional prop (default is false)
+  showStrength?: boolean;
 }
 
 export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
@@ -26,16 +26,22 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
   id = "password",
   error,
   placeholder = "Input Password",
-  showStrength = false, // <-- New prop to toggle strength indicator
+  showStrength = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
-  // Calculate password strength only if showStrength is enabled
-  const strength = showStrength ? zxcvbn(password).score : 0;
+  // Optimize strength calculation with useMemo
+  const result = useMemo(() => (showStrength ? zxcvbn(password) : null), [password, showStrength]);
 
-  const strengthColors = ["bg-red-500", "bg-orange-400", "bg-yellow-300", "bg-green-400", "bg-green-600"];
-  const strengthLabels = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
+  // Password requirements checklist
+  const passwordChecks = [
+    { label: "At least 8 characters", check: password.length >= 8 },
+    { label: "Contains a number", check: /\d/.test(password) },
+    { label: "Contains an uppercase letter", check: /[A-Z]/.test(password) },
+    { label: "Contains a lowercase letter", check: /[a-z]/.test(password) },
+    { label: "Contains a special character", check: /[\W_]/.test(password) },
+  ];
 
   return (
     <div>
@@ -47,6 +53,7 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
           {label}
         </Label>
       )}
+
       <div className="grid grid-cols-1 grid-rows-0 place-items-center relative">
         <Input
           className={clsx(
@@ -60,7 +67,7 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            clearErrors && clearErrors();
+            clearErrors?.();
           }}
         />
         <span
@@ -71,22 +78,25 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
         </span>
       </div>
 
-      {/* Password Strength Indicator - Only show if enabled */}
+      {/* Password Strength Checker */}
       {showStrength && password && (
-        <div className="mt-2 flex flex-col">
-          <div className="h-2 w-full bg-gray-200 rounded">
-            <div
-              className={`h-full ${strengthColors[strength]} rounded`}
-              style={{ width: `${(strength + 1) * 20}%` }}
-            ></div>
-          </div>
-          <span className={`text-xs font-semibold mt-1 ${strengthColors[strength]}`}>
-            {strengthLabels[strength]}
-          </span>
+        <div className="mt-2 p-2 rounded-lg">
+          <ul className="mt-1 space-y-1">
+            {passwordChecks.map((item, index) => (
+              <li key={index} className="flex items-center text-sm font-semibold">
+                {item.check ? (
+                  <CircleCheck className="text-green-500 w-5 h-5 mr-1" />
+                ) : (
+                  <XCircle className="text-red-500 w-5 h-5 mr-1" />
+                )}
+                {item.label}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
-      {/* Display error message if error exists */}
+      {/* Error Message */}
       {error && <span className="h-1 text-xs text-red-500">{error}</span>}
     </div>
   );

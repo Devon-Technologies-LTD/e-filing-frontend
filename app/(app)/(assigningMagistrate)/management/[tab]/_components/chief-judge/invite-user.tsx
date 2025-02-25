@@ -6,13 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ConfirmInvite from "./confirm-invite";
 import { ROLES } from "@/types/auth";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/redux";
 import { ALL_DISTRICT } from "@/types/files/case-type";
 
@@ -20,9 +14,9 @@ interface InviteUserProps {
   trigger: ReactNode;
 }
 
-export const formSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+const formSchema = z.object({
+  first_name: z.string().min(2, "First name must be at least 2 characters"),
+  last_name: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
 });
 
@@ -30,179 +24,116 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function InviteUser({ trigger }: InviteUserProps) {
   const { data: user } = useAppSelector((state) => state.profile);
-
-  const [formValues, setFormValues] = useState<FormValues>({
-    firstName: "",
-    lastName: "",
-    email: "",
+  const [formValues, setFormValues] = useState<FormValues>({ first_name: "", last_name: "", email: "" });
+  const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
+  const [isValid, setIsValid] = useState(false);
+  const [role, setRole] = useState<string>(() => {
+    switch (user?.role) {
+      case ROLES.DIRECTOR_MAGISTRATES:
+        return "ASSIGNING_MAGISTRATES";
+      case ROLES.CHIEF_JUDGE:
+        return "DIRECTOR_MAGISTRATES";
+      case ROLES.ASSIGNING_MAGISTRATES:
+        return "PRESIDING_MAGISTRATE"; //add central magisterate
+      default:
+        return "CENTRAL";
+    }
   });
 
-  const [formErrors, setFormErrors] = useState<{
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-  }>({});
-
-  const [isValid, setIsValid] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof FormValues
-  ) => {
-    setFormValues({ ...formValues, [field]: e.target.value });
-    setIsValid(true)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [id]: value }));
+    setIsValid(true);
   };
-
 
   const validateForm = (): boolean => {
     const result = formSchema.safeParse(formValues);
     if (!result.success) {
       const formattedErrors = result.error.format();
       setFormErrors({
-        firstName: formattedErrors.firstName?._errors?.[0],
-        lastName: formattedErrors.lastName?._errors?.[0],
+        first_name: formattedErrors.first_name?._errors?.[0],
+        last_name: formattedErrors.last_name?._errors?.[0],
         email: formattedErrors.email?._errors?.[0],
       });
       setIsValid(false);
       return false;
-    } else {
-      setFormErrors({});
-      setIsValid(true);
-      return true;
     }
+    setFormErrors({});
+    setIsValid(true);
+    return true;
   };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formValues);
-      //   setFormValues({ firstName: "", lastName: "", email: "" });
+      console.log("Form submitted:", { ...formValues, role });
     } else {
       console.log("Form has errors");
     }
   };
 
-
   return (
-    <>
-      <Sheet>
-        <SheetTrigger onClick={(e) => e.stopPropagation()} className="">
-          {trigger}
-        </SheetTrigger>
-
-        <SheetContent
-          side="right"
-          className="bg-white md:!w-[505px] min-w-[505px] h-full !max-w-none"
-        >
-    
-          <div className=" mx-auto space-y-8">
-            <div className="w-full space-y-6">
-              <div className="space-y-1 border-b">
-                <div className="text-xl font-bold">
-                  Invite a Director Magistrate
-                </div>
-                <p className="text-sm font-semibold">
-                  Invite a Director Magistrate to handle overseeing across all
-                  division.
-                </p>
-              </div>
-              <section>
-                <form onSubmit={onSubmit} className="space-y-6">
-                  {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
-                    <>
-                      <Select>
-                        <SelectTrigger variant="underlined" className="w-full text-base">
-                          <SelectValue placeholder="Select District" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ALL_DISTRICT.map((doc) => (
-                            <SelectItem
-                              variant="underlined"
-                              className="py-2"
-                              key={doc.value}
-                              value={doc.value}
-                            >
-                              {doc.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </>
-                  )}
-                  <div className="space-y-1">
-                    <Label variant={"underline"} htmlFor="firstName">
-                      FIRST NAME
-                    </Label>
-                    <Input
-                      variant="underlined"
-                      id="firstName"
-                      placeholder="e.g barnabas"
-                      value={formValues.firstName}
-                      className="placeholder:text-zinc-400 border-zinc-300"
-                      onChange={(e) => handleChange(e, "firstName")}
-                    />
-                    {formErrors.firstName && (
-                      <p className="text-red-500 text-sm">
-                        {formErrors.firstName}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label variant={"underline"} htmlFor="lastName">
-                      LAST NAME
-                    </Label>
-                    <Input
-                      variant="underlined"
-                      id="lastName"
-                      placeholder="e.g Ibrahim"
-                      className="placeholder:text-zinc-400 border-zinc-300"
-                      value={formValues.lastName}
-                      onChange={(e) => handleChange(e, "lastName")}
-                    />
-                    {formErrors.lastName && (
-                      <p className="text-red-500 text-sm">
-                        {formErrors.lastName}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label variant={"underline"} htmlFor="email">
-                      EMAIL ADDRESS*
-                    </Label>
-                    <Input
-                      variant="underlined"
-                      type="email"
-                      id="email"
-                      className="placeholder:text-zinc-400 border-zinc-300"
-                      placeholder="name@example.com"
-                      value={formValues.email}
-                      onChange={(e) => handleChange(e, "email")}
-                    />
-                    {formErrors.email && (
-                      <p className="text-red-500 text-sm">{formErrors.email}</p>
-                    )}
-                  </div>
-                  {isValid && (
-                    <ConfirmInvite
-                      formValues={formValues}
-                      trigger={
-                        <Button type="submit" size={"medium"}>
-                          SEND INVITE
-                        </Button>
-                      }
-                    />
-                  )}
-                  {!isValid && (
-                    <Button type="submit" size={"medium"}>
-                      SEND INVITE
-                    </Button>
-                  )}
-                </form>
-              </section>
+    <Sheet>
+      <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
+      <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
+        <div className="space-y-8 mx-auto">
+          <div className="space-y-6 w-full">
+            <div className="border-b space-y-1">
+              <h2 className="text-xl font-bold">Invite a Director Magistrate</h2>
+              <p className="text-sm font-semibold">Invite a Director Magistrate to oversee all divisions.</p>
             </div>
+            <form onSubmit={onSubmit} className="space-y-6">
+              <Input type="hidden" id="role" value={role} />
+              {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
+                <Select>
+                  <SelectTrigger className="w-full text-base">
+                    <SelectValue placeholder="Select District" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ALL_DISTRICT.map((doc) => (
+                      <SelectItem key={doc.value} value={doc.value} className="py-2">
+                        {doc.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+              {(["first_name", "last_name", "email"] as const).map((field) => (
+                <div key={field} className="space-y-1">
+                  <Label htmlFor={field} >
+                    {field.replace("_", " ").toUpperCase()}
+                  </Label>
+                  <Input
+                    variant="underlined"
+                    id={field}
+                    type={field === "email" ? "email" : "text"}
+                    placeholder={`Enter ${field.replace("_", " ")}`}
+                    value={formValues[field]}
+                    onChange={handleChange}
+                    className="placeholder:text-zinc-400 border-zinc-300"
+                  />
+                  {formErrors[field] && <p className="text-red-500 text-sm">{formErrors[field]}</p>}
+                </div>
+              ))}
+              <ConfirmInvite
+                formValues={{ ...formValues, role }}
+                trigger={<Button type="submit">SEND INVITE</Button>}
+              />
+            </form>
           </div>
-        </SheetContent>
-      </Sheet>
-    </>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
+
+
+{/* <Input
+  variant="underlined"
+  type="email"
+  id="email"
+  className="placeholder:text-zinc-400 border-zinc-300"
+  placeholder="name@example.com"
+  value={formValues.email}
+  onChange={(e) => handleChange(e, "email")}
+/> */}

@@ -63,23 +63,27 @@ export const mockUsers: IUsersColumn[] = [
   {
     id: "1",
     name: "Bayo Adetola",
+    first_name: "Bayo Adetola",
+    last_name: "Bayo Adetola",
     email: "bayoadetola@gmail.com",
     status: USER_STATUS.ACTIVE,
     division: "Life Camp",
     districts: "Wuse zone 1",
-    courtType: "Magistrate Court",
+    created_at: "Magistrate Court",
   },
   {
     id: "1",
     name: "Bayo Adetola",
+    first_name: "Bayo Adetola",
+    last_name: "Bayo Adetola",
     email: "bayoadetola@gmail.com",
     status: USER_STATUS.INACTIVE,
     division: "Kuje",
     districts: "Wuse zone 2",
     courtType: "Family Court",
+    created_at: "Family Court",
   },
 ];
-
 export const notifications: INotification[] = [
   {
     id: "1",
