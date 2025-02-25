@@ -131,7 +131,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   >
                     {
                       // row.status === "ACTIVE"
-                      row.status === true
+                      row.status === "true"
                         ? "DE-ACTIVATE USER"
                         : "ACTIVATE USER"
                     }

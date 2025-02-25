@@ -7,7 +7,7 @@ export const mainColumns: ColumnDef<ICase>[] = [
     header: "Filing Date",
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {
@@ -39,7 +39,7 @@ export const unassignedColumns: ColumnDef<ICase>[] = [
     header: "Filing Date",
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {

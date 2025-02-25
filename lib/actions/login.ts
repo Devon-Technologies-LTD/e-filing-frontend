@@ -279,13 +279,13 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
     console.log("This token  " + token);
 
     // API call
-    await authService.changePassword({
+    await authService.resetPassword({
       new_password: result.data.newPassword,
-      old_password: result.data.confirmPassword,
+      confirm_password: result.data.confirmPassword,
       email: email,
     });
     cookies().delete("otpEmail");
-    // cookies().delete("TempToken");
+    cookies().delete("TempToken");
     return {
       status: 200,
       message: "Password has been successfully, Please Login.",

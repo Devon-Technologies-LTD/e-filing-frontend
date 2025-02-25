@@ -24,6 +24,9 @@ const AuthService = {
   async verifyOtp(payload: { otp: string; email: string }) {
     return await authConfig.post("/auth/verify-otp", payload);
   },
+  async resendOtp(payload: { email: string }) {
+    return await authConfig.post("/auth/resend-otp", payload);
+  },
 
   async resetPassword(payload: {
     email: string;

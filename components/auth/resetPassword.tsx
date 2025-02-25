@@ -12,7 +12,7 @@ const ResetPaswordComponent = () => {
     const [state, dispatch] = useFormState(resetPassword, undefined);
     useEffect(() => {
         if (state?.success) {
-            toast.success(state.success);
+            toast.success(state.message);
             redirect("/login");
         }
         if (state?.message && !state.success) {

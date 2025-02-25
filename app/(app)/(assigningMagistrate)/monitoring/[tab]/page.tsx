@@ -5,7 +5,6 @@ import { TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
 import { mainColumns, unassignedColumns } from "./_components/table-columns";
-import Pagination from "@/components/ui/pagination";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
@@ -18,7 +17,20 @@ export default function FilteredCases() {
 
   let TYPE: CaseStatus[] = [];
 
-  if (tab === "case") {
+  if (tab === "unassigned") {
+    TYPE = [
+      CaseStatus.ToBeAssigned,
+      CaseStatus.UnderReview,
+    ];
+  } else if (tab === "active") {
+    TYPE = [
+      CaseStatus.Assigned,
+    ];
+  } else if (tab === "concluded") {
+    TYPE = [
+      CaseStatus.StruckOut,
+    ];
+  } else if (tab === "case") {
     TYPE = [
       CaseStatus.Approved,
       CaseStatus.Assigned,
@@ -29,10 +41,9 @@ export default function FilteredCases() {
       CaseStatus.ToBeAssigned,
       CaseStatus.UnderReview,
     ];
-  } else if (Object.values(CaseStatus).includes(tab as CaseStatus)) {
-    TYPE = [tab as CaseStatus]; // Ensure it's a valid CaseStatus
+  } else {
+    TYPE = [tab as CaseStatus];
   }
-
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [tab, { search: "", currentPage }],
     queryFn: async () =>
@@ -54,7 +65,6 @@ export default function FilteredCases() {
     <div className="space-y-12">
       <CasesDataTableToolbar />
       <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
-      {/* <Pagination currentPage={currentPage} onPageChange={setCurrentPage} /> */}
     </div>
   );
 }

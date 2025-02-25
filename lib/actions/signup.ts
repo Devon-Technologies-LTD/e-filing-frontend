@@ -10,6 +10,30 @@ import { defaultLoginRedirect } from "@/routes";
 import { NEXT_BASE_URL } from "@/lib/_constants"
 
 
+export async function reSendOtpAction(_prevState: unknown, formData: FormData) {
+    try {
+        const email = cookies().get("otpEmail")?.value;
+        if (!email) {
+            return {
+                status: 400,
+                message: "Email not found in session. Please restart the process.",
+                errors: "Missing email.",
+                success: false,  // Ensure success is always included
+            };
+        }
+        const res = await authService.resendOtp({ email });
+
+        return {
+            status: 200,
+            message: "Email sent successfully.",
+            success: true,  // Ensure success is always included
+        };
+
+    } catch (err: unknown) {
+        return handleError(err);  // handleError now always includes `success`
+    }
+}
+
 export async function OTPAction(_prevState: unknown, formData: FormData) {
     const dataz = Object.fromEntries(formData);
     const result = OTPFormSchema.safeParse(dataz);

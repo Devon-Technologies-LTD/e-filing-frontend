@@ -7,15 +7,15 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
 import { OTPAction } from "@/lib/actions/signup";
 import { useRouter } from "next/navigation";
 import { getOtpEmail } from "@/lib/getCookies";
+import { reSendOtpAction } from "@/lib/actions/signup";
+
 import { toast } from "sonner"
 import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
-import { isFieldErrorObject } from "@/types/auth";
 
 const OtpComponent = () => {
     const [state, dispatch] = useFormState(OTPAction, undefined);
@@ -23,12 +23,24 @@ const OtpComponent = () => {
     const [resendDisabled, setResendDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState<string>("");
+    const [otpState, dispatchOTP] = useFormState(reSendOtpAction, undefined);
+    const [isResending, setIsResending] = useState(false);
+
+
+    useEffect(() => {
+        if (otpState && 'success' in otpState) {
+            if (otpState.success) {
+                toast.success(otpState.message);
+                setTimeLeft(60 * 5);
+            } else {
+                toast.error(otpState.message);
+            }
+            setIsResending(false);
+        }
+    }, [otpState]);
+
 
     const router = useRouter();
-
-    const errors = isFieldErrorObject(state?.errors)
-        ? state.errors
-        : {} as Record<string, string[]>;
 
     useEffectAfterMount(() => {
         if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -70,10 +82,7 @@ const OtpComponent = () => {
         const seconds = timeLeft % 60;
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
-    const handleResend = () => {
-        setTimeLeft(300);
-        setResendDisabled(true);
-    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -86,53 +95,73 @@ const OtpComponent = () => {
             setLoading(false);
         }
     }, [state]);
+    const handleResendOTP = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsResending(true);
+        const formData = new FormData();
+        dispatchOTP(formData);
+    };
 
 
 
     return (
         <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6">
-            <div className="flex-1 flex justify-center items-center">
-                <form id="otp-form" onSubmit={handleSubmit} className="space-y-6 text-center">
-                    <p className="text-app-primary text-3xl font-bold">Check your email for a code</p>
-                    <p className="text-sm font-semibold">
-                        We&apos;ve sent a 6-character code to <b>{email}</b>.<br />
-                        The code expires shortly, so please enter it soon.
-                    </p>
-                    <InputOTP name="otp" maxLength={6}>
-                        <InputOTPGroup className="gap-2">
-                            {[...Array(3)].map((_, index) => (
-                                <InputOTPSlot
-                                    key={index}
-                                    index={index}
-                                    className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[114px] w-[86px]"
-                                />
-                            ))}
-                        </InputOTPGroup>
-                        <InputOTPSeparator className="text-neutral-400 mx-6" />
-                        <InputOTPGroup className="gap-2">
-                            {[...Array(3)].map((_, index) => (
-                                <InputOTPSlot
-                                    key={index + 3}
-                                    index={index + 3}
-                                    className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[114px] w-[86px]"
-                                />
-                            ))}
-                        </InputOTPGroup>
-                    </InputOTP>
-                    <div className="space-y-2 mt-6">
-                        <p className="text-sm font-semibold">Didn&apos;t get the code?</p>
-                        <p className="text-xl font-bold text-gray-500">{formatTime()}</p>
-                        <Button variant="link" onClick={handleResend} disabled={resendDisabled} className="text-xs">
-                            Resend Code
-                        </Button>
+            <div className="flex flex-1 justify-center  items-center">
+                <div>
+                    <div className="text-center">
+                        <p className="text-app-primary text-3xl font-bold">Check your email for a code</p>
+                        <p className="text-sm font-semibold">
+                            We&apos;ve sent a 6-character code to <b>{email}</b>.<br />
+                            The code expires shortly, so please enter it soon.
+                        </p>
                     </div>
 
+                    <form id="otp-form" onSubmit={handleSubmit} className="space-y-6 text-center">
+                        <InputOTP name="otp" maxLength={6}>
+                            <InputOTPGroup className="gap-2">
+                                {[...Array(3)].map((_, index) => (
+                                    <InputOTPSlot
+                                        key={index}
+                                        index={index}
+                                        className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[114px] w-[86px]"
+                                    />
+                                ))}
+                            </InputOTPGroup>
+                            <InputOTPSeparator className="text-neutral-400 mx-6" />
+                            <InputOTPGroup className="gap-2">
+                                {[...Array(3)].map((_, index) => (
+                                    <InputOTPSlot
+                                        key={index + 3}
+                                        index={index + 3}
+                                        className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[114px] w-[86px]"
+                                    />
+                                ))}
+                            </InputOTPGroup>
+                        </InputOTP>
+                    </form>
+
+                    <div className="items-center text-center space-y-2 mt-6">
+                        <p className="text-sm font-semibold">Didn&apos;t get the code?</p>
+                        <p className="text-xl font-bold text-gray-500">{formatTime()}</p>
+                        <form onSubmit={handleResendOTP}>
+                            <input type="hidden" name="otp" />
+                            <button
+                                type="submit"
+                                className={`text-xs text-center font-bold mt-3 z-10 cursor-pointer ${timeLeft > 0 || isResending ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'}`}
+                                disabled={timeLeft > 0 || isResending}
+                            >
+                                {isResending ? 'Resending...' : 'Resend Code'}
+                            </button>
+                        </form>
+
+                        <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-32 group-hover:bg-app-secondary"></div>
+                    </div>
                     {loading && (
                         <div className="flex justify-center items-center">
                             <div className="spinner"></div>
                         </div>
                     )}
-                </form>
+                </div>
             </div>
         </div>
     );

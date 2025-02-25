@@ -1,24 +1,39 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from "react";
 import AuthLayout from "@/components/AuthLayout";
 import Link from "next/link";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useFormState } from "react-dom";
-// import { verifyOTP, reSendOTP } from "@/lib/actions/login";  // Ensure reSendOTP is correctly imported
-import { verifyOTP } from "@/lib/actions/login";  // Ensure reSendOTP is correctly imported
+import { verifyOTP } from "@/lib/actions/login";
+import { reSendOtpAction } from "@/lib/actions/signup";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { toast } from "sonner";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
-export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
+export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
     const [state, dispatch] = useFormState(verifyOTP, undefined);
-    // const [otpState, dispatchOTP] = useFormState(reSendOTP, undefined);  // Renamed to avoid conflict
-    const [timeLeft, setTimeLeft] = useState(5 * 60); // 5 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(60 * 5);
+    const [otpState, dispatchOTP] = useFormState(reSendOtpAction, undefined);
+    const [isResending, setIsResending] = useState(false);
+
+
+    useEffect(() => {
+        if (otpState && 'success' in otpState) {
+            if (otpState.success) {
+                toast.success(otpState.message);
+                setTimeLeft(60 * 5);
+            } else {
+                toast.error(otpState.message);
+            }
+            setIsResending(false);
+        }
+    }, [otpState]);
 
     useEffect(() => {
         if (timeLeft <= 0) return;
         const interval = setInterval(() => {
-            setTimeLeft((prev) => prev - 1);
+            setTimeLeft(prev => prev - 1);
         }, 1000);
         return () => clearInterval(interval);
     }, [timeLeft]);
@@ -29,26 +44,30 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
         return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
 
+    const handleResendOTP = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsResending(true);
+        const formData = new FormData();
+        dispatchOTP(formData);
+    };
+
     return (
         <AuthLayout
             headerContent={
-                <Link
-                    href="/login"
-                    className="text-sm font-bold text-app-primary relative z-10"
-                >
+                <Link href="/login" className="text-sm font-bold text-app-primary relative z-10">
                     Log In
                 </Link>
             }
         >
-            <form action={dispatch}>
-                <div className="flex flex-col text-center justify-center items-center space-y-6 px-4 sm:px-6">
-                    <p className="text-app-primary text-2xl sm:text-3xl font-bold">
-                        Check your email for a code
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-500">
-                        We&apos;ve sent a 6-character code to <b>{email}</b>. <br />
-                        The code expires shortly, so please enter it soon.
-                    </p>
+            <div className="flex flex-col text-center justify-center items-center space-y-6 px-4 sm:px-6">
+                <p className="text-app-primary text-2xl sm:text-3xl font-bold">
+                    Check your email for a code
+                </p>
+                <p className="text-xs sm:text-sm text-gray-500">
+                    We&apos;ve sent a 6-character code to <b>{email}</b>. <br />
+                    The code expires shortly, so please enter it soon.
+                </p>
+                <form action={dispatch}>
 
                     <InputOTP maxLength={6} name="otp" pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
                         <InputOTPGroup className="gap-2">
@@ -73,35 +92,34 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: any }) {
                     </InputOTP>
 
                     <p className="text-xs text-red-500 h-2 text-center">
-                        {state && state?.message}
+                        {state?.message}
                     </p>
                     <SubmitButton value="PROCEED" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
+                </form>
 
-                    <div className="space-y-2 mt-6">
-                        <p className="text-xs sm:text-sm text-gray-500">
-                            Didn&apos;t get the code?
-                        </p>
-                        <p className="text-xl font-bold text-gray-500">{formatTime(timeLeft)}</p>
-                        <div className="flex items-center justify-center">
-                            <div className="items-center text-app-primary group relative">
-                                {/* <form action={dispatchOTP}> */}
-                                    <button
-                                        type="submit"
-                                        className={`text-xs text-center font-bold mt-3 z-10 cursor-pointer ${
-                                            timeLeft > 0 ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'
-                                        }`}
-                                        disabled={timeLeft > 0}
-                                        onClick={() => timeLeft <= 0 && setTimeLeft(5 * 60)}
-                                    >
-                                        Resend Code
-                                    </button>
-                                {/* </form> */}
-                                <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-32 group-hover:bg-app-secondary"></div>
-                            </div>
+                <div className="space-y-2 mt-6">
+                    <p className="text-xs sm:text-sm text-gray-500">
+                        Didn&apos;t get the code?
+                    </p>
+                    <p className="text-xl font-bold text-gray-500">{formatTime(timeLeft)}</p>
+                    <div className="flex items-center justify-center">
+                        <div className="items-center text-app-primary group relative">
+                            <form onSubmit={handleResendOTP}>
+                                <input type="hidden" name="otp" />
+                                <button
+                                    type="submit"
+                                    className={`text-xs text-center font-bold mt-3 z-10 cursor-pointer ${timeLeft > 0 || isResending ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'}`}
+                                    disabled={timeLeft > 0 || isResending}
+                                >
+                                    {isResending ? 'Resending...' : 'Resend Code'}
+                                </button>
+                            </form>
+
+                            <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-app-primary transform -translate-x-1/2 transition-all duration-300 group-hover:w-32 group-hover:bg-app-secondary"></div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </AuthLayout>
     );
 }
