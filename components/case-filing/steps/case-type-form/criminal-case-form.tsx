@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import {
   CaseTypeData,
   CriminalCaseSubType,
-  DocumentTitlesEnum,
+  CriminalDocumentTitles,
 } from "@/constants";
 import { DirectCriminalComplaintForm } from "./direct-complaint-form";
 
@@ -23,7 +23,7 @@ export default function CriminalCaseForm() {
               required
               errorMessage={caseTypeErrors?.firDoc ?? ""}
               subTitle={CaseTypeData.CRIMINAL_CASE}
-              title={DocumentTitlesEnum.FirstInformationReportFIR}
+              title={CriminalDocumentTitles.FIRST_INFORMATION_REPORT}
               caseType={case_type}
               subCase={sub_case_type}
             />
@@ -36,7 +36,7 @@ export default function CriminalCaseForm() {
               required
               errorMessage={caseTypeErrors?.exparte ?? ""}
               subTitle={CaseTypeData.CRIMINAL_CASE}
-              title={DocumentTitlesEnum.RequestForRemandOrderExparte}
+              title={CriminalDocumentTitles.REQUEST_FOR_REMAND_ORDER}
               caseType={case_type}
               subCase={sub_case_type}
             />

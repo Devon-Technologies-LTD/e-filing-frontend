@@ -16,8 +16,8 @@ type ErrorResponse = {
 
 export async function getUserDivision() {
   try {
-    const data = await DivisionsService.getUserDivision();
-    return { data: data, success: true };
+    const data  = await DivisionsService.getUserDivision();
+    return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);

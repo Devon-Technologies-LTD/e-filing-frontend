@@ -1,4 +1,9 @@
-import { CaseTypeData, CriminalCaseSubType } from "@/constants";
+import {
+  CaseTypeData,
+  CriminalCaseSubType,
+  CriminalDocumentTitles,
+  DocumentTitlesEnum,
+} from "@/constants";
 import {
   addCaseTypeError,
   clearCaseTypeError,
@@ -33,13 +38,13 @@ export const criminalCaseSchema = z.object({
     ),
   direct_complain: z
     .string()
-    .min(2, "Direct Complain must be at least 2 characters"),
+    .optional(),
 });
 
 const useCriminalCaseFormValidator = ({ store, documents }: HookProps) => {
   const dispatch = useDispatch();
   const validateDocument = (
-    docTitle: CriminalCaseSubType,
+    docTitle: CriminalDocumentTitles,
     errorKey: string
   ) => {
     const doc = documents?.find(
@@ -83,7 +88,7 @@ const useCriminalCaseFormValidator = ({ store, documents }: HookProps) => {
       case CriminalCaseSubType.FIRST_INFORMATION_REPORT:
         if (
           validateDocument(
-            CriminalCaseSubType.FIRST_INFORMATION_REPORT,
+            CriminalDocumentTitles.FIRST_INFORMATION_REPORT,
             "firDoc"
           )
         ) {
@@ -96,7 +101,7 @@ const useCriminalCaseFormValidator = ({ store, documents }: HookProps) => {
       case CriminalCaseSubType.REQUEST_FOR_REMAND_ORDER:
         if (
           validateDocument(
-            CriminalCaseSubType.REQUEST_FOR_REMAND_ORDER,
+            CriminalDocumentTitles.REQUEST_FOR_REMAND_ORDER,
             "exparte"
           )
         ) {
@@ -109,6 +114,8 @@ const useCriminalCaseFormValidator = ({ store, documents }: HookProps) => {
       case CriminalCaseSubType.DIRECT_COMPLAIN:
         if (handleSchemaErrors(result)) {
           _callback?.();
+        } else {
+          toast.error("Fill all required fields");
         }
         break;
 

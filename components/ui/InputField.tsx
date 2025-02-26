@@ -19,6 +19,7 @@ interface InputFieldProps {
   type?: string;
   placeholder?: string;
   required?: boolean;
+  showErrorInLabel?: boolean;
   disabled?: boolean;
   error?: string;
   value?: string;
@@ -44,6 +45,7 @@ const InputField: React.FC<InputFieldProps> = ({
   label,
   type = "text",
   placeholder,
+  showErrorInLabel = false,
   required = false,
   disabled = false,
   error,
@@ -84,12 +86,17 @@ const InputField: React.FC<InputFieldProps> = ({
         <Label
           htmlFor={id}
           className={clsx(
-            "text-sm font-bold",
+            "flex items-center justify-between w-full text-sm font-bold",
             error ? "text-red-500" : "text-neutral-600"
           )}
         >
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          <span className="flex items-center">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </span>
+          {showErrorInLabel && error && (
+            <p className="text-xs text-red-500 mt-1">{error}</p>
+          )}
         </Label>
       </div>
 
@@ -130,7 +137,9 @@ const InputField: React.FC<InputFieldProps> = ({
         )}
       </div>
       {bottomText && <div>{bottomText}</div>}
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+      {!showErrorInLabel && error && (
+        <p className="text-xs text-red-500 mt-1">{error}</p>
+      )}
       {state?.errors && state.errors[name] && (
         <span className="h-1 text-xs text-red-500">{state.errors[name]}</span>
       )}

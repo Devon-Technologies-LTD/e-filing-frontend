@@ -56,6 +56,7 @@ export interface ICaseTypes {
   exparte?: string;
   firDoc?: string;
   familyDoc?: string;
+  counsel_name: string;
 }
 
 export interface ILegalCounsels {}
@@ -75,6 +76,7 @@ const initialState: FormState = {
   caseTypeErrors: {},
   caseType: {
     court_division: "",
+    counsel_name:"",
     claimant_address: "",
     claimant_name: "",
     claimant_whats_app: "",

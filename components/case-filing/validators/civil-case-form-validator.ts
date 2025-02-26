@@ -2,6 +2,8 @@ import {
   CaseTypeData,
   CivilCaseSubType,
   CivilCaseSubTypeValueWorth,
+  CivilDocumentTitles,
+  SpecificSummonsValueWorth,
 } from "@/constants";
 import {
   addCaseTypeError,
@@ -21,7 +23,7 @@ export const civilCaseSchema = z
   .object({
     case_type: z.nativeEnum(CaseTypeData),
     sub_case_type: z.nativeEnum(CivilCaseSubType),
-    recovery_amount: z.nativeEnum(CivilCaseSubTypeValueWorth),
+    recovery_amount: z.string(),
     court_division: z.string().optional(),
     property_description: z.string().optional(),
     rental_value: z.string().optional(),
@@ -41,11 +43,10 @@ export const civilCaseSchema = z
       .string()
       .nonempty("Claimant phone number is required")
       .regex(/^\d+$/, "Phone number must contain only numbers"),
-    claimant_whats_app: z
-      .string()
-      .nonempty("Claimant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
-    claimant_email_address: z.string().email("Invalid email address"),
+    claimant_whats_app: z.string().optional(),
+    // .nonempty("Claimant phone number is required")
+    // .regex(/^\d+$/, "Phone number must contain only numbers"),
+    claimant_email_address: z.string().optional(),
     claimant_address: z
       .string()
       .min(2, "Claimant address must be at least 2 characters"),
@@ -58,22 +59,20 @@ export const civilCaseSchema = z
       ),
     defendant_phone_number: z
       .string()
-      .nonempty("Defendant phone number is required")
+      .nonempty("Phone number is required")
       .regex(/^\d+$/, "Phone number must contain only numbers"),
-    defendant_email_address: z.string().email("Invalid email address"),
-    defendant_whats_app: z
-      .string()
-      .nonempty("Defendant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
+    defendant_email_address: z.string().optional(),
+    defendant_whats_app: z.string().optional(),
+    // .nonempty("Defendant phone number is required")
+    // .regex(/^\d+$/, "Phone number must contain only numbers"),
     defendant_address: z
       .string()
-      .min(2, "Defendant address must be at least 2 characters"),
+      .min(2, "Address must be at least 2 characters"),
   })
   .superRefine((data, ctx) => {
     if (data.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
       validateRecoveryOfPremise(data, ctx);
     }
-
     if (
       data.sub_case_type === CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS ||
       data.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
@@ -86,13 +85,13 @@ export const civilCaseSchema = z
 const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
   const requiredFields = [
     { field: "court_division", message: "Court division is required" },
-    {
-      field: "property_description",
-      message: "Property Description is required",
-    },
-    { field: "rental_value", message: "Rental Value is required" },
-    { field: "relief_sought", message: "Relief Sought is required" },
-    { field: "dated_this", message: "Date is required" },
+    // {
+    //   field: "property_description",
+    //   message: "Property Description is required",
+    // },
+    // { field: "rental_value", message: "Rental Value is required" },
+    // { field: "relief_sought", message: "Relief Sought is required" },
+    // { field: "dated_this", message: "Date is required" },
   ];
 
   requiredFields.forEach(({ field, message }) => {
@@ -110,10 +109,10 @@ const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
 const validatePlaintForSummons = (data: any, ctx: z.RefinementCtx) => {
   const requiredFields = [
     { field: "court_division", message: "Court division is required" },
-    { field: "sum_claimed", message: "Sum Claimed is required" },
-    { field: "interest_claimed", message: "Interest Claimed is required" },
-    { field: "cost_claimed", message: "Cost Claimed is required" },
-    { field: "dated_this", message: "Date is required" },
+    // { field: "sum_claimed", message: "Sum Claimed is required" },
+    // { field: "interest_claimed", message: "Interest Claimed is required" },
+    // { field: "cost_claimed", message: "Cost Claimed is required" },
+    // { field: "dated_this", message: "Date is required" },
   ];
 
   requiredFields.forEach(({ field, message }) => {
@@ -134,7 +133,7 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
     const schema = civilCaseSchema;
     const result = schema.safeParse(store);
     const errors: Partial<Record<keyof ICaseTypes, string>> = {};
-
+    console.log("client err", errors);
     // Validate the form fields
     if (!result.success) {
       result.error.errors.forEach((error) => {
@@ -166,22 +165,25 @@ const validateDocuments = (store: ICaseTypes, documents: any, errors: any) => {
   const eSignature =
     documents?.find((doc: any) => doc.title === "E-SIGNATURE") || null;
   const witness =
-    documents?.find((doc: any) => doc.title === "WITNESS STATEMENT OF OATH") ||
-    null;
+    documents?.find(
+      (doc: any) =>
+        doc.title.toLowerCase() ===
+        CivilDocumentTitles.WitnessStatementOnOath.toLowerCase()
+    ) || null;
   // const plaintParticulars =
   //   documents?.find((doc: any) => [].includes(doc.title)) ||
   //   null;
 
   if (store.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
-    if (!eSignature) errors.signature = "E-Signature is required";
-    if (!witness) errors.witness = "Witness statement of oath is required";
+    // if (!eSignature) errors.signature = "E-Signature is required";
+    if (!witness) errors.witness = "Required";
   }
 
   if (
     store.sub_case_type === CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS ||
     store.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
   ) {
-    if (!eSignature) errors.signature = "E-Signature is required";
+    // if (!eSignature) errors.signature = "E-Signature is required";
     // if (!plaintParticulars)
     //   errors.plaintParticulars = "Particulars of plaint is required";
   }

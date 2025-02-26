@@ -35,21 +35,12 @@ export enum CivilCaseSubTypeValueWorth {
   BetweenOneAndThree = "BETWEEN ₦1,000,000 AND ₦3,000,000",
   BetweenThreeAndSeven = "BETWEEN ₦3,000,000 AND ₦7,000,000",
 }
-
-export enum FamilyCaseSubType {
-  WITNESS_STATEMENT_OF_OATH = "WITNESS STATEMENT OF OATH",
-  NOTICE_OF_INTENTION_TO_DEFEND = "NOTICE OF INTENTION TO DEFEND",
-  FORM_48 = "FORM 48",
-  MEMORANDUM_OF_CONDITIONAL_APPEARANCE = "MEMORANDUM OF CONDITIONAL APPEARANCE",
-  INTERPLEADER = "INTERPLEADER",
-  LEGAL_GUARDIANSHIP = "LEGAL GUARDIANSHIP",
-  MOTION_ON_NOTICE = "MOTION ON NOTICE",
-  APPLICATION_FOR_PUBLIC_ADOPTION = "APPLICATION FOR PUBLIC ADOPTION",
-  EXHIBIT_FOR_APPLICATION_FOR_PUBLIC_ADOPTION = "EXHIBIT FOR APPLICATION FOR PUBLIC ADOPTION",
-  MOTION_EX_PARTE = "MOTION EX PARTE",
-  APPLICATION_FOR_COMMENCEMENT = "APPLICATION FOR COMMENCEMENT",
-  FORM_49 = "FORM 49",
-  OATH_AFFIDAVIT = "OATH/AFFIDAVIT",
+export enum SpecificSummonsValueWorth {
+  LessThanOne = "LESS THAN OR EQUAL TO ₦5,000",
+  BetweenFiveAndFifty = "BETWEEN ₦5,000 AND ₦50,000",
+  BetweenFiftyAndFiveHundred = "BETWEEN ₦50,000 AND ₦500,000",
+  BetweenFiveHundredAndOneMillion = "BETWEEN ₦500,000 AND ₦1,000,000",
+  BetweenOneMillionAndSevenMillion = "BETWEEN ₦1,000,000 AND ₦7,000,000",
 }
 
 export enum OtherDocuments {
@@ -65,20 +56,57 @@ export enum CriminalCaseSubType {
 }
 
 export enum CriminalDocumentTitles {
-  FIRST_INFORMATION_REPORT = "FIRST INFORMATION REPORT (FIR)",
-  DIRECT_COMPLAIN = "DIRECT COMPLAIN",
-  REQUEST_FOR_REMAND_ORDER = "REQUEST FOR REMAND ORDER (EXPARTE)",
+  FIRST_INFORMATION_REPORT = "First Information Report (FIR)",
+  DIRECT_COMPLAIN = "Direct Criminal Complaint (DCC)",
+  REQUEST_FOR_REMAND_ORDER = "Request for Remand Order (Exparte)",
+}
+export enum CriminalOtherDocumentTitles {
+  ChargeSheet = "Charge Sheet",
+  MotionForBail = "Motion for Bail",
+  CounterAffidavit = "Counter Affidavit",
 }
 export enum CivilDocumentTitles {
   PlaintRecoveryOfPremises1M = "Plaint/Recovery of Premises (≤₦1M)",
   PlaintForSpecificSummonsDefaultSummonsLeq5K = "Plaint for specific summons/Default Summons (≤₦5K)",
   PlaintRecoveryOfPremises3M7M = "Plaint/Recovery of Premises (₦3M–₦7M)",
   PlaintRecoveryOfPremises1MCivil = "Plaint/Recovery of Premises (≤₦1M)",
+  PlaintRecoveryOfPremises1M3M = "Plaint/Recovery of Premises (₦1M–₦3M)",
   PlaintForSpecificSummonsDefaultSummons5K50K = "Plaint for specific summons/Default Summons (₦5K–₦50K)",
   PlaintForSpecificSummonsDefaultSummons50K500K = "Plaint for specific summons/Default Summons (₦50K–₦500K)",
+  PlaintForSpecificSummonsDefaultSummons500K1M = "Plaint for specific summons/Default Summons (₦500K–₦1M)",
   PlaintForSpecificSummonsDefaultSummons1M7M = "Plaint for specific summons/Default Summons (₦1M–₦7M)",
+  WitnessStatementOnOath = "Witness Statement on Oath",
 }
 
+export enum CivilOtherDocumentTitles {
+  Interpleader = "Interpleader",
+  NoticeOfIntentionToDefend = "Notice of Intention to Defend",
+  // WitnessStatementOnOath = "Witness Statement on Oath",
+  MemorandumOfAppearance = "Memorandum of appearance",
+  OathAffidavit_Civil = "Oath/Affidavit",
+  OriginatingApplication = "Originating Application",
+  Motions = "Motions",
+  MotionExparte_Civil = "Motion Exparte",
+  MotionOnNotice_Civil = "Motion on Notice",
+
+}
+
+export enum FamilyDocumentTitles {
+  Form49 = "Form 49",
+  Form48 = "Form 48",
+  OathAffidavit = "Oath/Affidavit",
+  ApplicationForPublicAdoption = "Application for Public adoption",
+  MemorandumOfConditionalAppearance = "Memorandum of conditional appearance",
+  ExhibitForPrivateAdoption = "Exhibit for Private Adoption",
+  MotionExparte_Family = "Motion Exparte",
+  ExhibitForApplicationForPublicAdoption = "Exhibit for Application for public adoption",
+  LegalGuardianship = "Legal Guardianship",
+  NoticeOfIntentionToDefend = "Notice of Intention to Defend",
+  MotionOnNotice_Family = "Motion on Notice",
+  PrivateAdoption = "Private Adoption",
+  ExhibitForLegalGuardianship = "Exhibit for Legal Guardianship",
+  ApplicationForCommencement = "Application for Commencement",
+}
 
 export enum DocumentTitlesEnum {
   NoticeOfIntentionToDefend = "Notice of Intention to Defend",

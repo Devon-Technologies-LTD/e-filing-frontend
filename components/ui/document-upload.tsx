@@ -56,7 +56,9 @@ export default function DocumentUploadComponent({
 
   const dispatch = useDispatch();
   const existingDocument =
-    documents?.find((doc: any) => doc.title === title) || null;
+    documents?.find(
+      (doc: any) => doc.title?.toLowerCase() === title?.toLowerCase()
+    ) || null;
   const documentId = existingDocument?.id;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -85,7 +87,8 @@ export default function DocumentUploadComponent({
       setIsOpen(false);
     },
     onError: (error) => {
-      toast.error(error.message);
+      const errorMsg = JSON.parse(error?.message)?.data;
+      toast.error(errorMsg);
       if (onError) onError(error);
       setIsOpen(false);
     },

@@ -2,7 +2,6 @@
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
 import "draft-js/dist/Draft.css";
-import { LocationSelect } from "../case-overview/form";
 import { getUserDivision } from "@/lib/actions/division";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/redux";
@@ -19,12 +18,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getPlaintTitleByAmount } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData, CivilCaseSubTypeValueWorth, DocumentTitlesEnum } from "@/constants";
+import {
+  CaseTypeData,
+} from "@/constants";
+import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm4 = () => {
   const dispatch = useDispatch();
@@ -47,7 +49,8 @@ export const CivilCaseForm4 = () => {
       dated_this,
       cost_claimed,
       interest_claimed,
-      recovery_amount
+      recovery_amount,
+      counsel_name,
     },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
@@ -91,8 +94,6 @@ export const CivilCaseForm4 = () => {
           </p>
           <div className="flex lg:w-1/2">
             <LocationSelect
-              loading={divisionFetching}
-              data={divisions?.data || []}
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -388,11 +389,16 @@ export const CivilCaseForm4 = () => {
           </div>
 
           <InputField
-            id="defendant"
-            name="defendant"
-            type="email"
+            id="counsel_name"
+            name="counsel_name"
+            type="text"
             label="NAME"
             placeholder="e.g claimant/counsel name"
+            value={counsel_name}
+            onChange={({ target }) => {
+              handleChange("counsel_name", target.value);
+            }}
+            error={caseTypeErrors?.counsel_name ?? ""}
           />
           <div className="mt-3 lg:w-1/2">
             <span className="text-xs text-red-500 ">
@@ -400,17 +406,7 @@ export const CivilCaseForm4 = () => {
             </span>
             <DocumentUploadComponent
               subTitle={CaseTypeData.CIVIL_CASE}
-              title={
-                recovery_amount === CivilCaseSubTypeValueWorth.LessThanOne
-                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises1M
-                  : recovery_amount ===
-                    CivilCaseSubTypeValueWorth.BetweenOneAndThree
-                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises1M3M
-                  : recovery_amount ===
-                    CivilCaseSubTypeValueWorth.BetweenThreeAndSeven
-                  ? DocumentTitlesEnum.PlaintRecoveryOfPremises3M7M
-                  : ""
-              }
+              title={getPlaintTitleByAmount(recovery_amount as any)}
               caseType={case_type}
               subCase={sub_case_type}
             />

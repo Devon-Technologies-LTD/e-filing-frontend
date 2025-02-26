@@ -87,6 +87,8 @@ export const useSaveForm = ({
       console.log("first in client", data);
       if (data?.success) {
         triggerPayment(data.data?.RRR, amount);
+      } else {
+        toast.error("Failed to generate RRR. Please try again");
       }
     },
   });
@@ -143,6 +145,11 @@ export const useSaveForm = ({
             phone_number: data.defendant_phone_number,
             whats_app: data.defendant_whats_app,
           },
+          legal_counsels: [
+            {
+              name: data.counsel_name ?? "",
+            },
+          ],
           direct_complain: data.direct_complain,
           interest_claimed: data.interest_claimed,
           sum_claimed: data.sum_claimed,
@@ -164,9 +171,8 @@ export const useSaveForm = ({
           },
           notes: data.notes,
           recovery_amount: data.recovery_amount,
-          legal_counsels,
           registrar: data.registrar,
-          status: isDraft ? CaseStatus.Draft : CaseStatus.Pending,
+          status: isDraft && CaseStatus.Draft,
         };
         console.log("payload to save", payload);
         return data?.case_type_id
@@ -197,7 +203,7 @@ export const useSaveForm = ({
           );
           if (step === 5) {
             // navigate.push("/cases");
-            generateRRRMutation.mutate({ caseFileId: data.id });
+            generateRRRMutation.mutate({ caseFileId: data.casefile_id });
           } else {
             dispatch(updateStep(step + 1));
           }

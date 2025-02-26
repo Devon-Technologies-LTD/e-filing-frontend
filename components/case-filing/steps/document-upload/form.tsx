@@ -9,30 +9,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DocumentUploadComponent from "@/components/ui/document-upload";
-import { OtherDocuments } from "@/constants";
+import {
+  CivilOtherDocumentTitles,
+  CriminalOtherDocumentTitles,
+  FamilyDocumentTitles,
+} from "@/constants";
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 
+export const OtherDocumentMapping: any = {
+  ["CIVIL CASE"]: CivilOtherDocumentTitles,
+  ["FAMILY CASE"]: FamilyDocumentTitles,
+  ["CRIMINAL CASE"]: CriminalOtherDocumentTitles,
+};
+
 export default function DocumentUploadForm() {
-  const [selectedDocType, setSelectedDocType] = useState<OtherDocuments | "">(
-    ""
-  );
+  const [selectedDocType, setSelectedDocType] = useState<any | "">("");
   const {
     caseType: { case_type },
   } = useAppSelector((state) => state.caseFileForm);
 
   const uploadedDocuments = useAppSelector((state) =>
     state.caseFileForm.documents?.filter((doc) =>
-      Object.values(OtherDocuments).includes(doc.title as OtherDocuments)
+      Object.values(OtherDocumentMapping[case_type])
+        .map((value: any) => value?.toLowerCase())
+        .includes(doc.title?.toLowerCase())
     )
   );
 
-  const availableDocTypes = Object.values(OtherDocuments).filter(
+  const availableDocTypes: any = Object.values(
+    OtherDocumentMapping[case_type]
+  ).filter(
     (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
   );
 
-  const handleDocTypeSelect = (value: OtherDocuments) => {
+  const handleDocTypeSelect = (value: any) => {
     setSelectedDocType(value);
   };
 
@@ -78,12 +90,12 @@ export default function DocumentUploadForm() {
             />
           </SelectTrigger>
           <SelectContent className="bg-white text-zinc-900">
-            {availableDocTypes.map((subCase) => (
+            {availableDocTypes.map((subCase: any) => (
               <SelectItem
                 variant="underlined"
                 key={subCase}
                 value={subCase}
-                className="py-2"
+                className="py-2 uppercase"
               >
                 {subCase}
               </SelectItem>

@@ -12,6 +12,7 @@ import {
   addCaseTypeError,
   clearCaseTypeError,
   updateCaseTypeName,
+  updateStep,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CriminalCaseForm from "./criminal-case-form";
@@ -20,10 +21,11 @@ import {
   CivilCaseSubType,
   CivilCaseSubTypeValueWorth,
   CriminalCaseSubType,
-  FamilyCaseSubType,
+  FamilyDocumentTitles,
+  SpecificSummonsValueWorth,
 } from "@/constants";
 import CivilCaseForm from "./civil-case-form";
-import FamilyCaseForm from "./family-case-form";
+// import FamilyCaseForm from "./family-case-form";
 import {
   Tooltip,
   TooltipContent,
@@ -38,16 +40,17 @@ export default function CaseTypesForm() {
   const dispatch = useDispatch();
   const caseTypeComponentMap: { [key: string]: React.ComponentType<any> } = {
     [CaseTypeData.CIVIL_CASE]: CivilCaseForm,
-    [CaseTypeData.FAMILY_CASE]: FamilyCaseForm,
+    // [CaseTypeData.FAMILY_CASE]: FamilyCaseForm,
     [CaseTypeData.CRIMINAL_CASE]: CriminalCaseForm,
   };
   const {
     caseType: { case_type, sub_case_type, recovery_amount },
     caseTypeErrors,
+    current_step,
   } = useAppSelector((value) => value.caseFileForm);
   const caseSubTypesMap: any = {
     [CaseTypeData.CIVIL_CASE]: Object.values(CivilCaseSubType),
-    [CaseTypeData.FAMILY_CASE]: Object.values(FamilyCaseSubType),
+    [CaseTypeData.FAMILY_CASE]: Object.values(FamilyDocumentTitles),
     [CaseTypeData.CRIMINAL_CASE]: Object.values(CriminalCaseSubType),
   };
 
@@ -73,6 +76,9 @@ export default function CaseTypesForm() {
               })
             );
             dispatch(clearCaseTypeError());
+            if (value === CaseTypeData.FAMILY_CASE) {
+              dispatch(updateStep(current_step + 1));
+            }
           }}
           value={case_type}
         >
@@ -151,64 +157,129 @@ export default function CaseTypesForm() {
             </SelectContent>
           </Select>
         )}
-
-        {case_type === CaseTypeData.CIVIL_CASE && sub_case_type && (
-          <Select
-            onValueChange={(value) => {
-              dispatch(
-                updateCaseTypeName({
-                  recovery_amount: value,
-                  direct_complain: "",
-                })
-              );
-              dispatch(
-                addCaseTypeError({
-                  recovery_amount: "",
-                })
-              );
-            }}
-            value={recovery_amount}
-          >
-            <SelectTrigger
-              tooltip={true}
-              variant={caseTypeErrors.recovery_amount ? "error" : "underlined"}
+        {case_type === CaseTypeData.CIVIL_CASE &&
+          sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE && (
+            <Select
+              onValueChange={(value) => {
+                dispatch(
+                  updateCaseTypeName({
+                    recovery_amount: value,
+                    direct_complain: "",
+                  })
+                );
+                dispatch(
+                  addCaseTypeError({
+                    recovery_amount: "",
+                  })
+                );
+              }}
+              value={recovery_amount}
             >
-              <SelectValue
-                className="text-neutral-700 text-xs"
-                placeholder={`Select the Value (Worth) Of Recovery`}
-              />
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle
-                      className="h-4 w-4 text-neutral-500 hover:text-neutral-700 cursor-help"
-                      aria-label="tooltipText"
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent className="mb-12 justify-start p-0">
-                    <ToolTipCard
-                      className="justify-start text-start"
-                      title="VALUE OF RECOVERY"
-                      description="This refers to the total amount or worth of what is being claimed in the case. It could be money owed, property value, or compensation being sought. The value helps determine the appropriate legal process for the case."
-                    />
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </SelectTrigger>
-            <SelectContent className="bg-white text-zinc-900">
-              {Object.values(CivilCaseSubTypeValueWorth)?.map((worth) => (
-                <SelectItem
-                  variant="underlined"
-                  key={worth}
-                  value={worth}
-                  className="py-2"
-                >
-                  {worth}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+              <SelectTrigger
+                tooltip={true}
+                variant={
+                  caseTypeErrors.recovery_amount ? "error" : "underlined"
+                }
+              >
+                <SelectValue
+                  className="text-neutral-700 text-xs"
+                  placeholder={`Select the Value (Worth) Of Recovery`}
+                />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle
+                        className="h-4 w-4 text-neutral-500 hover:text-neutral-700 cursor-help"
+                        aria-label="tooltipText"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent className="mb-12 justify-start p-0">
+                      <ToolTipCard
+                        className="justify-start text-start"
+                        title="VALUE OF RECOVERY"
+                        description="This refers to the total amount or worth of what is being claimed in the case. It could be money owed, property value, or compensation being sought. The value helps determine the appropriate legal process for the case."
+                      />
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </SelectTrigger>
+              <SelectContent className="bg-white text-zinc-900">
+                {Object.values(CivilCaseSubTypeValueWorth)?.map((worth) => (
+                  <SelectItem
+                    variant="underlined"
+                    key={worth}
+                    value={worth}
+                    className="py-2"
+                  >
+                    {worth}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        {case_type === CaseTypeData.CIVIL_CASE &&
+          [
+            CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS,
+            CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS,
+          ].includes(sub_case_type as any) && (
+            <Select
+              onValueChange={(value) => {
+                dispatch(
+                  updateCaseTypeName({
+                    recovery_amount: value,
+                    direct_complain: "",
+                  })
+                );
+                dispatch(
+                  addCaseTypeError({
+                    recovery_amount: "",
+                  })
+                );
+              }}
+              value={recovery_amount}
+            >
+              <SelectTrigger
+                tooltip={true}
+                variant={
+                  caseTypeErrors.recovery_amount ? "error" : "underlined"
+                }
+              >
+                <SelectValue
+                  className="text-neutral-700 text-xs"
+                  placeholder={`Select the Value (Worth) Of Recovery`}
+                />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle
+                        className="h-4 w-4 text-neutral-500 hover:text-neutral-700 cursor-help"
+                        aria-label="tooltipText"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent className="mb-12 justify-start p-0">
+                      <ToolTipCard
+                        className="justify-start text-start"
+                        title="VALUE OF RECOVERY"
+                        description="This refers to the total amount or worth of what is being claimed in the case. It could be money owed, property value, or compensation being sought. The value helps determine the appropriate legal process for the case."
+                      />
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </SelectTrigger>
+              <SelectContent className="bg-white text-zinc-900">
+                {Object.values(SpecificSummonsValueWorth)?.map((worth) => (
+                  <SelectItem
+                    variant="underlined"
+                    key={worth}
+                    value={worth}
+                    className="py-2"
+                  >
+                    {worth}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
       </div>
       {renderCaseContent()}
     </div>

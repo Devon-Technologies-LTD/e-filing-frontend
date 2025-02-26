@@ -2,14 +2,12 @@ import { useState, useCallback } from "react";
 import { ContentState, EditorState } from "draft-js";
 import InputField from "@/components/ui/InputField";
 import { InfoIcon } from "lucide-react";
-import { RichTextEditor } from "../forms/civil";
 import { useAppSelector } from "@/hooks/redux";
 import { useDispatch } from "react-redux";
 import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
-import { LocationSelect } from "../case-overview/form";
-import { getUserDivision } from "@/lib/actions/division";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
+import { LocationSelect } from "@/components/location-select";
+import { RichTextEditor } from "../forms/civil";
 export const DirectCriminalComplaintForm = () => {
   const {
     caseType: {
@@ -27,15 +25,6 @@ export const DirectCriminalComplaintForm = () => {
   );
 
   const dispatch = useDispatch();
-  const { data, isLoading: divisionFetching } = useQuery({
-    queryKey: ["divisions"],
-    queryFn: async () => {
-      return await getUserDivision();
-    },
-    placeholderData: keepPreviousData,
-    staleTime: 50000,
-  });
-  const divisions: any = data?.data || [];
 
   const handleEditorChange: any = useCallback(
     (newEditorState: any) => {
@@ -70,6 +59,7 @@ export const DirectCriminalComplaintForm = () => {
           tooltipText="Enter the name of the claimant"
           tooltipIcon={InfoIcon}
           placeholder="eg. John Doe"
+          error={caseTypeErrors?.claimant_name ?? ""}
           onChange={({ target }) => {
             dispatch(
               updateCaseTypeName({
@@ -87,6 +77,7 @@ export const DirectCriminalComplaintForm = () => {
           value={defendant_name}
           tooltipText="Enter the name of the defendant"
           tooltipIcon={InfoIcon}
+          error={caseTypeErrors?.defendant_name ?? ""}
           placeholder="eg. John Doe"
           onChange={({ target }) => {
             dispatch(
@@ -102,8 +93,6 @@ export const DirectCriminalComplaintForm = () => {
         </div>
         <div className="flex lg:w-1/2">
           <LocationSelect
-            loading={divisionFetching}
-            data={divisions?.data || []}
             value={court_division}
             onChange={(value) => {
               dispatch(updateCaseTypeName({ court_division: value }));

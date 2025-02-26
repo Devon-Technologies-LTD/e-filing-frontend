@@ -5,7 +5,12 @@ import { twMerge } from "tailwind-merge";
 
 import { jwtDecode } from "jwt-decode";
 import { TCaseFilterType } from "@/types/case";
-import { CaseStatus } from "@/constants";
+import {
+  CaseStatus,
+  CivilCaseSubTypeValueWorth,
+  CivilDocumentTitles,
+  SpecificSummonsValueWorth,
+} from "@/constants";
 
 // interface DecodedToken {
 //   exp: number;
@@ -165,10 +170,10 @@ export function dateFormatter(dateString: string | Date) {
 
 export const getCaseTypeFields = (data: any) => ({
   case_file_id: data?.id ?? "",
-  claimant_address: data?.casetype?.[0]?.claimant?.address ?? "",
-  claimant_email_address: data?.casetype?.[0]?.claimant?.email_address ?? "",
-  claimant_name: data?.casetype?.[0]?.claimant?.name ?? "",
-  claimant_phone_number: data?.casetype?.[0]?.claimant?.phone_number ?? "",
+  claimant_address: data?.claimant?.address ?? "",
+  claimant_email_address: data?.claimant?.email_address ?? "",
+  claimant_name: data?.claimant?.name ?? "",
+  claimant_phone_number: data?.claimant?.phone_number ?? "",
   claimant_whats_app: data?.casetype?.[0]?.claimant?.whats_app ?? "",
   court_division: data?.court_division_id ?? "",
   defendant_address: data?.casetype?.[0]?.defendant?.address ?? "",
@@ -199,6 +204,7 @@ export const getCaseTypeFields = (data: any) => ({
     data?.casetype?.[0]?.summon_details?.state_location ?? "",
   summon_time: data?.casetype?.[0]?.summon_details?.time ?? "",
   value_worth: data?.casetype?.[0]?.value_worth ?? "",
+  counsel_name: data?.casetype?.[0]?.legal_counsels[0]?.name ?? "",
 });
 
 export const formatErrors = (errors: any) => {
@@ -234,9 +240,12 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
 export const handleApiError = (error: any) => {
   if (error?.response) {
     return {
-      data:null,
+      data: error.response.data,
       status: error.response.status,
-      message: error.response.data?.message || "An error occurred.",
+      message:
+        error.response.data?.message ||
+        error.response.data ||
+        "An error occurred.",
       errors: error.response.data?.data || null,
       success: false,
     };
@@ -259,4 +268,43 @@ export const handleApiError = (error: any) => {
     errors: error?.message || "Unknown error.",
     success: false,
   };
+};
+
+const recoveryTitleMap: Record<
+  CivilCaseSubTypeValueWorth,
+  Partial<CivilDocumentTitles>
+> = {
+  [CivilCaseSubTypeValueWorth.LessThanOne]:
+    CivilDocumentTitles.PlaintRecoveryOfPremises1MCivil,
+  [CivilCaseSubTypeValueWorth.BetweenOneAndThree]:
+    CivilDocumentTitles.PlaintRecoveryOfPremises1M3M,
+  [CivilCaseSubTypeValueWorth.BetweenThreeAndSeven]:
+    CivilDocumentTitles.PlaintRecoveryOfPremises3M7M,
+};
+const plaintTitleMap: Record<
+  SpecificSummonsValueWorth,
+  Partial<CivilDocumentTitles>
+> = {
+  [SpecificSummonsValueWorth.LessThanOne]:
+    CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummonsLeq5K,
+  [SpecificSummonsValueWorth.BetweenFiveAndFifty]:
+    CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummons5K50K,
+  [SpecificSummonsValueWorth.BetweenFiftyAndFiveHundred]:
+    CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummons50K500K,
+  [SpecificSummonsValueWorth.BetweenFiveHundredAndOneMillion]:
+    CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummons500K1M,
+  [SpecificSummonsValueWorth.BetweenOneMillionAndSevenMillion]:
+    CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummons1M7M,
+};
+
+export const getRecoveryTitleByAmount = (
+  recoveryAmount: CivilCaseSubTypeValueWorth
+): string => {
+  return recoveryTitleMap[recoveryAmount] || "";
+};
+
+export const getPlaintTitleByAmount = (
+  recoveryAmount: SpecificSummonsValueWorth
+): string => {
+  return plaintTitleMap[recoveryAmount] || "PARTICULARS OF PLAINT";
 };
