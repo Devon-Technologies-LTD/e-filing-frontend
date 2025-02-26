@@ -4,7 +4,6 @@ import { EditorState, Editor, ContentState } from "draft-js";
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
 import "draft-js/dist/Draft.css";
-import { LocationSelect } from "../case-overview/form";
 import { getUserDivision } from "@/lib/actions/division";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/redux";
@@ -21,12 +20,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getRecoveryTitleByAmount } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData, DocumentTitlesEnum } from "@/constants";
+import {
+  CaseTypeData,
+  CivilCaseSubTypeValueWorth,
+  CivilDocumentTitles,
+  DocumentTitlesEnum,
+} from "@/constants";
+import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm5 = () => {
   const dispatch = useDispatch();
@@ -49,7 +54,9 @@ export const CivilCaseForm5 = () => {
       defendant_email_address,
       defendant_phone_number,
       defendant_whats_app,
+      counsel_name,
     },
+
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
   const [propertyDescription, setPropertyDescripton] = useState(() =>
@@ -137,8 +144,6 @@ export const CivilCaseForm5 = () => {
           </p>
           <div className="flex lg:w-1/2">
             <LocationSelect
-              loading={divisionFetching}
-              data={divisions?.data || []}
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -176,7 +181,7 @@ export const CivilCaseForm5 = () => {
             id="defendant"
             name="defendant"
             type="text"
-            label="DEFENDANT"
+            label="DEFENDANT(S)"
             value={defendant_name}
             tooltipContent={
               <ToolTipCard
@@ -292,6 +297,8 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="claimant_address"
                 name="claimant_address"
+                required
+                showErrorInLabel
                 value={claimant_address}
                 type="text"
                 onChange={({ target }) => {
@@ -304,6 +311,8 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="claimant_phone_number"
                 name="claimant_phone_number"
+                required
+                showErrorInLabel
                 value={claimant_phone_number}
                 onChange={({ target }) => {
                   handleChange("claimant_phone_number", target.value);
@@ -343,6 +352,8 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="defendant_address"
                 name="defendant_address"
+                required
+                showErrorInLabel
                 value={defendant_address}
                 type="text"
                 onChange={({ target }) => {
@@ -355,6 +366,8 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="defendant_phone_number"
                 name="defendant_phone_number"
+                required
+                showErrorInLabel
                 value={defendant_phone_number}
                 onChange={({ target }) => {
                   handleChange("defendant_phone_number", target.value);
@@ -451,18 +464,24 @@ export const CivilCaseForm5 = () => {
           </div>
 
           <InputField
-            id="defendant"
-            name="defendant"
-            type="email"
+            id="counsel_name"
+            name="counsel_name"
+            type="text"
             label="NAME"
             placeholder="e.g claimant/counsel name"
+            value={counsel_name}
+            onChange={({ target }) => {
+              handleChange("counsel_name", target.value);
+            }}
+            error={caseTypeErrors?.counsel_name ?? ""}
           />
 
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
+              required
               errorMessage={caseTypeErrors?.witness ?? ""}
               subTitle={CaseTypeData.CIVIL_CASE}
-              title={DocumentTitlesEnum.WitnessStatementOnOath}
+              title={CivilDocumentTitles.WitnessStatementOnOath}
               caseType={case_type}
               subCase={sub_case_type}
             />

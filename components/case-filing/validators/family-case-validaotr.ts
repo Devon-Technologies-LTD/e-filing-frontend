@@ -1,7 +1,4 @@
-import { FamilyCaseSubType } from "@/constants";
-import { addCaseTypeError } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
-import { toast } from "sonner";
 
 type HookProps = {
   documents?: any;
@@ -9,27 +6,28 @@ type HookProps = {
 
 const useFamilyCaseFormValidator = ({ documents }: HookProps) => {
   const dispatch = useDispatch();
-  const checkDocuments = (callback: () => void) => {
-    const requiredDocuments = Object.values(FamilyCaseSubType);
-    const isAtLeastOnePresent = documents?.some((doc: any) =>
-      requiredDocuments?.includes(doc.title as FamilyCaseSubType)
-    );
+  // const checkDocuments = (callback: () => void) => {
+  //   const requiredDocuments = Object.values(FamilyDocumentTitles);
+  //   const isAtLeastOnePresent = documents?.some((doc: any) =>
+  //     requiredDocuments?.includes(doc.title as FamilyDocumentTitles)
+  //   );
 
-    if (isAtLeastOnePresent) {
-      callback?.();
-    } else {
-      dispatch(
-        addCaseTypeError({
-          familyDoc: "Please upload at least one document",
-        })
-      );
-      toast.error("Please upload at least one document");
-    }
-  };
+  //   // if (isAtLeastOnePresent) {
+  //     callback?.();
+  //   // } else {
+  //   //   dispatch(
+  //   //     addCaseTypeError({
+  //   //       familyDoc: "Please upload at least one document",
+  //   //     })
+  //   //   );
+  //   //   toast.error("Please upload at least one document");
+  //   // }
+  // };
 
   const validate = async (_callback?: () => void) => {
     if (_callback) {
-      checkDocuments(_callback);
+      // checkDocuments(_callback);
+      _callback;
     } else {
       console.log("No callback provided.");
     }

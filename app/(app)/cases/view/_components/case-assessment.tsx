@@ -2,7 +2,7 @@ import {
   CaseTypeData,
   CivilCaseSubType,
   CriminalCaseSubType,
-  FamilyCaseSubType,
+  FamilyDocumentTitles,
   OtherDocuments,
 } from "@/constants";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
@@ -23,7 +23,9 @@ export function CostAssessment({
     Object.values(CivilCaseSubType).includes(doc.title as CivilCaseSubType)
   );
   const filteredFamilyDocuments = documents?.filter((doc) =>
-    Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
+    Object.values(FamilyDocumentTitles).includes(
+      doc.title as FamilyDocumentTitles
+    )
   );
   const filteredOtherDocuments = documents?.filter((doc) =>
     Object.values(OtherDocuments).includes(doc.title as OtherDocuments)

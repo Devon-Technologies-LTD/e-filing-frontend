@@ -9,19 +9,18 @@ export interface IDivision {
   updated_at: string;
 }
 
-interface IDivisionResponse {
-  total_rows: number;
-  total_pages: number;
-  size: number;
-  page: number;
-  data: IDivision[];
-}
+// interface IDivisionResponse {
+//   total_rows: number;
+//   total_pages: number;
+//   size: number;
+//   page: number;
+//   data: IDivision[];
+// }
 
 const DivisionsService = {
-  async getUserDivision(): Promise<IDivisionResponse> {
-    const response = await axiosInstance.get<IDivisionResponse>(
-      `/user/division`
-    );
+  async getUserDivision(): Promise<IDivision[]> {
+    const response = await axiosInstance.get<IDivision[]>(`/user/division`);
+    console.log("division dataaaaa", response.data);
     return response.data;
   },
 };

@@ -2,9 +2,6 @@
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
 import "draft-js/dist/Draft.css";
-import { LocationSelect } from "../case-overview/form";
-import { getUserDivision } from "@/lib/actions/division";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/redux";
 import {
   addCaseTypeError,
@@ -19,12 +16,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getPlaintTitleByAmount } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import { CaseTypeData } from "@/constants";
+import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm8 = () => {
   const dispatch = useDispatch();
@@ -47,11 +45,12 @@ export const CivilCaseForm8 = () => {
       defendant_email_address,
       defendant_phone_number,
       defendant_whats_app,
+      counsel_name,
+      recovery_amount,
     },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
 
-  const handleSuccess = (data: any) => {};
   const handleChange = (name: keyof ICaseTypes, value: string | Date) => {
     dispatch(
       updateCaseTypeName({
@@ -64,16 +63,6 @@ export const CivilCaseForm8 = () => {
       })
     );
   };
-
-  const { data, isLoading: divisionFetching } = useQuery({
-    queryKey: ["divisions"],
-    queryFn: async () => {
-      return await getUserDivision();
-    },
-    placeholderData: keepPreviousData,
-    staleTime: 50000,
-  });
-  const divisions: any = data?.data || [];
 
   return (
     <div className="space-y-1">
@@ -91,8 +80,6 @@ export const CivilCaseForm8 = () => {
           </p>
           <div className="flex lg:w-1/3">
             <LocationSelect
-              loading={divisionFetching}
-              data={divisions?.data || []}
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -403,7 +390,6 @@ export const CivilCaseForm8 = () => {
           <div className="space-y-3">
             <p className="text-base items-center gap-3 text-neutral-600 font-bold">
               SIGNATURE
-             
             </p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
@@ -412,26 +398,36 @@ export const CivilCaseForm8 = () => {
                 title={"E-SIGNATURE"}
                 caseType={case_type}
                 subCase={sub_case_type}
-                onSuccess={(data) => handleSuccess(data)}
               />
             </div>
           </div>
 
           <InputField
-            id="defendant"
-            name="defendant"
-            type="email"
+            id="counsel_name"
+            name="counsel_name"
+            type="text"
             label="NAME"
             placeholder="e.g claimant/counsel name"
+            value={counsel_name}
+            onChange={({ target }) => {
+              handleChange("counsel_name", target.value);
+            }}
+            error={caseTypeErrors?.counsel_name ?? ""}
           />
           <div className="mt-3 lg:w-1/2">
-            <DocumentUploadComponent
+            {/* <DocumentUploadComponent
               errorMessage={caseTypeErrors?.plaintParticulars ?? ""}
               subTitle={CaseTypeData.CIVIL_CASE}
               title={"PARTICULARS OF PLAINT"}
               caseType={case_type}
               subCase={sub_case_type}
               onSuccess={(data) => handleSuccess(data)}
+            /> */}
+            <DocumentUploadComponent
+              subTitle={CaseTypeData.CIVIL_CASE}
+              title={getPlaintTitleByAmount(recovery_amount as any)}
+              caseType={case_type}
+              subCase={sub_case_type}
             />
           </div>
         </div>

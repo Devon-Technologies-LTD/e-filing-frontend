@@ -1,16 +1,6 @@
 "use client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { FORM_FIELDS } from "@/types/files/general";
 import InputField from "@/components/ui/InputField";
-import { getUserDivision } from "@/lib/actions/division";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { IDivision } from "@/lib/_services/divisions-service";
 import { useAppSelector } from "@/hooks/redux";
 import {
   addCaseTypeError,
@@ -19,53 +9,7 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
-
-export const LocationSelect = ({
-  value,
-  onChange,
-  error,
-  data,
-  loading,
-}: {
-  data: IDivision[] | any;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  loading: boolean;
-}) => (
-  <div className="w-full">
-    <Select onValueChange={onChange} value={value}>
-      <SelectTrigger
-        loading={loading}
-        disabled={loading}
-        variant={error ? "error" : "underlined"}
-      >
-        <SelectValue
-          className="text-neutral-700 text-xs"
-          placeholder="Select A Filing Location"
-        />
-      </SelectTrigger>
-      <SelectContent className="bg-white text-zinc-900">
-        {data?.length > 0 ? (
-          <>
-            {data?.map((location: any) => (
-              <SelectItem
-                variant="underlined"
-                key={location.id}
-                value={location.id}
-                className="py-2"
-              >
-                {location.title}
-              </SelectItem>
-            ))}
-          </>
-        ) : (
-          ""
-        )}
-      </SelectContent>
-    </Select>
-  </div>
-);
+import { LocationSelect } from "@/components/location-select";
 
 export default function CaseOverviewForm() {
   const { caseType, caseTypeErrors } = useAppSelector(
@@ -76,22 +20,9 @@ export default function CaseOverviewForm() {
     dispatch(updateCaseTypeName({ [name]: value }));
   };
 
-  const { data, isLoading: divisionFetching } = useQuery({
-    queryKey: ["divisions"],
-    queryFn: async () => {
-      return await getUserDivision();
-    },
-    placeholderData: keepPreviousData,
-    staleTime: 50000,
-  });
-
-  const divisions: any = data?.data || [];
-
   return (
     <div className="w-full space-y-8 ">
       <LocationSelect
-        loading={divisionFetching}
-        data={divisions?.data}
         value={caseType.court_division}
         onChange={(value) => {
           handleChange("court_division", value);

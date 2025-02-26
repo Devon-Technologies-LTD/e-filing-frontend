@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CaseTypeData, FamilyCaseSubType } from "@/constants";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { toast } from "sonner";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
+import { CaseTypeData, FamilyDocumentTitles } from "@/constants";
 
 export default function FamilyCaseForm() {
   const {
@@ -18,21 +18,23 @@ export default function FamilyCaseForm() {
     caseTypeErrors,
   } = useAppSelector((value) => value.caseFileForm);
   const [selectedDocType, setSelectedDocType] = useState<
-    FamilyCaseSubType | ""
+    FamilyDocumentTitles | ""
   >("");
   const uploadedDocuments = useAppSelector((state) =>
     state.caseFileForm.documents?.filter((doc) =>
-      Object.values(FamilyCaseSubType).includes(doc.title as FamilyCaseSubType)
+      Object.values(FamilyDocumentTitles).includes(
+        doc.title as FamilyDocumentTitles
+      )
     )
   );
 
   console.log("first", uploadedDocuments)
 
-  const availableDocTypes = Object.values(FamilyCaseSubType).filter(
+  const availableDocTypes = Object.values(FamilyDocumentTitles).filter(
     (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
   );
 
-  const handleDocTypeSelect = (value: FamilyCaseSubType) => {
+  const handleDocTypeSelect = (value: FamilyDocumentTitles) => {
     setSelectedDocType(value);
   };
 

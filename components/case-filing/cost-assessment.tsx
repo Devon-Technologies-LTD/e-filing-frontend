@@ -1,10 +1,8 @@
 import {
   CaseTypeData,
-  CivilCaseSubType,
   CivilDocumentTitles,
-  CriminalCaseSubType,
-  FamilyCaseSubType,
-  OtherDocuments,
+  CriminalDocumentTitles,
+  FamilyDocumentTitles,
 } from "@/constants";
 import { getDocumentFees } from "@/lib/actions/public";
 import { cn } from "@/lib/utils";
@@ -15,6 +13,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { OtherDocumentMapping } from "./steps/document-upload/form";
 
 const variants = {
   header: {
@@ -54,25 +53,25 @@ export default function CostAssessment({
   };
 
   const filteredCriminalDocuments = documents?.filter((doc) =>
-    Object.values(CriminalCaseSubType).some(
-      (caseType) => caseType.toLowerCase() === doc.title.toLowerCase()
+    Object.values(CriminalDocumentTitles).some(
+      (caseType) => caseType?.toLowerCase() === doc.title?.toLowerCase()
     )
   );
   const filteredCivilDocuments = documents?.filter((doc) =>
     Object.values(CivilDocumentTitles).some(
-      (value) => value.toLowerCase() === doc.title.toLowerCase()
+      (value) => value?.toLowerCase() === doc.title?.toLowerCase()
     )
   );
 
   const filteredFamilyDocuments = documents?.filter((doc) =>
-    Object.values(FamilyCaseSubType).some(
-      (value) => value.toLowerCase() === doc.title.toLowerCase()
+    Object.values(FamilyDocumentTitles).some(
+      (value) => value?.toLowerCase() === doc.title?.toLowerCase()
     )
   );
 
   const filteredOtherDocuments = documents?.filter((doc) =>
-    Object.values(OtherDocuments).some(
-      (value) => value.toLowerCase() === doc.title.toLowerCase()
+    Object.values(OtherDocumentMapping[case_type] ?? {}).some(
+      (value: any) => value?.toLowerCase() === doc.title?.toLowerCase()
     )
   );
 
@@ -96,7 +95,6 @@ export default function CostAssessment({
     amount: getFeeByTitle(doc.title),
   }));
 
-  console.log("cost assessment", costFamilyItems);
   const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
     category: doc.case_type_name,
     name: doc.title,
@@ -107,7 +105,6 @@ export default function CostAssessment({
     name: doc.title,
     amount: 500,
   }));
-  console.log("cost assessment other docs", costOtherDocuments);
 
   // const totalAmount = [
   //   ...costCriminalItems,
@@ -134,7 +131,7 @@ export default function CostAssessment({
     ...costExhibitsItems,
   ]
     ?.map((item) => item.amount || 0)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0) + 2000;
 
   useEffect(() => {
     dispatch(setTotalAmount(totalAmount));
@@ -274,6 +271,14 @@ export default function CostAssessment({
                 </div>
               )}
 
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <p className="text-primary text-xs font-semibold">
+                    Seal Generation
+                  </p>
+                  <span className="text-base font-medium">₦ 2000.00</span>
+                </div>
+              </div>
               <div className="flex justify-between items-center font-medium">
                 <span className="text-xs font-bold">TOTAL</span>
                 <span className="text-base font-medium">
