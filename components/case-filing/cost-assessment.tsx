@@ -38,8 +38,8 @@ export default function CostAssessment({
 }: {
   documents: IDocumentFileType[];
   case_type: string;
-  recovery_amount: string;
-  sub_case_type: any;
+  recovery_amount?: string;
+  sub_case_type?: any;
   variant?: keyof typeof variants.header;
 }) {
   const { data, isLoading } = useQuery({

@@ -9,27 +9,24 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
 import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
+import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/pagination";
 
 export default function FilteredCases() {
   const params = useParams();
+  const router = useRouter();
+
   const [currentPage, setCurrentPage] = useState(1);
   const tab = params.tab as TCaseFilterType;
 
   let TYPE: CaseStatus[] = [];
 
   if (tab === "unassigned") {
-    TYPE = [
-      CaseStatus.ToBeAssigned,
-      CaseStatus.UnderReview,
-    ];
+    TYPE = [CaseStatus.ToBeAssigned, CaseStatus.UnderReview];
   } else if (tab === "active") {
-    TYPE = [
-      CaseStatus.Assigned,
-    ];
+    TYPE = [CaseStatus.Assigned];
   } else if (tab === "concluded") {
-    TYPE = [
-      CaseStatus.StruckOut,
-    ];
+    TYPE = [CaseStatus.StruckOut];
   } else if (tab === "case") {
     TYPE = [
       CaseStatus.Approved,
@@ -60,11 +57,29 @@ export default function FilteredCases() {
   };
 
   const columns = getColumns();
+  const handleRowClick = (row: any) => {
+    router.push(`view/${encodeURIComponent(row.id)}`);
+  };
 
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
-      <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
+      <DataTable
+        onRowClick={handleRowClick}
+        columns={columns}
+        loading={draftsLoading}
+        data={data?.data}
+      />
+      <div className="flex justify-end">
+        <Pagination 
+          currentPage={currentPage}
+          total={data?.total_rows ?? 0}
+          rowsPerPage={DEFAULT_PAGE_SIZE}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+          }}
+        />
+      </div>
     </div>
   );
 }

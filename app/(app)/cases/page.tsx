@@ -9,8 +9,11 @@ export default function CasesPage() {
   useEffect(() => {
     if (user) {
       let redirectPath = "/cases/recent";
-      if (user?.role === ROLES.DIRECTOR_MAGISTRATES) {
+      if ([ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(user?.role)) {
         redirectPath = "/cases/assigned";
+      }
+      if (user?.role === ROLES.ASSIGNING_MAGISTRATES) {
+        redirectPath = "/cases/case";
       }
       redirect(redirectPath);
     } else {

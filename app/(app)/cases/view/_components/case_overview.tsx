@@ -89,6 +89,7 @@ export function CaseOverview({ data }: IProps) {
             />
           )}
           <CostAssessment
+          
           variant="view"
             documents={data?.documents || []}
             case_type={
