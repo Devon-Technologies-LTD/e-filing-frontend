@@ -115,6 +115,11 @@ const CaseFileService = {
     console.log("case filter by id response", response.data);
     return response.data;
   },
+  async getAdminCaseFilesbyId(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(`admin/CaseFile/${id}`);
+    console.log("case filter by id response", response.data);
+    return response.data;
+  },
   async deleteCaseFiles(id: string): Promise<any> {
     const response = await axiosInstance.delete<string>(`casefile/${id}`);
     console.log("case filter response", response.data);
