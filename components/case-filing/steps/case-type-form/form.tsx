@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -76,7 +76,7 @@ export default function CaseTypesForm() {
               })
             );
             dispatch(clearCaseTypeError());
-            if (value === CaseTypeData.FAMILY_CASE) {
+            if (value === CaseTypeData.FAMILY_CASE && current_step === 2) {
               dispatch(updateStep(current_step + 1));
             }
           }}

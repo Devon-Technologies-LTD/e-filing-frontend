@@ -16,12 +16,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn, getPlaintTitleByAmount } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData } from "@/constants";
+import { CaseTypeData, CivilDocumentTitles } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm8 = () => {
@@ -80,6 +80,7 @@ export const CivilCaseForm8 = () => {
           </p>
           <div className="flex lg:w-1/3">
             <LocationSelect
+              disabled
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -94,6 +95,7 @@ export const CivilCaseForm8 = () => {
             id="claimant"
             name="claimant"
             type="text"
+            disabled
             label="CLAIMANT"
             value={claimant_name}
             tooltipContent={
@@ -116,6 +118,7 @@ export const CivilCaseForm8 = () => {
           <InputField
             id="defendant"
             name="defendant"
+            disabled
             type="text"
             label="DEFENDANT"
             value={defendant_name}
@@ -135,11 +138,14 @@ export const CivilCaseForm8 = () => {
         </div>
 
         <div className="space-y-3">
-          <p className="text-lg font-bold">Summons for service on Mr/Mrs</p>
+          <p className="text-lg font-bold">
+            Summons for service on Mr/Mrs/Miss
+          </p>
           <div className="space-y-6">
             <InputField
               id="defendant_name"
               name="defendant_name"
+              disabled
               value={defendant_name}
               type="text"
               onChange={({ target }) => {
@@ -174,6 +180,7 @@ export const CivilCaseForm8 = () => {
               id="sum_claimed"
               name="sum_claimed"
               value={sum_claimed}
+              showErrorInLabel
               type="text"
               onChange={({ target }) => {
                 handleChange("sum_claimed", target.value);
@@ -244,6 +251,8 @@ export const CivilCaseForm8 = () => {
               <InputField
                 id="claimant_address"
                 name="claimant_address"
+                disabled
+                required
                 value={claimant_address}
                 type="text"
                 onChange={({ target }) => {
@@ -256,6 +265,8 @@ export const CivilCaseForm8 = () => {
               <InputField
                 id="claimant_phone_number"
                 name="claimant_phone_number"
+                disabled
+                required
                 value={claimant_phone_number}
                 onChange={({ target }) => {
                   handleChange("claimant_phone_number", target.value);
@@ -268,6 +279,7 @@ export const CivilCaseForm8 = () => {
               <InputField
                 id="claimant_email_address"
                 name="claimant_email_address"
+                disabled
                 type="email"
                 label="Email Address"
                 value={claimant_email_address}
@@ -290,11 +302,13 @@ export const CivilCaseForm8 = () => {
                 placeholder="eg. 2347030338024"
               />
             </div>
-            <div className=" w-full space-y-6">
+            <div className=" w-full text-neutral-600 space-y-6">
               <p className="text-base font-bold">DEFENDANT DETAILS</p>
               <InputField
                 id="defendant_address"
                 name="defendant_address"
+                required
+                showErrorInLabel
                 value={defendant_address}
                 type="text"
                 onChange={({ target }) => {
@@ -307,6 +321,8 @@ export const CivilCaseForm8 = () => {
               <InputField
                 id="defendant_phone_number"
                 name="defendant_phone_number"
+                required
+                showErrorInLabel
                 value={defendant_phone_number}
                 onChange={({ target }) => {
                   handleChange("defendant_phone_number", target.value);
@@ -349,7 +365,9 @@ export const CivilCaseForm8 = () => {
             This plaint was taken out by claimant/counsel as the case may be
           </p>
           <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
-            DATED THIS
+            <span className="flex ">
+              DATED THIS <span className="text-red-500 ml-1">*</span>
+            </span>
             <span className="text-xs text-red-500 ">
               {caseTypeErrors?.dated_this ?? ""}
             </span>
@@ -393,6 +411,7 @@ export const CivilCaseForm8 = () => {
             </p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
+                required
                 errorMessage={caseTypeErrors?.signature ?? ""}
                 subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
@@ -424,10 +443,11 @@ export const CivilCaseForm8 = () => {
               onSuccess={(data) => handleSuccess(data)}
             /> */}
             <DocumentUploadComponent
-              subTitle={CaseTypeData.CIVIL_CASE}
-              title={getPlaintTitleByAmount(recovery_amount as any)}
+              required
+              title={CivilDocumentTitles.OtherPlaintsDocument}
               caseType={case_type}
               subCase={sub_case_type}
+              errorMessage={caseTypeErrors?.plaintParticulars ?? ""}
             />
           </div>
         </div>

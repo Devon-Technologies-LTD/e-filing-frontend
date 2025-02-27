@@ -76,7 +76,7 @@ const initialState: FormState = {
   caseTypeErrors: {},
   caseType: {
     court_division: "",
-    counsel_name:"",
+    counsel_name: "",
     claimant_address: "",
     claimant_name: "",
     claimant_whats_app: "",
@@ -164,9 +164,15 @@ const formSlice = createSlice({
         state.documents?.push(action.payload);
       }
     },
-    deleteDocument: (state, action: PayloadAction<string>) => {
+    deleteDocument: (
+      state,
+      action: PayloadAction<{ title: string; subCase: string }>
+    ) => {
       state.documents = state.documents?.filter(
-        (document) => document.title !== action.payload
+        (document) =>
+          document.title.toLowerCase() !== action.payload.title.toLowerCase() &&
+          document.sub_title.toLowerCase() !==
+            action.payload.subCase.toLowerCase()
       );
     },
 

@@ -10,7 +10,7 @@ export default function ExhibitForm() {
           <span className="text-primary font-semibold">RECOMMENDED</span>
         </h2>
         <p className="text-sm font-medium text-neutral-500">
-          Accepted Files - PNG, PDF, DOC, JPEG, JPG Formats
+          Accepted Files - PNG, PDF, JPEG, JPG Formats
         </p>
       </div>
       <ExhibitFormFields />

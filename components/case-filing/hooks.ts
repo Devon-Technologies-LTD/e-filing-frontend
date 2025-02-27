@@ -189,7 +189,6 @@ export const useSaveForm = ({
     onSuccess: (data) => {
       console.log("respinse from submit", data);
       if (data?.success) {
-        toast.success(data?.message || "Form saved successfully!");
         if (isDraft) {
           queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
           navigate.push("/drafts");

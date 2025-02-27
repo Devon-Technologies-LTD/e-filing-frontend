@@ -36,7 +36,7 @@ export function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
             <div className="rounded-full p-2">
               <AlertCircle className="w-6 h-6 text-red-600" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 overflow-auto">
               <h1 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">
                 Something went wrong!
               </h1>

@@ -18,13 +18,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn, getPlaintTitleByAmount } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import {
   CaseTypeData,
+  CivilDocumentTitles,
 } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
@@ -94,6 +95,7 @@ export const CivilCaseForm4 = () => {
           </p>
           <div className="flex lg:w-1/2">
             <LocationSelect
+              disabled
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -109,6 +111,8 @@ export const CivilCaseForm4 = () => {
             name="claimant"
             type="text"
             label="CLAIMANT"
+            disabled
+            required
             value={claimant_name}
             tooltipContent={
               <ToolTipCard
@@ -132,6 +136,8 @@ export const CivilCaseForm4 = () => {
             name="defendant"
             type="text"
             label="DEFENDANT"
+            disabled
+            required
             value={defendant_name}
             tooltipContent={
               <ToolTipCard
@@ -228,6 +234,8 @@ export const CivilCaseForm4 = () => {
               <InputField
                 id="claimant_address"
                 name="claimant_address"
+                disabled
+                required
                 value={claimant_address}
                 type="text"
                 onChange={({ target }) => {
@@ -240,6 +248,8 @@ export const CivilCaseForm4 = () => {
               <InputField
                 id="claimant_phone_number"
                 name="claimant_phone_number"
+                disabled
+                required
                 value={claimant_phone_number}
                 onChange={({ target }) => {
                   handleChange("claimant_phone_number", target.value);
@@ -252,6 +262,8 @@ export const CivilCaseForm4 = () => {
               <InputField
                 id="claimant_email_address"
                 name="claimant_email_address"
+                disabled
+                required
                 type="email"
                 label="Email Address"
                 value={claimant_email_address}
@@ -277,10 +289,12 @@ export const CivilCaseForm4 = () => {
             <div className=" w-full space-y-6">
               <p className="text-base font-bold">DEFENDANT DETAILS</p>
               <InputField
+                showErrorInLabel
                 id="defendant_address"
                 name="defendant_address"
                 value={defendant_address}
                 type="text"
+                required
                 onChange={({ target }) => {
                   handleChange("defendant_address", target.value);
                 }}
@@ -291,6 +305,8 @@ export const CivilCaseForm4 = () => {
               <InputField
                 id="defendant_phone_number"
                 name="defendant_phone_number"
+                showErrorInLabel
+                required
                 value={defendant_phone_number}
                 onChange={({ target }) => {
                   handleChange("defendant_phone_number", target.value);
@@ -333,7 +349,9 @@ export const CivilCaseForm4 = () => {
             This plaint was taken out by claimant/counsel as the case may be
           </p>
           <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
-            DATED THIS
+            <span className="flex ">
+              DATED THIS <span className="text-red-500 ml-1">*</span>
+            </span>
             <span className="text-xs text-red-500 ">
               {caseTypeErrors?.dated_this ?? ""}
             </span>
@@ -401,14 +419,13 @@ export const CivilCaseForm4 = () => {
             error={caseTypeErrors?.counsel_name ?? ""}
           />
           <div className="mt-3 lg:w-1/2">
-            <span className="text-xs text-red-500 ">
-              {caseTypeErrors?.plaintParticulars ?? ""}
-            </span>
             <DocumentUploadComponent
+              required
               subTitle={CaseTypeData.CIVIL_CASE}
-              title={getPlaintTitleByAmount(recovery_amount as any)}
+              title={CivilDocumentTitles.OtherPlaintsDocument}
               caseType={case_type}
               subCase={sub_case_type}
+              errorMessage={caseTypeErrors?.plaintParticulars ?? ""}
             />
           </div>
         </div>

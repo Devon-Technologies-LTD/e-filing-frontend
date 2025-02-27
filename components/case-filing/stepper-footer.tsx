@@ -19,9 +19,6 @@ import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
 import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 import { toast } from "sonner";
-import { useRemitaPayment } from "@/hooks/use-remita-payment";
-import { useMutation } from "@tanstack/react-query";
-import { generateRRR } from "@/lib/actions/payment";
 
 export function StepperNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +86,7 @@ export function StepperNavigation() {
         );
       }
       if (caseType.case_type === CaseTypeData.FAMILY_CASE) {
-        await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
+        dispatch(updateStep(current_step + 1));
       }
     } else if (current_step === 5) {
       saveForm({

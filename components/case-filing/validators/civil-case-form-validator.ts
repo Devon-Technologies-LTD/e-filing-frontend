@@ -1,9 +1,7 @@
 import {
   CaseTypeData,
   CivilCaseSubType,
-  CivilCaseSubTypeValueWorth,
   CivilDocumentTitles,
-  SpecificSummonsValueWorth,
 } from "@/constants";
 import {
   addCaseTypeError,
@@ -18,6 +16,15 @@ type HookProps = {
   store: ICaseTypes;
   documents?: any;
 };
+interface Errors extends Partial<Record<keyof ICaseTypes, string>> {
+  signature?: string;
+  witness?: string;
+  plaintParticulars?: string;
+}
+interface Document {
+  title: string;
+  sub_title?: string;
+}
 
 export const civilCaseSchema = z
   .object({
@@ -81,7 +88,6 @@ export const civilCaseSchema = z
     }
   });
 
-// Helper function to validate Recovery of Premise sub-case type
 const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
   const requiredFields = [
     { field: "court_division", message: "Court division is required" },
@@ -105,14 +111,13 @@ const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
   });
 };
 
-// Helper function to validate Plaint for Summons sub-case type
 const validatePlaintForSummons = (data: any, ctx: z.RefinementCtx) => {
   const requiredFields = [
     { field: "court_division", message: "Court division is required" },
-    // { field: "sum_claimed", message: "Sum Claimed is required" },
+    { field: "sum_claimed", message: "Sum Claimed is required" },
     // { field: "interest_claimed", message: "Interest Claimed is required" },
     // { field: "cost_claimed", message: "Cost Claimed is required" },
-    // { field: "dated_this", message: "Date is required" },
+    { field: "dated_this", message: "Date is required" },
   ];
 
   requiredFields.forEach(({ field, message }) => {
@@ -132,8 +137,8 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
   const validate = async (_callback?: () => void) => {
     const schema = civilCaseSchema;
     const result = schema.safeParse(store);
-    const errors: Partial<Record<keyof ICaseTypes, string>> = {};
-    console.log("client err", errors);
+    const errors: Errors = {};
+    console.log("errors", errors);
     // Validate the form fields
     if (!result.success) {
       result.error.errors.forEach((error) => {
@@ -142,18 +147,19 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
         }
       });
     }
-
-    // Validate the documents
+    // Validate the necessary documents
     validateDocuments(store, documents, errors);
 
-    // If there are any errors, dispatch them and show a toast
-    if (Object.keys(errors).length > 0) {
+    const hasErrors = Object.values(errors).some(
+      (value) => value && value.length > 0
+    );
+
+    if (hasErrors) {
       dispatch(addCaseTypeError(errors));
       toast.error("Fill all required fields");
       return;
     }
 
-    // If no errors, clear any previous errors and execute the callback
     dispatch(clearCaseTypeError());
     _callback?.();
   };
@@ -161,31 +167,60 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
   return { validate };
 };
 
-const validateDocuments = (store: ICaseTypes, documents: any, errors: any) => {
-  const eSignature =
-    documents?.find((doc: any) => doc.title === "E-SIGNATURE") || null;
-  const witness =
-    documents?.find(
-      (doc: any) =>
-        doc.title.toLowerCase() ===
-        CivilDocumentTitles.WitnessStatementOnOath.toLowerCase()
-    ) || null;
-  // const plaintParticulars =
-  //   documents?.find((doc: any) => [].includes(doc.title)) ||
-  //   null;
-
-  if (store.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
-    // if (!eSignature) errors.signature = "E-Signature is required";
-    if (!witness) errors.witness = "Required";
+const validateDocuments = (
+  store: ICaseTypes,
+  documents: Document[] | undefined,
+  errors: Errors
+): void => {
+  if (!documents) {
+    if (store.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
+      errors.signature = "E-Signature is required";
+      errors.witness = "Required";
+    } else if (
+      store.sub_case_type === CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS ||
+      store.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
+    ) {
+      errors.signature = "E-Signature is required";
+      errors.plaintParticulars = "Required";
+    }
+    return;
   }
 
-  if (
-    store.sub_case_type === CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS ||
-    store.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
-  ) {
-    // if (!eSignature) errors.signature = "E-Signature is required";
-    // if (!plaintParticulars)
-    //   errors.plaintParticulars = "Particulars of plaint is required";
+  const findDocument = (title: string): Document | null =>
+    documents.find(
+      (doc) =>
+        doc.title.toLowerCase() === title.toLowerCase() &&
+        doc.sub_title?.toLowerCase() === store.sub_case_type.toLowerCase()
+    ) || null;
+
+  const validateRequired = (
+    doc: Document | null,
+    errorKey: keyof Errors,
+    errorMessage: string
+  ) => {
+    errors[errorKey] = doc ? "" : errorMessage;
+  };
+
+  switch (store.sub_case_type) {
+    case CivilCaseSubType.RECOVERY_OF_PREMISE: {
+      const eSignature = findDocument("E-SIGNATURE");
+      const witness = findDocument(CivilDocumentTitles.WitnessStatementOnOath);
+      validateRequired(eSignature, "signature", "E-Signature is required");
+      validateRequired(witness, "witness", "Required");
+      break;
+    }
+    case CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS:
+    case CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS: {
+      const eSignature = findDocument("E-SIGNATURE");
+      const plaintParticulars = findDocument(
+        CivilDocumentTitles.OtherPlaintsDocument
+      );
+      validateRequired(eSignature, "signature", "E-Signature is required");
+      validateRequired(plaintParticulars, "plaintParticulars", "Required");
+      break;
+    }
+    default:
+      break;
   }
 };
 
