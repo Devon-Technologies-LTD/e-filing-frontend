@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { SingleCaseHeader } from "../_components/single-case-header";
 import { CaseOverview } from "../_components/case_overview";
 import { CaseUpdates } from "../_components/case-updates";
-import { demoData } from "@/lib/dummy-data";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { Icons } from "@/components/svg/icons";
 import { DocumentUpdates } from "../_components/document_updates";
@@ -34,7 +33,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     setActiveTab(value);
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
     queryFn: async () => {
       return await getCaseFilesById(params.id);
@@ -49,7 +48,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   }
   return (
     <div className="bg-zinc-100 ">
-      <SingleCaseHeader data={data} params={params} />
+      <SingleCaseHeader data={data.data} params={params} />
       <div className=" bg-white shadow-xl">
         <div className="container  flex justify-between items-center pt-2">
           <ReusableTabs

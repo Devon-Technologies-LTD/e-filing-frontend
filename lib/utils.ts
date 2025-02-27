@@ -129,26 +129,35 @@ export const formatNumber = (num: number) => {
 };
 
 export function dateFormatter(dateString: string | Date) {
-  const date = new Date(dateString);
+  let date = new Date(dateString);
+
+  // Check if date is invalid
+  if (isNaN(date.getTime())) {
+    console.warn("Invalid date provided:", dateString);
+    date = new Date(); // Fallback to the current date
+  }
 
   return {
     fullDateTime: date.toLocaleString(), // 2/17/2025, 10:23:35 AM
-    fullDate: date.toLocaleDateString(), // 2/17/2025, 10:23:35 AM
+    fullDate: date.toLocaleDateString(), // 2/17/2025
     isoFormat: date.toISOString(), // 2025-02-17T09:23:35.493Z
     humanFriendly: date.toDateString(), // Mon Feb 17 2025
     ddmmyyyy_hhmmss: `${date.getDate().toString().padStart(2, "0")}/${(
       date.getMonth() + 1
     )
       .toString()
-      .padStart(
-        2,
-        "0"
-      )}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+      .padStart(2, "0")}/${date.getFullYear()} ${date
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
       const minutesAgo = Math.floor(diff / 60000);
-      return `${minutesAgo} minutes ago`;
+      return minutesAgo === 0 ? "Just now" : `${minutesAgo} minutes ago`;
     })(),
     amPmFormat: (() => {
       const hours = date.getHours() % 12 || 12;
@@ -168,6 +177,7 @@ export function dateFormatter(dateString: string | Date) {
     unixTimestamp: Math.floor(date.getTime() / 1000), // 1739793815 (Unix seconds)
   };
 }
+
 
 export const getCaseTypeFields = (data: any) => ({
   case_file_id: data?.id ?? "",

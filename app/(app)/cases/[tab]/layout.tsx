@@ -31,9 +31,21 @@ export default function LayoutPage({
     { id: "submitted", label: "Submitted Cases" },
     { id: "concluded", label: "Concluded Cases" },
   ];
+  const presidingTabs = [
+    { id: "assigned", label: "Assigned To Me" },
+    { id: "submitted", label: "Submitted Cases" },
+    { id: "concluded", label: "Concluded Cases" },
+  ];
+  const assigningMagistrateTabs = [
+    { id: "case", label: "My Cases" },
+    { id: "active", label: "Active Cases" },
+    { id: "concluded", label: "Concluded Cases" },
+  ];
 
   const roleToTabs: RoleToTabs = {
     [ROLES.DIRECTOR_MAGISTRATES]: directorTabs,
+    [ROLES.ASSIGNING_MAGISTRATES]: assigningMagistrateTabs,
+    [ROLES.PRESIDING_MAGISTRATES]: presidingTabs,
   };
   const tabs = useMemo(() => {
     return roleToTabs[user?.role as string] || defaultTabs;
@@ -52,5 +64,4 @@ export default function LayoutPage({
       <div>{children}</div>
     </div>
   );
-  
 }

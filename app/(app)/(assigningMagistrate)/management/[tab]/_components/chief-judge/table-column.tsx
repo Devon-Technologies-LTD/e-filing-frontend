@@ -69,7 +69,7 @@ export const createUserColumns = (
       header: "Status",
       accessorKey: "status",
       cell: ({ row }) => {
-        const status = row.original.status?.toLowerCase() || "unknown"; // Handle unexpected cases
+        const status = row.original.status ? row.original.status?.toLowerCase() : "N/A"
 
         const statusColors: Record<string, string> = {
           pending: "text-yellow-600 bg-yellow-100",
