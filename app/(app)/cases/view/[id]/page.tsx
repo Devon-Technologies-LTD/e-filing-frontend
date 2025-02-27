@@ -20,9 +20,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useQuery } from "@tanstack/react-query";
-import { getCaseFilesById } from "@/lib/actions/case-file";
+import { getAdminCaseFilesById, getCaseFilesById } from "@/lib/actions/case-file";
+import { ROLES } from "@/types/auth";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
+  const { data: user } = useAppSelector((state) => state.profile);
+
   const tabs: { id: any; label: string }[] = [
     { id: "overview", label: "Case Overview" },
     { id: "documents", label: "Documents" },
@@ -36,7 +40,19 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
     queryFn: async () => {
-      return await getCaseFilesById(params.id);
+      if (
+        [
+          ROLES.DIRECTOR_MAGISTRATES,
+          ROLES.ASSIGNING_MAGISTRATES,
+          ROLES.PRESIDING_MAGISTRATES,
+          ROLES.CHIEF_JUDGE,
+          ROLES.CENTRAL_REGISTRY,
+        ].includes(user?.role as ROLES)
+      ) {
+        return await getAdminCaseFilesById(params.id);
+      } else {
+        return await getCaseFilesById(params.id);
+      }
     },
     enabled: !!params.id,
   });
