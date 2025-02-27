@@ -17,7 +17,6 @@ export function DashboardHeader() {
             </Link>
             <MainNav />
           </div>
-
           <div className="ml-auto flex items-center space-x-4 md:space-x-6">
             <SearchMenu />
             <HelpCircleComponent />

@@ -9,6 +9,10 @@ import { ROLES } from "@/types/auth";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/redux";
 import { ALL_DISTRICT } from "@/types/files/case-type";
+import { LocationSelect } from "@/components/location-select";
+import { addCaseTypeError, ICaseTypes, updateCaseTypeName } from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
+
 
 interface InviteUserProps {
   trigger: ReactNode;
@@ -29,10 +33,10 @@ export default function InviteUser({ trigger }: InviteUserProps) {
   const [isValid, setIsValid] = useState(false);
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
-      case ROLES.DIRECTOR_MAGISTRATES:
-        return "ASSIGNING_MAGISTRATES";
       case ROLES.CHIEF_JUDGE:
         return "DIRECTOR_MAGISTRATES";
+      case ROLES.DIRECTOR_MAGISTRATES:
+        return "ASSIGNING_MAGISTRATES";
       case ROLES.ASSIGNING_MAGISTRATES:
         return "PRESIDING_MAGISTRATE"; //add central magisterate
       default:
@@ -40,6 +44,13 @@ export default function InviteUser({ trigger }: InviteUserProps) {
     }
   });
 
+  const { caseType, caseTypeErrors } = useAppSelector(
+    (data) => data.caseFileForm
+  );
+  const dispatch = useDispatch();
+  const handleChanges = (name: keyof ICaseTypes, value: string) => {
+    dispatch(updateCaseTypeName({ [name]: value }));
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormValues((prev) => ({ ...prev, [id]: value }));
@@ -85,18 +96,33 @@ export default function InviteUser({ trigger }: InviteUserProps) {
             <form onSubmit={onSubmit} className="space-y-6">
               <Input type="hidden" id="role" value={role} />
               {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
-                <Select>
-                  <SelectTrigger className="w-full text-base">
-                    <SelectValue placeholder="Select District" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ALL_DISTRICT.map((doc) => (
-                      <SelectItem key={doc.value} value={doc.value} className="py-2">
-                        {doc.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+
+                <LocationSelect
+                  value={caseType.court_division}
+                  onChange={(value) => {
+                    handleChanges("court_division", value);
+                    dispatch(
+                      addCaseTypeError({
+                        court_division: "",
+                      })
+                    );
+                  }}
+                  error={caseTypeErrors?.court_division}
+                />
+
+
+                // <Select>
+                //   <SelectTrigger className="w-full text-base">
+                //     <SelectValue placeholder="Select District" />
+                //   </SelectTrigger>
+                //   <SelectContent>
+                //     {ALL_DISTRICT.map((doc) => (
+                //       <SelectItem key={doc.value} value={doc.value} className="py-2">
+                //         {doc.label}
+                //       </SelectItem>
+                //     ))}
+                //   </SelectContent>
+                // </Select>
               )}
               {(["first_name", "last_name", "email"] as const).map((field) => (
                 <div key={field} className="space-y-1">

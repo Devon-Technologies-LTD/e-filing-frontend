@@ -7,7 +7,7 @@ import UserManagementDataTableAction from "./data-table-action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export interface IUsersColumn {
-  id?: string;
+  id: string;
   name: string;
   first_name: string;
   last_name: string;
@@ -24,6 +24,7 @@ export const createUserColumns = (
   type?: "pending" | "all"
 ): ColumnDef<IUsersColumn>[] => {
   const baseColumns: ColumnDef<IUsersColumn>[] = [
+
     {
       id: "name",
       header: "Name",

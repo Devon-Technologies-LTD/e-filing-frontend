@@ -68,8 +68,9 @@ export default function AllMagistrates() {
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
-
     return data.data.filter((magistrate: IUsersColumn) => {
+      // Exclude "pending" records
+      if (magistrate.status.toLowerCase() === "pending") return false;
       const searchLower = searchTerm.toLowerCase();
       return (
         magistrate.first_name.toLowerCase().includes(searchLower) ||
