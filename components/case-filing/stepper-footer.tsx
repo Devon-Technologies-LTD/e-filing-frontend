@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useCivilCaseFormValidator } from "./validators/civil-case-form-validator";
 import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
-import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
+// import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 import { toast } from "sonner";
 
 export function StepperNavigation() {
@@ -38,9 +38,9 @@ export function StepperNavigation() {
     store: caseType,
     documents,
   });
-  const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
-    documents,
-  });
+  // const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
+  //   documents,
+  // });
   const {
     mutation: { mutate: saveAsDraft, isPending: draftPending },
   } = useSaveForm({
