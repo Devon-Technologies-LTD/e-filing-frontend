@@ -1,4 +1,6 @@
 export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_SEAL_FEE = 500;
+export const DEFAULT_EXHIBIT_FEE = 500;
 export const allowedUploadTypes = [
   "application/pdf",
   "image/jpeg",
@@ -76,6 +78,7 @@ export enum CivilDocumentTitles {
   PlaintForSpecificSummonsDefaultSummons500K1M = "Plaint for specific summons/Default Summons (₦500K–₦1M)",
   PlaintForSpecificSummonsDefaultSummons1M7M = "Plaint for specific summons/Default Summons (₦1M–₦7M)",
   WitnessStatementOnOath = "Witness Statement on Oath",
+  OtherPlaintsDocument = "Other Plaint Document",
 }
 
 export enum CivilOtherDocumentTitles {

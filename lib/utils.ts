@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { TCaseFilterType } from "@/types/case";
 import {
   CaseStatus,
+  CivilCaseSubType,
   CivilCaseSubTypeValueWorth,
   CivilDocumentTitles,
   SpecificSummonsValueWorth,
@@ -281,6 +282,7 @@ const recoveryTitleMap: Record<
   [CivilCaseSubTypeValueWorth.BetweenThreeAndSeven]:
     CivilDocumentTitles.PlaintRecoveryOfPremises3M7M,
 };
+
 const plaintTitleMap: Record<
   SpecificSummonsValueWorth,
   Partial<CivilDocumentTitles>
@@ -297,14 +299,26 @@ const plaintTitleMap: Record<
     CivilDocumentTitles.PlaintForSpecificSummonsDefaultSummons1M7M,
 };
 
-export const getRecoveryTitleByAmount = (
-  recoveryAmount: CivilCaseSubTypeValueWorth
-): string => {
-  return recoveryTitleMap[recoveryAmount] || "";
-};
-
-export const getPlaintTitleByAmount = (
-  recoveryAmount: SpecificSummonsValueWorth
-): string => {
-  return plaintTitleMap[recoveryAmount] || "PARTICULARS OF PLAINT";
+export const getTitleByRecoveryAmount = ({
+  type,
+  recoveryAmount,
+}: {
+  type: CivilCaseSubType;
+  recoveryAmount: CivilCaseSubTypeValueWorth | SpecificSummonsValueWorth;
+}): string => {
+  if (type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
+    return recoveryTitleMap[recoveryAmount as CivilCaseSubTypeValueWorth] || "";
+  }
+  if (
+    [
+      CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS,
+      CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS,
+    ].includes(type)
+  ) {
+    return (
+      plaintTitleMap[recoveryAmount as SpecificSummonsValueWorth] ||
+      "PARTICULARS OF PLAINT"
+    );
+  }
+  return "";
 };

@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import { LocationSelect } from "@/components/location-select";
-import { RichTextEditor } from "../forms/civil";
+import { RichTextEditor } from "@/components/rich-text-editor";
 export const DirectCriminalComplaintForm = () => {
   const {
     caseType: {

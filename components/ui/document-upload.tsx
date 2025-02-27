@@ -18,7 +18,11 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-import { allowedUploadTypes, DOCUMENT_MAX_SIZE } from "@/constants";
+import {
+  allowedUploadTypes,
+  CaseTypeData,
+  DOCUMENT_MAX_SIZE,
+} from "@/constants";
 import { DeleteDocumentPayload } from "@/lib/_services/document-service";
 import { ConfirmationModal } from "../confirmation-modal";
 import { AlertDialogCancel, AlertDialogFooter } from "./alert-dialog";
@@ -26,10 +30,10 @@ import { Loader } from "lucide-react";
 
 interface Iprops {
   caseType?: string;
-  subCase?: string;
+  subCase: string;
   notes?: string;
   title: string;
-  subTitle: string;
+  subTitle?: string;
   canDelete?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -41,8 +45,8 @@ interface Iprops {
 export default function DocumentUploadComponent({
   caseType,
   title,
+  subCase,
   disabled = false,
-  notes,
   onSuccess,
   onError,
   required,
@@ -57,7 +61,10 @@ export default function DocumentUploadComponent({
   const dispatch = useDispatch();
   const existingDocument =
     documents?.find(
-      (doc: any) => doc.title?.toLowerCase() === title?.toLowerCase()
+      (doc: any) =>
+        doc.title?.toLowerCase() === title?.toLowerCase() &&
+        (caseType !== CaseTypeData.CIVIL_CASE ||
+          doc.sub_title?.toLowerCase() === subCase?.toLowerCase())
     ) || null;
   const documentId = existingDocument?.id;
   const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +87,7 @@ export default function DocumentUploadComponent({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {
       if (data?.success) {
-        dispatch(deleteDocument(title));
+        dispatch(deleteDocument({ title, subCase }));
       } else {
         throw new Error(JSON.stringify(data));
       }
@@ -99,6 +106,7 @@ export default function DocumentUploadComponent({
     onSuccess: (data) => {
       if (data?.success) {
         if (onSuccess) onSuccess(data);
+        dispatch(updateDocument(data?.data as any));
       } else {
         throw new Error(JSON.stringify(data));
       }
@@ -131,9 +139,9 @@ export default function DocumentUploadComponent({
     formData.append("casefile_id", case_file_id);
     formData.append("case_type_name", caseType || title);
     formData.append("file", file);
-    formData.append("sub_title", file.name);
+    formData.append("sub_title", subCase);
     formData.append("title", title);
-    formData.append("notes", notes || "");
+    formData.append("notes", file.name || "");
 
     if (existingDocument) {
       updateMutation.mutate(formData, {
@@ -199,7 +207,7 @@ export default function DocumentUploadComponent({
             {existingDocument ? (
               <span className="flex items-center gap-2">
                 <Icons.documents />
-                {existingDocument?.sub_title}
+                {existingDocument?.notes || ""}
               </span>
             ) : (
               <span>
@@ -255,14 +263,15 @@ export default function DocumentUploadComponent({
               disabled={deleteMutation.isPending}
               className=" text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500 disabled:font-bold"
               onClick={() => {
-                if (documentId) {
-                  const payload = {
-                    document_ids: [documentId],
-                  };
-                  deleteMutation.mutate(payload);
-                } else {
-                  toast.error("Document ID not found");
-                }
+                // if (documentId) {
+                //   const payload = {
+                //     document_ids: [documentId],
+                //   };
+                //   deleteMutation.mutate(payload);
+                // } else {
+                //   toast.error("Document ID not found");
+                // }
+                dispatch(deleteDocument({ title, subCase }));
               }}
             >
               {deleteMutation.isPending ? (
