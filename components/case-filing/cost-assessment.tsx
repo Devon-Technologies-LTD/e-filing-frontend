@@ -119,8 +119,6 @@ export default function CostAssessment({
       ? costCriminalItems
       : case_type === CaseTypeData.CIVIL_CASE
       ? costCivilItems
-      : case_type === CaseTypeData.FAMILY_CASE
-      ? costFamilyItems
       : [];
 
   if (case_type === CaseTypeData.CIVIL_CASE && recovery_amount) {
