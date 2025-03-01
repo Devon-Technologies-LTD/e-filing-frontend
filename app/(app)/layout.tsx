@@ -18,11 +18,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
     });
   }, []);
   return (
-    <div data-wrapper="" className="border-grid flex flex-1 h-dvh flex-col">
+    <div data-wrapper="" className="flex h-dvh flex-col">
       <DashboardHeader />
-      <main className="flex flex-1 flex-col min-h-[calc(100dvh - 10rem)] max-h-[calc(100dvh - 10rem)] overflow-scroll">
-        {children}
-      </main>
+      <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );
 }

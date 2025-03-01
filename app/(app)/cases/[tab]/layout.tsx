@@ -52,16 +52,20 @@ export default function LayoutPage({
   }, [user?.role]);
 
   return (
-    <div className="container mx-auto space-y-8 py-4">
-      <header className="space-y-4">
-        <h1 className="text-xl font-semibold uppercase">Your Cases</h1>
-        <ReusableTabs
-          tabs={tabs}
-          onTabChange={handleTabChange}
-          activeTab={activeTab}
-        />
-      </header>
-      <div>{children}</div>
+    <div className="h-full bg-white">
+      <div className="flex flex-col h-full mx-auto gap-3">
+        <header className="shadow-md space-y-4">
+          <div className="container space-y-3 pt-4">
+            <h1 className="text-xl font-semibold uppercase">Your Cases</h1>
+            <ReusableTabs
+              tabs={tabs}
+              onTabChange={handleTabChange}
+              activeTab={activeTab}
+            />
+          </div>
+        </header>
+        <div className="flex-1 container py-8 overflow-auto">{children}</div>
+      </div>
     </div>
   );
 }

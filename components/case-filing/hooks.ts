@@ -97,6 +97,7 @@ export const useSaveForm = ({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
       const saveStep1 = async () => {
         const payload = {
+          // steps: String(step),
           claimant: {
             name: data.claimant_name,
             phone_number: data.claimant_phone_number,
@@ -124,6 +125,7 @@ export const useSaveForm = ({
 
       const saveStep2 = async () => {
         const payload = {
+          // steps: String(step),
           case_type_name: data.case_type,
           casefile_id: data.case_file_id,
           claimant: {

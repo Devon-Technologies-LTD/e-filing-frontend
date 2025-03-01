@@ -17,7 +17,7 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     ),
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {
@@ -28,12 +28,13 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
+      console.log("first", row);
       const casetype = row.original.case_type_name;
       const subName = row.original.sub_case_type_name?.toLowerCase();
       return (
         <div>
           <span className="uppercase">
-            {casetype ? `${casetype} CASE:` : ""}
+            {casetype ? `${casetype}:` : ""}
           </span>
           <br />
           <span className="capitalize">{subName}</span>
@@ -53,13 +54,13 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "PRESIDING MAGISTRATE",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex break-all items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-secondary-foreground text-black">
-              {(row.original as any).magistrate_name ?? ""}
+              {row.original.assigned_to ?? ""}
             </AvatarFallback>
           </Avatar>
-          {(row.original as any)?.magistrate_name ?? "---------"}
+          {row.original?.assigned_to ?? "---------"}
         </div>
       );
     },
