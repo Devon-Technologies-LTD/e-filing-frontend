@@ -3,6 +3,7 @@ import { axiosInstance } from "../_api/axios-config";
 
 export interface ICreateCaseFileData {
   title?: string;
+  // steps?: string;
   description?: string;
   court_division_id?: string;
   claimant?: Partial<Claimant>;
@@ -10,6 +11,7 @@ export interface ICreateCaseFileData {
 }
 export interface CaseTypeDetails {
   id?: string;
+  // steps?: string;
   casefile_id?: string;
   case_type_name?: string;
   sub_case_type_name?: string;
@@ -82,6 +84,7 @@ export interface CaseDetailsResponse {
   status: CaseStatus;
   created_at: string;
   updated_at: string;
+  assigned_to: string;
 }
 
 const CaseFileService = {

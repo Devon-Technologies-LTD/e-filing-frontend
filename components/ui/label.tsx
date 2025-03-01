@@ -13,7 +13,7 @@ const labelVariants = cva(
       variant: {
         default: "text-foreground",
         underline: "text-neutral-600 font-bold",
-        error:"text-red-600"
+        error:"text-red-600 font-bold"
       },
       size: {
         sm: "text-xs",

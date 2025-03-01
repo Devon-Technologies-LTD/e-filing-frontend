@@ -1,4 +1,5 @@
 "use client";
+import SuspenseLoader from "@/components/suspense-loader";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { redirect } from "next/navigation";
@@ -9,7 +10,11 @@ export default function CasesPage() {
   useEffect(() => {
     if (user) {
       let redirectPath = "/cases/recent";
-      if ([ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(user?.role)) {
+      if (
+        [ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(
+          user?.role
+        )
+      ) {
         redirectPath = "/cases/assigned";
       }
       if (user?.role === ROLES.ASSIGNING_MAGISTRATES) {
@@ -17,9 +22,7 @@ export default function CasesPage() {
       }
       redirect(redirectPath);
     } else {
-      console.warn(
-        "User data not yet available. Consider a loading state or redirect."
-      );
+      <SuspenseLoader />;
     }
   }, [user]);
 

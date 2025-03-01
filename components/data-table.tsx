@@ -101,20 +101,22 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className="h-16 hover:border-b-2 transition-colors duration-500 hover:bg-zinc-50 hover:border-b-app-secondary"
+                  className={`h-16 transition-colors duration-500 hover:border-b-2 hover:bg-zinc-50 hover:border-b-app-secondary ${
+                  onRowClick ? "cursor-pointer" : ""
+                  }`}
                   data-state={row.getIsSelected() ? "selected" : undefined}
                   onClick={() => onRowClick && onRowClick(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="h-24 font-semibold text-black text-sm "
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                  <TableCell
+                    key={cell.id}
+                    className="h-24 font-semibold text-black text-sm "
+                  >
+                    {flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                    )}
+                  </TableCell>
                   ))}
                 </TableRow>
               ))

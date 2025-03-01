@@ -56,6 +56,8 @@ export interface ICaseTypes {
   exparte?: string;
   firDoc?: string;
   familyDoc?: string;
+  interpleader?: string;
+  originating?: string;
   counsel_name: string;
 }
 

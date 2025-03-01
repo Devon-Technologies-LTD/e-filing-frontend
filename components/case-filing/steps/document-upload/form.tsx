@@ -132,7 +132,7 @@ export default function DocumentUploadForm() {
             {availableDocTypes.map((doc: any, index: any) => (
               <div
                 key={index}
-                className={`p-2 px-4 text-sm cursor-pointer text-zinc-900  hover:bg-secondary-foreground hover:bg-gray-50 ${
+                className={`p-2 uppercase px-4 text-sm cursor-pointer text-zinc-900  hover:bg-secondary-foreground hover:bg-gray-50 ${
                   selectedDocType === doc
                     ? "bg-secondary-foreground font-bold"
                     : "font-semibold"

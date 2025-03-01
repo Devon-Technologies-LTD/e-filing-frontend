@@ -1,6 +1,5 @@
 import {
   CaseTypeData,
-  CivilCaseSubType,
   CivilDocumentTitles,
   CriminalDocumentTitles,
   DEFAULT_EXHIBIT_FEE,
