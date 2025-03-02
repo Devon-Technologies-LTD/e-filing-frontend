@@ -57,7 +57,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     enabled: !!params.id,
   });
 
-  console.log("get single data by id", data);
+  console.log("get single data by id", data?.case_suit_number);
 
   if (isLoading) {
     return <div>Loading...</div>;

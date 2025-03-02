@@ -20,7 +20,7 @@ export default function CaseFilingLayout({
   subheading,
   close,
 }: OnboardingLayout) {
-    
+
   return (
     <>
       <FormProvider>
@@ -50,19 +50,26 @@ export default function CaseFilingLayout({
               <div className="max-h-screen bg-white border-r pr-12">
                 <div className="mx-auto overflow-auto scrollbar-hide h-[calc(100vh-220px)] space-y-8">
                   <div className="sticky top-0 bg-white z-10 space-y-2">
-                    <div className="text-xs font-semibold text-gray-600">
-                      STEP {currentStep} OF 3
-                    </div>
+                    {(currentStep > 0 &&
+                      <div className="text-xs font-semibold text-gray-600">
+                        STEP {currentStep} OF 3
+                      </div>
+                    )}
                     <div className="text-3xl font-medium leading-8 text-primary">
                       {heading}
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <OnboarindIndicator steps={[1, 2, 3]} currentStep={currentStep} />
-                  </div>
-                  <div className="font-medium leading-8 text-primary">
-                    {subheading}
-                  </div>
+                  {(currentStep > 0 &&
+                    <>
+                      <div className="space-y-3">
+                        <OnboarindIndicator steps={[1, 2, 3]} currentStep={currentStep} />
+                      </div>
+                      <div className="font-medium leading-8 text-primary">
+                        {subheading}
+                      </div>
+                    </>
+                  )}
+
                 </div>
               </div>
             </div>

@@ -10,12 +10,28 @@ import Notifications from "./notifications";
 export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<<<<<<< HEAD
+        <div className="container flex h-20 items-center">
+          <div className="mr-4 hidden md:flex">
+            <Link href="/" className="mr-4 flex items-center gap-2 lg:mr-6">
+              <Icons.logo className="h-6 w-6" />
+            </Link>
+            <MainNav />
+          </div>
+          <div className="ml-auto flex items-center space-x-4 md:space-x-6">
+            <SearchMenu />
+            <HelpCircleComponent />
+            <Notifications />
+            <UserNav />
+          </div>
+=======
       <div className="container flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-4 flex items-center gap-2 lg:mr-6">
             <Icons.logo className="h-6 w-6" />
           </Link>
           <MainNav />
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
         </div>
 
         <div className="ml-auto flex items-center space-x-4 md:space-x-6">

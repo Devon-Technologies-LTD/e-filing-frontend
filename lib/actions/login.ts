@@ -40,6 +40,11 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       token: data.token,
     };
     role = sessionData.user.role;
+    console.log(role);
+    console.log(role);
+    console.log(role);
+    console.log(role);
+    console.log(role);
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;

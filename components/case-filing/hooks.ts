@@ -187,6 +187,21 @@ export const useSaveForm = ({
     onSuccess: (data) => {
       console.log("response from save data", data);
       if (data?.success) {
+<<<<<<< HEAD
+        if (isDraft) {
+          queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
+          navigate.push("/drafts");
+          dispatch(clearForm());
+          dispatch(clearCaseTypeError());
+        } else {
+          dispatch(
+            updateCaseTypeName({
+              case_file_id: data.id,
+            })
+          );
+          if (step === 5) {
+            // navigate.push("/cases");
+=======
         if (step === 1) {
           if (isDraft) {
             dispatch(
@@ -217,6 +232,7 @@ export const useSaveForm = ({
             dispatch(clearForm());
             dispatch(clearCaseTypeError());
           } else {
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
             generateRRRMutation.mutate({ caseFileId: data.casefile_id });
           }
         } else {

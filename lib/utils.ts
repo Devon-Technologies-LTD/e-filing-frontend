@@ -178,6 +178,7 @@ export function dateFormatter(dateString: string | Date) {
   };
 }
 
+
 export const getCaseTypeFields = (data: any) => ({
   // current_step: +data.steps,
   case_file_id: data?.id ?? "",

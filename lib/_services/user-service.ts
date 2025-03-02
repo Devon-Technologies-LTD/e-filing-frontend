@@ -23,7 +23,12 @@ const UserService = {
     console.log("user management response", response.data);
     return response.data;
   },
-  async addUserManagement(payload: any)  {
+  async getPendingUsers(): Promise<any> {
+    const response = await axiosInstance.get(`admin/user/filter-user/pending`);
+    console.log("pending users management response", response.data);
+    return response.data;
+  },
+  async addUserManagement(payload: any) {
     const response = await axiosInstance.post(`admin/user`, payload);
     console.log("user management response", response.data);
     return response.data;

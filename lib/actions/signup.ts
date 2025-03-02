@@ -22,7 +22,6 @@ export async function reSendOtpAction(_prevState: unknown, formData: FormData) {
             };
         }
         const res = await authService.resendOtp({ email });
-
         return {
             status: 200,
             message: "Email sent successfully.",
@@ -87,6 +86,8 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
             token: responseData.token,
         };
 
+        console.log(updatedSessionData);
+
         role = updatedSessionData.user.role;
         await createSession(updatedSessionData);
     } catch (err: unknown) {
@@ -103,6 +104,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     if (!image) {
         return {
             status: 400,
+            errors: "Image file is required",
             message: "Image file is required",
         };
     }
@@ -111,6 +113,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     if (!allowedMimeTypes.includes(image.type)) {
         return {
             status: 400,
+            errors: "Invalid image format. Only JPG and PNG are allowed.",
             message: "Invalid image format. Only JPG and PNG are allowed.",
         };
     }
@@ -120,6 +123,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     if (image.size > maxSize) {
         return {
             status: 400,
+            errors: "File size exceeds the 5MB limit.",
             message: "File size exceeds the 5MB limit.",
         };
     }

@@ -8,10 +8,9 @@ import { CaseTypes, COURT_TYPE } from "@/types/files/case-type";
 import { Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { createUserColumns, IUsersColumn } from "./table-column";
-import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
-import { getUserManagement } from "@/lib/actions/user-management";
+import { getPendingUser } from "@/lib/actions/user-management";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -64,10 +63,10 @@ export default function PendingInvites() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["userManagement"],
+    queryKey: ["pendingUsers"],
     queryFn: async () => {
       console.log("Fetching user management data...");
-      return await getUserManagement();
+      return await getPendingUser();
     },
     staleTime: 100000,
   });
@@ -105,13 +104,13 @@ export default function PendingInvites() {
               onChange={handleCourtTypeChange}
             />
           )}
-          <InviteUser
+          {/* <InviteUser
             trigger={
               <Button size={"medium"} className="h-11">
                 {buttonText}
               </Button>
             }
-          />
+          /> */}
         </div>
       </div>
       <div className="relative">

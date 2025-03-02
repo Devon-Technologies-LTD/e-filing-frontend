@@ -25,6 +25,8 @@ interface Document {
   title: string;
   sub_title?: string;
 }
+<<<<<<< HEAD
+=======
 
 const requiredField = (value: any, message: string) =>
   value !== undefined && value !== null && value !== "" ? undefined : message;
@@ -44,6 +46,7 @@ type ValidationRule = {
   args?: any[];
   message: string;
 };
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
 
 export const civilCaseSchema = z
   .object({
@@ -184,16 +187,47 @@ export const civilCaseSchema = z
         },
       ];
 
+<<<<<<< HEAD
+const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
+  const requiredFields = [
+    { field: "court_division", message: "Court division is required" },
+    // {
+    //   field: "property_description",
+    //   message: "Property Description is required",
+    // },
+    // { field: "rental_value", message: "Rental Value is required" },
+    // { field: "relief_sought", message: "Relief Sought is required" },
+    // { field: "dated_this", message: "Date is required" },
+  ];
+
+  requiredFields.forEach(({ field, message }) => {
+    if (!data[field]) {
+      ctx.addIssue({
+        path: [field],
+        message,
+        code: z.ZodIssueCode.custom,
+=======
       validations.forEach(({ field, check, args = [], message }) => {
         const value = (data as Partial<ICaseTypes>)[field as keyof ICaseTypes];
         const result = check(value, ...args, message);
         if (result) {
           ctx.addIssue({ path: [field], message, code: z.ZodIssueCode.custom });
         }
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
       });
     }
   });
 
+<<<<<<< HEAD
+const validatePlaintForSummons = (data: any, ctx: z.RefinementCtx) => {
+  const requiredFields = [
+    { field: "court_division", message: "Court division is required" },
+    { field: "sum_claimed", message: "Sum Claimed is required" },
+    // { field: "interest_claimed", message: "Interest Claimed is required" },
+    // { field: "cost_claimed", message: "Cost Claimed is required" },
+    { field: "dated_this", message: "Date is required" },
+  ];
+=======
 // const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
 //   const requiredFields = [
 //     { field: "court_division", message: "Court division is required" },
@@ -208,6 +242,7 @@ export const civilCaseSchema = z
 //     // { field: "relief_sought", message: "Relief Sought is required" },
 //     // { field: "dated_this", message: "Date is required" },
 //   ];
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
 
 //   const minValueFields = [
 //     {
@@ -320,6 +355,10 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
     const schema = civilCaseSchema;
     const result = schema.safeParse(store);
     const errors: Errors = {};
+<<<<<<< HEAD
+    console.log("errors", errors);
+=======
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
     // Validate the form fields
     if (!result.success) {
       result.error.errors.forEach((error) => {
@@ -356,6 +395,10 @@ const validateDocuments = (
   if (!documents) {
     if (store.sub_case_type === CivilCaseSubType.RECOVERY_OF_PREMISE) {
       errors.signature = "E-Signature is required";
+<<<<<<< HEAD
+      errors.witness = "Required";
+=======
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
     } else if (
       store.sub_case_type === CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS ||
       store.sub_case_type === CivilCaseSubType.PLAINT_FOR_DEFAULT_SUMMONS
@@ -384,7 +427,13 @@ const validateDocuments = (
   switch (store.sub_case_type) {
     case CivilCaseSubType.RECOVERY_OF_PREMISE: {
       const eSignature = findDocument("E-SIGNATURE");
+<<<<<<< HEAD
+      const witness = findDocument(CivilDocumentTitles.WitnessStatementOnOath);
       validateRequired(eSignature, "signature", "E-Signature is required");
+      validateRequired(witness, "witness", "Required");
+=======
+      validateRequired(eSignature, "signature", "E-Signature is required");
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
       break;
     }
     case CivilCaseSubType.PLAINT_FOR_SPECIFIC_SUMMONS:
@@ -397,6 +446,8 @@ const validateDocuments = (
       validateRequired(plaintParticulars, "plaintParticulars", "Required");
       break;
     }
+<<<<<<< HEAD
+=======
     case CivilCaseSubType.Interpleader: {
       const interpleader = findDocument(CivilDocumentTitles.Interpleader);
       validateRequired(interpleader, "interpleader", "Required");
@@ -409,6 +460,7 @@ const validateDocuments = (
       validateRequired(originating, "originating", "Required");
       break;
     }
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
     default:
       break;
   }

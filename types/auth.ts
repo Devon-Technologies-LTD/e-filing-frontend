@@ -41,8 +41,9 @@ export interface User {
 }
 
 export enum USER_STATUS {
-  INACTIVE = "INACTIVE",
-  ACTIVE = "ACTIVE",
+  INACTIVE = "inactive",
+  ACTIVE = "active",
+  PENDING = "pending",
 };
 
 export function isFieldErrorObject(
