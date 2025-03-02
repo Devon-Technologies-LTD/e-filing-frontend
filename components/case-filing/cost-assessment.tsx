@@ -57,19 +57,6 @@ export default function CostAssessment({
     return item ? Number(item.fee) : 0;
   };
 
-<<<<<<< HEAD
-  const filteredCriminalDocuments = documents?.filter((doc) =>
-    Object.values(CriminalDocumentTitles).some(
-      (caseType) => caseType?.toLowerCase() === doc.title?.toLowerCase()
-    )
-  );
-  const filteredCivilDocuments = documents?.filter(
-    (doc) =>
-      Object.values(CivilDocumentTitles).some(
-        (value) => value?.toLowerCase() === doc.title?.toLowerCase()
-      ) && doc.sub_title === sub_case_type
-  );
-=======
   const filteredCriminalDocuments =
     documents?.filter((doc) =>
       Object.values(CriminalDocumentTitles).some(
@@ -83,7 +70,6 @@ export default function CostAssessment({
           (value) => value?.toLowerCase() === doc.title?.toLowerCase()
         ) && doc.sub_title === sub_case_type
     ) || [];
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
 
   const filteredFamilyDocuments =
     documents?.filter((doc) =>
@@ -104,37 +90,6 @@ export default function CostAssessment({
       (doc) => doc.case_type_name.toLowerCase() === "exhibits"
     ) || [];
 
-<<<<<<< HEAD
-  const costCriminalItems = filteredCriminalDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: getFeeByTitle(doc.title),
-  }));
-
-  const costCivilItems = filteredCivilDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: getFeeByTitle(doc.title),
-  }));
-
-  const costFamilyItems = filteredFamilyDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: getFeeByTitle(doc.title),
-  }));
-
-  const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: DEFAULT_EXHIBIT_FEE,
-  }));
-  const costOtherDocuments = filteredOtherDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: getFeeByTitle(doc.title) || DEFAULT_EXHIBIT_FEE,
-  }));
-
-=======
   const costCriminalItems =
     filteredCriminalDocuments?.map((doc) => ({
       category: doc.case_type_name,
@@ -169,7 +124,6 @@ export default function CostAssessment({
       amount: getFeeByTitle(doc.title) || DEFAULT_EXHIBIT_FEE,
     })) || [];
 
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
   const displayedItems =
     case_type === CaseTypeData.CRIMINAL_CASE
       ? costCriminalItems || []
@@ -189,10 +143,6 @@ export default function CostAssessment({
       amount: getFeeByTitle(recoveryTitle),
     });
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
   const sealFee = [{ amount: DEFAULT_SEAL_FEE }];
 
   const totalAmount = [
@@ -230,11 +180,7 @@ export default function CostAssessment({
               <></>
             ) : (
               <>
-<<<<<<< HEAD
-                {Array.isArray(data) && data.length > 0 ? (
-=======
                 {Array.isArray(data) && data && data?.length > 0 ? (
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
                   <>
                     <div className="space-y-3 uppercase">
                       <div className="space-y-1 uppercase">
@@ -267,11 +213,7 @@ export default function CostAssessment({
                             )}
 
                             {/* CIVIL CASE DOCUMENTS */}
-<<<<<<< HEAD
-                            {filteredCivilDocuments.length > 0 && (
-=======
                             {filteredCivilDocuments?.length > 0 && (
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
                               <>
                                 {costCivilItems.map((item, index) => (
                                   <div

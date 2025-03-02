@@ -110,17 +110,14 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
             {/* Actions */}
             <div className="flex items-center gap-4">
               <DeleteUser
-                trigger={
-                  <Button
-                    variant="danger"
-                    size={"medium"}
-                    className="h-12 px-5"
-                    onClick={() => { }}
-                  >
-                    DELETE USER
-                  </Button>
-                }
-              />
+                trigger={<Button
+                  variant="danger"
+                  size={"medium"}
+                  className="h-12 px-5"
+                  onClick={() => { } }
+                >
+                  DELETE USER
+                </Button>} userId={undefined} email={undefined}              />
               <DeactivateUser
                 row={row}
                 trigger={
