@@ -89,17 +89,12 @@ export function CaseOverview({ data }: IProps) {
             />
           )}
           <CostAssessment
-<<<<<<< HEAD
-          
-          variant="view"
-=======
             sub_case_type={
               data?.casetype?.length > 0
                 ? data?.casetype[0]?.sub_case_type_name
                 : ""
             }
             variant="view"
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
             documents={data?.documents || []}
             case_type={
               data?.casetype?.length > 0
