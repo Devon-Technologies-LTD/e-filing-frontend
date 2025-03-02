@@ -79,14 +79,9 @@ export enum CivilDocumentTitles {
   PlaintForSpecificSummonsDefaultSummons50K500K = "Plaint for specific summons/Default Summons (₦50K–₦500K)",
   PlaintForSpecificSummonsDefaultSummons500K1M = "Plaint for specific summons/Default Summons (₦500K–₦1M)",
   PlaintForSpecificSummonsDefaultSummons1M7M = "Plaint for specific summons/Default Summons (₦1M–₦7M)",
-<<<<<<< HEAD
-  WitnessStatementOnOath = "Witness Statement on Oath",
-  OtherPlaintsDocument = "Other Plaint Document",
-=======
   OtherPlaintsDocument = "Particulars of Claim",
   Interpleader = "INTERPLEADER",
   OriginatingApplication = "ORIGINATING APPLICATION",
->>>>>>> b4677b643514520e09118f64bb28968933b3cd39
 }
 
 export enum CivilOtherDocumentTitles {
