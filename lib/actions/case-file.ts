@@ -45,6 +45,15 @@ export async function getCaseFilesById(id: string) {
     return handleApiError(error);
   }
 }
+export async function getAdminCaseFilesById(id: string) {
+  try {
+    const data = await CaseFileService.getAdminCaseFilesbyId(id);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function deleteCase(id: string) {
   try {
     const data = await CaseFileService.deleteCaseFiles(id);

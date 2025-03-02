@@ -17,6 +17,7 @@ export default function FilteredCases() {
   const params = useParams();
   const router = useRouter();
 
+
   const [currentPage, setCurrentPage] = useState(1);
   const tab = params.tab as TCaseFilterType;
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
@@ -51,7 +52,7 @@ export default function FilteredCases() {
         selectedCase={selectedCase}
         setSelectedCase={setSelectedCase}
       />
-      <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
+      <DataTable  onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
       <div className="flex justify-end">
         <Pagination
           currentPage={currentPage}

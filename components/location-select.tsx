@@ -11,9 +11,11 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 export const LocationSelect = ({
   value,
   onChange,
+  disabled,
   error,
 }: {
   value: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
   error?: string;
 }) => {
@@ -32,7 +34,7 @@ export const LocationSelect = ({
       <Select onValueChange={onChange} value={value}>
         <SelectTrigger
           loading={loading}
-          disabled={loading}
+          disabled={loading || disabled}
           variant={error ? "error" : "underlined"}
         >
           <SelectValue

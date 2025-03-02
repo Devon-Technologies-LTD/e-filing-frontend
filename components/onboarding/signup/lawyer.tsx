@@ -84,7 +84,7 @@ const LawyerComponent = () => {
                 error={errors.nin?.[0]}
               />
               <p className="text-sm font-bold mt-4 text-neutral-600">
-                UPLOAD NATIONAL IDENTITY CARD*
+                UPLOAD NATIONAL IDENTITY CARD <span className="text-red-500  ml-1">*</span>
               </p>
             </div>
             <DragDropUploaderNIN />

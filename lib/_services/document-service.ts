@@ -32,7 +32,7 @@ const DocumentService = {
         },
       });
       console.log("response from api direct", response?.data);
-      return response ? response.data : null;
+      return response?.data || null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;
@@ -53,7 +53,7 @@ const DocumentService = {
         }
       );
       console.log("responesss", response);
-      return response ? response.data : null;
+      return response?.data || null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;
@@ -68,7 +68,7 @@ const DocumentService = {
         data: payload,
       });
       console.log("responesss from delete finished", response);
-      return response ? response.data : null;
+      return response.data || null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
       throw error;

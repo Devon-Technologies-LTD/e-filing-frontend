@@ -6,6 +6,7 @@ import {
   apiAuthPrefix,
   apiPrefix,
   authRoutes,
+  publicRoutes,
 } from '@/routes'
 
 export async function middleware(request: NextRequest) {
@@ -20,6 +21,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+   // Exclude '/' from allowing subpaths
+   const isPublicRoute = publicRoutes.some(route => {
+    if (route === '/') {
+      return nextUrl.pathname === '/'; // Exact match only for '/'
+    }
+    return nextUrl.pathname.startsWith(route); // Allow subpaths for all other routes
+  });
+  
   if (isApiRoute) {
     return NextResponse.next()
   }

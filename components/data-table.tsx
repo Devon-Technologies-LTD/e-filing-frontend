@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className="h-16 hover:border-b-2 transition-colors duration-500 hover:bg-zinc-50 hover:border-b-app-secondary"
+                  className="h-16 hover:border-b-2 transition-colors cursor-pointer duration-500 hover:bg-zinc-50 hover:border-b-app-secondary"
                   data-state={row.getIsSelected() ? "selected" : undefined}
                   onClick={() => onRowClick && onRowClick(row.original)}
                 >

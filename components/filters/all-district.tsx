@@ -10,7 +10,7 @@ export function AllDistrictFilter() {
   };
   const caseFilter = [{ value: 'all', label: 'ALL DISTRICTS' }, ...ALL_DISTRICT];
   return (
-    <section className="flex gap-3">
+    <section className="flex w-full gap-3">
       <FilterDropdown
         triggerVariant="outline"
         itemVariant="outline"

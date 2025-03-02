@@ -8,7 +8,6 @@ import { CaseTypes, COURT_TYPE } from "@/types/files/case-type";
 import { Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { createUserColumns, IUsersColumn } from "./table-column";
-import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
 import { getPendingUser } from "@/lib/actions/user-management";

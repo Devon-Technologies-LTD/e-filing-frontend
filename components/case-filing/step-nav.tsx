@@ -8,7 +8,7 @@ export function StepNav() {
   const {
     current_step,
     documents,
-    caseType: { case_type },
+    caseType: { case_type, recovery_amount, sub_case_type },
   } = useAppSelector((data) => data.caseFileForm);
 
   return (
@@ -25,9 +25,14 @@ export function StepNav() {
         <div className="space-y-3 ">
           <CaseFilingStepper steps={FORM_STEPS} currentStep={current_step} />
         </div>{" "}
-        {current_step > 1 && documents?.length > 0 && (
+        {current_step > 1 && case_type && (
           <div className="space-y-3 ">
-            <CostAssessment documents={documents} case_type={case_type} />
+            <CostAssessment
+              sub_case_type={sub_case_type}
+              recovery_amount={recovery_amount}
+              documents={documents}
+              case_type={case_type}
+            />
           </div>
         )}
       </div>

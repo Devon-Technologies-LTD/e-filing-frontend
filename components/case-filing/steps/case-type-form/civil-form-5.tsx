@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { EditorState, Editor, ContentState } from "draft-js";
 import { CalendarIcon, InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
@@ -20,16 +20,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn, getRecoveryTitleByAmount } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import {
   CaseTypeData,
-  CivilCaseSubTypeValueWorth,
   CivilDocumentTitles,
-  DocumentTitlesEnum,
 } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
@@ -144,6 +142,7 @@ export const CivilCaseForm5 = () => {
           </p>
           <div className="flex lg:w-1/2">
             <LocationSelect
+              disabled
               value={court_division}
               onChange={(value) => {
                 handleChange("court_division", value);
@@ -156,6 +155,7 @@ export const CivilCaseForm5 = () => {
           <p className="text-base font-semibold">BETWEEEN</p>
           <InputField
             id="claimant"
+            disabled
             name="claimant"
             type="text"
             label="CLAIMANT"
@@ -179,6 +179,7 @@ export const CivilCaseForm5 = () => {
           <p className="text-base font-semibold">AND</p>
           <InputField
             id="defendant"
+            disabled
             name="defendant"
             type="text"
             label="DEFENDANT(S)"
@@ -297,6 +298,7 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="claimant_address"
                 name="claimant_address"
+                disabled
                 required
                 showErrorInLabel
                 value={claimant_address}
@@ -312,6 +314,7 @@ export const CivilCaseForm5 = () => {
                 id="claimant_phone_number"
                 name="claimant_phone_number"
                 required
+                disabled
                 showErrorInLabel
                 value={claimant_phone_number}
                 onChange={({ target }) => {
@@ -325,6 +328,7 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="claimant_email_address"
                 name="claimant_email_address"
+                disabled
                 type="email"
                 label="Email Address"
                 value={claimant_email_address}
@@ -337,6 +341,7 @@ export const CivilCaseForm5 = () => {
               <InputField
                 id="claimant_whats_app"
                 name="claimant_whats_app"
+                disabled
                 type="text"
                 label="Whatsapp Number"
                 value={claimant_whats_app}
@@ -347,7 +352,7 @@ export const CivilCaseForm5 = () => {
                 placeholder="eg. 2347030338024"
               />
             </div>
-            <div className=" w-full space-y-6">
+            <div className=" w-full text-neutral-600 space-y-6">
               <p className="text-base font-bold">DEFENDANT DETAILS</p>
               <InputField
                 id="defendant_address"

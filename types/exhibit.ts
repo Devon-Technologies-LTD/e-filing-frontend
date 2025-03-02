@@ -10,7 +10,6 @@ export interface DocumentFileType {
   file: File | null;
 }
 export type AcceptedFileType = "PNG" | "PDF" | "DOC" | "JPEG" | "JPG";
-
 export const ACCEPTED_FILE_TYPES: AcceptedFileType[] = [
   "PNG",
   "PDF",

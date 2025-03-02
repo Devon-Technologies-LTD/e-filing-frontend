@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import CaseActionDropdown from "./CaseActionDropdown";
+import RequestSheet from "./sheet/Request";
+import AssignCaseSheet from "./sheet/AssignCaseSheet";
+import ReAssignmentSheet from "./sheet/ReAssignmentSheet";
+import ReAssignmentStatusSheet from "./sheet/ReAssignmentStatus";
+import CaseRequestSheet from "./sheet/CaseRequestSheet";
 
 export function SingleCaseHeader({
   data,
@@ -51,54 +49,22 @@ export function SingleCaseHeader({
             {/* Magistrates Buttons */}
             {userRole === ROLES.ASSIGNING_MAGISTRATES && (
               <div className="flex gap-2">
-                <Button variant="outline" className="bg-primary">
-                  ASSIGN CASE
-                </Button>
-                <Button variant="outline" className="bg-primary">
-                  REVIEW CASE
-                </Button>
+                <AssignCaseSheet trigger={<Button variant="outline">ASSIGN CASE</Button>} />
+                <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline">VIEW REQUEST STATUS</Button>} />
+                {/* <Button variant="outline">REVIEW CASE</Button> */}
               </div>
             )}
 
             {userRole === ROLES.DIRECTOR_MAGISTRATES && (
-              <Button variant="outline" className="bg-primary">
-                REQUEST THIS CASE
-              </Button>
+              <CaseRequestSheet id={id} trigger={<Button variant="outline">  REQUEST THIS CASE</Button>} />
             )}
 
             {userRole === ROLES.PRESIDING_MAGISTRATES && (
-              <Button variant="outline" className="bg-primary">
-                REQUEST RE-ASSIGNMENT
-              </Button>
+              <RequestSheet trigger={
+                <Button variant="outline"> REQUEST RE-ASSIGNMENT</Button>} />
             )}
 
-            {/* Case Action Dropdown */}
-            {[ROLES.ASSIGNING_MAGISTRATES, ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES, ROLES.CHIEF_JUDGE].includes(userRole) && (
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button variant="default">Case Action</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {userRole === ROLES.CHIEF_JUDGE && (
-                    <>
-                      <DropdownMenuLabel>HEARING HISTORY</DropdownMenuLabel>
-                      <DropdownMenuLabel>RE-ASSIGNMENT HISTORY</DropdownMenuLabel>
-                    </>
-                  )}
-                  {userRole === ROLES.PRESIDING_MAGISTRATES && (
-                    <>
-                      <DropdownMenuLabel>SCHEDULE A MEETING</DropdownMenuLabel>
-                      <DropdownMenuLabel>DELIVER JUDGE</DropdownMenuLabel>
-                      <DropdownMenuLabel>STRUCK OUT</DropdownMenuLabel>
-                      <DropdownMenuLabel>HEARING HISTORY</DropdownMenuLabel>
-                      <DropdownMenuLabel>RE-ASSIGNMENT HISTORY</DropdownMenuLabel>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-
-            {/* Lawyer & User Section */}
+            <CaseActionDropdown user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
                 <QrCode className="h-10 w-10 text-gray-400" />

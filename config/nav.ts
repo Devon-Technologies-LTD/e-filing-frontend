@@ -18,7 +18,7 @@ export const navigationLinks: NavItem[] = [
   {
     title: "Your Cases", //adewale
     href: "/cases",
-    roles: [ROLES.LAWYER, ROLES.USER, ROLES.DIRECTOR_MAGISTRATES],
+    roles: [ROLES.LAWYER, ROLES.USER, ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES],
     isActive: (pathname) => pathname === "/cases",
   },
   {
@@ -33,12 +33,12 @@ export const navigationLinks: NavItem[] = [
     roles: [ROLES.LAWYER, ROLES.USER],
     isActive: (pathname) => pathname?.startsWith("/track"),
   },
-  {
-    title: "Your Cases",
-    href: "/your-cases/case",
-    roles: [ROLES.ASSIGNING_MAGISTRATES],
-    isActive: (pathname) => pathname?.startsWith("/your-cases"),
-  },
+  // {
+  //   title: "Your Cases",
+  //   href: "/your-cases/case",
+  //   roles: [ROLES.ASSIGNING_MAGISTRATES],
+  //   isActive: (pathname) => pathname?.startsWith("/your-cases"),
+  // },
   {
     title: "Case Reviews",
     href: "/reviews/under-review",
