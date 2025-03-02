@@ -39,6 +39,12 @@ export const DraftsColumns: ColumnDef<IDraftsColumn>[] = [
   {
     accessorKey: "case_type_name",
     header: "Case Type",
+    cell: ({ row }) => {
+      const casetype = row.original.case_type_name;
+      return (
+        <span className="uppercase">{casetype ? `${casetype}` : <i className="text-xs">No Case type selected yet</i>}</span>
+      );
+    },
   },
   {
     accessorKey: "",

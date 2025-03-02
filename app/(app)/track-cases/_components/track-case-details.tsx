@@ -22,7 +22,7 @@ export function TrackCaseDetails() {
   const router = useRouter();
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between items-start mb-6">
         <div className="">
           <div className="flex items-center gap-4">

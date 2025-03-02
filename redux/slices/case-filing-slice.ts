@@ -56,6 +56,8 @@ export interface ICaseTypes {
   exparte?: string;
   firDoc?: string;
   familyDoc?: string;
+  interpleader?: string;
+  originating?: string;
   counsel_name: string;
 }
 
@@ -156,7 +158,10 @@ const formSlice = createSlice({
     },
     updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
       const index = state.documents?.findIndex(
-        (d) => d.title === action.payload.title
+        (d) =>
+          d.title === action.payload.title &&
+          d.sub_title.toLowerCase() !==
+            action.payload.sub_title.toLowerCase()
       );
       if (index !== -1) {
         state.documents[index] = action.payload;

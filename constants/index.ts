@@ -31,6 +31,8 @@ export enum CivilCaseSubType {
   PLAINT_FOR_SPECIFIC_SUMMONS = "PLAINT FOR SPECIFIC SUMMONS",
   PLAINT_FOR_DEFAULT_SUMMONS = "PLAINT FOR DEFAULT SUMMONS",
   RECOVERY_OF_PREMISE = "RECOVERY OF PREMISE",
+  Interpleader = "INTERPLEADER",
+  OriginatingApplication = "ORIGINATING APPLICATION",
 }
 export enum CivilCaseSubTypeValueWorth {
   LessThanOne = "LESS THAN OR EQUAL TO ₦1,000,000",
@@ -77,27 +79,30 @@ export enum CivilDocumentTitles {
   PlaintForSpecificSummonsDefaultSummons50K500K = "Plaint for specific summons/Default Summons (₦50K–₦500K)",
   PlaintForSpecificSummonsDefaultSummons500K1M = "Plaint for specific summons/Default Summons (₦500K–₦1M)",
   PlaintForSpecificSummonsDefaultSummons1M7M = "Plaint for specific summons/Default Summons (₦1M–₦7M)",
+<<<<<<< HEAD
   WitnessStatementOnOath = "Witness Statement on Oath",
   OtherPlaintsDocument = "Other Plaint Document",
+=======
+  OtherPlaintsDocument = "Particulars of Claim",
+  Interpleader = "INTERPLEADER",
+  OriginatingApplication = "ORIGINATING APPLICATION",
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
 }
 
 export enum CivilOtherDocumentTitles {
-  Interpleader = "Interpleader",
   NoticeOfIntentionToDefend = "Notice of Intention to Defend",
-  // WitnessStatementOnOath = "Witness Statement on Oath",
+  WitnessStatementOnOath = "Witness Statement on Oath",
   MemorandumOfAppearance = "Memorandum of appearance",
-  OathAffidavit_Civil = "Oath/Affidavit",
-  OriginatingApplication = "Originating Application",
+  OathAffidavit_Civil = "Affidavit",
   Motions = "Motions",
   MotionExparte_Civil = "Motion Exparte",
   MotionOnNotice_Civil = "Motion on Notice",
-
 }
 
 export enum FamilyDocumentTitles {
   Form49 = "Form 49",
   Form48 = "Form 48",
-  OathAffidavit = "Oath/Affidavit",
+  OathAffidavit = "Affidavit",
   ApplicationForPublicAdoption = "Application for Public adoption",
   MemorandumOfConditionalAppearance = "Memorandum of conditional appearance",
   ExhibitForPrivateAdoption = "Exhibit for Private Adoption",
@@ -120,7 +125,7 @@ export enum DocumentTitlesEnum {
   PlaintRecoveryOfPremises3M7M = "Plaint/Recovery of Premises (₦3M–₦7M)",
   Form49 = "Form 49",
   Form48 = "Form 48",
-  OathAffidavit = "Oath/Affidavit",
+  OathAffidavit = "Affidavit",
   ApplicationForPublicAdoption = "Application for Public adoption",
   PlaintRecoveryOfPremises1MCivil = "Plaint/Recovery of Premises (≤₦1M)",
   MemorandumOfConditionalAppearance = "Memorandum of conditional appearance",
@@ -131,7 +136,7 @@ export enum DocumentTitlesEnum {
   FinalWrittenAddress = "Final Written Address",
   PlaintForSpecificSummonsDefaultSummons500K1M = "Plaint for specific summons/Default Summons (₦500K–₦1M)",
   DirectCriminalComplaintDCC = "Direct Criminal Complaint (DCC)",
-  OathAffidavit_Civil = "Oath/Affidavit",
+  OathAffidavit_Civil = "Affidavit",
   EachExhibit = "Each Exhibit",
   PlaintForSpecificSummonsDefaultSummons50K500K = "Plaint for specific summons/Default Summons (₦50K–₦500K)",
   MotionExparte_Family = "Motion Exparte",

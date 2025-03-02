@@ -481,16 +481,7 @@ export const CivilCaseForm5 = () => {
             error={caseTypeErrors?.counsel_name ?? ""}
           />
 
-          <div className="mt-3 lg:w-1/2">
-            <DocumentUploadComponent
-              required
-              errorMessage={caseTypeErrors?.witness ?? ""}
-              subTitle={CaseTypeData.CIVIL_CASE}
-              title={CivilDocumentTitles.WitnessStatementOnOath}
-              caseType={case_type}
-              subCase={sub_case_type}
-            />
-          </div>
+          
         </div>
       </div>
     </div>

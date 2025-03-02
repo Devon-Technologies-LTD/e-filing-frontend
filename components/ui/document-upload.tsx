@@ -171,7 +171,7 @@ export default function DocumentUploadComponent({
             Upload {title}{" "}
             {required ? <span className="text-red-600">*</span> : ""}
           </span>
-          <span className="text-xs capitalize">
+          <span className="text-xs font-semibold capitalize">
             {errorMessage ? errorMessage : ""}
           </span>
         </Label>

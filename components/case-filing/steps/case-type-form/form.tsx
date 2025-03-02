@@ -35,6 +35,7 @@ import {
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
 import { HelpCircle } from "lucide-react";
 import CaseTypeTooltip from "./case-type-tooltip";
+import DocumentUploadComponent from "@/components/ui/document-upload";
 
 export default function CaseTypesForm() {
   const dispatch = useDispatch();
@@ -279,6 +280,28 @@ export default function CaseTypesForm() {
                 ))}
               </SelectContent>
             </Select>
+          )}
+        {case_type === CaseTypeData.CIVIL_CASE &&
+          sub_case_type === CivilCaseSubType.Interpleader && (
+            <DocumentUploadComponent
+              required
+              errorMessage={caseTypeErrors?.interpleader ?? ""}
+              subTitle={CaseTypeData.CIVIL_CASE}
+              title={CivilCaseSubType.Interpleader}
+              caseType={case_type}
+              subCase={sub_case_type}
+            />
+          )}
+        {case_type === CaseTypeData.CIVIL_CASE &&
+          sub_case_type === CivilCaseSubType.OriginatingApplication && (
+            <DocumentUploadComponent
+              required
+              errorMessage={caseTypeErrors?.originating ?? ""}
+              subTitle={CaseTypeData.CIVIL_CASE}
+              title={CivilCaseSubType.OriginatingApplication}
+              caseType={case_type}
+              subCase={sub_case_type}
+            />
           )}
       </div>
       {renderCaseContent()}

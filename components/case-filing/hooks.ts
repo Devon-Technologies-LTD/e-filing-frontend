@@ -88,19 +88,16 @@ export const useSaveForm = ({
       if (data?.success) {
         triggerPayment(data.data?.RRR, amount);
       } else {
-        toast.error("Failed to generate RRR. Please try again");
+        toast.error(`Failed to generate RRR. ${data?.data.message}`);
       }
     },
   });
 
   const mutation = useMutation({
-    mutationFn: async ({
-      case_file_id,
-      data,
-      legal_counsels,
-    }: SaveFormParams) => {
+    mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
       const saveStep1 = async () => {
         const payload = {
+          // steps: String(step),
           claimant: {
             name: data.claimant_name,
             phone_number: data.claimant_phone_number,
@@ -128,6 +125,7 @@ export const useSaveForm = ({
 
       const saveStep2 = async () => {
         const payload = {
+          // steps: String(step),
           case_type_name: data.case_type,
           casefile_id: data.case_file_id,
           claimant: {
@@ -187,8 +185,9 @@ export const useSaveForm = ({
       }
     },
     onSuccess: (data) => {
-      console.log("respinse from submit", data);
+      console.log("response from save data", data);
       if (data?.success) {
+<<<<<<< HEAD
         if (isDraft) {
           queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
           navigate.push("/drafts");
@@ -202,11 +201,64 @@ export const useSaveForm = ({
           );
           if (step === 5) {
             // navigate.push("/cases");
+=======
+        if (step === 1) {
+          if (isDraft) {
+            dispatch(
+              updateCaseTypeName({
+                case_file_id: data.id,
+              })
+            );
+            queryClient.invalidateQueries({
+              queryKey: ["get_case_drafts"],
+            });
+            navigate.push("/drafts");
+            dispatch(clearForm());
+            dispatch(clearCaseTypeError());
+          } else {
+            dispatch(
+              updateCaseTypeName({
+                case_file_id: data.id,
+              })
+            );
+          }
+        }
+        if (step === 5) {
+          if (isDraft) {
+            queryClient.invalidateQueries({
+              queryKey: ["get_case_drafts"],
+            });
+            navigate.push("/drafts");
+            dispatch(clearForm());
+            dispatch(clearCaseTypeError());
+          } else {
+>>>>>>> b4677b643514520e09118f64bb28968933b3cd39
             generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+          }
+        } else {
+          if (isDraft) {
+            queryClient.invalidateQueries({
+              queryKey: ["get_case_drafts"],
+            });
+            navigate.push("/drafts");
+            dispatch(clearForm());
+            dispatch(clearCaseTypeError());
           } else {
             dispatch(updateStep(step + 1));
           }
         }
+        // if (isDraft) {
+        // queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
+        // navigate.push("/drafts");
+        // dispatch(clearForm());
+        // dispatch(clearCaseTypeError());
+        // } else {
+        //   if (step === 5) {
+        //     generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+        //   } else {
+        //     dispatch(updateStep(step + 1));
+        //   }
+        // }
       } else {
         const errorMessage: any = formatErrors(data.errors);
         toast.error(
