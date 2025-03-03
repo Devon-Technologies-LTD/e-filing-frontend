@@ -34,10 +34,10 @@ export default function InviteUser({ trigger }: InviteUserProps) {
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
       case ROLES.CHIEF_JUDGE:
-        return "DIRECTOR_MAGISTRATES";
-      case ROLES.DIRECTOR_MAGISTRATES:
-        return "ASSIGNING_MAGISTRATES";
-      case ROLES.ASSIGNING_MAGISTRATES:
+        return "DIRECTOR_MAGISTRATE";
+      case ROLES.DIRECTOR_MAGISTRATE:
+        return "ASSIGNING_MAGISTRATE";
+      case ROLES.ASSIGNING_MAGISTRATE:
         return "PRESIDING_MAGISTRATE"; //add central magisterate
       default:
         return "CENTRAL";
@@ -95,7 +95,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
             </div>
             <form onSubmit={onSubmit} className="space-y-6">
               <Input type="hidden" id="role" value={role} />
-              {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
+              {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
 
                 <LocationSelect
                   value={caseType.court_division}

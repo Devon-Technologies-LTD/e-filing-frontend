@@ -94,7 +94,7 @@ export const createUserColumns = (
 
   let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
 
-  if (userRole === ROLES.DIRECTOR_MAGISTRATES) {
+  if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
     const directorColumns: ColumnDef<IUsersColumn>[] = [
       {
         header: "Division",
@@ -120,7 +120,7 @@ export const createUserColumns = (
     }
   }
 
-  if (userRole === ROLES.ASSIGNING_MAGISTRATES) {
+  if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
     const assigningColumns: ColumnDef<IUsersColumn>[] = [
       {
         accessorKey: "districts",

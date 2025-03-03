@@ -47,7 +47,7 @@ export function SingleCaseHeader({
 
           <div className="flex items-center gap-4">
             {/* Magistrates Buttons */}
-            {userRole === ROLES.ASSIGNING_MAGISTRATES && (
+            {userRole === ROLES.ASSIGNING_MAGISTRATE && (
               <div className="flex gap-2">
                 <AssignCaseSheet trigger={<Button variant="outline">ASSIGN CASE</Button>} />
                 <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline">VIEW REQUEST STATUS</Button>} />
@@ -55,11 +55,11 @@ export function SingleCaseHeader({
               </div>
             )}
 
-            {userRole === ROLES.DIRECTOR_MAGISTRATES && (
+            {userRole === ROLES.DIRECTOR_MAGISTRATE && (
               <CaseRequestSheet id={id} trigger={<Button variant="outline">  REQUEST THIS CASE</Button>} />
             )}
 
-            {userRole === ROLES.PRESIDING_MAGISTRATES && (
+            {userRole === ROLES.PRESIDING_MAGISTRATE && (
               <RequestSheet trigger={
                 <Button variant="outline"> REQUEST RE-ASSIGNMENT</Button>} />
             )}

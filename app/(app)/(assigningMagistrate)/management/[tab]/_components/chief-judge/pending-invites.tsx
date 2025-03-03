@@ -1,5 +1,4 @@
 import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
 import { Input } from "@/components/ui/input";
 import { useAppSelector } from "@/hooks/redux";
@@ -11,8 +10,9 @@ import { createUserColumns, IUsersColumn } from "./table-column";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
 import { getPendingUser } from "@/lib/actions/user-management";
-import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DEFAULT_PAGE_SIZE } from "@/constants";
+
 
 export default function PendingInvites() {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -35,13 +35,13 @@ export default function PendingInvites() {
         "Review and manage pending invitations sent to magistrates. Track invitation statuses and resend or revoke invitations as needed.";
       buttonText = "INVITE NEW DIRECTOR MAGISTRATE";
       break;
-    case ROLES.DIRECTOR_MAGISTRATES:
+    case ROLES.DIRECTOR_MAGISTRATE:
       headingText = "All Assigning Magistrates";
       descriptionText =
         "Review and manage pending invitations sent to magistrates. Track invitation statuses and resend or revoke invitations as needed.";
       buttonText = "INVITE NEW MAGISTRATE";
       break;
-    case ROLES.ASSIGNING_MAGISTRATES:
+    case ROLES.ASSIGNING_MAGISTRATE:
       headingText = "Magistrate Information";
       descriptionText =
         "Review and manage pending invitations sent to magistrates and central registrars. Track invitation statuses and resend or revoke invitations as needed.";
@@ -62,14 +62,19 @@ export default function PendingInvites() {
   }, [user?.role]);
 
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["pendingUsers"],
+    queryKey: ["pendingUsers", currentPage], // Include dependencies
     queryFn: async () => {
       console.log("Fetching user management data...");
-      return await getPendingUser();
+      return await getPendingUser({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+      });
     },
     staleTime: 100000,
   });
+
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
@@ -94,7 +99,7 @@ export default function PendingInvites() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATES].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
             <FilterDropdown
               triggerVariant="outline"
               itemVariant="outline"
@@ -134,7 +139,17 @@ export default function PendingInvites() {
           data={filteredData}
         />
       </ScrollArea>
+      <div className="flex justify-end">
+        <Pagination
+          currentPage={currentPage}
+          total={data?.total_rows ?? 0}
+          rowsPerPage={DEFAULT_PAGE_SIZE}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+          }}
+        />
+      </div>
 
-    </div>
+    </div >
   );
 }

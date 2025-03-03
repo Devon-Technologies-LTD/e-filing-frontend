@@ -37,8 +37,8 @@ export default function LayoutPage({
 
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
-    [ROLES.DIRECTOR_MAGISTRATES]: directorMagostrateTabs,
-    [ROLES.ASSIGNING_MAGISTRATES]: assigningMagostrateTabs,
+    [ROLES.DIRECTOR_MAGISTRATE]: directorMagostrateTabs,
+    [ROLES.ASSIGNING_MAGISTRATE]: assigningMagostrateTabs,
   };
 
   const handleTabChange = (newTab: string) => {

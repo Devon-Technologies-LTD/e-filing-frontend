@@ -11,13 +11,13 @@ export default function CasesPage() {
     if (user) {
       let redirectPath = "/cases/recent";
       if (
-        [ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES].includes(
+        [ROLES.DIRECTOR_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(
           user?.role
         )
       ) {
         redirectPath = "/cases/assigned";
       }
-      if (user?.role === ROLES.ASSIGNING_MAGISTRATES) {
+      if (user?.role === ROLES.ASSIGNING_MAGISTRATE) {
         redirectPath = "/cases/case";
       }
       redirect(redirectPath);

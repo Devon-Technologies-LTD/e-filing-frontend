@@ -40,7 +40,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
     const userRole = user?.role;
 
     if (
-        ![ROLES.ASSIGNING_MAGISTRATES, ROLES.DIRECTOR_MAGISTRATES, ROLES.PRESIDING_MAGISTRATES, ROLES.CHIEF_JUDGE].includes(userRole!)
+        ![ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(userRole!)
     ) {
         return null;
     }

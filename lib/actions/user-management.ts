@@ -19,9 +19,10 @@ export interface Ipage {
     size?: number;
 }
 
-export async function getUserManagement() {
+// Update the function to accept parameters
+export async function getUserManagement(params: Ipage) {
     try {
-        const data = await UserService.getUserManagement();
+        const data = await UserService.getUserManagement(params); // Use 'params' instead of 'Ipage'
         console.log("this is from the server function", data);
         return { ...data, success: true };
     } catch (err: unknown) {
@@ -63,9 +64,9 @@ export async function getUserManagement() {
 
     }
 }
-export async function getPendingUser() {
+export async function getPendingUser(params: Ipage) {
     try {
-        const data = await UserService.getPendingUsers();
+        const data = await UserService.getPendingUsers(params);
         console.log("this is from the server function", data);
         return { ...data, success: true };
     } catch (err: unknown) {

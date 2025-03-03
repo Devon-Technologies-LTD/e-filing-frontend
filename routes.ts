@@ -50,8 +50,8 @@ export const defaultLoginRedirect = (role?: ROLES) => {
   switch (role) {
     case "ADMIN": return "/case-filing";
     case ROLES.CHIEF_JUDGE:
-    case ROLES.DIRECTOR_MAGISTRATES:
-    case ROLES.ASSIGNING_MAGISTRATES:
+    case ROLES.DIRECTOR_MAGISTRATE:
+    case ROLES.ASSIGNING_MAGISTRATE:
       return "/overview/case";
     case "LAWYER":
       return "/cases/recent";
