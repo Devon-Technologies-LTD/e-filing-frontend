@@ -23,7 +23,7 @@ export default function Registerars() {
   };
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
-    case ROLES.ASSIGNING_MAGISTRATES:
+    case ROLES.ASSIGNING_MAGISTRATE:
       headingText = "Central Registerar";
       descriptionText =
         "Assign a Central Registrar to review and validate filed cases before they proceed to the next stage.";
@@ -42,17 +42,15 @@ export default function Registerars() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: [
-      "get_cases",
-      {
-        search: "",
-        currentPage,
-      },
-    ],
+    queryKey: ["userManagement", currentPage], // Include dependencies
     queryFn: async () => {
-      return await getUserManagement();
+      console.log("Fetching user management data...");
+      return await getUserManagement({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+      });
     },
-    staleTime: 50000,
+    staleTime: 100000, // Move this inside the object correctly
   });
 
   return (
@@ -65,7 +63,7 @@ export default function Registerars() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
                 triggerVariant="outline"

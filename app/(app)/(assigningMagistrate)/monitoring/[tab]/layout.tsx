@@ -56,8 +56,8 @@ export default function LayoutPage({
 
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: CheifJudegeTabs,
-    [ROLES.ASSIGNING_MAGISTRATES]: AssigningMTabs,
-    [ROLES.DIRECTOR_MAGISTRATES]: DirectorMTabs,
+    [ROLES.ASSIGNING_MAGISTRATE]: AssigningMTabs,
+    [ROLES.DIRECTOR_MAGISTRATE]: DirectorMTabs,
   };
   const tabs = useMemo(() => {
     return roleToTabs[user?.role as string] || defaultTabs;

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         }
 
         console.log("Deleting User ID:", d.userId);
-        const response = await axiosInstance.delete(`/admin/user/delete-account/${d.userId}`, {
+        const response = await axiosInstance.delete(`/admin/user/${d.userId}`, {
             data: {
                 email: d.email,
                 is_soft_delete: true
