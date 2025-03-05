@@ -242,6 +242,13 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
   switch (tab) {
     case "pending":
       return [CaseStatus.Pending, CaseStatus.UnderReview];
+    case "recent":
+      return [
+        CaseStatus.UnderReview,
+        CaseStatus.Assigned,
+        CaseStatus.Approved,
+        CaseStatus.ToBeAssigned,
+      ];
     case "active":
       return [CaseStatus.Approved, CaseStatus.Assigned];
     case "unassigned":

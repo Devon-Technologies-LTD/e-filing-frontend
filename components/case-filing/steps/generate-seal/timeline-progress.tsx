@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { Icons } from "@/components/svg/icons";
 import CaseGenerationLoader from "@/components/loaders/case-generation-loader";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { validatePayment } from "@/lib/actions/payment";
+import { useAppSelector } from "@/hooks/redux";
+import { toast } from "sonner";
 
 interface TimelineStep {
   title: string;
   description: string;
-  status: "completed" | "in-progress" | "pending";
+  status: "completed" | "in-progress" | "pending" | "failed";
 }
 
 interface TimelineProgressProps {
@@ -23,39 +27,93 @@ export default function TimelineProgress({
 }: TimelineProgressProps) {
   const [steps, setSteps] = useState(initialSteps);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const {
+    caseType: { case_file_id, reference },
+  } = useAppSelector((state) => state.caseFileForm);
+  // const VerifyPaymentTransaction = async (endpoint: string) => {
+  //   const response = await fetch(endpoint);
+  //   if (!response.ok)
+  //     throw new Error(`Failed to fetch status from ${endpoint}`);
+  //   const data = await response.json();
+  //   return data.status; // Expecting "pending", "completed", or "failed"
+  // };
+
+  const { data: verifyData, isLoading: verifyLoading } = useQuery({
+    queryKey: ["verify_transaction"],
+    queryFn: async () => {
+      return await validatePayment(case_file_id, reference!);
+    },
+  });
 
   useEffect(() => {
-    if (currentStepIndex >= steps.length) {
-      onComplete?.();
-      return;
+    if (verifyLoading) {
+      setSteps((current) =>
+        current.map((step, index) =>
+          index === 0 ? { ...step, status: "in-progress" } : step
+        )
+      );
+    } else if (verifyData) {
+      console.log("verifyDataaa", verifyData);
+      if (verifyData.success) {
+        setSteps((current) =>
+          current.map((step, index) =>
+            index === 0
+              ? {
+                  ...step,
+                  status: "completed",
+                  title: "PAYMENT SUCCESSFUL",
+                  description: "Confirmed from REMITA Services"
+                }
+              : step
+          )
+        );
+        setCurrentStepIndex(1);
+      } else {
+        toast.error((verifyData as any)?.data?.data);
+        setSteps((current) =>
+          current.map((step, index) =>
+            index === 0
+              ? {
+                  ...step,
+                  status: "failed",
+                  title:"PAYMENT UNSUCCESSFUL",
+                  description: verifyData.data.data,
+                }
+              : step
+          )
+        );
+      }
     }
+  }, [verifyData, verifyLoading]);
 
-    // Mark current step as in-progress
-    setSteps((current) =>
-      current.map((step, index) => ({
-        ...step,
-        status:
-          index === currentStepIndex
-            ? "in-progress"
-            : index < currentStepIndex
-            ? "completed"
-            : "pending",
-      }))
-    );
-
-    // After 2 seconds, mark current step as completed and move to next step
-    const timer = setTimeout(() => {
+  useEffect(() => {
+    if (currentStepIndex > 0) {
+      // Mark current step as in-progress
       setSteps((current) =>
         current.map((step, index) => ({
           ...step,
-          status: index <= currentStepIndex ? "completed" : "pending",
+          status:
+            index === currentStepIndex
+              ? "in-progress"
+              : index < currentStepIndex
+              ? "completed"
+              : "pending",
         }))
       );
-      setCurrentStepIndex((prev) => prev + 1);
-    }, 2000);
 
-    return () => clearTimeout(timer);
-  }, [currentStepIndex, steps.length, onComplete]);
+      // After 2 seconds, mark current step as completed and move to next step
+      const timer = setTimeout(() => {
+        setSteps((current) =>
+          current.map((step, index) => ({
+            ...step,
+            status: index <= currentStepIndex ? "completed" : "pending",
+          }))
+        );
+        setCurrentStepIndex((prev) => prev + 1);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStepIndex, steps.length]);
 
   return (
     <div className="max-w-2xl p-6">
@@ -83,6 +141,9 @@ export default function TimelineProgress({
                   {step.status === "pending" && <Icons.timelinePendingCheck />}
                   {step.status === "completed" && <Icons.timelineCheck />}
                   {step.status === "in-progress" && <CaseGenerationLoader />}
+                  {step.status === "failed" && (
+                    <Icons.alert className="h-10 w-10" />
+                  )}
                 </div>
 
                 {/* Content */}
@@ -101,7 +162,7 @@ export default function TimelineProgress({
                     {step.title}
                   </h3>
                   <p
-                    className={cn("text-sm font-medium", {
+                    className={cn("text-sm capitalize font-medium", {
                       "text-neutral-400": step.status === "pending",
                       "text-black": step.status !== "pending",
                     })}
@@ -113,7 +174,7 @@ export default function TimelineProgress({
                       size={"sm"}
                       variant={"ghost"}
                       className={cn(
-                        "text-sm h-8 font-semibold p-0 w-fit text-primary hover:underline",
+                        "text-sm h-8 font-semibold p-0 w-fit text-primary",
                         {
                           "text-neutral-400":
                             step.status === "pending" ||
@@ -121,9 +182,10 @@ export default function TimelineProgress({
                         }
                       )}
                     >
-                      Loading...
+                      {step.status === "failed" ? "Failed" : "..."}
                     </Button>
                   )}
+
                   {index === 0 && step.status === "completed" && (
                     <Button
                       size={"sm"}
@@ -195,4 +257,7 @@ export default function TimelineProgress({
       </div>
     </div>
   );
+}
+function fetchStepStatus(endpoint: any): any {
+  throw new Error("Function not implemented.");
 }

@@ -28,7 +28,6 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
-      console.log("first", row);
       const casetype = row.original.case_type_name;
       const subName = row.original.sub_case_type_name?.toLowerCase();
       return (
@@ -84,6 +83,13 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "filingDate",
     header: "Filing Date",
+    cell: ({ row }) => (
+      <span>
+        {row.original?.created_at
+          ? dateFormatter(row.original?.created_at)?.fullDate
+          : ""}
+      </span>
+    ),
   },
   {
     accessorKey: "caseId",
@@ -96,13 +102,40 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "type",
     header: "Case Type",
+    cell: ({ row }) => {
+      const casetype = row.original.case_type_name;
+      const subName = row.original.sub_case_type_name?.toLowerCase();
+      return (
+        <div>
+          <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
+          <br />
+          <span className="capitalize">{subName}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "court",
     header: "MGT. DIVISION/COURT",
+    cell: ({ row }) => {
+      return <span>{row.original.division_name}</span>;
+    },
   },
   {
     accessorKey: "status",
     header: "Status",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <StatusBadge
+          tooltip={""}
+          tooltipProps={{ delayDuration: 200 }}
+          status={row.original.status as any}
+        />
+      );
+    },
   },
 ];

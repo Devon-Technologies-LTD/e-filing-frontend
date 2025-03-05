@@ -4,24 +4,26 @@ const PaymentService = {
   async generateRRR(caseFileId: string, amount?: any): Promise<any> {
     try {
       const response = await axiosInstance.get<any>(
-        `/transactions/generate-rrr/${caseFileId}/${amount}`
+        `/transactions/generate-rrr/${caseFileId}`
       );
-      console.log("response from genreatingsss rrr", response?.data);
       return response ? response?.data : null;
     } catch (error) {
-      console.error("Error paymentsss:", (error as any).response.data);
       throw error;
     }
   },
-  async validatePayment(caseFileId: string, amount?: any): Promise<any> {
+  async validatePayment(params: {
+    reference: string;
+    casefile_id: String;
+  }): Promise<any> {
     try {
-      const response = await axiosInstance.get<any>(
-        `/transactions/validate-rrr/${caseFileId}/${amount}`
+      const response = await axiosInstance.post<any>(
+        `/transactions/verify-transaction`,
+        { ...params }
       );
-      console.log("response from genreatingsss rrr", response?.data);
+      console.log("response from validating transaction", response?.data);
       return response ? response?.data : null;
     } catch (error) {
-      console.error("Error paymentsss:", (error as any).response.data);
+      console.error("Error verify payment:", (error as any).response.data);
       throw error;
     }
   },

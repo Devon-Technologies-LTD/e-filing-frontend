@@ -5,8 +5,8 @@ import TimelineProgress from "./timeline-progress";
 export default function GenerateSeal() {
   const steps = [
     {
-      title: "PAYMENT SUCCESSFUL",
-      description: "confirmed from REMITA Services",
+      title: "VERIFYING PAYMENT",
+      description: "confirming from REMITA Services",
       status: "pending" as const,
     },
     {

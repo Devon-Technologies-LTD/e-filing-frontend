@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
-import { FORM_STEPS } from "@/constants/form";
+import { FORM_STEPS, REFILING_FORM_STEPS } from "@/constants/form";
 import { MoveLeft } from "lucide-react";
 import { useAppSelector } from "@/hooks/redux";
 import { useCaseOverviewFormValidator } from "./validators/case-overview-validator";
@@ -17,19 +17,21 @@ import { useState } from "react";
 import { useCivilCaseFormValidator } from "./validators/civil-case-form-validator";
 import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
-// import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 import { toast } from "sonner";
 
-export function StepperNavigation() {
+interface Iprops {
+  isRefiling?: boolean;
+}
+export function StepperNavigation({ isRefiling }: Iprops) {
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
   const { current_step, caseType, legal_counsels, documents, totalAmount } =
     useAppSelector((store) => store.caseFileForm);
   const { validate } = useCaseOverviewFormValidator({
     store: caseType,
   });
-
+  const step = isRefiling ? current_step - 2 : current_step;
+  const formSteps = isRefiling ? REFILING_FORM_STEPS : FORM_STEPS;
   const { validate: validateCivilCase } = useCivilCaseFormValidator({
     store: caseType,
     documents,
@@ -38,9 +40,6 @@ export function StepperNavigation() {
     store: caseType,
     documents,
   });
-  // const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
-  //   documents,
-  // });
   const {
     mutation: { mutate: saveAsDraft, isPending: draftPending },
   } = useSaveForm({
@@ -97,7 +96,11 @@ export function StepperNavigation() {
         legal_counsels,
       });
     } else if (current_step === 6) {
-      router.push("/cases");
+      if (isRefiling) {
+        router.back();
+      } else {
+        router.push("/cases");
+      }
     } else {
       dispatch(updateStep(current_step + 1));
     }
@@ -116,9 +119,13 @@ export function StepperNavigation() {
   };
 
   const handlePreviousStep = () => {
-    if (current_step === 1) {
-      router.push(`/cases`);
-      dispatch(updateStep(1));
+    if (step === 1) {
+      if (isRefiling) {
+        router.back();
+      } else {
+        router.push(`/cases`);
+        dispatch(updateStep(1));
+      }
     } else {
       dispatch(updateStep(current_step - 1));
     }
@@ -131,63 +138,68 @@ export function StepperNavigation() {
           variant="outline"
           className="font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11"
           onClick={handlePreviousStep}
-          disabled={current_step === FORM_STEPS.length}
+          disabled={step === formSteps.length}
         >
           <MoveLeft /> Back
         </Button>
       </div>
+
       <div className="w-1/2 flex justify-end ">
-        <ConfirmationModal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          trigger={
-            <Button
-              size={"lg"}
-              variant={"ghost"}
-              className="font-bold flex-end text-sm h-11"
-              disabled={current_step === FORM_STEPS.length}
-            >
-              Save and continue later
-            </Button>
-          }
-        >
-          <div className="space-y-8">
-            <div className="flex flex-col items-center gap-1 pt-2">
-              <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
-                <Icons.saveIcon />
-              </div>
-              <div className="text-center text-primary space-y-2">
-                <p className="font-bold text-xl">Save Your Progress</p>
-                <p className="text-black font-semibold text-sm text-center max-w-sm mx-auto">
-                  You can return anytime to complete your case filing. Remember
-                  to submit it before the deadline to avoid delays.
-                </p>
-              </div>
-            </div>
-
-            <AlertDialogFooter className="flex items-center sm:justify-center w-full">
+        {!isRefiling ? (
+          <ConfirmationModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            trigger={
               <Button
-                className=" text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500 disabled:font-bold"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSaveAndContinue();
-                }}
-                disabled={draftPending}
+                size={"lg"}
+                variant={"ghost"}
+                className="font-bold flex-end text-sm h-11"
+                disabled={current_step === FORM_STEPS.length}
               >
-                {draftPending ? "Saving..." : "SAVE PROGRESS"}
+                Save and continue later
               </Button>
+            }
+          >
+            <div className="space-y-8">
+              <div className="flex flex-col items-center gap-1 pt-2">
+                <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
+                  <Icons.saveIcon />
+                </div>
+                <div className="text-center text-primary space-y-2">
+                  <p className="font-bold text-xl">Save Your Progress</p>
+                  <p className="text-black font-semibold text-sm text-center max-w-sm mx-auto">
+                    You can return anytime to complete your case filing.
+                    Remember to submit it before the deadline to avoid delays.
+                  </p>
+                </div>
+              </div>
 
-              <AlertDialogCancel
-                className="font-extrabold text-red-800 text-xs uppercase"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                RETURN TO FILING{" "}
-              </AlertDialogCancel>
-            </AlertDialogFooter>
-          </div>
-        </ConfirmationModal>
+              <AlertDialogFooter className="flex items-center sm:justify-center w-full">
+                <Button
+                  className=" text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500 disabled:font-bold"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSaveAndContinue();
+                  }}
+                  disabled={draftPending}
+                >
+                  {draftPending ? "Saving..." : "SAVE PROGRESS"}
+                </Button>
+
+                <AlertDialogCancel
+                  className="font-extrabold text-red-800 text-xs uppercase"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  RETURN TO FILING{" "}
+                </AlertDialogCancel>
+              </AlertDialogFooter>
+            </div>
+          </ConfirmationModal>
+        ) : (
+          <div></div>
+        )}
 
         <Button
           size={"lg"}

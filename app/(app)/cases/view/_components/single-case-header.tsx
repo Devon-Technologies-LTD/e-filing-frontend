@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
+import { getCaseTypeFields } from "@/lib/utils";
+import {
+  addDocument,
+  clearForm,
+  updateMultipleCaseTypeFields,
+  updateStep,
+} from "@/redux/slices/case-filing-slice";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import CaseActionDropdown from "./CaseActionDropdown";
 import RequestSheet from "./sheet/Request";
 import AssignCaseSheet from "./sheet/AssignCaseSheet";
@@ -23,6 +32,18 @@ export function SingleCaseHeader({
   const id = decodeURIComponent(params.id);
   const { data: user } = useAppSelector((state) => state.profile);
   const userRole = user?.role;
+
+  const navigate = useRouter();
+  const dispatch = useDispatch();
+
+  const handleRefileProcesses = () => {
+    const caseTypeFields = getCaseTypeFields(data);
+    dispatch(clearForm());
+    dispatch(updateStep(3));
+    dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
+    dispatch(addDocument([]));
+    navigate.push(`${params?.id}/refile-documents`);
+  };
 
   return (
     <div className="space-y-3 bg-white pt-4">
@@ -49,26 +70,44 @@ export function SingleCaseHeader({
             {/* Magistrates Buttons */}
             {userRole === ROLES.ASSIGNING_MAGISTRATE && (
               <div className="flex gap-2">
-                <AssignCaseSheet trigger={<Button variant="outline">ASSIGN CASE</Button>} />
-                <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline">VIEW REQUEST STATUS</Button>} />
+                <AssignCaseSheet
+                  trigger={<Button variant="outline">ASSIGN CASE</Button>}
+                />
+                <ReAssignmentStatusSheet
+                  id={id}
+                  trigger={
+                    <Button variant="outline">VIEW REQUEST STATUS</Button>
+                  }
+                />
                 {/* <Button variant="outline">REVIEW CASE</Button> */}
               </div>
             )}
 
             {userRole === ROLES.DIRECTOR_MAGISTRATE && (
-              <CaseRequestSheet id={id} trigger={<Button variant="outline">  REQUEST THIS CASE</Button>} />
+              <CaseRequestSheet
+                id={id}
+                trigger={<Button variant="outline"> REQUEST THIS CASE</Button>}
+              />
             )}
 
             {userRole === ROLES.PRESIDING_MAGISTRATE && (
-              <RequestSheet trigger={
-                <Button variant="outline"> REQUEST RE-ASSIGNMENT</Button>} />
+              <RequestSheet
+                trigger={
+                  <Button variant="outline"> REQUEST RE-ASSIGNMENT</Button>
+                }
+              />
             )}
 
             <CaseActionDropdown user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
                 <QrCode className="h-10 w-10 text-gray-400" />
-                <Button disabled className="bg-primary">
+                <Button
+                  disabled={![ROLES.LAWYER, ROLES.USER].includes(
+                    user?.role as ROLES
+                  )}
+                  className="bg-primary"
+                >
                   FILE OTHER PROCESSES
                 </Button>
               </div>

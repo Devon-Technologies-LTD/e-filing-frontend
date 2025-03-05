@@ -16,6 +16,12 @@ export const FORM_STEPS = [
   "Preview Case",
   "Generate Seal and QR Code",
 ];
+export const REFILING_FORM_STEPS = [
+  "Upload Documents",
+  "Submit Exhibits",
+  "Preview Case",
+  "Generate Seal and QR Code",
+];
 
 export const STEP_TITLES: Record<number, string> = {
   1: "General Overview of the case you want to file",
@@ -25,4 +31,3 @@ export const STEP_TITLES: Record<number, string> = {
   5: "Review all case details before payment",
   6: "Generating your case seal and QR Code",
 };
-

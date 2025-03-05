@@ -19,6 +19,7 @@ export interface IDocumentFileType {
 
 export interface ICaseTypes {
   case_file_id: string;
+  reference?: string;
   court_division: string;
   claimant_address: string;
   claimant_phone_number: string;
@@ -78,6 +79,7 @@ const initialState: FormState = {
   caseTypeErrors: {},
   caseType: {
     court_division: "",
+    reference:"",
     counsel_name: "",
     claimant_address: "",
     claimant_name: "",

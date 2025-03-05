@@ -68,16 +68,18 @@ export default function FilteredCases() {
         loading={draftsLoading}
         data={data?.data}
       />
-      <div className="flex justify-end">
-        <Pagination
-          currentPage={currentPage}
-          total={data?.total_rows ?? 0}
-          rowsPerPage={DEFAULT_PAGE_SIZE}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-          }}
-        />
-      </div>
+      {data?.data?.length > 0 && (
+        <div className="flex justify-end">
+          <Pagination
+            currentPage={currentPage}
+            total={data?.total_rows ?? 0}
+            rowsPerPage={DEFAULT_PAGE_SIZE}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
