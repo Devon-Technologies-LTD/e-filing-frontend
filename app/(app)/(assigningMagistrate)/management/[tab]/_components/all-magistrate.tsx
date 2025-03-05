@@ -22,6 +22,7 @@ export default function AllMagistrates() {
   const handleCourtTypeChange = (value: string) => {
     setSelectedCourt(value as CaseTypes);
   };
+  console.log(user);
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
     case ROLES.CHIEF_JUDGE:
@@ -73,7 +74,7 @@ export default function AllMagistrates() {
     if (!data?.data) return [];
     return data.data.filter((magistrate: IUsersColumn) => {
       // Exclude "pending" records
-      if (magistrate.status.toLowerCase() === "pending") return false;
+      // if (magistrate.status.toLowerCase() === "pending") return false;
       const searchLower = searchTerm.toLowerCase();
       return (
         magistrate.first_name.toLowerCase().includes(searchLower) ||
@@ -82,8 +83,6 @@ export default function AllMagistrates() {
       );
     });
   }, [data, searchTerm]);
-
-
 
   return (
     <div className="bg-white p-6 space-y-6">

@@ -26,17 +26,9 @@ export async function POST(req: NextRequest) {
                 { status: 400 }
             );
         }
-        console.log("Processing invitation for:", email);
-
-        // ✅ Use response type
         const response = await axiosInstance.get<AcceptInviteResponse>(`/user/accept-invite/${email}/${otp}`);
-
-        console.log("API Response:", response.data);
-
-        // ✅ Now TypeScript knows 'token' exists
         cookies().set("TempToken", response.data.token);
         cookies().set("TempID", response.data.id);
-
         return new NextResponse(JSON.stringify(response.data), {
             status: response.status,
             headers: { "Content-Type": "application/json" },
@@ -44,11 +36,9 @@ export async function POST(req: NextRequest) {
 
     } catch (err: any) {
         console.error("Error Occurred:", err);
-
         if (err.response) {
             const { status, data } = err.response;
             console.log("Server responded with error:", data);
-
             return new NextResponse(
                 JSON.stringify({
                     status,

@@ -19,6 +19,7 @@ interface InputFieldProps {
   type?: string;
   placeholder?: string;
   required?: boolean;
+  readonly?: boolean;
   showErrorInLabel?: boolean;
   disabled?: boolean;
   error?: string;
@@ -47,6 +48,7 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   showErrorInLabel = false,
   required = false,
+  readonly = false,
   disabled = false,
   error,
   value,
@@ -108,6 +110,7 @@ const InputField: React.FC<InputFieldProps> = ({
           type={type}
           placeholder={placeholder}
           required={required}
+          readOnly={readonly}
           disabled={disabled}
           value={value}
           onChange={onChange}
