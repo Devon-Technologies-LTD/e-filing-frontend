@@ -56,11 +56,11 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     queryFn: async () => {
       if (
         [
-          ROLES.DIRECTOR_MAGISTRATES,
-          ROLES.ASSIGNING_MAGISTRATES,
-          ROLES.PRESIDING_MAGISTRATES,
+          ROLES.DIRECTOR_MAGISTRATE,
+          ROLES.ASSIGNING_MAGISTRATE,
+          ROLES.PRESIDING_MAGISTRATE,
           ROLES.CHIEF_JUDGE,
-          ROLES.CENTRAL_REGISTRY,
+          ROLES.CENTRAL_REGISTRAR,
         ].includes(user?.role as ROLES)
       ) {
         return await getAdminCaseFilesById(params.id);
@@ -79,8 +79,6 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     dispatch(addDocument([]));
     navigate.push(`${params?.id}/refile-documents`);
   };
-
-  console.log("get single data by id", data);
 
   if (isLoading) {
     return <div>Loading...</div>;

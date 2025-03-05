@@ -19,10 +19,53 @@ export interface Ipage {
     size?: number;
 }
 
-export async function getUserManagement() {
+// Update the function to accept parameters
+export async function getUserManagement(params: Ipage) {
     try {
-        const data = await UserService.getUserManagement();
-        console.log("this is from the server function", data);
+        const data = await UserService.getUserManagement(params); // Use 'params' instead of 'Ipage'
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        console.log(err);
+        const error = err as ErrorResponse;
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: "An unexpected error occurred.",
+                errors: "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+
+    }
+}
+export async function getPendingUser(params: Ipage) {
+    try {
+        const data = await UserService.getPendingUsers(params);
         return { ...data, success: true };
     } catch (err: unknown) {
         console.log(err);
@@ -66,6 +109,46 @@ export async function getUserManagement() {
 
 
 export async function InviteUserAction(_prevState: unknown, formData: FormData) {
+    const formDataObject = Object.fromEntries(formData.entries()); // ✅ Correct way to extract form data
+
+    console.log("Received Form Data:", formDataObject);
+
+    try {
+        const data = await UserService.addUserManagement(formDataObject);
+        console.log("Response from server:", data);
+        return { data, success: true, status: 200 };
+    } catch (err: unknown) {
+        console.error("Error in InviteUserAction:", err);
+        const error = err as ErrorResponse;
+
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: error.message || "An unexpected error occurred.",
+                errors: error.message || "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+    }
+}
+export async function ActiveUserAction(_prevState: unknown, formData: FormData) {
     const formDataObject = Object.fromEntries(formData.entries()); // ✅ Correct way to extract form data
 
     console.log("Received Form Data:", formDataObject);

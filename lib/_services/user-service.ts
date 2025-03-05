@@ -16,16 +16,37 @@ export interface IDraftFilter {
   page?: number;
   size?: number;
 }
+export interface Ipage {
+  page?: number;
+  size?: number;
+}
 
 const UserService = {
-  async getUserManagement(): Promise<any> {
-    const response = await axiosInstance.get(`admin/user`);
-    console.log("user management response", response.data);
+
+  async getUserManagement(params: Ipage): Promise<any> {
+    const response = await axiosInstance.get(`admin/user`, {
+      params: {
+        page: params.page ?? 1,
+        limit: params.size ?? 10,
+      },
+    });
+
     return response.data;
   },
-  async addUserManagement(payload: any)  {
+
+  async getPendingUsers(params: Ipage): Promise<any> {
+    const response = await axiosInstance.get(`admin/user/filter-user/pending`, {
+      params: {
+        page: params.page ?? 1,
+        limit: params.size ?? 10,
+      },
+    });
+    console.log("pending users management response", response.data);
+    return response.data;
+  },
+
+  async addUserManagement(payload: any) {
     const response = await axiosInstance.post(`admin/user`, payload);
-    console.log("user management response", response.data);
     return response.data;
   },
 

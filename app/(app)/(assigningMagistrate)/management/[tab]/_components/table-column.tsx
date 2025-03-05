@@ -7,16 +7,17 @@ import UserManagementDataTableAction from "./data-table-action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export interface IUsersColumn {
-  id?: string;
+  id: string;
   name: string;
   first_name: string;
   last_name: string;
   email: string;
+  role: ROLES;
   status: string;
-  division?: string;
+  court_division?: string;
   districts?: string;
   courtType?: string;
-  created_at?: string;
+  created_at?: Date | undefined;
 }
 
 export const createUserColumns = (
@@ -24,6 +25,7 @@ export const createUserColumns = (
   type?: "pending" | "all"
 ): ColumnDef<IUsersColumn>[] => {
   const baseColumns: ColumnDef<IUsersColumn>[] = [
+
     {
       id: "name",
       header: "Name",
@@ -93,7 +95,7 @@ export const createUserColumns = (
 
   let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
 
-  if (userRole === ROLES.DIRECTOR_MAGISTRATES) {
+  if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
     const directorColumns: ColumnDef<IUsersColumn>[] = [
       {
         header: "Division",
@@ -119,7 +121,7 @@ export const createUserColumns = (
     }
   }
 
-  if (userRole === ROLES.ASSIGNING_MAGISTRATES) {
+  if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
     const assigningColumns: ColumnDef<IUsersColumn>[] = [
       {
         accessorKey: "districts",

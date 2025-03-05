@@ -40,6 +40,11 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       token: data.token,
     };
     role = sessionData.user.role;
+    console.log(role);
+    console.log(role);
+    console.log(role);
+    console.log(role);
+    console.log(role);
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -178,7 +183,6 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
       message: "",
     };
   }
-
   try {
     const email = cookies().get("otpEmail")?.value; // Ensure correct cookie handling
     if (!email) {
@@ -300,5 +304,5 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       success: false,
     };
   }
-  // redirect("/login");
+  redirect("/login");
 }

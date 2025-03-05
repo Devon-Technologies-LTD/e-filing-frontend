@@ -6,6 +6,7 @@ import {
   apiAuthPrefix,
   apiPrefix,
   authRoutes,
+  publicRoutes,
 } from '@/routes'
 
 export async function middleware(request: NextRequest) {
@@ -16,9 +17,19 @@ export async function middleware(request: NextRequest) {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+
+  // Exclude '/' from allowing subpaths
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === '/') {
+      return nextUrl.pathname === '/';
+    }
+    return nextUrl.pathname.startsWith(route);
+  });
+
   if (isApiAuthRoute) {
     return NextResponse.next()
   }
+
 
   if (isApiRoute) {
     return NextResponse.next()
@@ -31,6 +42,11 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!isLoggedIn) {
+    return NextResponse.redirect(new URL('/login', nextUrl))
+  }
+
+
+  if (!isPublicRoute && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }
 

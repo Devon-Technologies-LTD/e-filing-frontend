@@ -10,6 +10,8 @@ import { reSendOtpAction } from "@/lib/actions/signup";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { toast } from "sonner";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
 
 export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
     const [state, dispatch] = useFormState(verifyOTP, undefined);
@@ -17,6 +19,11 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
     const [otpState, dispatchOTP] = useFormState(reSendOtpAction, undefined);
     const [isResending, setIsResending] = useState(false);
 
+    useEffectAfterMount(() => {
+        if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
+            toast.error(state?.message);
+        }
+    }, [state]);
 
     useEffect(() => {
         if (otpState && 'success' in otpState) {
@@ -67,7 +74,7 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
                     We&apos;ve sent a 6-character code to <b>{email}</b>. <br />
                     The code expires shortly, so please enter it soon.
                 </p>
-                <form action={dispatch}>
+                <form action={dispatch} className="space-y-6">
 
                     <InputOTP maxLength={6} name="otp" pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
                         <InputOTPGroup className="gap-2">
@@ -90,10 +97,6 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
                             ))}
                         </InputOTPGroup>
                     </InputOTP>
-
-                    <p className="text-xs text-red-500 h-2 text-center">
-                        {state?.message}
-                    </p>
                     <SubmitButton value="PROCEED" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
                 </form>
 

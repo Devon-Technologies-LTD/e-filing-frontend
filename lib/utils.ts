@@ -23,6 +23,19 @@ import {
 //   return jwtDecode<DecodedToken>(token);
 // }
 
+// utils/errorHandler.ts
+export function handleApiError2(error: any) {
+  console.error("API Error:", error);
+  return {
+    success: false,
+    data: {
+      message: error.response?.data?.message || "Something went wrong",
+      error: error.response?.data?.data?.error || "Unknown error",
+    },
+  };
+}
+
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -147,12 +160,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-      .getHours()
-      .toString()
-      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-      .getSeconds()
-      .toString()
-      .padStart(2, "0")}`,
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+          .getSeconds()
+          .toString()
+          .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -177,6 +190,7 @@ export function dateFormatter(dateString: string | Date) {
     unixTimestamp: Math.floor(date.getTime() / 1000), // 1739793815 (Unix seconds)
   };
 }
+
 
 export const getCaseTypeFields = (data: any) => ({
   // current_step: +data.steps,

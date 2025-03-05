@@ -17,6 +17,7 @@ import { Search } from "lucide-react";
 
 export default function AllMagistrates() {
   const { data: user } = useAppSelector((state) => state.profile);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
   const handleCourtTypeChange = (value: string) => {
     setSelectedCourt(value as CaseTypes);
@@ -29,16 +30,16 @@ export default function AllMagistrates() {
         "View and manage the director magistrates responsible for overseeing all divisions. Monitor their activity and administrative roles across divisions.";
       buttonText = "INVITE NEW DIRECTOR MAGISTRATE";
       break;
-    case ROLES.DIRECTOR_MAGISTRATES:
+    case ROLES.DIRECTOR_MAGISTRATE:
       headingText = "All Assigning Magistrates";
       descriptionText =
         "View and manage all assigning magistrates responsible for case allocations. Monitor their activity and administrative roles across divisions";
-      buttonText = "INVITE NEW MAGISTRATE";
+      buttonText = "INVITE ASSIGNING MAGISTRATE";
       break;
-    case ROLES.ASSIGNING_MAGISTRATES:
+    case ROLES.ASSIGNING_MAGISTRATE:
       headingText = "Presiding Magistrates";
       descriptionText = "View and manage all presiding magistrates responsible for presiding over cases.  Monitor their activity, case request anf re-assignment request across different districts";
-      buttonText = "INVITE NEW MAGISTRATE";
+      buttonText = "INVITE PRESIDING MAGISTRATE";
       break;
     default:
       headingText = "Magistrate Information";
@@ -56,20 +57,23 @@ export default function AllMagistrates() {
   );
 
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["userManagement"],
+    queryKey: ["userManagement", currentPage],
     queryFn: async () => {
-      console.log("Fetching user management data...");
-      return await getUserManagement();
+      return await getUserManagement({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+      });
     },
-    staleTime: 100000,
+    staleTime: 100000, // Move this inside the object correctly
   });
 
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
-
     return data.data.filter((magistrate: IUsersColumn) => {
+      // Exclude "pending" records
+      if (magistrate.status.toLowerCase() === "pending") return false;
       const searchLower = searchTerm.toLowerCase();
       return (
         magistrate.first_name.toLowerCase().includes(searchLower) ||
@@ -80,7 +84,6 @@ export default function AllMagistrates() {
   }, [data, searchTerm]);
 
 
-  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div className="bg-white p-6 space-y-6">
@@ -92,7 +95,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATES, ROLES.ASSIGNING_MAGISTRATES].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
                 triggerVariant="outline"
@@ -129,7 +132,7 @@ export default function AllMagistrates() {
       <ScrollArea className="h-[600px] w-full p-4">
         <DataTable columns={columns} loading={draftsLoading} data={filteredData} />
       </ScrollArea>
-      {/* <div className="flex justify-end">
+      <div className="flex justify-end">
         <Pagination
           currentPage={currentPage}
           total={data?.total_rows ?? 0}
@@ -138,7 +141,7 @@ export default function AllMagistrates() {
             setCurrentPage(page);
           }}
         />
-      </div> */}
+      </div>
     </div>
   );
 }

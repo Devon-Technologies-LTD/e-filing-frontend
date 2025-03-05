@@ -22,7 +22,6 @@ export async function getCaseFiles(payload: IDraftFilter) {
 
     try {
         const data = await CaseFileService.getCaseFilesAdmin(payload);
-        console.log("this is from the server function", data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;

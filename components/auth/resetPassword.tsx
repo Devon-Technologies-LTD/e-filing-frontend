@@ -1,5 +1,4 @@
 'use client'
-import { useEffect } from "react";
 import { SubmitButton } from "@/components/ui/submit-button";
 import TransformingLineLink from "../ui/animation-link";
 import { useFormState } from "react-dom";
@@ -7,10 +6,11 @@ import { resetPassword } from "@/lib/actions/login";
 import { toast } from "sonner"
 import { redirect } from "next/navigation";
 import { LoginPasswordField } from "@/components/passwordField";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
 
 const ResetPaswordComponent = () => {
     const [state, dispatch] = useFormState(resetPassword, undefined);
-    useEffect(() => {
+    useEffectAfterMount(() => {
         if (state?.success) {
             toast.success(state.message);
             redirect("/login");

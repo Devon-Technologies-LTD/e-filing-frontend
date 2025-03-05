@@ -39,8 +39,7 @@ export default function UserManagementDataTableAction({ row }: props) {
             row={row.original}
             trigger={
               <p className="px-2 py-1.5 w-full ">
-                {/* {row.original.status === USER_STATUS.ACTIVE */}
-                {row.original.status === "true"
+                {row.original.status === USER_STATUS.ACTIVE
                   ? "DE-ACTIVATE USER"
                   : "ACTIVATE USER"}
               </p>
@@ -49,8 +48,7 @@ export default function UserManagementDataTableAction({ row }: props) {
         </DropdownMenuItem>
         <DropdownMenuItem className="p-0 " variant="outline">
           <DeleteUser
-            trigger={<p className="px-2 py-1.5 w-full  ">DELETE USER</p>}
-          />
+            trigger={<p className="px-2 py-1.5 w-full  ">DELETE USER</p>} userId={row.original.id} email={row.original.email} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

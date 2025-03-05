@@ -51,13 +51,14 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
           className={clsx("text-sm font-bold", error ? "text-red-500" : "text-neutral-600")}
         >
           {label}
+          <span className="text-red-500 ml-1">*</span>
         </Label>
       )}
 
       <div className="grid grid-cols-1 grid-rows-0 place-items-center relative">
         <Input
           className={clsx(
-            "col-span-full placeholder:text-sm placeholder:font-semibold placeholder:text-zinc-500 text-sm border-0 border-app-secondary row-span-full bg-transparent border-none border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer",
+            "col-span-full placeholder:text-md placeholder:font-semibold placeholder:text-zinc-500 text-md border-0 border-app-secondary row-span-full bg-transparent border-none border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer",
             error ? "border-red-500 focus:border-red-500" : "border-neutral-200"
           )}
           name={name}
@@ -69,6 +70,7 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
             setPassword(e.target.value);
             clearErrors?.();
           }}
+          required
         />
         <span
           onClick={() => setShowPassword(!showPassword)}

@@ -22,8 +22,6 @@ const assigningMagostrateTabs = [
 ];
 const defaultTab = [
   { id: "all", label: "All (Presiding) Magistrates" },
-  { id: "registerars", label: "Central Registerars" },
-  { id: "pending", label: "Pending Invitation" },
 ];
 
 export default function LayoutPage({
@@ -37,8 +35,8 @@ export default function LayoutPage({
 
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
-    [ROLES.DIRECTOR_MAGISTRATES]: directorMagostrateTabs,
-    [ROLES.ASSIGNING_MAGISTRATES]: assigningMagostrateTabs,
+    [ROLES.DIRECTOR_MAGISTRATE]: directorMagostrateTabs,
+    [ROLES.ASSIGNING_MAGISTRATE]: assigningMagostrateTabs,
   };
 
   const handleTabChange = (newTab: string) => {
