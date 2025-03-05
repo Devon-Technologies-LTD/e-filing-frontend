@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { parse, format } from "date-fns";
+import { createCaseFile } from "@/lib/actions/case-actions";
+import { ErrorResponse } from "@/types/auth";
 
 interface ScheduleSheetProps {
   trigger: React.ReactNode;
@@ -54,13 +56,20 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
         other_details: details,
         casefile_id: data.id,
       };
-      console.log(formData);
+      const response = await createCaseFile(formData, data.id);
+      console.log(response);
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        const errorMessage = response.data.message;
+        const detailedError = response.data.error;
+        toast.error(`${errorMessage}:  ${detailedError}`);
+      }
 
-      const response = await fetch("/api/schedule-case", { method: "POST", body: JSON.stringify(formData) });
-      if (response.ok) toast.success("Hearing scheduled successfully!");
-      else toast.error("Failed to schedule hearing. Please try again.");
-    } catch (error) {
-      toast.error("An error occurred. Please try again later.");
+    } catch (err: unknown) {
+      const error = err as ErrorResponse;
+      toast.error(error.message);
+      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -112,7 +121,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
           <form onSubmit={handleSubmit}>
             <Button type="submit" disabled={isSubmitting || !date || !time}>
               {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
-               CONFIRM SCHEDULE
+              CONFIRM SCHEDULE
             </Button>
           </form>
         </div>

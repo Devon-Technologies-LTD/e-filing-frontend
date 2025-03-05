@@ -23,7 +23,6 @@ export interface Ipage {
 export async function getUserManagement(params: Ipage) {
     try {
         const data = await UserService.getUserManagement(params); // Use 'params' instead of 'Ipage'
-        console.log("this is from the server function", data);
         return { ...data, success: true };
     } catch (err: unknown) {
         console.log(err);
@@ -67,7 +66,6 @@ export async function getUserManagement(params: Ipage) {
 export async function getPendingUser(params: Ipage) {
     try {
         const data = await UserService.getPendingUsers(params);
-        console.log("this is from the server function", data);
         return { ...data, success: true };
     } catch (err: unknown) {
         console.log(err);

@@ -3,6 +3,7 @@ import { TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import AllMagistrates from "./all-magistrate";
 import PendingInvites from "./pending-invites";
+import Registerars from "./registerars";
 
 export default function ChiefJudgeUserManagement() {
   const params = useParams();
@@ -12,7 +13,7 @@ export default function ChiefJudgeUserManagement() {
       case "all":
         return AllMagistrates;
       case "registerars":
-        return AllMagistrates;
+        return Registerars;
       default:
         return PendingInvites;
     }

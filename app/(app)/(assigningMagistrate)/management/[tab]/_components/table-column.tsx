@@ -12,8 +12,9 @@ export interface IUsersColumn {
   first_name: string;
   last_name: string;
   email: string;
+  role: ROLES;
   status: string;
-  division?: string;
+  court_division?: string;
   districts?: string;
   courtType?: string;
   created_at?: string;

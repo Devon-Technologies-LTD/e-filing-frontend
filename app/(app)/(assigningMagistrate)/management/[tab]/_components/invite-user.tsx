@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -8,14 +9,15 @@ import ConfirmInvite from "./confirm-invite";
 import { ROLES } from "@/types/auth";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppSelector } from "@/hooks/redux";
-import { ALL_DISTRICT } from "@/types/files/case-type";
-import { LocationSelect } from "@/components/location-select";
+import { COURT_TYPE } from "@/types/files/case-type";
+import { LocationAdmin } from "@/components/location-admin";
 import { addCaseTypeError, ICaseTypes, updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 
 
 interface InviteUserProps {
   trigger: ReactNode;
+  tab?: String;
 }
 
 const formSchema = z.object({
@@ -26,11 +28,36 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function InviteUser({ trigger }: InviteUserProps) {
+export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const { data: user } = useAppSelector((state) => state.profile);
-  const [formValues, setFormValues] = useState<FormValues>({ first_name: "", last_name: "", email: "" });
-  const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
-  const [isValid, setIsValid] = useState(false);
+  const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
+  const dispatch = useDispatch();
+
+  let headingText, descriptionText, buttonText;
+  switch (user?.role) {
+    case ROLES.CHIEF_JUDGE:
+      headingText = "Invite a Director Magistrate";
+      descriptionText = "Invite a Director Magistrate to oversee all divisions..";
+      break;
+    case ROLES.DIRECTOR_MAGISTRATE:
+      headingText = "Invite New Assigning Magistrate";
+      descriptionText = "Invite a Assigning Magistrate to handle case distribution within their division.";
+      break;
+    case ROLES.ASSIGNING_MAGISTRATE:
+      if (tab === "central") {
+        headingText = "Invite New Central Magistrate";
+        descriptionText = "View and manage all central magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
+      } else {
+        headingText = "Invite New Presiding Magistrate";
+        descriptionText = "View and manage all presiding magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
+      }
+      break;
+
+    default:
+      headingText = "Magistrate Information";
+      descriptionText = "View general information about magistrates.";
+  }
+
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
       case ROLES.CHIEF_JUDGE:
@@ -38,19 +65,40 @@ export default function InviteUser({ trigger }: InviteUserProps) {
       case ROLES.DIRECTOR_MAGISTRATE:
         return "ASSIGNING_MAGISTRATE";
       case ROLES.ASSIGNING_MAGISTRATE:
-        return "PRESIDING_MAGISTRATE"; //add central magisterate
+        if (tab === "central") {
+          return "CENTRAL_REGISTRAR";
+        } else {
+          return "PRESIDING_MAGISTRATE";
+        }
       default:
         return "CENTRAL";
     }
   });
+  console.log(tab);
 
-  const { caseType, caseTypeErrors } = useAppSelector(
-    (data) => data.caseFileForm
-  );
-  const dispatch = useDispatch();
+
+  const [formValues, setFormValues] = useState<FormValues>({ first_name: "", last_name: "", email: "" });
+  const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
+  const [isValid, setIsValid] = useState(false);
+
+  // State for selected court_type and court division
+  const [selectedCourt, setSelectedDistrict] = useState<string>("");
+  const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
+
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));
   };
+
+  const handleSelectChange = (value: string) => {
+    setSelectedDistrict(value);
+  };
+
+  const handleCourtDivisionChange = (value: string) => {
+    setSelectedCourtDivision(value);
+    handleChanges("court_division", value);
+    dispatch(addCaseTypeError({ court_division: "" }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormValues((prev) => ({ ...prev, [id]: value }));
@@ -77,7 +125,7 @@ export default function InviteUser({ trigger }: InviteUserProps) {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", { ...formValues, role });
+      console.log("Form submitted:", { ...formValues, role, selectedCourt, selectedCourtDivision });
     } else {
       console.log("Form has errors");
     }
@@ -90,43 +138,40 @@ export default function InviteUser({ trigger }: InviteUserProps) {
         <div className="space-y-8 mx-auto">
           <div className="space-y-6 w-full">
             <div className="border-b space-y-1">
-              <h2 className="text-xl font-bold">Invite a Director Magistrate</h2>
-              <p className="text-sm font-semibold">Invite a Director Magistrate to oversee all divisions.</p>
+              <h2 className="text-xl font-bold">{headingText}</h2>
+              <p className="text-sm font-semibold">{descriptionText}</p>
             </div>
             <form onSubmit={onSubmit} className="space-y-6">
               <Input type="hidden" id="role" value={role} />
-              {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
 
-                <LocationSelect
-                  value={caseType.court_division}
-                  onChange={(value) => {
-                    handleChanges("court_division", value);
-                    dispatch(
-                      addCaseTypeError({
-                        court_division: "",
-                      })
-                    );
-                  }}
+              {/* District Select */}
+              {[ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
+                <Select onValueChange={handleSelectChange}>
+                  <SelectTrigger className="w-full text-base">
+                    <SelectValue placeholder="Select Type of Court" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COURT_TYPE.map((doc) => (
+                      <SelectItem key={doc.value} value={doc.value} className="py-2">
+                        {doc.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {/* Court Division Selection */}
+              {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+                <LocationAdmin
+                  value={selectedCourtDivision}
+                  onChange={handleCourtDivisionChange}
                   error={caseTypeErrors?.court_division}
                 />
-
-
-                // <Select>
-                //   <SelectTrigger className="w-full text-base">
-                //     <SelectValue placeholder="Select District" />
-                //   </SelectTrigger>
-                //   <SelectContent>
-                //     {ALL_DISTRICT.map((doc) => (
-                //       <SelectItem key={doc.value} value={doc.value} className="py-2">
-                //         {doc.label}
-                //       </SelectItem>
-                //     ))}
-                //   </SelectContent>
-                // </Select>
               )}
+
               {(["first_name", "last_name", "email"] as const).map((field) => (
                 <div key={field} className="space-y-1">
-                  <Label htmlFor={field} >
+                  <Label htmlFor={field}>
                     {field.replace("_", " ").toUpperCase()}
                   </Label>
                   <Input
@@ -141,8 +186,10 @@ export default function InviteUser({ trigger }: InviteUserProps) {
                   {formErrors[field] && <p className="text-red-500 text-sm">{formErrors[field]}</p>}
                 </div>
               ))}
+
+              {/* Passing values to ConfirmInvite */}
               <ConfirmInvite
-                formValues={{ ...formValues, role }}
+                formValues={{ ...formValues, role, court_type: selectedCourt, court_division: selectedCourtDivision }}
                 trigger={<Button type="submit">SEND INVITE</Button>}
               />
             </form>
@@ -152,14 +199,3 @@ export default function InviteUser({ trigger }: InviteUserProps) {
     </Sheet>
   );
 }
-
-
-{/* <Input
-  variant="underlined"
-  type="email"
-  id="email"
-  className="placeholder:text-zinc-400 border-zinc-300"
-  placeholder="name@example.com"
-  value={formValues.email}
-  onChange={(e) => handleChange(e, "email")}
-/> */}

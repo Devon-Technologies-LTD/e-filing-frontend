@@ -15,6 +15,8 @@ interface FormValues {
   last_name: string;
   email: string;
   role: string;
+  court_type?: string;
+  court_division?: string;
 }
 
 interface Props {
@@ -68,12 +70,15 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues }) => {
           <div className="text-center text-primary space-y-2">
             <p className="font-bold text-xl">Invite this User?</p>
             <p className="text-black font-semibold text-sm text-center max-w-sm mx-auto">
-              Invite{" "}
-              <span className="font-extrabold">
-                {formValues.first_name} {formValues.last_name}
-              </span>{" "}
+              Invite <span className="font-extrabold">{formValues.first_name} {formValues.last_name} </span>
               at <span className="font-extrabold">{formValues.email}</span>? This action can’t be undone, but the invitation can be revoked later.
             </p>
+            {/* {formValues.court_type && (
+              <p className="text-sm text-center">Court: <span className="font-bold">{formValues.court_type}</span></p>
+            )}
+            {formValues.court_division && (
+              <p className="text-sm text-center">Court Division: <span className="font-bold">{formValues.court_division}</span></p>
+            )} */}
           </div>
         </div>
 

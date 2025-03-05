@@ -25,7 +25,15 @@ export default async function handler(
         }
 
         // Validate MIME type
-        const allowedMimeTypes = ["image/jpeg", "image/png"];
+        const allowedMimeTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml",
+            "image/bmp",
+            "image/tiff"
+        ];
         if (!image.mimetype || !allowedMimeTypes.includes(image.mimetype)) {
             return res.status(400).json({ error: "Invalid file format. Only JPG and PNG are allowed." });
         }
