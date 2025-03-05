@@ -108,8 +108,15 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
             message: "Image file is required",
         };
     }
-
-    const allowedMimeTypes = ["image/jpeg", "image/png"];
+    const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/svg+xml",
+        "image/bmp",
+        "image/tiff"
+    ];
     if (!allowedMimeTypes.includes(image.type)) {
         return {
             status: 400,
@@ -178,4 +185,102 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     }
     // Redirect to OTP page
     redirect("/otp");
+}
+
+export async function invitationAction(_prevState: unknown, formData: FormData) {
+    // Extract form data
+    const data = Object.fromEntries(formData.entries());
+    const image = formData.get("image") as File | null;
+
+    if (!image) {
+        return {
+            status: 400,
+            errors: "Image file is required",
+            message: "Image file is required",
+        };
+    }
+
+    const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/svg+xml",
+        "image/bmp",
+        "image/tiff"
+    ];
+
+    if (!allowedMimeTypes.includes(image.type)) {
+        return {
+            status: 400,
+            errors: "Invalid image format. Only JPG and PNG are allowed.",
+            message: "Invalid image format. Only JPG and PNG are allowed.",
+        };
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (image.size > maxSize) {
+        return {
+            status: 400,
+            errors: "File size exceeds the 5MB limit.",
+            message: "File size exceeds the 5MB limit.",
+        };
+    }
+
+    // Upload the image to the API
+    const uploadFormData = new FormData();
+    uploadFormData.append("image", image);
+
+    const result = SignupFormSchema.safeParse({ ...data });
+    if (!result.success) {
+        return {
+            status: 400,
+            errors: result.error.flatten().fieldErrors,
+            message: "Validation failed, please check input fields",
+        };
+    }
+    console.log(formData);
+    const token = cookies().get("TempToken")?.value;
+    const id = cookies().get("TempID")?.value;
+    try {
+        const url = `${NEXT_BASE_URL}/admin/user/${id}`;
+        const signupResponse = await fetch(url, {
+            method: "PATCH",
+            body: formData,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        if (!signupResponse.ok) {
+            const errorData = await signupResponse.json();
+            throw {
+                response: {
+                    status: signupResponse.status,
+                    data: errorData,
+                },
+            };
+        }
+        const responseData = await signupResponse.json();
+        // Prepare session data
+        const sessionData = {
+            user: {
+                id: responseData.ID,
+                email: responseData.email,
+                first_name: responseData.first_name,
+                last_name: responseData.last_name,
+                phone_number: responseData.phone_number,
+                role: responseData.role,
+            },
+            token: responseData.token,
+        };
+
+        // Store session data
+        cookies().set("otpEmail", result.data.email);
+        cookies().set("AuthData", JSON.stringify(sessionData));
+    } catch (err: unknown) {
+        return handleError(err);
+    }
+    // Redirect to OTP page
+    redirect("/login");
 }

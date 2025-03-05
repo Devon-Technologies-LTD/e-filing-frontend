@@ -30,6 +30,7 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
 export async function getCaseFiles(payload: IDraftFilter) {
   try {
     const data = await CaseFileService.getCaseFiles(payload);
+    // const data = await CaseFileService.getCaseFilesAdmin(payload);
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

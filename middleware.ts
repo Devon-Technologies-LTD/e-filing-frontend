@@ -17,18 +17,20 @@ export async function middleware(request: NextRequest) {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+
+  // Exclude '/' from allowing subpaths
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === '/') {
+      return nextUrl.pathname === '/';
+    }
+    return nextUrl.pathname.startsWith(route);
+  });
+
   if (isApiAuthRoute) {
     return NextResponse.next()
   }
 
-   // Exclude '/' from allowing subpaths
-   const isPublicRoute = publicRoutes.some(route => {
-    if (route === '/') {
-      return nextUrl.pathname === '/'; // Exact match only for '/'
-    }
-    return nextUrl.pathname.startsWith(route); // Allow subpaths for all other routes
-  });
-  
+
   if (isApiRoute) {
     return NextResponse.next()
   }
@@ -40,6 +42,11 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!isLoggedIn) {
+    return NextResponse.redirect(new URL('/login', nextUrl))
+  }
+
+
+  if (!isPublicRoute && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }
 

@@ -20,6 +20,7 @@ export const authRoutes = [
   "/forgot",
   "/password-otp",
   "/reset-password",
+  '/invitation',
 ];
 
 export const publicRoutes = [

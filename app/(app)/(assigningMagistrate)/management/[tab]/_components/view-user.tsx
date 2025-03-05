@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { AnalyticsChart } from "./analytics-chart";
 import DeleteUser from "./delete-user";
 import DeactivateUser from "./deactivate-user";
+import { format } from "date-fns";
 
 interface StatsCardProps {
   label: string;
@@ -72,10 +73,11 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
               <div className="flex items-center divide-x-2 gap-3">
                 <div>
                   <p className="text-stone-700 opacity-60 font-bold text-sm">
-                    Assigning Magistrate
+                    {row?.role}
                   </p>
                   <p className="text-sm text-primary font-extrabold uppercase">
-                    Wuse zone 2
+                    {row?.court_division ?? "-"}
+
                   </p>
                 </div>
                 <div className="px-3">
@@ -83,7 +85,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                     Date Invited
                   </p>
                   <p className="text-sm text-primary font-extrabold uppercase">
-                    {row.created_at}
+                    {format(new Date(row?.created_at ?? ""), "MMM dd, yyyy")}
                   </p>
                 </div>
               </div>
@@ -114,10 +116,10 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   variant="danger"
                   size={"medium"}
                   className="h-12 px-5"
-                  onClick={() => { } }
+                  onClick={() => { }}
                 >
                   DELETE USER
-                </Button>} userId={undefined} email={undefined}              />
+                </Button>} userId={undefined} email={undefined} />
               <DeactivateUser
                 row={row}
                 trigger={

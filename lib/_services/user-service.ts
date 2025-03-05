@@ -31,7 +31,6 @@ const UserService = {
       },
     });
 
-    console.log("user management response", response.data);
     return response.data;
   },
 
@@ -48,7 +47,6 @@ const UserService = {
 
   async addUserManagement(payload: any) {
     const response = await axiosInstance.post(`admin/user`, payload);
-    console.log("user management response", response.data);
     return response.data;
   },
 

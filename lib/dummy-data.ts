@@ -1,7 +1,7 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
 import { ICase, TManagement } from "../types/case";
 import { INotification } from "@/components/activity-list";
-import { IUsersColumn } from "@/app/(app)/(assigningMagistrate)/management/[tab]/_components/chief-judge/table-column";
+import { IUsersColumn } from "@/app/(app)/(assigningMagistrate)/management/[tab]/_components/table-column";
 import { USER_STATUS } from "@/types/auth";
 
 export const mockCases: ICase[] = [

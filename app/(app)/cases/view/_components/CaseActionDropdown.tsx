@@ -20,13 +20,7 @@ interface CaseActionDropdownProps {
     id: string,
 }
 
-const SHEET_TITLES: Record<string, string> = {
-    Hearing: "Schedule Case Hearing",
-    Deliver: "Deliver Judge",
-    Struck: "Struck Out",
-    "Hearing History": "Hearing History",
-    "Re-Assignment History": "Re-Assignment History",
-};
+
 
 const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => {
     const [openSheet, setOpenSheet] = useState(false);
@@ -53,41 +47,51 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        <ScheduleSheet id={id}
-                            trigger={
-                                <DropdownMenuLabel className="w-full text-left">
-                                    SCHEDULE A HEARING
-                                </DropdownMenuLabel>
-                            }
-                        />
-                        <DeliverJugdementSheet id={id}
-                            trigger={
-                                <DropdownMenuLabel className="w-full text-left">
-                                    DELIVER JUDGMENT
-                                </DropdownMenuLabel>
-                            }
-                        />
-                        <ReAssignmentSheet id={id}
-                            trigger={
-                                <DropdownMenuLabel className="w-full text-left">
-                                    RE-ASSIGNMENT HISTORY
-                                </DropdownMenuLabel>
-                            }
-                        />
-                        <HearingSheet id={id}
+                        {(userRole === ROLES.PRESIDING_MAGISTRATE) && (
+                            <>
+                                <ScheduleSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            SCHEDULE A HEARING
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                                <DeliverJugdementSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            DELIVER JUDGMENT
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                                <StruckSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            STRUCK OUT
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                            </>
+                        )}
+
+                        <HearingSheet
+                            id={id}
                             trigger={
                                 <DropdownMenuLabel className="w-full text-left">
                                     HEARING HISTORY
                                 </DropdownMenuLabel>
                             }
                         />
-                        <StruckSheet id={id}
+                        <ReAssignmentSheet
+                            id={id}
                             trigger={
                                 <DropdownMenuLabel className="w-full text-left">
-                                    STRUCK OUT
+                                    RE-ASSIGNMENT HISTORY
                                 </DropdownMenuLabel>
                             }
                         />
+
+
+
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>

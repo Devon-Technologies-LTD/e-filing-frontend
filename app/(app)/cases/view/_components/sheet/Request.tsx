@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Loader2 } from "lucide-react";
+import { ErrorResponse } from "@/types/auth";
+import { requestReAssigment } from "@/lib/actions/case-actions";
 
 
 
@@ -49,11 +51,20 @@ export default function RequestSheet({ trigger, id }: any) {
                 reason: reason,
             };
             console.log(formData);
-            const response = await fetch("/api/reassignment-request", { method: "POST", body: JSON.stringify(formData) });
-            if (response.ok) toast.success("Hearing scheduled successfully!");
-            else toast.error("Failed to schedule hearing. Please try again.");
-        } catch (error) {
-            toast.error("An error occurred. Please try again later.");
+            const response = await requestReAssigment(formData, data.id);
+            console.log(response);
+            if (response.success) {
+                toast.success(response.message);
+            } else {
+                const errorMessage = response.data.message;
+                const detailedError = response.data.error;
+                toast.error(`${errorMessage}:  ${detailedError}`);
+            }
+
+        } catch (err: unknown) {
+            const error = err as ErrorResponse;
+            toast.error(error.message);
+            console.log(error);
         } finally {
             setIsSubmitting(false);
         }
