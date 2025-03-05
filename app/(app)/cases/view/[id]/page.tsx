@@ -35,6 +35,7 @@ import {
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
+import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -81,7 +82,9 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+        <CaseDocumentListSkeleton />
+    );
   }
   return (
     <div className="bg-zinc-100 h-full overflow-auto">
