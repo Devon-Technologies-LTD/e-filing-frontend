@@ -10,67 +10,59 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/svg/icons";
+import {
+  addDocument,
+  clearForm,
+  ICaseTypes,
+  IDocumentFileType,
+  updateMultipleCaseTypeFields,
+  updateStep,
+} from "@/redux/slices/case-filing-slice";
+import { getCaseTypeFields } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
-interface Document {
-  id: string;
-  name: string;
-  type: string;
-  fileDate: string;
+interface IProps {
+  data: ICaseTypes & { id: string; documents: IDocumentFileType[] };
 }
 
-interface DocumentGroup {
-  date: string;
-  documents: Document[];
-}
-
-export function CaseDocumentList() {
+export function CaseDocumentList({ data }: IProps) {
+  const navigate = useRouter();
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const documentGroups: DocumentGroup[] = [
-    {
-      date: "12/02/2024",
-      documents: [
-        { id: "1", name: "COVER PAGE", type: "pdf", fileDate: "12/02/2024" },
-        {
-          id: "2",
-          name: "Plaint/Recovery Of Premise - Civil Form 5",
-          type: "pdf",
-          fileDate: "12/02/2024",
-        },
-        {
-          id: "3",
-          name: "Witness Statement On Oath",
-          type: "pdf",
-          fileDate: "12/02/2024",
-        },
-      ],
+  //grouped the documents by date
+  const groupedDocuments = data.documents.reduce(
+    (acc: { [key: string]: any }, doc) => {
+      const date = doc.created_at
+        ? new Date(doc.created_at).toLocaleDateString()
+        : "Unknown date";
+      acc[date] = acc[date] || { date, documents: [] };
+      acc[date].documents.push(doc);
+      return acc;
     },
-    {
-      date: "25/02/2024",
-      documents: [
-        {
-          id: "4",
-          name: "Motion On Notice",
-          type: "pdf",
-          fileDate: "25/02/2024",
-        },
-        {
-          id: "5",
-          name: "Motion Exparte",
-          type: "pdf",
-          fileDate: "25/02/2024",
-        },
-      ],
-    },
-  ];
-  const filteredGroups = documentGroups
+    {}
+  );
+
+  //filter by name search
+  const filteredGroups = Object.values(groupedDocuments)
     .map((group) => ({
       ...group,
-      documents: group.documents.filter((doc) =>
-        doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      documents: group.documents.filter((doc: IDocumentFileType) =>
+        doc.sub_title.toLowerCase().includes(searchQuery.toLowerCase())
       ),
     }))
     .filter((group) => group.documents.length > 0);
+
+  // const documentGroups = Object.values(groupedDocuments);
+  const handleRefileProcesses = () => {
+    const caseTypeFields = getCaseTypeFields(data);
+    dispatch(clearForm());
+    dispatch(updateStep(3));
+    dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
+    dispatch(addDocument([]));
+    navigate.push(`${data?.id}/refile-documents`);
+  };
 
   const handleDownload = (documentId: string) => {
     console.log(`Downloading document ${documentId}`);
@@ -107,69 +99,74 @@ export function CaseDocumentList() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="space-y-1">
-            <DropdownMenuItem variant="outline" className="uppercase text-sm">
+            <DropdownMenuItem
+              onClick={handleRefileProcesses}
+              variant="outline"
+              className="uppercase text-xs"
+            >
               Refile other process{" "}
             </DropdownMenuItem>
-            <DropdownMenuItem variant="outline" className="uppercase text-sm">
+            <DropdownMenuItem variant="outline" className="uppercase text-xs">
               Download all documents{" "}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        {/* <div className="w-1/6">
-          <FilterDropdown
-            triggerVariant="outline"
-            itemVariant="outline"
-            placeholder="SELECT ACTIONS"
-            options={filter}
-            value={selectedFilter}
-            onChange={handleFilterChange}
-          />
-        </div> */}
       </div>
 
       <div className="space-y-6">
-        {filteredGroups.map((group) => (
-          <div
-            key={group.date}
-            className="rounded-lg overflow-hidden border border-gray-200"
-          >
-            <div className="bg-secondary-foreground px-6 py-2 flex justify-between items-center">
-              <div className="text-base font-medium">
-                Filed on: <span className="font-bold">{group.date}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="font-semibold text-sm"
-                onClick={() => handleDownloadAll(group.date)}
-              >
-                Download All
-              </Button>
-            </div>
-            <div className="divide-y divide-gray-200">
-              {group.documents.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex items-center justify-between px-6 py-4 hover:bg-gray-50"
-                >
-                  <div className="flex items-center gap-3">
-                    <Icons.pdf className="h-6 w-6" />
-                    <span className="text-sm font-bold">{doc.name}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-500 hover:text-gray-700"
-                    onClick={() => handleDownload(doc.id)}
-                  >
-                    <Download className="h-4 w-4 text-black" />
-                    <span className="sr-only">Download {doc.name}</span>
-                  </Button>
+        {filteredGroups.length > 0 ? (
+          filteredGroups?.map((group) => (
+            <div
+              key={group.date}
+              className="rounded-lg overflow-hidden border border-gray-200"
+            >
+              <div className="bg-secondary-foreground px-6 py-2 flex justify-between items-center">
+                <div className="text-base font-medium">
+                  Filed on: <span className="font-bold">{group.date}</span>
                 </div>
-              ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-semibold text-sm"
+                  onClick={() => handleDownloadAll(group.date)}
+                >
+                  Download All
+                </Button>
+              </div>
+              <div className="divide-y divide-gray-200">
+                {group.documents.map((doc: IDocumentFileType) => (
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between px-6 py-4 hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icons.pdf className="h-6 w-6" />
+                      <span className="text-sm font-bold">{doc.sub_title}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => handleDownload(doc.id)}
+                    >
+                      <Download className="h-4 w-4 text-black" />
+                      <span className="sr-only">Download {doc.sub_title}</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div>
+            <div className="bg-white h-full space-y-6 relative w-full flex flex-col items-center justify-center rounded-lg">
+              <Icons.empty />
+              <p className="absolute bottom-4 font-semibold max-w-56 text-sm text-center">
+                No documents found matching "{searchQuery}"{" "}
+              </p>
             </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

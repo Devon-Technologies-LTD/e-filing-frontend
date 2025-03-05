@@ -5,7 +5,11 @@ import { QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useAppSelector } from "@/hooks/redux";
-import { ROLES } from "@/types/auth";
+// import { ROLES } from "@/types/auth";
+import { getCaseTypeFields } from "@/lib/utils";
+import { addDocument, clearForm, updateMultipleCaseTypeFields, updateStep } from "@/redux/slices/case-filing-slice";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 export function SingleCaseHeader({
   data,
@@ -15,7 +19,19 @@ export function SingleCaseHeader({
   data: any;
 }) {
   const id = decodeURIComponent(params.id);
-  const { data: user } = useAppSelector((state) => state.profile);
+  // const { data: user } = useAppSelector((state) => state.profile);
+  const navigate = useRouter();
+  const dispatch = useDispatch();
+
+  const handleRefileProcesses = () => {
+    const caseTypeFields = getCaseTypeFields(data);
+    dispatch(clearForm());
+    dispatch(updateStep(3));
+    dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
+    dispatch(addDocument([]));
+    navigate.push(`${params?.id}/refile-documents`);
+  };
+
   return (
     <div className="space-y-3 bg-white pt-4 ">
       <div className="container space-y-3">
@@ -43,9 +59,12 @@ export function SingleCaseHeader({
                 <QrCode className="h-10 w-10 text-gray-400" />
               </div>
               <Button
-                disabled={[ROLES.LAWYER, ROLES.USER].includes(
-                  user?.role as ROLES
-                )}
+                // disabled={[ROLES.LAWYER, ROLES.USER].includes(
+                //   user?.role as ROLES
+                // )}
+                onClick={() => {
+                  handleRefileProcesses();
+                }}
                 className="bg-primary"
               >
                 FILE OTHER PROCESSES

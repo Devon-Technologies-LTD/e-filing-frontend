@@ -28,7 +28,6 @@ export const LocationSelect = ({
     staleTime: 50000,
   });
 
-  console.log("response from location", data);
   return (
     <div className="w-full">
       <Select onValueChange={onChange} value={value}>

@@ -26,7 +26,7 @@ export default function DocumentUploadForm() {
 
   const uploadedDocuments = useAppSelector((state) =>
     state.caseFileForm.documents?.filter((doc) =>
-      Object.values(OtherDocumentMapping[case_type])
+      Object.values(OtherDocumentMapping[case_type] || [])
         .map((value: any) => value?.toLowerCase())
         .includes(doc.title?.toLowerCase())
     )

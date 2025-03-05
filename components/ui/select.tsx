@@ -5,6 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp, Loader } from "lucide-react"; // Import Loader icon
 
 import { cn } from "@/lib/utils";
+import { Icons } from "../svg/icons";
 
 const Select = SelectPrimitive.Root;
 
@@ -61,11 +62,21 @@ const SelectTrigger = React.forwardRef<
     variant?: keyof typeof selectTriggerVariants.variant;
     size?: keyof typeof selectTriggerVariants.size;
     loading?: boolean;
-    tooltip?:boolean
+    tooltip?: boolean;
+    lock?: boolean;
   }
 >(
   (
-    { className, children, variant = "default", size = "default", loading = false, tooltip=false, ...props },
+    {
+      className,
+      children,
+      variant = "default",
+      size = "default",
+      loading = false,
+      tooltip = false,
+      lock = false,
+      ...props
+    },
     ref
   ) => (
     <SelectPrimitive.Trigger
@@ -79,13 +90,18 @@ const SelectTrigger = React.forwardRef<
       {...props}
     >
       {children}
-     {tooltip? "": <SelectPrimitive.Icon asChild>
-        {loading ? (
-          <Loader className="h-4 w-4 animate-spin" /> // Render spinner if loading
-        ) : (
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        )}
-      </SelectPrimitive.Icon>}
+      {tooltip ? (
+        ""
+      ) : (
+        <SelectPrimitive.Icon asChild>
+          {loading ? (
+            <Loader className="h-4 w-4 animate-spin" /> // Render spinner if loading
+          ) : (
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          )}
+        </SelectPrimitive.Icon>
+      )}
+      {lock && <Icons.lock />}
     </SelectPrimitive.Trigger>
   )
 );

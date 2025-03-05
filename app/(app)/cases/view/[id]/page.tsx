@@ -20,12 +20,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useQuery } from "@tanstack/react-query";
-import { getAdminCaseFilesById, getCaseFilesById } from "@/lib/actions/case-file";
+import {
+  getAdminCaseFilesById,
+  getCaseFilesById,
+} from "@/lib/actions/case-file";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
+import { useRouter } from "next/navigation";
+import { getCaseTypeFields } from "@/lib/utils";
+import {
+  addDocument,
+  clearForm,
+  updateMultipleCaseTypeFields,
+  updateStep,
+} from "@/redux/slices/case-filing-slice";
+import { useDispatch } from "react-redux";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
+  const navigate = useRouter();
+  const dispatch = useDispatch();
 
   const tabs: { id: any; label: string }[] = [
     { id: "overview", label: "Case Overview" },
@@ -57,15 +71,24 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     enabled: !!params.id,
   });
 
+  const handleRefileProcesses = () => {
+    const caseTypeFields = getCaseTypeFields(data);
+    dispatch(clearForm());
+    dispatch(updateStep(3));
+    dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
+    dispatch(addDocument([]));
+    navigate.push(`${params?.id}/refile-documents`);
+  };
+
   console.log("get single data by id", data);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
   return (
-    <div className="bg-zinc-100 ">
-      <SingleCaseHeader data={data.data} params={params} />
-      <div className=" bg-white shadow-xl">
+    <div className="bg-zinc-100 h-full overflow-auto">
+      <SingleCaseHeader data={data} params={params} />
+      <div className=" bg-white shadow-md">
         <div className="container  flex justify-between items-center pt-2">
           <ReusableTabs
             tablistClassName="border-0"
@@ -88,7 +111,13 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="space-y-1">
-              <DropdownMenuItem variant="outline" className="uppercase text-xs">
+              <DropdownMenuItem
+                onClick={() => {
+                  handleRefileProcesses();
+                }}
+                variant="outline"
+                className="uppercase text-xs"
+              >
                 Refile other process{" "}
               </DropdownMenuItem>
               <DropdownMenuItem variant="outline" className="uppercase text-xs">
@@ -104,36 +133,38 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
           </DropdownMenu>
         </div>
       </div>
-      {activeTab === "overview" && (
-        <div className="container py-4 grid grid-cols-12 gap-5">
-          <div className="col-span-7 bg-white p-2">
-            <CaseOverview data={data} />
-          </div>{" "}
-          <div className="col-span-5 bg-white p-2">
-            <CaseUpdates />
+      <section className="py-4">
+        {activeTab === "overview" && (
+          <div className="container py-4 grid grid-cols-12 gap-5">
+            <div className="col-span-7 bg-white p-2">
+              <CaseOverview data={data} />
+            </div>{" "}
+            <div className="col-span-5 bg-white p-2">
+              <CaseUpdates />
+            </div>
           </div>
-        </div>
-      )}{" "}
-      {activeTab === "documents" && (
-        <div className="container py-4 grid grid-cols-12 gap-5">
-          <div className="col-span-7 bg-white p-2">
-            <CaseDocumentList />
-          </div>{" "}
-          <div className="col-span-5 bg-white p-2">
-            <DocumentUpdates />
+        )}{" "}
+        {activeTab === "documents" && (
+          <div className="container py-4 grid grid-cols-12 gap-5">
+            <div className="col-span-7 bg-white p-2">
+              <CaseDocumentList data={data} />
+            </div>{" "}
+            <div className="col-span-5 bg-white p-2">
+              <DocumentUpdates />
+            </div>
           </div>
-        </div>
-      )}
-      {activeTab === "decisions" && (
-        <div className="container py-4 grid grid-cols-12 gap-5">
-          <div className="col-span-7 bg-white p-2">
-            <CaseDocumentList />
-          </div>{" "}
-          <div className="col-span-5 bg-white p-2">
-            <DocumentUpdates />
+        )}
+        {activeTab === "decisions" && (
+          <div className="container py-4 grid grid-cols-12 gap-5">
+            <div className="col-span-7 bg-white p-2">
+              <CaseDocumentList data={data} />
+            </div>{" "}
+            <div className="col-span-5 bg-white p-2">
+              <DocumentUpdates />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </section>
     </div>
   );
 }

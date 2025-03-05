@@ -73,7 +73,7 @@ export const useSaveForm = ({
 
   const { triggerPayment } = useRemitaPayment({
     onSuccess: (response) => {
-      toast.success("payment successful");
+      console.log("response from remita payment==>", response);
       dispatch(updateStep(step + 1));
     },
     onError: (response) => console.log("Payment Error:", response),
@@ -87,6 +87,7 @@ export const useSaveForm = ({
       console.log("first in client", data);
       if (data?.success) {
         triggerPayment(data.data?.RRR, amount);
+        dispatch(updateCaseTypeName({ reference: data?.data?.RRR }));
       } else {
         toast.error(`Failed to generate RRR. ${data?.data.message}`);
       }
@@ -186,69 +187,30 @@ export const useSaveForm = ({
     },
     onSuccess: (data) => {
       console.log("response from save data", data);
-      if (data?.success) {
-        if (step === 1) {
-          if (isDraft) {
-            dispatch(
-              updateCaseTypeName({
-                case_file_id: data.id,
-              })
-            );
-            queryClient.invalidateQueries({
-              queryKey: ["get_case_drafts"],
-            });
-            navigate.push("/drafts");
-            dispatch(clearForm());
-            dispatch(clearCaseTypeError());
-          } else {
-            dispatch(
-              updateCaseTypeName({
-                case_file_id: data.id,
-              })
-            );
-          }
-        }
-        if (step === 5) {
-          if (isDraft) {
-            queryClient.invalidateQueries({
-              queryKey: ["get_case_drafts"],
-            });
-            navigate.push("/drafts");
-            dispatch(clearForm());
-            dispatch(clearCaseTypeError());
-          } else {
-            generateRRRMutation.mutate({ caseFileId: data.casefile_id });
-          }
-        } else {
-          if (isDraft) {
-            queryClient.invalidateQueries({
-              queryKey: ["get_case_drafts"],
-            });
-            navigate.push("/drafts");
-            dispatch(clearForm());
-            dispatch(clearCaseTypeError());
-          } else {
-            dispatch(updateStep(step + 1));
-          }
-        }
-        // if (isDraft) {
-        // queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
-        // navigate.push("/drafts");
-        // dispatch(clearForm());
-        // dispatch(clearCaseTypeError());
-        // } else {
-        //   if (step === 5) {
-        //     generateRRRMutation.mutate({ caseFileId: data.casefile_id });
-        //   } else {
-        //     dispatch(updateStep(step + 1));
-        //   }
-        // }
-      } else {
-        const errorMessage: any = formatErrors(data.errors);
+      if (!data?.success) {
+        const errorMessage = formatErrors(data.errors);
         toast.error(
           `${data?.message}: ${errorMessage}` ||
             "An error occurred while saving the form."
         );
+        return;
+      } else {
+        if (isDraft) {
+          queryClient.invalidateQueries({ queryKey: ["get_case_drafts"] });
+          navigate.push("/drafts");
+          dispatch(clearForm());
+          dispatch(clearCaseTypeError());
+        }
+        if (!isDraft) {
+          if (step === 1) {
+            dispatch(updateCaseTypeName({ case_file_id: data.id }));
+          }
+          if (step === 5) {
+            generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+          } else if (step < 5) {
+            dispatch(updateStep(step + 1));
+          }
+        }
       }
     },
     onError: (error) => {
