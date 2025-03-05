@@ -1,4 +1,5 @@
 
+'use client'
 import React, { ReactNode, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const { data: user } = useAppSelector((state) => state.profile);
   const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
   const dispatch = useDispatch();
+  const [showConfirmInvite, setShowConfirmInvite] = useState(false);
 
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
@@ -125,15 +127,26 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", { ...formValues, role, selectedCourt, selectedCourtDivision });
+      console.log("Form is valid, opening confirmation modal...");
+      setShowConfirmInvite(true);
     } else {
-      console.log("Form has errors");
+      console.log("Form has errors, modal will not open.");
     }
   };
 
+
   return (
     <Sheet>
-      <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
+      <SheetTrigger onClick={(e) => {
+        e.stopPropagation();
+
+        setFormValues({
+          first_name: "",
+          last_name: "",
+          email: "",
+        });
+
+      }}>{trigger}</SheetTrigger>
       <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
         <div className="space-y-8 mx-auto">
           <div className="space-y-6 w-full">
@@ -187,11 +200,16 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 </div>
               ))}
 
-              {/* Passing values to ConfirmInvite */}
-              <ConfirmInvite
-                formValues={{ ...formValues, role, court_type: selectedCourt, court_division: selectedCourtDivision }}
-                trigger={<Button type="submit">SEND INVITE</Button>}
-              />
+              <Button type="submit" onClick={onSubmit}>SEND INVITE</Button>
+              {isValid && (
+                <ConfirmInvite
+                  isOpen={showConfirmInvite}
+                  setIsOpen={setShowConfirmInvite}
+                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division: selectedCourtDivision }}
+                  trigger={<span />}
+                />
+              )}
+
             </form>
           </div>
         </div>

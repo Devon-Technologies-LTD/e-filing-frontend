@@ -17,7 +17,7 @@ export interface IUsersColumn {
   court_division?: string;
   districts?: string;
   courtType?: string;
-  created_at?: string;
+  created_at?: Date | undefined;
 }
 
 export const createUserColumns = (

@@ -17,15 +17,18 @@ interface FormValues {
   role: string;
   court_type?: string;
   court_division?: string;
+
 }
 
 interface Props {
   trigger: React.ReactNode;
   formValues: FormValues;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
-const ConfirmInvite: React.FC<Props> = ({ trigger, formValues }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, isOpen, setIsOpen }) => {
+  // const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 

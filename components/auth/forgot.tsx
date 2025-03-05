@@ -39,7 +39,7 @@ const FORGOT = () => {
                     </span>
                 </p>
             </div>
-            <form action={dispatch} className="w-full space-y-6">
+            <form action={dispatch} className="w-full space-y-8">
 
                 <InputField
                     id="email"

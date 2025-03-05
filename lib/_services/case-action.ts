@@ -24,6 +24,13 @@ const CaseActionService = {
         );
         return response.data;
     },
+    async deliverJudgement(payload: any, id: string): Promise<any> {
+        const response = await axiosInstance.post<any>(`/admin/casefile/deliver-judgement/${id}`,
+            payload
+        );
+        return response.data;
+    },
+    // ({{baseUrl}}/admin/casefile/deliver-judgement/32661cd1-ff3e-4af0-88e5-044db321afc1)
 
 };
 

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { AnalyticsChart } from "./analytics-chart";
 import DeleteUser from "./delete-user";
 import DeactivateUser from "./deactivate-user";
+import { format } from "date-fns";
 
 interface StatsCardProps {
   label: string;
@@ -84,7 +85,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                     Date Invited
                   </p>
                   <p className="text-sm text-primary font-extrabold uppercase">
-                    {row.created_at}
+                    {format(new Date(row?.created_at ?? ""), "MMM dd, yyyy")}
                   </p>
                 </div>
               </div>

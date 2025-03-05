@@ -183,7 +183,6 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
       message: "",
     };
   }
-
   try {
     const email = cookies().get("otpEmail")?.value; // Ensure correct cookie handling
     if (!email) {
@@ -305,5 +304,5 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       success: false,
     };
   }
-  // redirect("/login");
+  redirect("/login");
 }

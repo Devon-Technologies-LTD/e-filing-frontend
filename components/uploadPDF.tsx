@@ -1,11 +1,15 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
-import { useDropzone, FileRejection } from 'react-dropzone';
-import { Card } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { useCallback, useState } from "react";
+import { useDropzone, FileRejection } from "react-dropzone";
+import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
-export default function UploadPdf() {
+interface UploadPdfProps {
+    onFileSelect?: (file: File) => void; // Function to pass the selected file
+}
+
+export default function UploadPdf({ onFileSelect }: UploadPdfProps) {
     const [pdfFile, setPdfFile] = useState<string | null>(null);
 
     const onDrop = useCallback(
@@ -14,19 +18,21 @@ export default function UploadPdf() {
                 toast.error("Invalid file type. Please upload a PDF.");
                 return;
             }
+
             if (acceptedFiles.length > 0) {
                 const file = acceptedFiles[0];
                 const objectUrl = URL.createObjectURL(file);
                 setPdfFile(objectUrl);
+                onFileSelect?.(file); // Pass file to parent component
                 toast.success("PDF uploaded successfully!");
             }
         },
-        []
+        [onFileSelect]
     );
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: { 'application/pdf': [] },
+        accept: { "application/pdf": [] },
         maxSize: 5 * 1024 * 1024,
     });
 
@@ -36,14 +42,14 @@ export default function UploadPdf() {
                 <div className="w-full">
                     <Card
                         {...getRootProps()}
-                        className="h-[145px] mb-3 flex items-center bg-[#FDF5EC] justify-center cursor-pointer"
+                        className="h-[300px] mb-3 flex items-center bg-[#FDF5EC] justify-center cursor-pointer"
                     >
-                        <input {...getInputProps()} />
+                        <input name="pdf" {...getInputProps()} />
                         <p className="text-center text-sm font-medium text-gray-600">
                             {pdfFile ? (
                                 <iframe
                                     src={pdfFile}
-                                    className="w-full h-[120px] border rounded"
+                                    className="w-full h-[300px] border rounded"
                                     title="PDF Preview"
                                 />
                             ) : (
