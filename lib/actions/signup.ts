@@ -1,6 +1,6 @@
 "use server";
 
-import { OTPFormSchema, SignupFormSchema, } from "@/lib/_definitions";
+import { InvitationFormSchema, OTPFormSchema, SignupFormSchema, } from "@/lib/_definitions";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ErrorResponse, handleError, LoginResponseData, ROLES } from "@/types/auth";
@@ -191,6 +191,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
     // Extract form data
     const data = Object.fromEntries(formData.entries());
     const image = formData.get("image") as File | null;
+    console.log("am here 1")
 
     if (!image) {
         return {
@@ -209,6 +210,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
         "image/bmp",
         "image/tiff"
     ];
+    console.log("am here 2")
 
     if (!allowedMimeTypes.includes(image.type)) {
         return {
@@ -217,7 +219,6 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             message: "Invalid image format. Only JPG and PNG are allowed.",
         };
     }
-
     // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (image.size > maxSize) {
@@ -231,8 +232,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
     // Upload the image to the API
     const uploadFormData = new FormData();
     uploadFormData.append("image", image);
-
-    const result = SignupFormSchema.safeParse({ ...data });
+    const result = InvitationFormSchema.safeParse({ ...data });
     if (!result.success) {
         return {
             status: 400,
@@ -261,26 +261,11 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 },
             };
         }
-        const responseData = await signupResponse.json();
-        // Prepare session data
-        const sessionData = {
-            user: {
-                id: responseData.ID,
-                email: responseData.email,
-                first_name: responseData.first_name,
-                last_name: responseData.last_name,
-                phone_number: responseData.phone_number,
-                role: responseData.role,
-            },
-            token: responseData.token,
-        };
-
-        // Store session data
-        cookies().set("otpEmail", result.data.email);
-        cookies().set("AuthData", JSON.stringify(sessionData));
+        cookies().delete("TempID");
+        cookies().delete("TempToken");
+        return {  message: "Account updated successful. Please Login", success: true, status: 200 };
+        // return { message: "Account updated successfully. Please Login", success: true, status: 200 };
     } catch (err: unknown) {
         return handleError(err);
     }
-    // Redirect to OTP page
-    redirect("/login");
 }

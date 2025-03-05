@@ -9,7 +9,8 @@ const ClickableRow: React.FC<{ row: any }> = ({ row }) => {
   return (
     <tr
       className="cursor-pointer hover:bg-gray-100"
-      onClick={() => router.push(`/cases/view/${encodeURIComponent(row.original.caseId)}`)}
+      onClick={() => 
+        router.push(`/cases/view/${encodeURIComponent(row.original.caseId)}`)}
       style={{ cursor: "pointer" }} // Ensure pointer applies
     >
       {row.getVisibleCells().map((cell: any) => (

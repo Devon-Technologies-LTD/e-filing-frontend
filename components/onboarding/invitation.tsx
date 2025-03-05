@@ -6,14 +6,16 @@ import InputField from "@/components/ui/InputField";
 import { useFormState } from "react-dom";
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
 import { invitationAction } from "@/lib/actions/signup";
-import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import { CLIENT_ERROR_STATUS, SUCCESS_STATUS } from "@/lib/_constants";
 import { LoginPasswordField } from "@/components/passwordField";
 import { isFieldErrorObject } from "@/types/auth";
 import DragDropUploaderNIN from "./signup/DragDropUploaderNIN";
+import { useRouter } from "next/navigation";
 
 const InvitationComponent = (email: any) => {
-
+    const router = useRouter();
     const [state, dispatch] = useFormState(invitationAction, undefined);
+    
     const [loading, setLoading] = useState<boolean>(false);
 
     const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
@@ -26,6 +28,13 @@ const InvitationComponent = (email: any) => {
                         ? Object.values(state.errors).flat().join(", ")
                         : undefined,
             });
+        }
+    }, [state]);
+
+    useEffectAfterMount(() => {
+        if (state && SUCCESS_STATUS.includes(state?.status)) {
+            toast.success(state?.message);
+            router.push('/login');
         }
     }, [state]);
 
@@ -68,7 +77,7 @@ const InvitationComponent = (email: any) => {
                             name="email"
                             placeholder="name@gmail.com"
                             value={email?.email}
-                            disabled
+                            readonly={true}
                         />
                     </div>
                     <div className="space-y-6">

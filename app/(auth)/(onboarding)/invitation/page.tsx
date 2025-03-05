@@ -8,9 +8,6 @@ import { InvitationComponent } from "@/components/onboarding/invitation";
 import { toast } from "sonner";
 
 const InvitationPage = () => {
-    // const searchParams = useSearchParams();
-    // const email = searchParams.get("email");
-
     const searchParams = useSearchParams();
     const otp = searchParams.get("otp");
     const email = searchParams.get("email") ?? "";
@@ -28,7 +25,7 @@ const InvitationPage = () => {
             }
             try {
                 const response = await axios.post(`/api/accept-invite`, { email: encodedEmail, otp });
-                console.log("Invitation accepted:", response.data);
+                // console.log("Invitation accepted:", response.data);
                 toast.success("Invite has been accepted successfully");
             } catch (err: any) {
                 console.error("Error:", err);
@@ -38,7 +35,6 @@ const InvitationPage = () => {
                 setLoading(false);
             }
         };
-
         acceptInvite();
     }, [encodedEmail, otp]);
 

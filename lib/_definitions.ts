@@ -19,8 +19,7 @@ export const OTPFormSchema = z.object({
   otp: z.string().min(6, { message: "Min of 6 digit." }).trim(),
 });
 
-export const SignupFormSchema = z
-  .object({
+export const SignupFormSchema = z.object({
     first_name: z
       .string()
       .min(2, { message: "First name must be at least 2 characters long." })
@@ -30,19 +29,6 @@ export const SignupFormSchema = z
     role: z.string().optional(),
     gender: z.string().optional(),
     scn: z.string().optional(),
-    // scn: z
-    //   .string()
-    //   .nonempty("SCN is required")
-    //   .refine((val) => /^SCN\d{6}$/.test(val), {
-    //     message: "SCN must start with 'SCN' followed by exactly 6 digits",
-    //   }),
-    // image: z
-    // .instanceof(File, { message: "Image must be a file" }) // Ensure it's a file
-    // .refine((file) => file.size < 5 * 1024 * 1024, { message: "Image must be less than 5MB" }) // Limit size
-    // .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), {
-    //   message: "Invalid file type. Only JPEG, PNG, and WEBP are allowed.",
-    // }),
-    // court: z.string().nonempty("Supreme Court Number is required"),
     phone_number: z
       .string()
       .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
@@ -51,6 +37,28 @@ export const SignupFormSchema = z
       .string()
       .min(2, { message: "Last name must be at least 2 characters long." })
       .trim(),
+    email: z.string().email({ message: "Please enter a valid email." }).trim(),
+    password: z
+      .string()
+      .min(8, { message: "Passwword Must contain at least 8 characters long" })
+      .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
+      .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
+      .trim(),
+    confirm_password: z.string().trim(),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
+export const InvitationFormSchema = z.object({
+  
+    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
+    ipn: z.string().optional(),
+    scn: z.string().optional(),
+    phone_number: z
+      .string()
+      .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
+      .nonempty("Phone number is required"),
     email: z.string().email({ message: "Please enter a valid email." }).trim(),
     password: z
       .string()

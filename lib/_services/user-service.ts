@@ -24,7 +24,7 @@ export interface Ipage {
 const UserService = {
 
   async getUserManagement(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user`, {
+    const response = await axiosInstance.get(`admin/user/`, {
       params: {
         page: params.page ?? 1,
         limit: params.size ?? 10,
