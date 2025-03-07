@@ -3,7 +3,7 @@
 import { InvitationFormSchema, OTPFormSchema, SignupFormSchema, } from "@/lib/_definitions";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { ErrorResponse, handleError, LoginResponseData, ROLES } from "@/types/auth";
+import { handleError, LoginResponseData, ROLES } from "@/types/auth";
 import authService from "../_services/auth-service";
 import { createSession } from "../server/auth";
 import { defaultLoginRedirect } from "@/routes";
@@ -44,7 +44,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
             message: "Login failed",
         };
     }
-
     let role: ROLES;
     try {
         const email = cookies().get("otpEmail")?.value;
@@ -72,7 +71,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
                 errors: "Missing session data.",
             };
         }
-
         const sessionData = JSON.parse(storedData);
         const updatedSessionData = {
             user: {
@@ -85,9 +83,7 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
             },
             token: responseData.token,
         };
-
         console.log(updatedSessionData);
-
         role = updatedSessionData.user.role;
         await createSession(updatedSessionData);
     } catch (err: unknown) {

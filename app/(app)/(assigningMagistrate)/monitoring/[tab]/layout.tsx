@@ -5,8 +5,10 @@ import ReusableTabs from "@/components/ui/reusable-tabs";
 import { RoleToTabs } from "@/types/general";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
+import { CaseTypes, COURT_TYPE, ALL_DISTRICT } from "@/types/files/case-type";
 
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { LocationAdmin } from "@/components/location-admin";
 
 export default function LayoutPage({
   children,
@@ -21,6 +23,8 @@ export default function LayoutPage({
   const handleTabChange = (newTab: string) => {
     router.push(`/monitoring/${newTab}`);
   };
+  const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+
 
   const defaultTabs: { id: TCaseFilterType; label: string }[] = [
     { id: "case", label: "My Cases" },
@@ -63,10 +67,36 @@ export default function LayoutPage({
     return roleToTabs[user?.role as string] || defaultTabs;
   }, [user?.role]);
 
+
+  const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
+  const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
+  const handleCourtDivisionChange = (value: string) => {
+    setSelectedCourtDivision(value);
+    // handleChanges("court_division", value);
+    // dispatch(addCaseTypeError({ court_division: "" }));
+  };
+
+
   return (
     <div className="container mx-auto space-y-8 py-4">
       <header className="space-y-4">
-        <h1 className="text-xl font-semibold uppercase">Your Cases</h1>
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <LocationAdmin
+              placeholder="All District"
+              value={selectedCase}
+              className="bg-primary text-white"
+              onChange={handleCourtDivisionChange}
+              error={caseTypeErrors?.court_division}
+            />
+          </div>
+          <div className="text-primary text-end">
+            <>
+              <p className="text-2xl font-bold">0</p>
+              <p className="text-sm font-bold">Total Magistrates across all divisions</p>
+            </>
+          </div>
+        </div>
         <ReusableTabs
           tabs={tabs}
           onTabChange={handleTabChange}

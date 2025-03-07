@@ -22,6 +22,11 @@ export interface Ipage {
 }
 
 const UserService = {
+  async getAllUser(): Promise<any> {
+    const response = await axiosInstance.get(`admin/user`);
+    console.log(response.data);
+    return response.data;
+  },
 
   async getUserManagement(params: Ipage): Promise<any> {
     const response = await axiosInstance.get(`admin/user/`, {
@@ -30,7 +35,6 @@ const UserService = {
         limit: params.size ?? 10,
       },
     });
-
     return response.data;
   },
 
@@ -50,21 +54,6 @@ const UserService = {
     return response.data;
   },
 
-  // async getMenu(menu_id: string) {
-  //   return await userConfig.get(`/dishes/${menu_id}`)
-  // },
-
-  // async uploadImage(id: string, formData: FormData) {
-  //   return await userConfig.patch(`/staffs/upload_passport/${id}`, formData, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //     },
-  //   })
-  // },
-
-  // async updateStaffStatus(id: string, payload: TActivatorPayload) {
-  //   return await userConfig.patch(`/staffs/activate/${id}`, payload)
-  // },
 }
 
 export default UserService

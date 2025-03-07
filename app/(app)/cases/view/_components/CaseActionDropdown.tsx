@@ -23,16 +23,7 @@ interface CaseActionDropdownProps {
 
 
 const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => {
-    const [openSheet, setOpenSheet] = useState(false);
-    const [sheetTitle, setSheetTitle] = useState<string>("");
-
-    const handleOpenSheet = (title: string) => {
-        setSheetTitle(title);
-        setOpenSheet(true);
-    };
-
     const userRole = user?.role;
-
     if (
         ![ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(userRole!)
     ) {
@@ -89,9 +80,6 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                                 </DropdownMenuLabel>
                             }
                         />
-
-
-
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>

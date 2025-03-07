@@ -17,7 +17,6 @@ const CaseActionService = {
         );
         return response.data;
     },
-
     async requestReAssigment(payload: any, id: string): Promise<any> {
         const response = await axiosInstance.post<any>(`/admin/casefile/request-resassignment/${id}`,
             payload
@@ -30,7 +29,15 @@ const CaseActionService = {
         );
         return response.data;
     },
-    // ({{baseUrl}}/admin/casefile/deliver-judgement/32661cd1-ff3e-4af0-88e5-044db321afc1)
+    async getSingleCaseHistory(id: string): Promise<any> {
+        const response = await axiosInstance.get<any>(`/admin/casefile/hearing-history/${id}`);
+        return response.data;
+    },
+    async CaseAssignment(payload: any, id: string): Promise<any> {
+        const response = await axiosInstance.put<any>(`/admin/casefile/assign-case/${id}`,
+            payload);
+        return response.data;
+    },
 
 };
 

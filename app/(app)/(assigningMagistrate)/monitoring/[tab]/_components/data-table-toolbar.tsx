@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { YearSelector } from "@/components/year-selector";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
+import { PopoverCalendar } from "@/components/popover-calender";
 
 export function CasesDataTableToolbar({
   selectedCase,
@@ -33,11 +34,11 @@ export function CasesDataTableToolbar({
       </div>
 
       <section className="flex gap-3">
-        <YearSelector />
+        <PopoverCalendar initialDate={new Date()} />
         <FilterDropdown
           triggerVariant="outline"
           itemVariant="outline"
-          placeholder="SELECT CASE TYPE"
+          placeholder="ALL CASE TYPE"
           options={caseFilter}
           value={selectedCase}
           onChange={handleCaseTypeChange}

@@ -40,11 +40,6 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       token: data.token,
     };
     role = sessionData.user.role;
-    console.log(role);
-    console.log(role);
-    console.log(role);
-    console.log(role);
-    console.log(role);
     await createSession(sessionData);
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -179,7 +174,8 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
   if (!result.success) {
     return {
       status: 400,
-      errors: result.error.flatten().fieldErrors,
+      errors: result.error.flatten
+      ().fieldErrors,
       message: "",
     };
   }

@@ -66,6 +66,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
               )}
             </div>
           </div>
+          
 
           <ReusableTabs tabs={tabs} onTabChange={handleTabChange} activeTab={activeTab} />
 

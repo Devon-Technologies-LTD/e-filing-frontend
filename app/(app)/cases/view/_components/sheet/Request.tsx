@@ -12,8 +12,6 @@ import { Loader2 } from "lucide-react";
 import { ErrorResponse } from "@/types/auth";
 import { requestReAssigment } from "@/lib/actions/case-actions";
 
-
-
 interface ScheduleSheetProps {
     trigger: React.ReactNode;
     id: string;
