@@ -59,12 +59,13 @@ export default function FilteredCases() {
     staleTime: 50000,
   });
 
-  console.log("first", data);
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
         return UnassignedColumns;
       case "under-review":
+      case "approved-review":
+      case "denied-review":
         return UnderReviewColumns;
       default:
         return MainColumns;

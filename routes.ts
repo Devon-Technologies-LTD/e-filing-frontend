@@ -20,12 +20,10 @@ export const authRoutes = [
   "/forgot",
   "/password-otp",
   "/reset-password",
-  '/invitation',
+  "/invitation",
 ];
 
-export const publicRoutes = [
-  '/invitation',
-]
+export const publicRoutes = ["/invitation"];
 
 /**
  * The prefix for API authentication routes
@@ -49,7 +47,8 @@ export const apiPrefix = "/api";
 export const DEFAULT_LOGIN_REDIRECT = "/case-filing";
 export const defaultLoginRedirect = (role?: ROLES) => {
   switch (role) {
-    case "ADMIN": return "/case-filing";
+    case "ADMIN":
+      return "/case-filing";
     case ROLES.CHIEF_JUDGE:
     case ROLES.DIRECTOR_MAGISTRATE:
     case ROLES.ASSIGNING_MAGISTRATE:
@@ -60,9 +59,9 @@ export const defaultLoginRedirect = (role?: ROLES) => {
       return "/cases/recent";
     case ROLES.SUPERADMIN:
       return "/reviews/under-review";
+    case ROLES.CENTRAL_REGISTRAR:
+      return "/overview/case";
     default:
       return "/cases/recent";
   }
 };
-
-
