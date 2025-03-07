@@ -7,12 +7,21 @@ import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ErrorResponse } from "@/types/auth";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+
 interface CaseRequestSheetProps {
     trigger: React.ReactNode;
     id: string;
 }
 
 export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [reason, setReason] = useState("");
 
     const { data, isLoading } = useQuery({
         queryKey: ["get_single_case_by_id"],
@@ -28,6 +37,34 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
             .map((n) => n[0])
             .join("");
         return initials.toUpperCase();
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        // setIsSubmitting(true);
+        try {
+            // const formData = {
+            //     casefile_id: data.id,
+            //     reason: reason,
+            // };
+            // console.log(formData);
+            // const response = await requestReAssigment(formData, data.id);
+            // console.log(response);
+            // if (response.success) {
+            //     toast.success(response.message);
+            // } else {
+            //     const errorMessage = response.data.message;
+            //     const detailedError = response.data.error;
+            //     toast.error(`${errorMessage}:  ${detailedError}`);
+            // }
+
+        } catch (err: unknown) {
+            const error = err as ErrorResponse;
+            toast.error(error.message);
+            console.log(error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -65,10 +102,16 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
                         <StatusBadge status={data?.status}>{data?.status}</StatusBadge>
                     </div>
 
-                    <p className="text-stone-600 text-sm font-bold mb-2">Request for Denial</p>
-                    <div className="border-b-2 bg-zinc-300 pb-3">
-                        <p>-</p>
-                    </div>
+                    <form onSubmit={handleSubmit} className="space-y-2">
+                        <div className="space-y-2">
+                            <p className="font-bold text-base">Reason for Request</p>
+                            <Textarea placeholder="Type here." required name="reason" className="bg-neutral-100 border-b-2 h-52 border-gray-300" onChange={(e) => setReason(e.target.value)} />
+                        </div>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                            SUBMIT REQUEST
+                        </Button>
+                    </form>
 
                 </div>
             </SheetContent>

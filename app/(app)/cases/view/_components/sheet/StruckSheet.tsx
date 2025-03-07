@@ -22,7 +22,6 @@ interface StruckSheetProps {
 export default function StruckSheet({ trigger, id }: StruckSheetProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
     queryFn: async () => {

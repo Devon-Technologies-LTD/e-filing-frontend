@@ -176,6 +176,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
               {/* Court Division Selection */}
               {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
                 <LocationAdmin
+                  placeholder="Select A Filing Location"
                   value={selectedCourtDivision}
                   onChange={handleCourtDivisionChange}
                   error={caseTypeErrors?.court_division}

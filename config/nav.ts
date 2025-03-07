@@ -42,7 +42,7 @@ export const navigationLinks: NavItem[] = [
   {
     title: "Case Reviews",
     href: "/reviews/under-review",
-    roles: [ROLES.CENTRAL_REGISTRAR, ROLES.CHIEF_JUDGE], //mote remove cheif judge role
+    roles: [ROLES.CENTRAL_REGISTRAR], //mote remove cheif judge role
     isActive: (pathname) => pathname?.startsWith("/reviews"),
   },
   {

@@ -8,19 +8,25 @@ import {
 } from "./ui/select";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ROLES } from "@/types/auth";
-import { useAppSelector } from "@/hooks/redux";
+import { cn } from "@/lib/utils";
+
 
 export const LocationAdmin = ({
+    placeholder,
     value,
     onChange,
     disabled,
     error,
+    className, // Added className as a prop
+
 }: {
     value: string;
+    placeholder: string;
     disabled?: boolean;
     onChange: (value: string) => void;
     error?: string;
+    className?: string; // Allowing className to be passed
+
 }) => {
     const { data, isLoading: loading } = useQuery({
         queryKey: ["divisions"],
@@ -31,7 +37,7 @@ export const LocationAdmin = ({
         staleTime: 50000,
     });
 
-      const { data: user } = useAppSelector((state) => state.profile);
+    //   const { data: user } = useAppSelector((state) => state.profile);
     const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
     const [selectedSubDivision, setSelectedSubDivision] = useState<string | null>(null);
 
@@ -56,8 +62,8 @@ export const LocationAdmin = ({
         <div className="w-full space-y-4">
             {/* Select Court Division */}
             <Select onValueChange={handleDivisionChange} value={selectedTitle ?? undefined}>
-                <SelectTrigger loading={loading} disabled={loading || disabled} variant={error ? "error" : "underlined"}>
-                    <SelectValue className="text-neutral-700 text-xs" placeholder="Select A Filing Location" />
+                <SelectTrigger className={cn("h-11", className)} loading={loading} disabled={loading || disabled} variant={error ? "error" : "underlined"}>
+                    <SelectValue className="text-neutral-700 text-xs mx-4 " placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-zinc-900">
                     {data?.data?.length > 0 ? (

@@ -15,14 +15,17 @@ import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CaseTypes } from "@/types/files/case-type";
+import { useAppSelector } from "@//hooks/redux";
 
 export default function FilteredCases() {
   const params = useParams();
   const tab = params.tab as TCaseFilterType;
   const router = useRouter();
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
       "get_cases",
@@ -39,10 +42,12 @@ export default function FilteredCases() {
         size: DEFAULT_PAGE_SIZE,
         status: getStatusByTab(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
+        role: user?.role, // Move role inside the payload
       });
     },
     staleTime: 50000,
   });
+
 
   const getColumns = () => {
     switch (tab) {

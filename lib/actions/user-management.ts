@@ -19,10 +19,10 @@ export interface Ipage {
     size?: number;
 }
 
-// Update the function to accept parameters
+
 export async function getUserManagement(params: Ipage) {
     try {
-        const data = await UserService.getUserManagement(params); // Use 'params' instead of 'Ipage'
+        const data = await UserService.getUserManagement(params);
         return { ...data, success: true };
     } catch (err: unknown) {
         console.log(err);
@@ -63,6 +63,51 @@ export async function getUserManagement(params: Ipage) {
 
     }
 }
+
+export async function getAllUser() {
+    try {
+        const data = await UserService.getAllUser();
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        console.log(err);
+        const error = err as ErrorResponse;
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: "An unexpected error occurred.",
+                errors: "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+
+    }
+}
+
 export async function getPendingUser(params: Ipage) {
     try {
         const data = await UserService.getPendingUsers(params);
@@ -109,7 +154,7 @@ export async function getPendingUser(params: Ipage) {
 
 
 export async function InviteUserAction(_prevState: unknown, formData: FormData) {
-    const formDataObject = Object.fromEntries(formData.entries()); // ✅ Correct way to extract form data
+    const formDataObject = Object.fromEntries(formData.entries());
 
     console.log("Received Form Data:", formDataObject);
 
@@ -149,7 +194,7 @@ export async function InviteUserAction(_prevState: unknown, formData: FormData) 
     }
 }
 export async function ActiveUserAction(_prevState: unknown, formData: FormData) {
-    const formDataObject = Object.fromEntries(formData.entries()); // ✅ Correct way to extract form data
+    const formDataObject = Object.fromEntries(formData.entries());
 
     console.log("Received Form Data:", formDataObject);
 
