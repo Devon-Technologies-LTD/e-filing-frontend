@@ -41,7 +41,7 @@ export default function LayoutPage({
     { id: "active", label: "Active Cases" },
     { id: "concluded", label: "Concluded Cases" },
   ];
-    const centralaRegistrarTabs = [
+   const centralaRegistrarTabs = [
       { id: "under-review", label: "Under Review" },
       { id: "approved-review", label: "Approved Cases Filed" },
       { id: "denied-review", label: "Denied Cases Filed" },

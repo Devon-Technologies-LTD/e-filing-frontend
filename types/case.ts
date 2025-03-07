@@ -5,6 +5,7 @@ export type TCaseFilterType =
   | "recent"
   | "active"
   | "reassigned"
+  | "assigned"
   | "registerars"
   | "under-review"
   | "approved-review"
@@ -12,7 +13,8 @@ export type TCaseFilterType =
   | "unassigned"
   | "concluded"
   | "performing"
-  | "request";
+  | "request"
+  | "submitted";
 export type MCaseFilterType = "case" | "magistrate" | "financial";
 
 export interface ICase {
@@ -42,7 +44,7 @@ export interface IMetric {
   title: string;
   total: string;
   lastYear: string;
-  variant?: string
+  variant?: string;
   description: string;
   districts: { name: string; cases: number }[];
 }

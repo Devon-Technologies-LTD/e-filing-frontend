@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useCaseFile } from "./layout";
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import { ConfirmationModal } from "@/components/confirmation-modal";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { AlertDialogFooter } from "@/components/ui/alert-dialog";
+import { useCaseFile } from "../components/case-file-context";
 
 function CaseTypeSection({
   caseType,
@@ -148,7 +148,6 @@ function ExhibitsSection({ documents }: { documents: IDocumentFileType[] }) {
     </div>
   );
 }
-
 
 export default function Page() {
   const { data } = useCaseFile();

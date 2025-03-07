@@ -38,7 +38,6 @@ export function StatusBadge({
   tooltipProps,
 }: StatusBadgeProps) {
   const variantClass = VARIANT_STYLES[status] || "bg-gray-50 text-gray-800";
-  console.log("status inside the view", status);
   const badgeElement = (
     <Badge
       variant="outline"
