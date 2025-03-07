@@ -19,6 +19,7 @@ const VARIANT_STYLES = {
   ["under review"]: "bg-gray-50 text-gray-800 border-gray-200",
   denied: "bg-rose-50 text-rose-800 border-rose-200",
   assigned: "bg-lime-50 text-lime-800 border-lime-200",
+  ["action required"]: "bg-red-50 text-red-500 border-red-200",
 };
 
 interface StatusBadgeProps {
