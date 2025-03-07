@@ -2,6 +2,7 @@
 import { ROLES } from "@/types/auth";
 import CaseFileService, {
   CaseTypeDetails,
+  IChangeStatus,
   ICreateCaseFileData,
   IDraftFilter,
 } from "../_services/case-file";
@@ -67,6 +68,15 @@ export async function getAdminCaseFilesById(id: string) {
 export async function deleteCase(id: string) {
   try {
     const data = await CaseFileService.deleteCaseFiles(id);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function changeCaseStatus(id: string, payload: IChangeStatus) {
+  try {
+    const data = await CaseFileService.changeCaseStatus(id, payload);
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

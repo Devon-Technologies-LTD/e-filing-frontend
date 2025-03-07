@@ -1,7 +1,8 @@
 "use client";
 import {
-  mainColumns,
-  unassignedColumns,
+  MainColumns,
+  UnassignedColumns,
+  UnderReviewColumns,
 } from "@/app/(app)/cases/[tab]/_components/table-columns";
 import { DataTable } from "@/components/data-table";
 import { TCaseFilterType } from "@/types/case";
@@ -16,6 +17,7 @@ import { getStatusByTab } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CaseTypes } from "@/types/files/case-type";
 import { useAppSelector } from "@//hooks/redux";
+import { ROLES } from "@/types/auth";
 
 export default function FilteredCases() {
   const params = useParams();
@@ -36,6 +38,7 @@ export default function FilteredCases() {
         selectedCase,
       },
     ],
+
     queryFn: async () => {
       return await getCaseFiles({
         page: currentPage,
@@ -52,14 +55,22 @@ export default function FilteredCases() {
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
-        return unassignedColumns;
+        return UnassignedColumns;
+      case "under-review":
+      case "approved-review":
+      case "denied-review":
+        return UnderReviewColumns;
       default:
-        return mainColumns;
+        return MainColumns;
     }
   };
   const columns = getColumns();
   const handleRowClick = (row: any) => {
-    router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+    if (user?.role === ROLES.CENTRAL_REGISTRAR) {
+      router.push(`/cases/reviews/${encodeURIComponent(row.id)}`);
+    } else {
+      router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+    }
   };
   return (
     <div className="space-y-12">
@@ -88,4 +99,3 @@ export default function FilteredCases() {
     </div>
   );
 }
-

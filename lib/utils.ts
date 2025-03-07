@@ -35,7 +35,6 @@ export function handleApiError2(error: any) {
   };
 }
 
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -160,12 +159,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-          .getSeconds()
-          .toString()
-          .padStart(2, "0")}`,
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -190,7 +189,6 @@ export function dateFormatter(dateString: string | Date) {
     unixTimestamp: Math.floor(date.getTime() / 1000), // 1739793815 (Unix seconds)
   };
 }
-
 
 export const getCaseTypeFields = (data: any) => ({
   // current_step: +data.steps,
@@ -242,6 +240,15 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
   switch (tab) {
     case "pending":
       return [CaseStatus.Pending, CaseStatus.UnderReview];
+    case "case":
+      return [
+        CaseStatus.Approved,
+        CaseStatus.ToBeAssigned,
+        CaseStatus.UnderReview,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.StruckOut,
+        CaseStatus.Assigned,
+      ];
     case "recent":
       return [
         CaseStatus.UnderReview,
@@ -251,6 +258,16 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
       ];
     case "active":
       return [CaseStatus.Approved, CaseStatus.Assigned];
+    case "assigned":
+      return [CaseStatus.Assigned];
+    case "submitted":
+      return [CaseStatus.Assigned];
+    case "under-review":
+      return [CaseStatus.UnderReview];
+    case "approved-review":
+      return [CaseStatus.Approved];
+    case "denied-review":
+      return [CaseStatus.Denied];
     case "unassigned":
       return [CaseStatus.UnderReview, CaseStatus.ToBeAssigned];
     case "concluded":

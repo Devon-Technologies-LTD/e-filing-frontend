@@ -5,26 +5,34 @@ import { ROLES } from "@/types/auth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
+const getRedirectPath = (role: string | undefined): string => {
+  if (!role) return "/login";
+
+  switch (role) {
+    case ROLES.DIRECTOR_MAGISTRATE:
+    case ROLES.PRESIDING_MAGISTRATE:
+      return "/cases/assigned";
+    case ROLES.ASSIGNING_MAGISTRATE:
+      return "/cases/case";
+    case ROLES.CENTRAL_REGISTRAR:
+      return "/cases/under-review";
+    default:
+      return "/cases/recent";
+  }
+};
+
 export default function CasesPage() {
   const { data: user } = useAppSelector((state) => state.profile);
   useEffect(() => {
-    if (user) {
-      let redirectPath = "/cases/recent";
-      if (
-        [ROLES.DIRECTOR_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(
-          user?.role
-        )
-      ) {
-        redirectPath = "/cases/assigned";
-      }
-      if (user?.role === ROLES.ASSIGNING_MAGISTRATE) {
-        redirectPath = "/cases/case";
-      }
-      redirect(redirectPath);
-    } else {
-      <SuspenseLoader />;
-    }
+    if (!user) return;
+
+    const redirectPath = getRedirectPath(user.role);
+    redirect(redirectPath);
   }, [user]);
+
+  if (!user) {
+    return <SuspenseLoader />;
+  }
 
   return null;
 }

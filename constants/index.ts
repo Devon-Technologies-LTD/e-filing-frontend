@@ -19,6 +19,7 @@ export enum CaseStatus {
   UnderReview = "under review",
   Denied = "denied",
   Assigned = "assigned",
+  ActionRequired = "action required",
 }
 
 export enum CaseTypeData {
