@@ -91,6 +91,7 @@ export interface CaseDetailsResponse {
   created_at: string;
   updated_at: string;
   assigned_to: string;
+  assignee_name: string;
 }
 
 const CaseFileService = {

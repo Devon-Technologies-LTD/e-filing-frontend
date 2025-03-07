@@ -55,10 +55,16 @@ export const MainColumns: ColumnDef<CaseDetailsResponse>[] = [
         <div className="flex break-all items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-secondary-foreground text-black">
-              {row.original.assigned_to ?? ""}
+              {row.original.assignee_name
+                ? row.original.assignee_name
+                    .split(" ")
+                    .map((word) => word.charAt(0))
+                    .join("")
+                    .toUpperCase()
+                : ""}{" "}
             </AvatarFallback>
           </Avatar>
-          {row.original?.assigned_to ?? "---------"}
+          {row.original?.assignee_name ?? "---------"}
         </div>
       );
     },
@@ -71,7 +77,7 @@ export const MainColumns: ColumnDef<CaseDetailsResponse>[] = [
         <StatusBadge
           tooltip={""}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status as any}
+          status={row.original.status?.toLowerCase() as any}
         />
       );
     },
@@ -128,7 +134,7 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
         <StatusBadge
           tooltip={""}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status as any}
+          status={row.original.status?.toLowerCase() as any}
         />
       );
     },
@@ -205,9 +211,9 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     cell: ({ row }) => {
       return (
         <StatusBadge
-          tooltip={""}
+          tooltip={row.original.status?.toLowerCase()}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status as any}
+          status={row.original.status?.toLowerCase() as any}
         />
       );
     },

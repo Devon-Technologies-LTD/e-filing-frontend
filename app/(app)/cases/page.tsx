@@ -23,6 +23,9 @@ export default function CasesPage() {
       if (user?.role === ROLES.CENTRAL_REGISTRAR) {
         redirectPath = "/cases/under-review";
       }
+      if (user?.role === ROLES.PRESIDING_MAGISTRATE) {
+        redirectPath = "/cases/assigned";
+      }
       redirect(redirectPath);
     } else {
       <SuspenseLoader />;
