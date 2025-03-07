@@ -1,7 +1,8 @@
 "use client";
 import {
-  mainColumns,
-  unassignedColumns,
+  MainColumns,
+  UnassignedColumns,
+  UnderReviewColumns,
 } from "@/app/(app)/cases/[tab]/_components/table-columns";
 import { DataTable } from "@/components/data-table";
 import { TCaseFilterType } from "@/types/case";
@@ -15,12 +16,15 @@ import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CaseTypes } from "@/types/files/case-type";
+import { ROLES } from "@/types/auth";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function FilteredCases() {
   const params = useParams();
   const tab = params.tab as TCaseFilterType;
   const router = useRouter();
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading: draftsLoading } = useQuery({
@@ -33,13 +37,24 @@ export default function FilteredCases() {
         selectedCase,
       },
     ],
+
     queryFn: async () => {
-      return await getCaseFiles({
-        page: currentPage,
-        size: DEFAULT_PAGE_SIZE,
-        status: getStatusByTab(tab),
-        casetype: selectedCase === "all" ? null : selectedCase,
-      });
+      return await getCaseFiles(
+        {
+          page: currentPage,
+          size: DEFAULT_PAGE_SIZE,
+          status: getStatusByTab(tab),
+          casetype: selectedCase === "all" ? null : selectedCase,
+        },
+        [
+          ROLES.CHIEF_JUDGE,
+          ROLES.CENTRAL_REGISTRAR,
+          ROLES.ASSIGNING_MAGISTRATE,
+          ROLES.CHIEF_JUDGE,
+          ROLES.PRESIDING_MAGISTRATE,
+          ROLES.DIRECTOR_MAGISTRATE,
+        ].includes(user?.role as ROLES)
+      );
     },
     staleTime: 50000,
   });
@@ -47,14 +62,20 @@ export default function FilteredCases() {
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
-        return unassignedColumns;
+        return UnassignedColumns;
+      case "under-review":
+        return UnderReviewColumns;
       default:
-        return mainColumns;
+        return MainColumns;
     }
   };
   const columns = getColumns();
   const handleRowClick = (row: any) => {
-    router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+    if (user?.role === ROLES.CENTRAL_REGISTRAR) {
+      router.push(`/cases/reviews/${encodeURIComponent(row.id)}`);
+    } else {
+      router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+    }
   };
   return (
     <div className="space-y-12">
@@ -83,4 +104,3 @@ export default function FilteredCases() {
     </div>
   );
 }
-

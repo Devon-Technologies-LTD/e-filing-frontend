@@ -1,6 +1,7 @@
 "use server";
 import CaseFileService, {
   CaseTypeDetails,
+  IChangeStatus,
   ICreateCaseFileData,
   IDraftFilter,
 } from "../_services/case-file";
@@ -27,10 +28,23 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
     return handleApiError(error);
   }
 }
-export async function getCaseFiles(payload: IDraftFilter) {
+export async function getCaseFiles(
+  payload: IDraftFilter,
+  isAdmin: boolean = false
+) {
   try {
-    const data = await CaseFileService.getCaseFiles(payload);
-    // const data = await CaseFileService.getCaseFilesAdmin(payload);
+    const data = isAdmin
+      ? await CaseFileService.getCaseFilesAdmin(payload)
+      : await CaseFileService.getCaseFiles(payload);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getAdminCaseFiles(payload: IDraftFilter) {
+  try {
+    const data = await CaseFileService.getCaseFilesAdmin(payload);
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -58,6 +72,15 @@ export async function getAdminCaseFilesById(id: string) {
 export async function deleteCase(id: string) {
   try {
     const data = await CaseFileService.deleteCaseFiles(id);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function changeCaseStatus(id: string, payload: IChangeStatus) {
+  try {
+    const data = await CaseFileService.changeCaseStatus(id, payload);
     return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

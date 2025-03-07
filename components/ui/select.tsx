@@ -97,11 +97,16 @@ const SelectTrigger = React.forwardRef<
           {loading ? (
             <Loader className="h-4 w-4 animate-spin" /> // Render spinner if loading
           ) : (
-            <ChevronDown className="h-4 w-4 opacity-50" />
+            <>
+              {lock ? (
+                <Icons.lock />
+              ) : (
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              )}
+            </>
           )}
         </SelectPrimitive.Icon>
       )}
-      {lock && <Icons.lock />}
     </SelectPrimitive.Trigger>
   )
 );

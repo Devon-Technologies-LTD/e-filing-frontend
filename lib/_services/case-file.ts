@@ -1,5 +1,6 @@
 import { CaseStatus, CaseTypeData } from "@/constants";
 import { axiosInstance } from "../_api/axios-config";
+import { changeCaseStatus } from "../actions/case-file";
 
 export interface ICreateCaseFileData {
   title?: string;
@@ -69,6 +70,11 @@ export interface IDraftFilter {
   page?: number;
   size?: number;
 }
+export interface IChangeStatus {
+  status: CaseStatus;
+  reason?: string;
+}
+
 
 export interface CaseDetailsResponse {
   id: string;
@@ -93,7 +99,6 @@ const CaseFileService = {
       `casefile`,
       payload
     );
-
     return response.data;
   },
   async getCaseFilesAdmin(payload: IDraftFilter): Promise<any> {
@@ -101,7 +106,6 @@ const CaseFileService = {
       `admin/casefile/case-filter`,
       payload
     );
-    console.log("case filter response", response.data);
     return response.data;
   },
   async getCaseFiles(payload: IDraftFilter): Promise<any> {
@@ -110,22 +114,25 @@ const CaseFileService = {
       `casefile/case-filter?page=${payload.page}&size=${payload.size}`,
       rest
     );
-    console.log("case filter response", response.data);
     return response.data;
   },
   async getCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`CaseFile/${id}`);
-    console.log("case filter by id response", response.data);
     return response.data;
   },
   async getAdminCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`admin/CaseFile/${id}`);
-    console.log("case filter by id response", response.data);
     return response.data;
   },
   async deleteCaseFiles(id: string): Promise<any> {
     const response = await axiosInstance.delete<string>(`casefile/${id}`);
-    console.log("case filter response", response.data);
+    return response.data;
+  },
+  async changeCaseStatus(id: string, body: IChangeStatus): Promise<any> {
+    const response = await axiosInstance.post<string>(
+      `admin/casefile/change-case-status/${id}`,
+      body
+    );
     return response.data;
   },
   async patchCaseFile({
