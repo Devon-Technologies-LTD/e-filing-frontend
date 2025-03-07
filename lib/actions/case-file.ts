@@ -1,4 +1,5 @@
 "use server";
+import { ROLES } from "@/types/auth";
 import CaseFileService, {
   CaseTypeDetails,
   IChangeStatus,
@@ -28,29 +29,22 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
     return handleApiError(error);
   }
 }
-export async function getCaseFiles(
-  payload: IDraftFilter,
-  isAdmin: boolean = false
-) {
+// Updated getCaseFiles function
+export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
   try {
-    const data = isAdmin
-      ? await CaseFileService.getCaseFilesAdmin(payload)
-      : await CaseFileService.getCaseFiles(payload);
-    return { ...data, success: true };
+    if ([ROLES.PRESIDING_MAGISTRATE].includes(payload.role as ROLES)) {
+      const data = await CaseFileService.getCaseFilesAdmin(payload);
+      return { ...data, success: true };
+    } else {
+      const data = await CaseFileService.getCaseFiles(payload);
+      return { ...data, success: true };
+    }
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);
   }
 }
-export async function getAdminCaseFiles(payload: IDraftFilter) {
-  try {
-    const data = await CaseFileService.getCaseFilesAdmin(payload);
-    return { ...data, success: true };
-  } catch (err: unknown) {
-    const error = err as ErrorResponse;
-    return handleApiError(error);
-  }
-}
+
 export async function getCaseFilesById(id: string) {
   try {
     const data = await CaseFileService.getCaseFilesbyId(id);
@@ -60,6 +54,7 @@ export async function getCaseFilesById(id: string) {
     return handleApiError(error);
   }
 }
+
 export async function getAdminCaseFilesById(id: string) {
   try {
     const data = await CaseFileService.getAdminCaseFilesbyId(id);
@@ -69,6 +64,7 @@ export async function getAdminCaseFilesById(id: string) {
     return handleApiError(error);
   }
 }
+
 export async function deleteCase(id: string) {
   try {
     const data = await CaseFileService.deleteCaseFiles(id);

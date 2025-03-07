@@ -47,6 +47,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
     if (!date) return toast.error("Please select a hearing date.");
     if (!time) return toast.error("Please select a time.");
 
+    
     setIsSubmitting(true);
     const parsedTime = parse(time, "hh:mm a", new Date());
     try {
@@ -59,13 +60,12 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
       const response = await createCaseFile(formData, data.id);
       console.log(response);
       if (response.success) {
-        toast.success(response.message);
+        toast.success("successful");
       } else {
         const errorMessage = response.data.message;
         const detailedError = response.data.error;
         toast.error(`${errorMessage}:  ${detailedError}`);
       }
-
     } catch (err: unknown) {
       const error = err as ErrorResponse;
       toast.error(error.message);

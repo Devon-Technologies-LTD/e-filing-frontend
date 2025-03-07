@@ -42,7 +42,7 @@ export default function FilteredCases() {
 
   const columns = getColumns();
   const handleRowClick = (row: any) => {
-    router.push(`/cases/view/${encodeURIComponent(row.id)}`);
+    router.push(`/monitoring/view/${encodeURIComponent(row.id)}`);
   };
 
   return (
@@ -51,7 +51,7 @@ export default function FilteredCases() {
         selectedCase={selectedCase}
         setSelectedCase={setSelectedCase}
       />
-      <DataTable  onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
+      <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
       <div className="flex justify-end">
         <Pagination
           currentPage={currentPage}

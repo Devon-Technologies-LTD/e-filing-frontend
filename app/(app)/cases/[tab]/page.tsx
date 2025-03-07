@@ -16,8 +16,8 @@ import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CaseTypes } from "@/types/files/case-type";
+import { useAppSelector } from "@//hooks/redux";
 import { ROLES } from "@/types/auth";
-import { useAppSelector } from "@/hooks/redux";
 
 export default function FilteredCases() {
   const params = useParams();
@@ -27,6 +27,7 @@ export default function FilteredCases() {
   const { data: user } = useAppSelector((state) => state.profile);
 
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
       "get_cases",
@@ -39,25 +40,17 @@ export default function FilteredCases() {
     ],
 
     queryFn: async () => {
-      return await getCaseFiles(
-        {
-          page: currentPage,
-          size: DEFAULT_PAGE_SIZE,
-          status: getStatusByTab(tab),
-          casetype: selectedCase === "all" ? null : selectedCase,
-        },
-        [
-          ROLES.CHIEF_JUDGE,
-          ROLES.CENTRAL_REGISTRAR,
-          ROLES.ASSIGNING_MAGISTRATE,
-          ROLES.CHIEF_JUDGE,
-          ROLES.PRESIDING_MAGISTRATE,
-          ROLES.DIRECTOR_MAGISTRATE,
-        ].includes(user?.role as ROLES)
-      );
+      return await getCaseFiles({
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+        status: getStatusByTab(tab),
+        casetype: selectedCase === "all" ? null : selectedCase,
+        role: user?.role, // Move role inside the payload
+      });
     },
     staleTime: 50000,
   });
+
 
   const getColumns = () => {
     switch (tab) {

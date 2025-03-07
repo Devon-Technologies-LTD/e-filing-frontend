@@ -10,8 +10,6 @@ import { Icons } from "@/components/svg/icons";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { useQuery } from "@tanstack/react-query";
 
-
-
 interface ReAssignmentSheetProps {
   trigger: React.ReactNode;
   id: string,

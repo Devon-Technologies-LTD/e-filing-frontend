@@ -26,9 +26,6 @@ export async function POST(req: NextRequest) {
         // Sending request to external API
         const response = await axiosInstance.post(url, data);
         console.log("API Response:", response.data);
-
-
-
         return new NextResponse(JSON.stringify(response.data), {
             status: response.status,
             headers: { "Content-Type": "application/json" },

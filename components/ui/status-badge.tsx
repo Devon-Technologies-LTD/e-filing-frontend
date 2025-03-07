@@ -7,19 +7,31 @@ import {
   TooltipTrigger,
 } from "./tooltip";
 import React from "react";
-import { CaseStatus } from "@/constants";
 
-const VARIANT_STYLES = {
-  draft: "bg-amber-50 text-amber-800 border-amber-200",
-  pending: "bg-amber-50 text-amber-800 border-amber-200",
-  approved: "bg-green-50 text-green-800 opacity-60",
-  ["to be assigned"]: "bg-red-50 text-red-800 border-red-200",
-  ["judgement delivered"]: "bg-blue-50 text-blue-800 border-blue-200",
-  ["struck out"]: "bg-green-50 text-green-700 opacity-60",
-  ["under review"]: "bg-gray-50 text-gray-800 border-gray-200",
-  denied: "bg-rose-50 text-rose-800 border-rose-200",
-  assigned: "bg-lime-50 text-lime-800 border-lime-200",
-  ["action required"]: "bg-red-50 text-red-500 border-red-200",
+export enum CaseStatus {
+  Draft = "draft",
+  Pending = "pending",
+  ToBeAssigned = "to be assigned",
+  JudgementDelivered = "judgement delivered",
+  StruckOut = "struck out",
+  Approved = "approved",
+  UnderReview = "under review",
+  Denied = "denied",
+  Assigned = "assigned",
+  ActionRequired = "action required",
+}
+
+const VARIANT_STYLES: Record<CaseStatus, string> = {
+  draft: "bg-amber-100 text-amber-900 border-amber-300",
+  pending: "bg-amber-100 text-amber-900 border-amber-300",
+  approved: "bg-green-100 text-green-900 border-green-300",
+  "to be assigned": "bg-red-100 text-red-900 border-red-300",
+  "judgement delivered": "bg-blue-100 text-blue-900 border-blue-300",
+  "struck out": "bg-green-100 text-green-900 border-green-300",
+  "under review": "bg-rose-100 text-rose-900 border-rose-300",
+  denied: "bg-rose-100 text-rose-900 border-rose-300",
+  assigned: "bg-lime-100 text-lime-900 border-lime-300",
+  "action required": "bg-yellow-100 text-yellow-900 border-yellow-300",
 };
 
 interface StatusBadgeProps {
@@ -37,17 +49,19 @@ export function StatusBadge({
   tooltip,
   tooltipProps,
 }: StatusBadgeProps) {
-  const variantClass = VARIANT_STYLES[status] || "bg-gray-50 text-gray-800";
+  const variantClass =
+    VARIANT_STYLES[status] || "bg-gray-100 text-gray-900 border-gray-300";
+
   const badgeElement = (
     <Badge
       variant="outline"
       className={cn(
-        "whitespace-nowrap font-bold uppercase py-1 border-none text-xs rounded-2xl",
+        "whitespace-nowrap font-semibold uppercase py-1 px-2 border text-xs rounded-full",
         variantClass,
         className
       )}
     >
-      {children || (status ? String(status)?.toLowerCase() : "N/A")}
+      {children || status.toLowerCase() || "N/A"}
     </Badge>
   );
 
@@ -58,7 +72,7 @@ export function StatusBadge({
           <TooltipTrigger>{badgeElement}</TooltipTrigger>
           <TooltipContent
             side="bottom"
-            className="text-zinc-700 font-medium text-xs"
+            className="bg-white text-gray-700 font-medium text-xs shadow-md border border-gray-200 rounded-md p-2"
           >
             {tooltip}
           </TooltipContent>

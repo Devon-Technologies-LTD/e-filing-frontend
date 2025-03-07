@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { toast } from "sonner";
-import { deliverJudgement, requestReAssigment } from "@/lib/actions/case-actions";
+import { deliverJudgement } from "@/lib/actions/case-actions";
 import { ErrorResponse } from "@/types/auth";
 
 interface DeliverJugdement {
