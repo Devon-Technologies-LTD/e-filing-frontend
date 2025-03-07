@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext } from "react";
+import React from "react";
 import { SideNav } from "../components/side-nav";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
@@ -8,16 +8,9 @@ import { ReviewActions } from "../components/review-actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { CaseStatus, CriminalCaseSubType } from "@/constants";
 import { Icons } from "@/components/svg/icons";
+import { CaseFileContext } from "../components/case-file-context";
 
-const CaseFileContext = createContext<any>(null);
 
-export const useCaseFile = () => {
-  const context = useContext(CaseFileContext);
-  if (!context) {
-    throw new Error("useCaseFile must be used within CaseFileProvider");
-  }
-  return context;
-};
 
 export default function layout({
   children,
