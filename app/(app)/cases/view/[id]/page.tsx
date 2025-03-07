@@ -72,6 +72,9 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     enabled: !!params.id,
   });
 
+  console.log("single case details", data);
+
+
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -141,7 +144,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               <CaseOverview data={data} />
             </div>{" "}
             <div className="col-span-5 bg-white p-2">
-              <CaseUpdates />
+              <CaseUpdates id={data.id} />
             </div>
           </div>
         )}{" "}

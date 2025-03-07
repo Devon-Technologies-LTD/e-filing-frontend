@@ -74,9 +74,9 @@ export default function CaseHistoryTimeline({ steps }: TimelineProgressProps) {
                   </div>
                 </div>
 
-                <div className="text-xs leading-none flex justify-end font-bold text-stone-600">
+                {/* <div className="text-xs leading-none flex justify-end font-bold text-stone-600">
                   View Receipts{" "}
-                </div>
+                </div> */}
               </div>
             </>
           ))}

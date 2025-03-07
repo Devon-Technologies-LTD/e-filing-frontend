@@ -44,7 +44,15 @@ export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
     return handleApiError(error);
   }
 }
-
+export async function getCaseActivity(id: string) {
+  try {
+    const data = await CaseFileService.getCaseActivity(id);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function getCaseFilesById(id: string) {
   try {
     const data = await CaseFileService.getCaseFilesbyId(id);

@@ -8,8 +8,19 @@ import { ActivityList } from "@/components/activity-list";
 import { notifications } from "@/lib/dummy-data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CaseHistoryTimeline from "./case-history";
+import { useQuery } from "@tanstack/react-query";
+import { getCaseActivity } from "@/lib/actions/case-file";
+import { NotificationIcon } from "@/components/ui/notifications-icon";
+import { dateFormatter, formatDate } from "@/lib/utils";
+import NotificationSkeleton from "./activity-skeleton";
 
-export function CaseUpdates() {
+interface INotification {
+  id: string;
+  initials: string;
+  title: string;
+  created_at: string;
+}
+export function CaseUpdates({ id }: { id: string }) {
   const tabs: { id: any; label: string }[] = [
     { id: "recent", label: "Recent Activities" },
     { id: "history", label: "Case History" },
@@ -20,6 +31,27 @@ export function CaseUpdates() {
     setActiveTab(value);
   };
 
+  const { data, isLoading: activityLoading } = useQuery({
+    queryKey: ["get_case_activity"],
+    queryFn: async () => {
+      return await getCaseActivity(id);
+    },
+    staleTime: 50000,
+  });
+  const { data:hearignData, isLoading: hearingLoading } = useQuery({
+    queryKey: ["get_case_hearing"],
+    queryFn: async () => {
+      return await getCaseActivity(id);
+    },
+    staleTime: 50000,
+  });
+
+  const timelineSteps = data?.history?.map((item: any) => ({
+    title: "Case Filed Successfully",
+    description: item?.title,
+    status: "completed",
+    time: dateFormatter(item?.created_at).fullDate,
+  }));
   return (
     <div className="bg-white space-y-4 w-full overflow-hidden p-4 rounded-lg shadow-sm">
       <div className="flex justify-between w-full items-center gap-4">
@@ -38,32 +70,57 @@ export function CaseUpdates() {
       <ScrollArea className="h-[calc(100dvh-300px)] max-h-[calc(100dvh-300px)] overflow-y-auto rounded-md ">
         <div className="py-4">
           {activeTab === "recent" && (
-            <ActivityList notifications={notifications} />
+            <>
+              {activityLoading ? (
+                <NotificationSkeleton />
+              ) : (
+                <div className="space-y-6">
+                  <p className="text-xs font-extrabold text-stone-600">
+                    Recent
+                  </p>
+                  {data?.activity?.map((notification: INotification) => (
+                    <div key={notification.id} className="border-b py-3">
+                      <div className="flex items-center gap-4">
+                        <NotificationIcon
+                          type={"check"}
+                          initials={notification.initials}
+                        />
+                        <div className="space-y-1 max-w-md">
+                          <p className="text-sm font-semibold">
+                            {notification.title}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
+                        {dateFormatter(notification.created_at).relativeTime}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
           {activeTab === "history" && (
-            <CaseHistoryTimeline
-              steps={[
-                {
-                  title: "Case Filed Successfully",
-                  description:
-                    "Suit Number #12345 generated, QR Code and electronic seal issued.",
-                  status: "completed",
-                  time: "5/01/2025",
-                },
-                {
-                  title: "Awaiting to be assigned to a Magistrate",
-                  description:
-                    "No Magistrate has been assigned to this case yet",
-                  status: "pending",
-                  time: "5/01/2025",
-                },
-              ]}
-            />
+            <>
+              {activityLoading ? (
+                <NotificationSkeleton />
+              ) : (
+                <CaseHistoryTimeline steps={timelineSteps} />
+              )}
+            </>
           )}
           {activeTab === "hearings" && (
-            <ActivityList
-              notifications={notifications.filter((n) => n.icon === "hearings")}
-            />
+            <>
+              {hearingLoading ? (
+                <NotificationSkeleton />
+              ) : (
+                <ActivityList
+                  notifications={notifications.filter(
+                    (n) => n.icon === "hearings"
+                  )}
+                />
+              )}
+            </>
           )}
         </div>
       </ScrollArea>
