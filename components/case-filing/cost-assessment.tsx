@@ -32,12 +32,14 @@ const variants = {
 export default function CostAssessment({
   documents,
   case_type,
+  isRefiling,
   variant = "default",
   recovery_amount,
   sub_case_type,
 }: {
   documents: IDocumentFileType[];
   case_type: string;
+  isRefiling?: boolean;
   recovery_amount?: string;
   sub_case_type?: any;
   variant?: keyof typeof variants.header;
@@ -121,18 +123,18 @@ export default function CostAssessment({
         ? costItems.civil
         : [];
 
-    if (case_type === CaseTypeData.CIVIL_CASE && recovery_amount) {
+    if (!isRefiling && case_type === CaseTypeData.CIVIL_CASE && recovery_amount) {
       const recoveryTitle = getTitleByRecoveryAmount({
-        recoveryAmount: recovery_amount as any,
-        type: sub_case_type,
+      recoveryAmount: recovery_amount as any,
+      type: sub_case_type,
       });
       items = [
-        ...items,
-        {
-          name: recoveryTitle,
-          category: CaseTypeData.CIVIL_CASE,
-          amount: getFeeByTitle(recoveryTitle),
-        },
+      ...items,
+      {
+        name: recoveryTitle,
+        category: CaseTypeData.CIVIL_CASE,
+        amount: getFeeByTitle(recoveryTitle),
+      },
       ];
     }
     return items;
@@ -157,8 +159,6 @@ export default function CostAssessment({
       maximumFractionDigits: 2,
     });
 
-  console.log("documentGroups", documentGroups);
-  console.log("costItems", costItems);
   return (
     <div className="space-y-4">
       <div className={cn(variants.header[variant])}>

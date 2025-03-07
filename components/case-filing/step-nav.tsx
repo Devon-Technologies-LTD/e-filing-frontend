@@ -33,6 +33,7 @@ export function StepNav({ isRefiling = false }: Iprops) {
         {current_step > 1 && case_type && (
           <div className="space-y-3 ">
             <CostAssessment
+              isRefiling
               sub_case_type={sub_case_type}
               recovery_amount={recovery_amount}
               documents={documents}
