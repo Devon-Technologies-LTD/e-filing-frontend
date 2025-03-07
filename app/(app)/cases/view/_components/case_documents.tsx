@@ -30,9 +30,8 @@ export function CaseDocumentList({ data }: IProps) {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-
   //grouped the documents by date
-  const groupedDocuments = data.documents.reduce(
+  const groupedDocuments = (data?.documents || [])?.reduce(
     (acc: { [key: string]: any }, doc) => {
       const date = doc.created_at
         ? new Date(doc.created_at).toLocaleDateString()
@@ -46,7 +45,7 @@ export function CaseDocumentList({ data }: IProps) {
 
   //filter by name search
   const filteredGroups = Object.values(groupedDocuments)
-    .map((group) => ({
+    ?.map((group) => ({
       ...group,
       documents: group.documents.filter((doc: IDocumentFileType) =>
         doc.sub_title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -162,7 +161,7 @@ export function CaseDocumentList({ data }: IProps) {
             <div className="bg-white h-full space-y-6 relative w-full flex flex-col items-center justify-center rounded-lg">
               <Icons.empty />
               <p className="absolute bottom-4 font-semibold max-w-56 text-sm text-center">
-                No documents found matching "{searchQuery}"{" "}
+                No documents found {searchQuery?`matching "${searchQuery}"`:""}
               </p>
             </div>
           </div>

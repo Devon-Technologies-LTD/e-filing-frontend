@@ -83,6 +83,8 @@ export default function DocumentUploadComponent({
       if (onError) onError(error);
     },
   });
+
+
   const deleteMutation = useMutation({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {

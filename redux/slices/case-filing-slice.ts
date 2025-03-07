@@ -79,7 +79,7 @@ const initialState: FormState = {
   caseTypeErrors: {},
   caseType: {
     court_division: "",
-    reference:"",
+    reference: "",
     counsel_name: "",
     claimant_address: "",
     claimant_name: "",
@@ -159,11 +159,13 @@ const formSlice = createSlice({
       state.documents = action.payload;
     },
     updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
-      const index = state.documents?.findIndex(
+      if (!state.documents) {
+        state.documents = [];
+      }
+      const index = state?.documents?.findIndex(
         (d) =>
           d.title === action.payload.title &&
-          d.sub_title.toLowerCase() !==
-            action.payload.sub_title.toLowerCase()
+          d.sub_title.toLowerCase() === action.payload.sub_title.toLowerCase()
       );
       if (index !== -1) {
         state.documents[index] = action.payload;

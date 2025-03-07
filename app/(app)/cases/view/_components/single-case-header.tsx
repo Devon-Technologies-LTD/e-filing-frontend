@@ -53,13 +53,17 @@ export function SingleCaseHeader({
           <Link href="/cases" className="font-semibold">
             YOUR CASES
           </Link>
-          <span className="text-zinc-500 font-bold">/ {id}</span>
+          <span className="text-zinc-500 font-bold">
+            / {data?.case_suit_number}
+          </span>
         </div>
 
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-medium text-primary">{id}</h1>
+            <h1 className="text-2xl font-medium text-primary">
+              {data?.case_suit_number}
+            </h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
               <StatusBadge status={data?.status} />
@@ -103,9 +107,10 @@ export function SingleCaseHeader({
               <div className="flex gap-2">
                 <QrCode className="h-10 w-10 text-gray-400" />
                 <Button
-                  disabled={![ROLES.LAWYER, ROLES.USER].includes(
-                    user?.role as ROLES
-                  )}
+                  onClick={handleRefileProcesses}
+                  disabled={
+                    ![ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES)
+                  }
                   className="bg-primary"
                 >
                   FILE OTHER PROCESSES

@@ -32,7 +32,7 @@ const variants = {
 export default function CostAssessment({
   documents,
   case_type,
-  isRefiling,
+  isRefiling = false,
   variant = "default",
   recovery_amount,
   sub_case_type,
@@ -123,18 +123,22 @@ export default function CostAssessment({
         ? costItems.civil
         : [];
 
-    if (!isRefiling && case_type === CaseTypeData.CIVIL_CASE && recovery_amount) {
+    if (
+      !isRefiling &&
+      case_type === CaseTypeData.CIVIL_CASE &&
+      recovery_amount
+    ) {
       const recoveryTitle = getTitleByRecoveryAmount({
-      recoveryAmount: recovery_amount as any,
-      type: sub_case_type,
+        recoveryAmount: recovery_amount as any,
+        type: sub_case_type,
       });
       items = [
-      ...items,
-      {
-        name: recoveryTitle,
-        category: CaseTypeData.CIVIL_CASE,
-        amount: getFeeByTitle(recoveryTitle),
-      },
+        ...items,
+        {
+          name: recoveryTitle,
+          category: CaseTypeData.CIVIL_CASE,
+          amount: getFeeByTitle(recoveryTitle),
+        },
       ];
     }
     return items;
@@ -146,7 +150,7 @@ export default function CostAssessment({
       ...costItems.other,
       ...costItems.exhibits,
       { amount: DEFAULT_SEAL_FEE },
-    ].reduce((acc, curr) => acc + (curr.amount || 0), 0);
+    ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
   }, [displayedItems, costItems]);
 
   useEffect(() => {
