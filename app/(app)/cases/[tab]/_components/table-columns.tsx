@@ -97,7 +97,7 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     ),
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {
@@ -142,7 +142,7 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
 ];
 export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {
@@ -153,7 +153,10 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
       return (
         <Tooltip>
           <TooltipTrigger>
-            <div className="max-w-32 text-left line-clamp-2 break-words" title={title}>
+            <div
+              className="max-w-32 text-left line-clamp-2 break-words"
+              title={title}
+            >
               {title}
             </div>
           </TooltipTrigger>

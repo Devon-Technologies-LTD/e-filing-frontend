@@ -38,7 +38,7 @@ export function CaseUpdates({ id }: { id: string }) {
     },
     staleTime: 50000,
   });
-  const { data:hearignData, isLoading: hearingLoading } = useQuery({
+  const { data:hearingData, isLoading: hearingLoading } = useQuery({
     queryKey: ["get_case_hearing"],
     queryFn: async () => {
       return await getCaseActivity(id);

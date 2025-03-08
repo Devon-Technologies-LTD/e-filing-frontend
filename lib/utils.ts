@@ -174,7 +174,7 @@ export function dateFormatter(dateString: string | Date) {
       if (minutesAgo === 0) return "Just now";
       if (minutesAgo < 60) return `${minutesAgo} minutes ago`;
       if (hoursAgo < 24) return `${hoursAgo} hours ago`;
-      return `${daysAgo} days ago`;
+      return daysAgo === 1 ? "1 day ago" : `${daysAgo} days ago`;
     })(),
     amPmFormat: (() => {
       const hours = date.getHours() % 12 || 12;

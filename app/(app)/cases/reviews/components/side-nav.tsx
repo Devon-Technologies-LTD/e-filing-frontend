@@ -18,8 +18,9 @@ interface Iprops {
   data: IDataProps;
 }
 export function SideNav({ data }: Iprops) {
+  console.log("first sdddd", data);
   function getTitle(status: CaseStatus) {
-    switch (status?.toLowerCase()) {
+    switch (status) {
       case CaseStatus.UnderReview:
         return "Review case files before it is assigned";
       case CaseStatus.Approved:
@@ -37,7 +38,7 @@ export function SideNav({ data }: Iprops) {
       <div className="mx-auto overflow-auto scrollbar-hide h-[calc(100vh-220px)] space-y-8">
         <div className="sticky top-0 bg-white z-10 space-y-2">
           <div className="text-3xl font-medium leading-8 text-primary">
-            {getTitle(data?.status)}
+            {data?.status ? getTitle(data?.status?.toLowerCase() as any) : ""}
           </div>
         </div>
         <div className="space-y-3 ">

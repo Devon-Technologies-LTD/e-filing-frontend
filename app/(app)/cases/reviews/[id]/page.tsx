@@ -10,10 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/svg/icons";
 import { Input } from "@/components/ui/input";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { useCaseFile } from "../components/case-file-context";
 
 function CaseTypeSection({
