@@ -140,7 +140,11 @@ export function CaseDocumentList({ data }: IProps) {
                   >
                     <div className="flex items-center gap-3">
                       <Icons.pdf className="h-6 w-6" />
-                      <span className="text-sm font-bold">{doc.sub_title}</span>
+                      <span className="text-sm font-bold">
+                        {doc.case_type_name === "EXHIBITS"
+                          ? `Exhibit - ${doc.title}`
+                          : doc.sub_title}
+                      </span>
                     </div>
                     <Button
                       variant="ghost"
@@ -161,7 +165,8 @@ export function CaseDocumentList({ data }: IProps) {
             <div className="bg-white h-full space-y-6 relative w-full flex flex-col items-center justify-center rounded-lg">
               <Icons.empty />
               <p className="absolute bottom-4 font-semibold max-w-56 text-sm text-center">
-                No documents found {searchQuery?`matching "${searchQuery}"`:""}
+                No documents found{" "}
+                {searchQuery ? `matching "${searchQuery}"` : ""}
               </p>
             </div>
           </div>

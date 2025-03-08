@@ -10,8 +10,6 @@ import { CaseStatus, CriminalCaseSubType } from "@/constants";
 import { Icons } from "@/components/svg/icons";
 import { CaseFileContext } from "../components/case-file-context";
 
-
-
 export default function layout({
   children,
   params,
@@ -24,7 +22,6 @@ export default function layout({
     queryFn: () => getAdminCaseFilesById(params.id),
     enabled: !!params.id,
   });
-  console.log("first", data);
 
   if (isLoading) {
     return <CaseDocumentListSkeleton />;
