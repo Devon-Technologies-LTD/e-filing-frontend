@@ -169,7 +169,12 @@ export function dateFormatter(dateString: string | Date) {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
       const minutesAgo = Math.floor(diff / 60000);
-      return minutesAgo === 0 ? "Just now" : `${minutesAgo} minutes ago`;
+      const hoursAgo = Math.floor(diff / 3600000);
+      const daysAgo = Math.floor(diff / 86400000);
+      if (minutesAgo === 0) return "Just now";
+      if (minutesAgo < 60) return `${minutesAgo} minutes ago`;
+      if (hoursAgo < 24) return `${hoursAgo} hours ago`;
+      return daysAgo === 1 ? "1 day ago" : `${daysAgo} days ago`;
     })(),
     amPmFormat: (() => {
       const hours = date.getHours() % 12 || 12;

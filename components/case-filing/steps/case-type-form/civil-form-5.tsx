@@ -459,6 +459,7 @@ export const CivilCaseForm5 = () => {
             </p>
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
+                required
                 errorMessage={caseTypeErrors?.signature ?? ""}
                 subTitle={CaseTypeData.CIVIL_CASE}
                 title={"E-SIGNATURE"}
@@ -480,8 +481,6 @@ export const CivilCaseForm5 = () => {
             }}
             error={caseTypeErrors?.counsel_name ?? ""}
           />
-
-          
         </div>
       </div>
     </div>

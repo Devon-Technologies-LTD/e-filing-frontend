@@ -16,6 +16,8 @@ export function StepNav({ isRefiling = false }: Iprops) {
 
   const form = isRefiling ? REFILING_FORM_STEPS : FORM_STEPS;
   const step = isRefiling ? current_step - 2 : current_step;
+
+  console.log("RefilingLayout", isRefiling);
   return (
     <div className=" max-h-screen bg-white border-r pr-12">
       <div className="mx-auto overflow-auto scrollbar-hide h-[calc(100vh-220px)] space-y-8">
@@ -33,6 +35,7 @@ export function StepNav({ isRefiling = false }: Iprops) {
         {current_step > 1 && case_type && (
           <div className="space-y-3 ">
             <CostAssessment
+              isRefiling={isRefiling}
               sub_case_type={sub_case_type}
               recovery_amount={recovery_amount}
               documents={documents}

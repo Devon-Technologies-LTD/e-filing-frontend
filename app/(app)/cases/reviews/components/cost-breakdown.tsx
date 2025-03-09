@@ -89,7 +89,7 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       ...displayedItems,
       ...costExhibitsItems,
       { amount: DEFAULT_SEAL_FEE },
-    ].reduce((acc, curr) => acc + (curr.amount || 0), 0);
+    ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
   }, [displayedItems]);
 
   return (

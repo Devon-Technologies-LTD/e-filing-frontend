@@ -13,6 +13,11 @@ interface documentFee {
   UpdatedAt: string;
   UpdatedBy: string;
 }
+
+interface IFeesResponse {
+  document_fees: documentFee[];
+  sub_document_fees: documentFee[];
+}
 const PublicApis = {
   async getAllTypes(): Promise<IDivisionResponse[]> {
     const response = await axiosInstance.get<IDivisionResponse[]>(
@@ -20,10 +25,8 @@ const PublicApis = {
     );
     return response.data;
   },
-  async getDocumentFees(): Promise<documentFee[]> {
-    const response = await axiosInstance.get<documentFee[]>(
-      `/public/document-fees`
-    );
+  async getDocumentFees(): Promise<any> {
+    const response = await axiosInstance.get<any>(`/public/document-fees`);
     return response.data;
   },
 };

@@ -32,27 +32,32 @@ const variants = {
 export default function CostAssessment({
   documents,
   case_type,
+  isRefiling = false,
   variant = "default",
   recovery_amount,
   sub_case_type,
 }: {
   documents: IDocumentFileType[];
   case_type: string;
+  isRefiling?: boolean;
   recovery_amount?: string;
   sub_case_type?: any;
   variant?: keyof typeof variants.header;
 }) {
-  const { data, isLoading } = useQuery({
+  const { data:fees, isLoading } = useQuery({
     queryKey: ["get_document_fees"],
     queryFn: async () => {
       return await getDocumentFees();
     },
   });
+  const data = [...(fees?.document_fees ?? []), ...(fees?.sub_document_fees ?? [])];
   const dispatch = useDispatch();
 
   const getFeeByTitle = (title: any) => {
     const item = Array.isArray(data)
-      ? data.find((item) => item.title?.toLowerCase() === title?.toLowerCase())
+      ? data?.find(
+          (item) => item.title?.toLowerCase() === title?.toLowerCase()
+        )
       : null;
     return item ? Number(item.fee) : 0;
   };
@@ -121,7 +126,11 @@ export default function CostAssessment({
         ? costItems.civil
         : [];
 
-    if (case_type === CaseTypeData.CIVIL_CASE && recovery_amount) {
+    if (
+      !isRefiling &&
+      case_type === CaseTypeData.CIVIL_CASE &&
+      recovery_amount
+    ) {
       const recoveryTitle = getTitleByRecoveryAmount({
         recoveryAmount: recovery_amount as any,
         type: sub_case_type,
@@ -144,7 +153,7 @@ export default function CostAssessment({
       ...costItems.other,
       ...costItems.exhibits,
       { amount: DEFAULT_SEAL_FEE },
-    ].reduce((acc, curr) => acc + (curr.amount || 0), 0);
+    ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
   }, [displayedItems, costItems]);
 
   useEffect(() => {
@@ -157,8 +166,6 @@ export default function CostAssessment({
       maximumFractionDigits: 2,
     });
 
-  console.log("documentGroups", documentGroups);
-  console.log("costItems", costItems);
   return (
     <div className="space-y-4">
       <div className={cn(variants.header[variant])}>
@@ -170,7 +177,8 @@ export default function CostAssessment({
         </h2>
         {isLoading ? (
           <p>Loading...</p>
-        ) : !Array.isArray(data) || !data.length ? (
+        ) : !Array.isArray(data) ||
+          !data?.length ? (
           <p className="py-6">Unable to fetch document fees</p>
         ) : (
           <div className="space-y-3 uppercase">

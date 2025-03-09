@@ -75,7 +75,6 @@ export interface IChangeStatus {
   reason?: string;
 }
 
-
 export interface CaseDetailsResponse {
   id: string;
   user_id: string;
@@ -106,6 +105,12 @@ const CaseFileService = {
     const response = await axiosInstance.post<IDraftFilter>(
       `admin/casefile/case-filter`,
       payload
+    );
+    return response.data;
+  },
+  async getCaseActivity(id: string): Promise<any> {
+    const response = await axiosInstance.get<IDraftFilter>(
+      `activity/case-activity/${id}`
     );
     return response.data;
   },

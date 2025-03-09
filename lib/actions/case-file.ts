@@ -31,8 +31,9 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
 }
 // Updated getCaseFiles function
 export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
+  console.log("payloaddddd", payload);
   try {
-    if ([ROLES.PRESIDING_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(payload.role as ROLES)) {
+    if ([ROLES.PRESIDING_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.CENTRAL_REGISTRAR].includes(payload.role as ROLES)) {
       const data = await CaseFileService.getCaseFilesAdmin(payload);
       return { ...data, success: true };
     } else {
@@ -44,7 +45,15 @@ export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
     return handleApiError(error);
   }
 }
-
+export async function getCaseActivity(id: string) {
+  try {
+    const data = await CaseFileService.getCaseActivity(id);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function getCaseFilesById(id: string) {
   try {
     const data = await CaseFileService.getCaseFilesbyId(id);
