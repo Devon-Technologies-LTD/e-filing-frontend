@@ -32,7 +32,7 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
 // Updated getCaseFiles function
 export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
   try {
-    if ([ROLES.PRESIDING_MAGISTRATE].includes(payload.role as ROLES)) {
+    if ([ROLES.PRESIDING_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(payload.role as ROLES)) {
       const data = await CaseFileService.getCaseFilesAdmin(payload);
       return { ...data, success: true };
     } else {
