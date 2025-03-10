@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { inter } from "@/app/fonts";
+import { Inter } from 'next/font/google';
 import "./globals.css";
 import { AppProvider } from "@/lib/provider";
 import NextTopLoader from "nextjs-toploader";
@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   },
   description: "Court Filing System",
 };
+const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] });
 
 export default function RootLayout({
   children,
@@ -30,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.className}>
       <Head>
         <title>E-Filing Portal</title>
         <meta
@@ -41,7 +42,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" />
       </Head>
       <body
-        className={`${inter.variable} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
+        className={`${inter.className} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
       >
         <Suspense fallback={<SuspenseLoader />}>
           <Toaster richColors expand={true} position="top-center" />

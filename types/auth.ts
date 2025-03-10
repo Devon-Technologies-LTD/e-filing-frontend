@@ -1,12 +1,17 @@
 export interface LoginResponseData {
+  sub_division: any;
   ID: string;
   email: string;
   first_name: string;
   last_name: string;
   phone_number: string;
+  court_type: string;
+  division_id: string;
+  divison_name: string;
   role: ROLES;
   token: string;
 }
+
 
 export type ErrorResponse = {
   name: string;
