@@ -6,8 +6,9 @@ export interface LoginResponseData {
   last_name: string;
   phone_number: string;
   court_type: string;
-  division_id: string;
-  divison_name: string;
+  court_division_id: string;
+  court_divison: string;
+  court_sub_division: string;
   role: ROLES;
   token: string;
 }

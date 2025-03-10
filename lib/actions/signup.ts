@@ -9,7 +9,6 @@ import { createSession } from "../server/auth";
 import { defaultLoginRedirect } from "@/routes";
 import { NEXT_BASE_URL } from "@/lib/_constants"
 
-
 export async function reSendOtpAction(_prevState: unknown, formData: FormData) {
     try {
         const email = cookies().get("otpEmail")?.value;
@@ -61,8 +60,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
         });
 
         const responseData = res.data as LoginResponseData;
-
-        // Retrieve stored session data
         const storedData = cookies().get("AuthData")?.value;
         if (!storedData) {
             return {
@@ -79,9 +76,9 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
                 first_name: sessionData.user.first_name,
                 last_name: sessionData.user.last_name,
                 court_type: sessionData.user.court_type,
-                division_id: sessionData.user.division_id,
-                divison_name: sessionData.user.divison_name,
-                sub_division: sessionData.user.sub_division,
+                court_division_id: sessionData.user.court_division_id,
+                court_divison: sessionData.user.court_divison,
+                court_sub_division: sessionData.user.sub_division,
                 phone_number: sessionData.user.phone_number,
                 role: sessionData.user.role as ROLES,
             },
@@ -241,23 +238,20 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             message: "Validation failed, please check input fields",
         };
     }
+    console.log("email" + data.email);
+    console.log("otp" + data.otp);
+    const response = await authService.acceptInvite({
+        otp: data.otp as string,
+        email: data.email as string,
+    });
+    console.log("accepoti invaite" + response);
+    // Assert the expected response shape
+    const responseData = response.data as { token: string; id: string };
 
-
-
+    const responseToken = responseData.token;
+    const responseId = responseData.id;
     try {
-        console.log("email" + data.email);
-        console.log("otp" + data.otp);
-        const response = await authService.acceptInvite({
-            otp: data.otp as string,
-            email: data.email as string,
-        });
-        console.log("accepoti invaite" + response);
-        // Assert the expected response shape
-        const responseData = response.data as { token: string; id: string };
-
-        const responseToken = responseData.token;
-        const responseId = responseData.id;
-
+        console.log(uploadFormData);
         const url = `${NEXT_BASE_URL}/admin/user/${responseId}`;
         const signupResponse = await fetch(url, {
             method: "PATCH",
@@ -266,7 +260,6 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 "Authorization": `Bearer ${responseToken}`,
             },
         });
-
         if (!signupResponse.ok) {
             const errorData = await signupResponse.json();
             throw {
@@ -276,11 +269,9 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 },
             };
         }
-
         // Delete TempToken and TempID cookies after success
         cookies().delete("TempToken");
         cookies().delete("TempID");
-
         return { message: "Account updated successfully. Please Login", success: true, status: 200 };
     } catch (err: unknown) {
         return handleError(err);
