@@ -13,7 +13,7 @@ export default function LayoutPage({
             Drafts
           </h1>
         </header>
-        <div className="flex-1 overflow-auto rounded-md px-4">{children}</div>
+        <div className="flex-1 overflow-hidden rounded-md px-4">{children}</div>
       </div>
     </div>
   );
