@@ -54,6 +54,7 @@ export default function Page() {
       });
     },
     staleTime: 50000,
+    refetchInterval: 10000,
   });
 
   const {
@@ -76,7 +77,6 @@ export default function Page() {
   }, [singleDraftError]);
 
   useEffect(() => {
-    console.log("single draft response", singleDraftData)
     if (singleDraftData && selectedRow) {
       const caseTypeFields = getCaseTypeFields(singleDraftData);
       dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
@@ -88,14 +88,14 @@ export default function Page() {
         )
       );
       dispatch(addDocument(singleDraftData.documents));
-      setSelectedRow(null)
+      setSelectedRow(null);
       router.push(`/case-filing`);
     }
   }, [singleDraftData, dispatch]);
 
   return (
-    <div className="container py-8">
-      <div className="bg-white p-4 space-y-6">
+    <div className="container flex flex-col py-2 h-full">
+      <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]">
         <DraftsDataTableToolbar date={date} setDate={setDate} />
         <DataTable
           onRowClick={handleRowClick}
@@ -103,18 +103,18 @@ export default function Page() {
           loading={draftsLoading || singleDraftsLoading}
           data={data?.data}
         />
-        {data?.data?.length > 0 && (
-          <div className="flex justify-end">
-            <Pagination
-              currentPage={currentPage}
-              total={data?.total_rows ?? 0}
-              rowsPerPage={DEFAULT_PAGE_SIZE}
-              onPageChange={(page) => {
-                setCurrentPage(page);
-              }}
-            />
-          </div>
-        )}
+      </div>
+      <div className=" fixed bottom-0 container left-0 right-0 py-1.5">
+        <div className="flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            total={data?.total_rows ?? 0}
+            rowsPerPage={DEFAULT_PAGE_SIZE}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+          />
+        </div>
       </div>
     </div>
   );
