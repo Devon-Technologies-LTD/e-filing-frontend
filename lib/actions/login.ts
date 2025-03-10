@@ -33,6 +33,9 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         id: data.ID,
         email: data.email,
         first_name: data.first_name,
+        court_type: data.court_type,
+        division_id: data.division_id,
+        divison_name: data.divison_name,
         last_name: data.last_name,
         phone_number: data.phone_number,
         role: data.role as ROLES,
@@ -81,6 +84,9 @@ export interface LoginResponseData2 {
     id: string;
     email: string;
     first_name: string;
+    court_type: string;
+    division_id: string;
+    divison_name: string;
     last_name: string;
     phone_number: string;
     role: ROLES;
@@ -99,6 +105,9 @@ export async function googleLoginAction(email: string) {
         id: data.user.id,
         email: data.user.email,
         first_name: data.user.first_name,
+        court_type: data.user.court_type,
+        division_id: data.user.division_id,
+        divison_name: data.user.divison_name,
         last_name: data.user.last_name,
         phone_number: data.user.phone_number,
         role: data.user.role as ROLES,
@@ -175,7 +184,7 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
     return {
       status: 400,
       errors: result.error.flatten
-      ().fieldErrors,
+        ().fieldErrors,
       message: "",
     };
   }

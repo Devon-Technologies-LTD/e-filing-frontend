@@ -12,10 +12,10 @@ import { isFieldErrorObject } from "@/types/auth";
 import DragDropUploaderNIN from "./signup/DragDropUploaderNIN";
 import { useRouter } from "next/navigation";
 
-const InvitationComponent = (email: any) => {
+const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) => {
     const router = useRouter();
     const [state, dispatch] = useFormState(invitationAction, undefined);
-    
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
@@ -30,7 +30,6 @@ const InvitationComponent = (email: any) => {
             });
         }
     }, [state]);
-
     useEffectAfterMount(() => {
         if (state && SUCCESS_STATUS.includes(state?.status)) {
             toast.success(state?.message);
@@ -42,7 +41,11 @@ const InvitationComponent = (email: any) => {
         e.preventDefault();
         setLoading(true);
         const form = e.target as HTMLFormElement;
+
         const formData = new FormData(form);
+        console.log(otpz)
+        formData.append("otp", otpz);
+        formData.append("email", email);
         dispatch(formData);
     };
 
@@ -58,28 +61,13 @@ const InvitationComponent = (email: any) => {
                 onSubmit={handleSubmit}
                 className="md:w-2/3 space-y-10"
             >
-
                 <input type="hidden" name="gender" value="male" />
                 <div
                     className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
                     style={{ height: "calc(100vh - 300px)" }}
                 >
-                    <div>
-                        <p className="font-bold text-sm text-neutral-500">
-                            Fields marked with an asterisk (*) are required.
-                        </p>
 
-                        <br />
-                        <InputField
-                            id="email"
-                            type="email"
-                            label="EMAIL ADDRESS"
-                            name="email"
-                            placeholder="name@gmail.com"
-                            value={email?.email}
-                            readonly={true}
-                        />
-                    </div>
+
                     <div className="space-y-6">
                         <div>
                             <InputField

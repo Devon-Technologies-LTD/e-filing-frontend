@@ -16,7 +16,8 @@ interface FormValues {
   email: string;
   role: string;
   court_type?: string;
-  court_division?: string;
+  court_division_id?: string;
+  court_sub_division?: string;
 
 }
 
@@ -37,6 +38,8 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, isOpen, setIsOpen
     setErrorMessages([]);
 
     try {
+      console.log(formValues);
+
       const { data } = await axios.post("/api/invite-user", formValues, {
         headers: { "Content-Type": "application/json" },
       });

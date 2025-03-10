@@ -11,37 +11,33 @@ import { useState } from "react";
 export default function OverSightComponenet() {
     const params = useParams();
     const tab = params.tab as TCaseFilterType;
-    const [currentPage, setCurrentPage] = useState(1);
-    const { data, isLoading: draftsLoading } = useQuery({
-        queryKey: [
-            "get_cases",
-            {
-                search: "",
-                currentPage,
-            },
-        ],
-        queryFn: async () => {
-            return await getCaseFiles({
-                page: currentPage,
-                size: DEFAULT_PAGE_SIZE,
-                status: [
-                    CaseStatus.Approved,
-                    CaseStatus.Assigned,
-                    CaseStatus.Denied,
-                    CaseStatus.JudgementDelivered,
-                    CaseStatus.Pending,
-                    CaseStatus.StruckOut,
-                    CaseStatus.ToBeAssigned,
-                    CaseStatus.UnderReview,
-                ],
-                // start_data: date?.from
-                //   ? dateFormatter(date?.from as Date).isoFormat
-                //   : null,
-                // end_date: date?.to ? dateFormatter(date?.to as Date).isoFormat : null,
-            });
-        },
-        staleTime: 50000,
-    });
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const { data, isLoading: draftsLoading } = useQuery({
+    //     queryKey: [
+    //         "get_cases",
+    //         {
+    //             search: "",
+    //             currentPage,
+    //         },
+    //     ],
+    //     queryFn: async () => {
+    //         return await getCaseFiles({
+    //             page: currentPage,
+    //             size: DEFAULT_PAGE_SIZE,
+    //             status: [
+    //                 CaseStatus.Approved,
+    //                 CaseStatus.Assigned,
+    //                 CaseStatus.Denied,
+    //                 CaseStatus.JudgementDelivered,
+    //                 CaseStatus.Pending,
+    //                 CaseStatus.StruckOut,
+    //                 CaseStatus.ToBeAssigned,
+    //                 CaseStatus.UnderReview,
+    //             ],
+    //         });
+    //     },
+    //     staleTime: 50000,
+    // });
     const getColumns = () => {
         switch (tab) {
             case "all":

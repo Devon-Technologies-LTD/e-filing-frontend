@@ -16,7 +16,7 @@ type ErrorResponse = {
 
 export async function getUserDivision() {
   try {
-    const data  = await DivisionsService.getUserDivision();
+    const data = await DivisionsService.getUserDivision();
     console.log(data);
     return { data, success: true };
   } catch (err: unknown) {
@@ -26,7 +26,17 @@ export async function getUserDivision() {
 }
 export async function getAdminDivision() {
   try {
-    const data  = await DivisionsService.getAdminDivision();
+    const data = await DivisionsService.getAdminDivision();
+    console.log(data);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getAdminSubDivision(id: string) {
+  try {
+    const data = await DivisionsService.getAdminSubDivision(id);
     console.log(data);
     return { data, success: true };
   } catch (err: unknown) {

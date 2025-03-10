@@ -27,6 +27,9 @@ const AuthService = {
   async resendOtp(payload: { email: string }) {
     return await authConfig.post("/auth/resend-otp", payload);
   },
+  async acceptInvite(payload: { email: string, otp: string }) {
+    return await authConfig.get(`/user/accept-invite/${payload.email}/${payload.otp}`);
+  },
 
   async resetPassword(payload: {
     email: string;
@@ -43,5 +46,6 @@ const AuthService = {
   }) {
     return await authConfig.post("/auth/change-password", payload);
   },
+
 };
 export default AuthService;

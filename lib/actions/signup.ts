@@ -187,7 +187,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
     // Extract form data
     const data = Object.fromEntries(formData.entries());
     const image = formData.get("image") as File | null;
-    console.log("am here 1")
+    console.log("am here 1");
 
     if (!image) {
         return {
@@ -204,9 +204,9 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
         "image/webp",
         "image/svg+xml",
         "image/bmp",
-        "image/tiff"
+        "image/tiff",
     ];
-    console.log("am here 2")
+    console.log("am here 2");
 
     if (!allowedMimeTypes.includes(image.type)) {
         return {
@@ -215,6 +215,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             message: "Invalid image format. Only JPG and PNG are allowed.",
         };
     }
+
     // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (image.size > maxSize) {
@@ -236,18 +237,32 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             message: "Validation failed, please check input fields",
         };
     }
-    console.log(formData);
-    const token = cookies().get("TempToken")?.value;
-    const id = cookies().get("TempID")?.value;
+
+
+
     try {
-        const url = `${NEXT_BASE_URL}/admin/user/${id}`;
+        console.log("email" + data.email);
+        console.log("otp" + data.otp);
+        const response = await authService.acceptInvite({
+            otp: data.otp as string,
+            email: data.email as string,
+        });
+        console.log("accepoti invaite" + response);
+        // Assert the expected response shape
+        const responseData = response.data as { token: string; id: string };
+
+        const responseToken = responseData.token;
+        const responseId = responseData.id;
+
+        const url = `${NEXT_BASE_URL}/admin/user/${responseId}`;
         const signupResponse = await fetch(url, {
             method: "PATCH",
-            body: formData,
+            body: uploadFormData,
             headers: {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": `Bearer ${responseToken}`,
             },
         });
+
         if (!signupResponse.ok) {
             const errorData = await signupResponse.json();
             throw {
@@ -257,10 +272,12 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 },
             };
         }
-        cookies().delete("TempID");
+
+        // Delete TempToken and TempID cookies after success
         cookies().delete("TempToken");
-        return {  message: "Account updated successful. Please Login", success: true, status: 200 };
-        // return { message: "Account updated successfully. Please Login", success: true, status: 200 };
+        cookies().delete("TempID");
+
+        return { message: "Account updated successfully. Please Login", success: true, status: 200 };
     } catch (err: unknown) {
         return handleError(err);
     }
