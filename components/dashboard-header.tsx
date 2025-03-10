@@ -19,7 +19,7 @@ export function DashboardHeader() {
         </div>
 
         <div className="ml-auto flex items-center space-x-4 md:space-x-6">
-          <SearchMenu />
+          {/* <SearchMenu /> */}
           <HelpCircleComponent />
           <Notifications />
           <UserNav />

@@ -49,8 +49,8 @@ export default function FilteredCases() {
       });
     },
     staleTime: 50000,
+    refetchInterval: 10000,
   });
-
 
   const getColumns = () => {
     switch (tab) {
@@ -73,27 +73,32 @@ export default function FilteredCases() {
     }
   };
   return (
-    <div className="space-y-12">
-      <CasesDataTableToolbar
-        selectedCase={selectedCase}
-        setSelectedCase={setSelectedCase}
-      />
-      <DataTable
-        onRowClick={handleRowClick}
-        columns={columns}
-        loading={draftsLoading}
-        data={data?.data}
-      />
+    <div className="container flex flex-col py-2 h-full">
+      <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]">
+        <CasesDataTableToolbar
+          selectedCase={selectedCase}
+          setSelectedCase={setSelectedCase}
+        />
+        <DataTable
+          onRowClick={handleRowClick}
+          columns={columns}
+          loading={draftsLoading}
+          data={data?.data}
+        />
+      </div>
+
       {data?.data?.length > 0 && (
-        <div className="flex justify-end">
-          <Pagination
-            currentPage={currentPage}
-            total={data?.total_rows ?? 0}
-            rowsPerPage={DEFAULT_PAGE_SIZE}
-            onPageChange={(page) => {
-              setCurrentPage(page);
-            }}
-          />
+        <div className="fixed bottom-0 container left-0 right-0 py-2">
+          <div className="flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              total={data?.total_rows ?? 0}
+              rowsPerPage={DEFAULT_PAGE_SIZE}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

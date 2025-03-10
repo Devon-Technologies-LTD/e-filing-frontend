@@ -36,6 +36,7 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         court_type: data.court_type,
         division_id: data.division_id,
         divison_name: data.divison_name,
+        sub_division: data.sub_division,
         last_name: data.last_name,
         phone_number: data.phone_number,
         role: data.role as ROLES,
@@ -81,6 +82,7 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
 
 export interface LoginResponseData2 {
   user: {
+    sub_division: string;
     id: string;
     email: string;
     first_name: string;
@@ -108,6 +110,7 @@ export async function googleLoginAction(email: string) {
         court_type: data.user.court_type,
         division_id: data.user.division_id,
         divison_name: data.user.divison_name,
+        sub_division: data.user.sub_division,
         last_name: data.user.last_name,
         phone_number: data.user.phone_number,
         role: data.user.role as ROLES,

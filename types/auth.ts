@@ -1,4 +1,5 @@
 export interface LoginResponseData {
+  sub_division: any;
   ID: string;
   email: string;
   first_name: string;
