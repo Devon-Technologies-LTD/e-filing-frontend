@@ -34,15 +34,16 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
         email: data.email,
         first_name: data.first_name,
         court_type: data.court_type,
-        division_id: data.division_id,
-        divison_name: data.divison_name,
-        sub_division: data.sub_division,
+        court_division_id: data.court_division_id,
+        court_divison: data.court_divison,
+        court_sub_division: data.court_sub_division,
         last_name: data.last_name,
         phone_number: data.phone_number,
         role: data.role as ROLES,
       },
       token: data.token,
     };
+    console.log(sessionData);
     role = sessionData.user.role;
     await createSession(sessionData);
   } catch (err: unknown) {
@@ -87,8 +88,9 @@ export interface LoginResponseData2 {
     email: string;
     first_name: string;
     court_type: string;
-    division_id: string;
-    divison_name: string;
+    court_division_id: string;
+    court_divison: string;
+    court_sub_division: string;
     last_name: string;
     phone_number: string;
     role: ROLES;
@@ -108,9 +110,9 @@ export async function googleLoginAction(email: string) {
         email: data.user.email,
         first_name: data.user.first_name,
         court_type: data.user.court_type,
-        division_id: data.user.division_id,
-        divison_name: data.user.divison_name,
-        sub_division: data.user.sub_division,
+        court_division_id: data.user.court_division_id,
+        court_divison: data.user.court_divison,
+        court_sub_division: data.user.court_sub_division,
         last_name: data.user.last_name,
         phone_number: data.user.phone_number,
         role: data.user.role as ROLES,

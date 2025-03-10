@@ -104,6 +104,8 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   };
   const handleCourtSubDivisionChange = (value: string) => {
     setSelectedCourtSubDivision(value);
+    setSelectedCourtDivision(user?.court_division_id ?? "");
+    setSelectedDistrict(user?.court_type ?? "");
     handleChanges("court_sub_division", value);
     dispatch(addCaseTypeError({ court_sub_division: "" }));
   };
@@ -189,10 +191,9 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 </>
               )}
 
-              {/* Court Division Selection */}
               {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
                 <DivisionAdmin
-                  id={user?.division_id ?? ""}
+                  id={user?.court_division_id ?? ""}
                   placeholder="Select A Sub Division"
                   value={selectedCourtSubDivision}
                   onChange={handleCourtSubDivisionChange}
@@ -223,7 +224,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 <ConfirmInvite
                   isOpen={showConfirmInvite}
                   setIsOpen={setShowConfirmInvite}
-                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision , court_sub_division : selectedCourtSubDivision  }}
+                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision, court_sub_division: selectedCourtSubDivision }}
                   trigger={<span />}
                 />
               )}

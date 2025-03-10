@@ -128,9 +128,9 @@ export type TUser = {
   first_name: string;
   last_name: string;
   phone_number: string;
-  divison_name: string;
-  division_id: string;
-  sub_division: string;
+  court_divison: string;
+  court_division_id: string;
+  court_sub_division: string;
   court_type: string;
   email: string;
   role: ROLES;
