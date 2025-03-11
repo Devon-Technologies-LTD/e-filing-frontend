@@ -11,11 +11,11 @@ export interface ColorToVariant {
 
 export const MetricCard: React.FC<{
   metric: any;
-  metricKey : string;
+  metricKey: string;
   type: "case" | "magistrate" | "finances";
   rightModal: boolean | undefined;
   className?: string;
-}> = ({ metric, className, rightModal, type, metricKey  }) => {
+}> = ({ metric, className, rightModal, type, metricKey }) => {
   const bgColors: ColorToVariant = {
     total: "bg-neutral-200",
     active: "bg-green-50",
@@ -34,7 +34,7 @@ export const MetricCard: React.FC<{
           className={cn(
             "p-4 sm:p-3 text-black font-bold uppercase text-lg sm:text-base",
             className,
-            bgColors[metricKey  as keyof typeof bgColors] || "bg-neutral-100"
+            bgColors[metricKey as keyof typeof bgColors] || "bg-neutral-100"
           )}
         >
           {metricKey} Cases
@@ -42,14 +42,15 @@ export const MetricCard: React.FC<{
         <div className="p-4 sm:p-3 py-6 sm:py-4">
           <p className="text-3xl sm:text-lg text-app-primary font-bold flex items-center gap-1">
             {type === "finances" ? <Icons.naira /> : ""}
-            <CountUp start={0} end={+metric.total} separator="," />
+            <CountUp start={0} end={Number(metric?.total) || 0} separator="," />
           </p>
           <span className="flex items-center space-x-1">
             <Icons.arrowUp className="h-4 w-4 sm:h-3 sm:w-3" />
             <p className="text-base sm:text-sm font-medium text-app-primary">
               <span className="font-extrabold">
-                {formatNumber(+metric.difference)}
-              </span>{" "}
+                {formatNumber(Number(metric?.difference) || 0)}
+              </span>
+              {" "}
               in the last year
             </p>
           </span>

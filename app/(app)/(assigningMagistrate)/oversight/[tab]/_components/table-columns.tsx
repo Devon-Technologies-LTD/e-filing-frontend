@@ -10,7 +10,6 @@ export interface IUsersColumn {
   Name: string;
   Type: string;
   court_division?: string;
-  districts?: string;
   courtType?: string;
   Status?: string;
   TotalAssignedCases?: number;
@@ -22,6 +21,7 @@ export const createUserColumns = (
   type?: "pending" | "all"
 ): ColumnDef<IUsersColumn>[] => {
   const baseColumns: ColumnDef<IUsersColumn>[] = [
+
     {
       id: "Name",
       header: "Name",
@@ -46,11 +46,19 @@ export const createUserColumns = (
         );
       },
     },
+
     {
       id: "Type",
       header: "Type",
       accessorKey: "Type",
     },
+
+    {
+      id: "Division",
+      header: "Division",
+      accessorKey: "Division",
+    },
+
     {
       id: "TotalAssignedCases",
       header: "Total Assigned Cases",
@@ -89,46 +97,6 @@ export const createUserColumns = (
   ];
 
   let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
-
-  if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
-    const directorColumns: ColumnDef<IUsersColumn>[] = [
-      {
-        header: "Division",
-        accessorKey: "court_division",
-      },
-      {
-        header: "Court Type",
-        accessorKey: "courtType",
-      },
-    ];
-
-    const statusIndex = conditionalColumns.findIndex((column) => column.id === "status");
-    if (statusIndex !== -1) {
-      const statusColumn = conditionalColumns.splice(statusIndex, 1)[0];
-      conditionalColumns.splice(statusIndex, 0, ...directorColumns);
-      conditionalColumns.splice(statusIndex + directorColumns.length, 0, statusColumn);
-    } else {
-      conditionalColumns.unshift(...directorColumns);
-    }
-  }
-
-  if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
-    const assigningColumns: ColumnDef<IUsersColumn>[] = [
-      {
-        accessorKey: "districts",
-        header: "Districts",
-      },
-    ];
-
-    const statusIndex = conditionalColumns.findIndex((column) => column.id === "status");
-    if (statusIndex !== -1) {
-      const statusColumn = conditionalColumns.splice(statusIndex, 1)[0];
-      conditionalColumns.splice(statusIndex, 0, ...assigningColumns);
-      conditionalColumns.splice(statusIndex + assigningColumns.length, 0, statusColumn);
-    } else {
-      conditionalColumns.unshift(...assigningColumns);
-    }
-  }
 
   return conditionalColumns;
 };
