@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/data-table";
 import { useAppSelector } from "@/hooks/redux";
 import React, { useMemo, useState } from "react";
-import { mainColumns } from "./table-columns";
+// import { mainColumns } from "./table-columns";
 import { USER_STATUS } from "@/types/auth";
 
 export interface IUsersColumn {
@@ -47,18 +47,18 @@ export default function PerformanceMagisterate() {
     console.log(row);
   };
 
-  const columns = useMemo(
-    () => mainColumns(user?.role!, "performance"),
-    [user?.role]
-  );
+  // const columns = useMemo(
+  //   () => mainColumns(user?.role!, "performance"),
+  //   [user?.role]
+  // );
   return (
     <div className="bg-white  space-y-6">
-      <DataTable
+      {/* <DataTable
         onRowClick={handleRowClick}
         columns={columns}
         loading={false}
         data={mockUsers}
-      />
+      /> */}
     </div>
   );
 }

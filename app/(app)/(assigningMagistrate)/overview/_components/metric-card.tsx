@@ -1,9 +1,7 @@
 import { Icons } from "@/components/svg/icons";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn, formatNumber } from "@/lib/utils";
-import { IMetric } from "@/types/case";
 import React, { useState } from "react";
-import { StatBreakdown } from "./stat-breakdown";
 import CountUp from "react-countup";
 import Link from "next/link";
 
@@ -12,15 +10,16 @@ export interface ColorToVariant {
 }
 
 export const MetricCard: React.FC<{
-  metric: IMetric;
+  metric: any;
+  metricKey : string;
   type: "case" | "magistrate" | "finances";
   rightModal: boolean | undefined;
   className?: string;
-}> = ({ metric, className, rightModal, type }) => {
+}> = ({ metric, className, rightModal, type, metricKey  }) => {
   const bgColors: ColorToVariant = {
     total: "bg-neutral-200",
     active: "bg-green-50",
-    activedir: "bg-sky-50",
+    assigned: "bg-sky-50",
     unassigned: "bg-orange-50",
     reassigned: "bg-red-50",
     concluded: "bg-purple-50",
@@ -33,12 +32,12 @@ export const MetricCard: React.FC<{
       <div className="space-y-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
         <div
           className={cn(
-            "p-4 sm:p-3 text-black font-bold text-lg sm:text-base",
+            "p-4 sm:p-3 text-black font-bold uppercase text-lg sm:text-base",
             className,
-            bgColors[metric?.variant as keyof typeof bgColors] || "bg-neutral-100"
+            bgColors[metricKey  as keyof typeof bgColors] || "bg-neutral-100"
           )}
         >
-          {metric.title}
+          {metricKey} Cases
         </div>
         <div className="p-4 sm:p-3 py-6 sm:py-4">
           <p className="text-3xl sm:text-lg text-app-primary font-bold flex items-center gap-1">
@@ -49,7 +48,7 @@ export const MetricCard: React.FC<{
             <Icons.arrowUp className="h-4 w-4 sm:h-3 sm:w-3" />
             <p className="text-base sm:text-sm font-medium text-app-primary">
               <span className="font-extrabold">
-                {formatNumber(+metric.lastYear)}
+                {formatNumber(+metric.difference)}
               </span>{" "}
               in the last year
             </p>
@@ -75,13 +74,12 @@ export const MetricCard: React.FC<{
           </button>
         )}
       </div>
-
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="right"
           className="bg-white w-full max-w-[90vw] md:w-[500px] md:!w-[613px] min-w-[300px] !max-w-none"
         >
-          <StatBreakdown
+          {/* <StatBreakdown
             type={type}
             title={metric.title}
             value={+metric.total}
@@ -89,7 +87,7 @@ export const MetricCard: React.FC<{
             description={metric.description}
             divisions={metric.districts}
             variant={metric.variant}
-          />
+          /> */}
         </SheetContent>
       </Sheet>
     </>

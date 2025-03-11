@@ -130,7 +130,7 @@ export type TUser = {
   phone_number: string;
   court_divison: string;
   court_division_id: string;
-  court_sub_division: string;
+  sub_division: string;
   court_type: string;
   email: string;
   role: ROLES;

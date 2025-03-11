@@ -1,40 +1,38 @@
-import { useState } from "react";
+"use client";
+
+import { StatusBadge } from "@/components/ui/status-badge";
+import { ROLES } from "@/types/auth";
 import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ROLES } from "@/types/auth";
 
-export interface Moversight {
-  id?: string;
-  name: string;
-  division?: string;
+export interface IUsersColumn {
+  Division: string;
+  Name: string;
+  Type: string;
+  court_division?: string;
   districts?: string;
   courtType?: string;
-  caseId?: string;
-  title?: string;
-  type?: string;
-  court?: string;
-  magistrate?: string;
-  status?: string;
-  total?: string;
-  active?: string;
-  close?: string;
-  reassigned?: string;
-  resolutionTime?: string;
+  Status?: string;
+  TotalAssignedCases?: number;
+  ActiveCases?: number;
 }
 
-export const mainColumns = (userRole: ROLES, type?: "performance" | "all"): ColumnDef<Moversight>[] => {
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  let baseColumns: ColumnDef<Moversight>[] = [
+export const createUserColumns = (
+  userRole: ROLES,
+  type?: "pending" | "all"
+): ColumnDef<IUsersColumn>[] => {
+  const baseColumns: ColumnDef<IUsersColumn>[] = [
     {
-      id: "name",
-      accessorKey: "name",
-      header: "Magistrate Name",
+      id: "Name",
+      header: "Name",
+      accessorKey: "Name",
       cell: ({ row }) => {
-        const name = row.original.name;
-        const initials = name
-          .split(" ")
-          .map((part) => part.charAt(0).toUpperCase())
-          .join("");
+        const Name = row.original.Name || "";
+        const initials = Name
+          ? Name.split(" ")
+            .map((part) => part.charAt(0).toUpperCase())
+            .join("")
+          : "";
 
         return (
           <div className="flex items-center gap-1">
@@ -43,52 +41,94 @@ export const mainColumns = (userRole: ROLES, type?: "performance" | "all"): Colu
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <p>{name}</p>
+            <p>{Name}</p>
           </div>
         );
       },
     },
     {
-      accessorKey: "total",
-      header: "Total Assigned Cases",
+      id: "Type",
+      header: "Type",
+      accessorKey: "Type",
     },
     {
-      accessorKey: "active",
+      id: "TotalAssignedCases",
+      header: "Total Assigned Cases",
+      accessorKey: "TotalAssignedCases",
+    },
+    {
+      id: "ActiveCases",
       header: "Active Cases",
+      accessorKey: "ActiveCases",
+    },
+    {
+      id: "Status",
+      header: "Status",
+      accessorKey: "Status",
+      cell: ({ row }) => {
+        const status = row.original.Status ? row.original.Status.toLowerCase() : "N/A";
+
+        const statusColors: Record<string, string> = {
+          pending: "text-yellow-600 bg-yellow-100",
+          active: "text-green-600 bg-green-100",
+          inactive: "text-red-600 bg-red-100",
+        };
+
+        return (
+          <StatusBadge
+            tooltip=""
+            tooltipProps={{ delayDuration: 200 }}
+            status={status as any}
+            className={`px-2 py-1 rounded-md ${statusColors[status] || "text-gray-600 bg-gray-100"}`}
+          >
+            {status}
+          </StatusBadge>
+        );
+      },
     },
   ];
 
-  let conditionalColumns: ColumnDef<Moversight>[] = [...baseColumns];
+  let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
 
-  if (type === "performance") {
-    conditionalColumns.push(
+  if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
+    const directorColumns: ColumnDef<IUsersColumn>[] = [
       {
-        accessorKey: "close",
-        header: "Closed Cases",
+        header: "Division",
+        accessorKey: "court_division",
       },
       {
-        accessorKey: "reassigned",
-        header: "Re-assignment Cases",
+        header: "Court Type",
+        accessorKey: "courtType",
       },
-      {
-        accessorKey: "resolutionTime",
-        header: "Avg. Case Resolution (Days)",
-      }
-    );
-  } else {
-    conditionalColumns.push(
-      {
-        accessorKey: "districts",
-        header: "District",
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-      }
-    );
+    ];
+
+    const statusIndex = conditionalColumns.findIndex((column) => column.id === "status");
+    if (statusIndex !== -1) {
+      const statusColumn = conditionalColumns.splice(statusIndex, 1)[0];
+      conditionalColumns.splice(statusIndex, 0, ...directorColumns);
+      conditionalColumns.splice(statusIndex + directorColumns.length, 0, statusColumn);
+    } else {
+      conditionalColumns.unshift(...directorColumns);
+    }
   }
 
-  return conditionalColumns; // ✅ Return only columns, NOT JSX elements
+  if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
+    const assigningColumns: ColumnDef<IUsersColumn>[] = [
+      {
+        accessorKey: "districts",
+        header: "Districts",
+      },
+    ];
+
+    const statusIndex = conditionalColumns.findIndex((column) => column.id === "status");
+    if (statusIndex !== -1) {
+      const statusColumn = conditionalColumns.splice(statusIndex, 1)[0];
+      conditionalColumns.splice(statusIndex, 0, ...assigningColumns);
+      conditionalColumns.splice(statusIndex + assigningColumns.length, 0, statusColumn);
+    } else {
+      conditionalColumns.unshift(...assigningColumns);
+    }
+  }
+
+  return conditionalColumns;
 };
-
-
