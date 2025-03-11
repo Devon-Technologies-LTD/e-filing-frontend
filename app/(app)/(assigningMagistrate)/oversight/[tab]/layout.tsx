@@ -58,7 +58,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
             <div className="text-primary text-end">
               {activeTab === "all" ? (
                 <>
-                  <p className="text-2xl font-bold">2,456</p>
+                  <p className="text-2xl font-bold">6</p>
                   <p className="text-sm font-bold">Total Magistrates across all divisions</p>
                 </>
               ) : (

@@ -33,7 +33,7 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
 export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
   console.log("payloaddddd", payload);
   try {
-    if ([ROLES.PRESIDING_MAGISTRATE, ROLES.CENTRAL_REGISTRAR].includes(payload.role as ROLES)) {
+    if ([ROLES.PRESIDING_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.CENTRAL_REGISTRAR].includes(payload.role as ROLES)) {
       const data = await CaseFileService.getCaseFilesAdmin(payload);
       return { ...data, success: true };
     } else {

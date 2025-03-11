@@ -71,9 +71,9 @@ export default function MagistrateCases() {
     <>
       <div className="bg-white py-12">
         <div className="container grid bg-white  grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {data.map((metric) => (
+          {/* {data.map((metric) => (
             <MetricCard type="magistrate" key={metric.id} metric={metric} rightModal={undefined} />
-          ))}
+          ))} */}
         </div>
       </div>
       <div className="bg-white">

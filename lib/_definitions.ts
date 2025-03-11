@@ -20,54 +20,54 @@ export const OTPFormSchema = z.object({
 });
 
 export const SignupFormSchema = z.object({
-    first_name: z
-      .string()
-      .min(2, { message: "First name must be at least 2 characters long." })
-      .trim(),
-    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
-    ipn: z.string().optional(),
-    role: z.string().optional(),
-    gender: z.string().optional(),
-    scn: z.string().optional(),
-    phone_number: z
-      .string()
-      .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
-      .nonempty("Phone number is required"),
-    last_name: z
-      .string()
-      .min(2, { message: "Last name must be at least 2 characters long." })
-      .trim(),
-    email: z.string().email({ message: "Please enter a valid email." }).trim(),
-    password: z
-      .string()
-      .min(8, { message: "Passwword Must contain at least 8 characters long" })
-      .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
-      .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
-      .trim(),
-    confirm_password: z.string().trim(),
-  })
+  first_name: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters long." })
+    .trim(),
+  nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
+  ipn: z.string().optional(),
+  role: z.string().optional(),
+  gender: z.string().optional(),
+  scn: z.string().optional(),
+  phone_number: z
+    .string()
+    .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
+    .nonempty("Phone number is required"),
+  last_name: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters long." })
+    .trim(),
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+  password: z
+    .string()
+    .min(8, { message: "Passwword Must contain at least 8 characters long" })
+    .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
+    .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
+    .trim(),
+  confirm_password: z.string().trim(),
+})
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords do not match",
     path: ["confirm_password"],
   });
 export const InvitationFormSchema = z.object({
-  
-    nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
-    ipn: z.string().optional(),
-    scn: z.string().optional(),
-    phone_number: z
-      .string()
-      .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
-      .nonempty("Phone number is required"),
-    email: z.string().email({ message: "Please enter a valid email." }).trim(),
-    password: z
-      .string()
-      .min(8, { message: "Passwword Must contain at least 8 characters long" })
-      .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
-      .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
-      .trim(),
-    confirm_password: z.string().trim(),
-  })
+
+  nin: z.string().min(11, { message: "NIN must be at least 11 digit" }).max(11, { message: "NIN must be at most 11 digit" }),
+  ipn: z.string().optional(),
+  scn: z.string().optional(),
+  phone_number: z
+    .string()
+    .regex(/^(\+234|0)[7-9][0-9]{9}$/, "Invalid phone number")
+    .nonempty("Phone number is required"),
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+  password: z
+    .string()
+    .min(8, { message: "Passwword Must contain at least 8 characters long" })
+    .regex(/[a-zA-Z]/, { message: "Passwword Must contain  at least one letter." })
+    .regex(/[0-9]/, { message: "Passwword Must contain  at least one number." })
+    .trim(),
+  confirm_password: z.string().trim(),
+})
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords do not match",
     path: ["confirm_password"],
@@ -107,6 +107,7 @@ export type TFullUser = {
   last_name: string;
   email: string;
   role: string;
+  sub_division: string;
   phone_number: string;
   gender: string;
   dob: string;
@@ -127,6 +128,10 @@ export type TUser = {
   first_name: string;
   last_name: string;
   phone_number: string;
+  court_divison: string;
+  court_division_id: string;
+  sub_division: string;
+  court_type: string;
   email: string;
   role: ROLES;
 };
@@ -394,4 +399,4 @@ export const ResetPasswordScheme = z.object({
   });
 
 
-  export type TaddAdmin = z.infer<typeof EMailFormSchema>;
+export type TaddAdmin = z.infer<typeof EMailFormSchema>;

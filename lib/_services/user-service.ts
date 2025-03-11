@@ -27,6 +27,18 @@ const UserService = {
     console.log(response.data);
     return response.data;
   },
+  async magistrateOversight(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/magistrate-oversight`);
+    return response.data;
+  },
+  async caseMetric(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/case-metrics`);
+    return response.data;
+  },
+  async getCaseDistribution(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/case-distribution`);
+    return response.data;
+  },
 
   async getUserManagement(params: Ipage): Promise<any> {
     const response = await axiosInstance.get(`admin/user/`, {

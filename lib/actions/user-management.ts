@@ -233,3 +233,139 @@ export async function ActiveUserAction(_prevState: unknown, formData: FormData) 
         }
     }
 }
+
+
+
+
+export async function getOversight() {
+    try {
+        const data = await UserService.magistrateOversight();
+        // console.log("magisterate over sight" + data);
+
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        console.log(err);
+        const error = err as ErrorResponse;
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: "An unexpected error occurred.",
+                errors: "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+
+    }
+}
+
+export async function getCaseMetric() {
+    try {
+        const data = await UserService.caseMetric();
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        console.log(err);
+        const error = err as ErrorResponse;
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: "An unexpected error occurred.",
+                errors: "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+
+    }
+}
+export async function getCaseDistribution() {
+    try {
+        const data = await UserService.getCaseDistribution();
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        console.log(err);
+        const error = err as ErrorResponse;
+        if (error?.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message,
+                errors: error.response.data.data,
+                success: false,
+                data: [],
+            };
+        } else if (error?.request) {
+            return {
+                status: 504,
+                message: "Something went wrong. Please try again.",
+                errors: "Unable to process request.",
+                success: false,
+                data: [],
+            };
+        } else if (error?.message) {
+            return {
+                status: 500,
+                message: error.message,
+                errors: error.message,
+                success: false,
+                data: [],
+            };
+        } else {
+            return {
+                status: 500,
+                message: "An unexpected error occurred.",
+                errors: "Unknown error.",
+                success: false,
+                data: [],
+            };
+        }
+
+    }
+}

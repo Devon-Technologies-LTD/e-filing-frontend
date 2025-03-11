@@ -14,6 +14,7 @@ import { COURT_TYPE } from "@/types/files/case-type";
 import { LocationAdmin } from "@/components/location-admin";
 import { addCaseTypeError, ICaseTypes, updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
+import { DivisionAdmin } from "@/components/division-admin";
 
 
 interface InviteUserProps {
@@ -86,6 +87,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   // State for selected court_type and court division
   const [selectedCourt, setSelectedDistrict] = useState<string>("");
   const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
+  const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>(caseType.court_division);
 
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));
@@ -99,6 +101,13 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
     setSelectedCourtDivision(value);
     handleChanges("court_division", value);
     dispatch(addCaseTypeError({ court_division: "" }));
+  };
+  const handleCourtSubDivisionChange = (value: string) => {
+    setSelectedCourtSubDivision(value);
+    setSelectedCourtDivision(user?.court_division_id ?? "");
+    setSelectedDistrict(user?.court_type ?? "");
+    handleChanges("sub_division", value);
+    dispatch(addCaseTypeError({ sub_division: "" }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,29 +166,38 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
             <form onSubmit={onSubmit} className="space-y-6">
               <Input type="hidden" id="role" value={role} />
 
-              {/* District Select */}
+
               {[ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
-                <Select onValueChange={handleSelectChange}>
-                  <SelectTrigger className="w-full text-base">
-                    <SelectValue placeholder="Select Type of Court" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {COURT_TYPE.map((doc) => (
-                      <SelectItem key={doc.value} value={doc.value} className="py-2">
-                        {doc.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <>
+                  <Select onValueChange={handleSelectChange}>
+                    <SelectTrigger className="w-full text-base">
+                      <SelectValue placeholder="Select Type of Court" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COURT_TYPE.map((doc) => (
+                        <SelectItem key={doc.value} value={doc.value} className="py-2">
+                          {doc.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <LocationAdmin
+                    placeholder="Select A Filing Location"
+                    value={selectedCourtDivision}
+                    onChange={handleCourtDivisionChange}
+                    error={caseTypeErrors?.court_division}
+                  />
+                </>
               )}
 
-              {/* Court Division Selection */}
-              {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
-                <LocationAdmin
-                  placeholder="Select A Filing Location"
-                  value={selectedCourtDivision}
-                  onChange={handleCourtDivisionChange}
-                  error={caseTypeErrors?.court_division}
+              {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+                <DivisionAdmin
+                  id={user?.court_division_id ?? ""}
+                  placeholder="Select A Sub Division"
+                  value={selectedCourtSubDivision}
+                  onChange={handleCourtSubDivisionChange}
+                  error={caseTypeErrors?.sub_division}
                 />
               )}
 
@@ -206,7 +224,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 <ConfirmInvite
                   isOpen={showConfirmInvite}
                   setIsOpen={setShowConfirmInvite}
-                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division: selectedCourtDivision }}
+                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision, sub_division: selectedCourtSubDivision }}
                   trigger={<span />}
                 />
               )}
