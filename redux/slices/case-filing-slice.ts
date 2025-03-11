@@ -25,7 +25,7 @@ export interface ICaseTypes {
   claimant_phone_number: string;
   claimant_name: string;
   claimant_email_address: string;
-  court_sub_division: string;
+  sub_division: string;
   claimant_whats_app: string;
   defendant_name: string;
   defendant_address: string;
@@ -80,7 +80,7 @@ const initialState: FormState = {
   caseTypeErrors: {},
   caseType: {
     court_division: "",
-    court_sub_division: "",
+    sub_division: "",
     reference: "",
     counsel_name: "",
     claimant_address: "",

@@ -17,7 +17,7 @@ interface FormValues {
   role: string;
   court_type?: string;
   court_division_id?: string;
-  court_sub_division?: string;
+  sub_division?: string;
 
 }
 

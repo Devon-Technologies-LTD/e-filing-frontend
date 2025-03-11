@@ -106,8 +106,8 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
     setSelectedCourtSubDivision(value);
     setSelectedCourtDivision(user?.court_division_id ?? "");
     setSelectedDistrict(user?.court_type ?? "");
-    handleChanges("court_sub_division", value);
-    dispatch(addCaseTypeError({ court_sub_division: "" }));
+    handleChanges("sub_division", value);
+    dispatch(addCaseTypeError({ sub_division: "" }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,7 +197,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                   placeholder="Select A Sub Division"
                   value={selectedCourtSubDivision}
                   onChange={handleCourtSubDivisionChange}
-                  error={caseTypeErrors?.court_sub_division}
+                  error={caseTypeErrors?.sub_division}
                 />
               )}
 
@@ -224,7 +224,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 <ConfirmInvite
                   isOpen={showConfirmInvite}
                   setIsOpen={setShowConfirmInvite}
-                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision, court_sub_division: selectedCourtSubDivision }}
+                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision, sub_division: selectedCourtSubDivision }}
                   trigger={<span />}
                 />
               )}

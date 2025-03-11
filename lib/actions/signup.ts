@@ -78,7 +78,7 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
                 court_type: sessionData.user.court_type,
                 court_division_id: sessionData.user.court_division_id,
                 court_divison: sessionData.user.court_divison,
-                court_sub_division: sessionData.user.sub_division,
+                sub_division: sessionData.user.sub_division,
                 phone_number: sessionData.user.phone_number,
                 role: sessionData.user.role as ROLES,
             },

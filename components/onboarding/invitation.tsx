@@ -130,4 +130,4 @@ export { InvitationComponent };
 
 // court_divison: string;
 // court_division_id: string;
-// court_sub_division: string;
+// sub_division: string;

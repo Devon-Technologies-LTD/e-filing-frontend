@@ -8,7 +8,6 @@ export interface LoginResponseData {
   court_type: string;
   court_division_id: string;
   court_divison: string;
-  court_sub_division: string;
   role: ROLES;
   token: string;
 }
