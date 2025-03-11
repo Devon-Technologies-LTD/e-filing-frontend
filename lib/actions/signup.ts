@@ -184,12 +184,13 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     redirect("/otp");
 }
 
+
 export async function invitationAction(_prevState: unknown, formData: FormData) {
     // Extract form data
     const data = Object.fromEntries(formData.entries());
-    const image = formData.get("image") as File | null;
-    console.log("am here 1");
+    console.log("Received data:", data);
 
+    const image = formData.get("image") as File | null;
     if (!image) {
         return {
             status: 400,
@@ -198,17 +199,8 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
         };
     }
 
-    const allowedMimeTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "image/svg+xml",
-        "image/bmp",
-        "image/tiff",
-    ];
-    console.log("am here 2");
-
+    // Allowed image types
+    const allowedMimeTypes = ["image/jpeg", "image/png"];
     if (!allowedMimeTypes.includes(image.type)) {
         return {
             status: 400,
@@ -227,41 +219,64 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
         };
     }
 
-    // Upload the image to the API
+    // Prepare FormData for upload
     const uploadFormData = new FormData();
     uploadFormData.append("image", image);
-    const result = InvitationFormSchema.safeParse({ ...data });
+
+    // Validate form fields
+    const result = InvitationFormSchema.safeParse(data);
     if (!result.success) {
+        console.error("Validation errors:", result.error.flatten().fieldErrors);
         return {
             status: 400,
             errors: result.error.flatten().fieldErrors,
             message: "Validation failed, please check input fields",
         };
     }
-    console.log("email" + data.email);
-    console.log("otp" + data.otp);
-    const response = await authService.acceptInvite({
-        otp: data.otp as string,
-        email: data.email as string,
-    });
-    console.log("accepoti invaite" + response);
-    // Assert the expected response shape
-    const responseData = response.data as { token: string; id: string };
 
-    const responseToken = responseData.token;
-    const responseId = responseData.id;
+    let token = cookies().get("TempToken")?.value;
+    let id = cookies().get("TempID")?.value;
+
+    if (!token) {
+        console.log("Authenticating with OTP:", { email: data.email, otp: data.otp });
+        const response = await authService.acceptInvite({
+            otp: data.otp as string,
+            email: data.email as string,
+        });
+        console.log("Auth response:", response);
+
+        const responseData = response.data as { token: string; id: string };
+        cookies().set("TempToken", responseData.token);
+        cookies().set("TempID", responseData.id);
+
+        token = responseData.token;
+        id = responseData.id;
+    }
+
+    if (!id) {
+        return {
+            status: 400,
+            errors: "User ID is missing",
+            message: "User ID is missing",
+        };
+    }
+
     try {
-        console.log(uploadFormData);
-        const url = `${NEXT_BASE_URL}/admin/user/${responseId}`;
+        const url = `${NEXT_BASE_URL}/admin/user/${id}`;
+        console.log(url);
+        console.log("token => " + token);
+
         const signupResponse = await fetch(url, {
             method: "PATCH",
             body: uploadFormData,
             headers: {
-                "Authorization": `Bearer ${responseToken}`,
+                "Authorization": `Bearer ${token}`,
             },
         });
+
         if (!signupResponse.ok) {
             const errorData = await signupResponse.json();
+            console.error("Signup error:", errorData);
             throw {
                 response: {
                     status: signupResponse.status,
@@ -269,11 +284,120 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 },
             };
         }
-        // Delete TempToken and TempID cookies after success
+
         cookies().delete("TempToken");
         cookies().delete("TempID");
-        return { message: "Account updated successfully. Please Login", success: true, status: 200 };
-    } catch (err: unknown) {
+
+        return {
+            message: "Account updated successfully. Please Login",
+            success: true,
+            status: 200
+        };
+    } catch (err) {
+        console.error("Error updating user:", err);
         return handleError(err);
     }
 }
+
+
+// export async function invitationAction(_prevState: unknown, formData: FormData) {
+//     // Extract form data
+//     const data = Object.fromEntries(formData.entries());
+//     console.log(" recent data" + data);
+//     const image = formData.get("image") as File | null;
+//     console.log("am here 1");
+
+//     if (!image) {
+//         return {
+//             status: 400,
+//             errors: "Image file is required",
+//             message: "Image file is required",
+//         };
+//     }
+
+//     const allowedMimeTypes = [
+//         "image/jpeg",
+//         "image/png",
+//         "image/gif",
+//         "image/webp",
+//         "image/svg+xml",
+//         "image/bmp",
+//         "image/tiff",
+//     ];
+//     console.log("am here 2");
+
+//     if (!allowedMimeTypes.includes(image.type)) {
+//         return {
+//             status: 400,
+//             errors: "Invalid image format. Only JPG and PNG are allowed.",
+//             message: "Invalid image format. Only JPG and PNG are allowed.",
+//         };
+//     }
+
+//     // Validate file size (5MB max)
+//     const maxSize = 5 * 1024 * 1024; // 5MB
+//     if (image.size > maxSize) {
+//         return {
+//             status: 400,
+//             errors: "File size exceeds the 5MB limit.",
+//             message: "File size exceeds the 5MB limit.",
+//         };
+//     }
+
+//     // Upload the image to the API
+//     const uploadFormData = new FormData();
+//     console.log(uploadFormData);
+
+//     uploadFormData.append("image", image);
+//     const result = InvitationFormSchema.safeParse({ ...data });
+//     console.log(result.data);
+//     if (!result.success) {
+//         return {
+//             status: 400,
+//             errors: result.error.flatten().fieldErrors,
+//             message: "Validation failed, please check input fields",
+//         };
+//     }
+//     const token = cookies().get("TempToken")?.value;
+//     if (!token) {
+//         console.log("email" + data.email);
+//         console.log("otp" + data.otp);
+//         const response = await authService.acceptInvite({
+//             otp: data.otp as string,
+//             email: data.email as string,
+//         });
+//         console.log("accepoti invaite =>  " + response);
+//         // Assert the expected response shape
+//         const responseData = response.data as { token: string; id: string };
+//         cookies().set("TempToken", responseData.token);
+//         cookies().set("TempID", responseData.id);
+//     }
+
+//     try {
+//         const token = cookies().get("TempToken")?.value;
+//         const id = cookies().get("TempID")?.value;
+//         const url = `${NEXT_BASE_URL}/admin/user/${id}`;
+//         const signupResponse = await fetch(url, {
+//             method: "PATCH",
+//             body: uploadFormData,
+//             headers: {
+//                 "Authorization": `Bearer ${token}`,
+//             },
+//         });
+//         console.log("signupResponse =< > " + signupResponse);
+//         if (!signupResponse.ok) {
+//             const errorData = await signupResponse.json();
+//             throw {
+//                 response: {
+//                     status: signupResponse.status,
+//                     data: errorData,
+//                 },
+//             };
+//         }
+//         cookies().delete("TempToken");
+//         cookies().delete("TempID");
+//         return { message: "Account updated successfully. Please Login", success: true, status: 200 };
+//     } catch (err: unknown) {
+//         return handleError(err);
+//     }
+// }
