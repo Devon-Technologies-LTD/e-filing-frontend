@@ -52,7 +52,6 @@ const DocumentService = {
           },
         }
       );
-      console.log("responesss", response);
       return response?.data || null;
     } catch (error) {
       console.error("Error uploading document:", (error as any).response.data);
@@ -64,7 +63,7 @@ const DocumentService = {
       console.log("entering delete payload");
       const response = await axiosInstance.request<any>({
         method: "DELETE",
-        url: "/document",
+        url: "/documents",
         data: payload,
       });
       console.log("responesss from delete finished", response);
