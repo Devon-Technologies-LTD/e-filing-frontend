@@ -22,24 +22,24 @@ export default function CaseMetrics() {
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
   // const caseData = isPresiding ? presidingdata : (centeral) ? centraldata : data;
   const caseMetrics = isPresiding ? presidingmetric : (centeral) ? centralMetric : caseMetric;
-
-
-  const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([]); // ✅ Define type explicitly
+  // const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([]); // ✅ Define type explicitly
+  const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([
+    { division_name: "No Data", case_count: 0 },
+  ]);
 
   React.useEffect(() => {
-    fetch("/api/case-distribution") // Replace with actual API URL
+    fetch("/api/case-distribution")
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setCaseMetricsData(data);
         } else {
-          console.error("Invalid API response, expected an array:", data);
-          setCaseMetricsData([]); // Fallback to an empty array
+          setCaseMetricsData([{ division_name: "No Data", case_count: 0 }]); // ✅ Default empty record
         }
       })
       .catch((error) => {
         console.error("Error fetching case data:", error);
-        setCaseMetricsData([]); // Fallback on error
+        setCaseMetricsData([{ division_name: "No Data", case_count: 0 }]); // ✅ Default empty record
       });
   }, []);
 
@@ -52,14 +52,6 @@ export default function CaseMetrics() {
     },
     staleTime: 100000,
   });
-
-  // const { data: metricData, isLoading: loadingMetric, error: metricError } = useQuery({
-  //   queryKey: ["caseDistribution"],
-  //   queryFn: async () => {
-  //     return await getCaseDistribution();
-  //   },
-  //   staleTime: 100000,
-  // });
 
   if (isLoading) {
     return <OverViewSkeleton />;
@@ -78,45 +70,40 @@ export default function CaseMetrics() {
     <>
       <div className="bg-white py-6 sm:py-8">
         <div className="w-full container  px-4 sm:px-8 grid gap-6 grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
-
           <MetricCard
             type="case"
-            metricKey='total'
-            metric={data.totalCases}
+            metricKey="total"
+            metric={data?.totalCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
           <MetricCard
             type="case"
-            metricKey='active'
-            metric={data.activeCases}
+            metricKey="active"
+            metric={data?.activeCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-
           <MetricCard
             type="case"
-            metricKey='assigned'
-            metric={data.assignedCases}
+            metricKey="assigned"
+            metric={data?.assignedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-
           <MetricCard
             type="case"
-            metricKey='unassigned'
-            metric={data.unassignedCases}
+            metricKey="unassigned"
+            metric={data?.unassignedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-
           <MetricCard
             type="case"
-            metricKey='reassigned'
-            metric={data.reassignedCases}
+            metricKey="reassigned"
+            metric={data?.reassignedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-
           <MetricCard
             type="case"
-            metricKey='concluded'
-            metric={data.concludedCases}
+            metricKey="concluded"
+            metric={data?.concludedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
 
