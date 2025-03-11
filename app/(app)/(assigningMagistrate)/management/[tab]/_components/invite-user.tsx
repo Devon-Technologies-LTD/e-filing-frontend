@@ -87,7 +87,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   // State for selected court_type and court division
   const [selectedCourt, setSelectedDistrict] = useState<string>("");
   const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
-  const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>(caseType.court_division);
+  const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
 
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));

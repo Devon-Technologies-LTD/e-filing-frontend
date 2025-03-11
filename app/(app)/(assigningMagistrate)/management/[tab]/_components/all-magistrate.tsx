@@ -72,17 +72,23 @@ export default function AllMagistrates() {
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
+
     return data.data.filter((magistrate: IUsersColumn) => {
-      // Exclude "pending" records
-      // if (magistrate.status.toLowerCase() === "pending") return false;
       const searchLower = searchTerm.toLowerCase();
-      return (
+      const matchesSearch =
         magistrate.first_name.toLowerCase().includes(searchLower) ||
         magistrate.last_name.toLowerCase().includes(searchLower) ||
-        magistrate.email.toLowerCase().includes(searchLower)
-      );
+        magistrate.email.toLowerCase().includes(searchLower) ||
+        magistrate.court_type.toLowerCase().includes(searchLower) ||
+        magistrate.court_division.toLowerCase().includes(searchLower);
+
+      const matchesCourt =
+        selectedCourt === "all" || magistrate.court_type === selectedCourt;
+
+      return matchesSearch && matchesCourt;
     });
-  }, [data, searchTerm]);
+  }, [data, searchTerm, selectedCourt]);
+
 
   return (
     <div className="bg-white p-6 space-y-6">

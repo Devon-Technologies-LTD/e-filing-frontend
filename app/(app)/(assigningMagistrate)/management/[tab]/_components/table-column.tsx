@@ -14,9 +14,9 @@ export interface IUsersColumn {
   email: string;
   role: ROLES;
   status: string;
-  court_division?: string;
+  court_division: string;
   districts?: string;
-  courtType?: string;
+  court_type: string;
   created_at?: Date | undefined;
 }
 
@@ -99,11 +99,11 @@ export const createUserColumns = (
     const directorColumns: ColumnDef<IUsersColumn>[] = [
       {
         header: "Division",
-        accessorKey: "division",
+        accessorKey: "court_division",
       },
       {
         header: "Court Type",
-        accessorKey: "courtType",
+        accessorKey: "court_type",
       },
     ];
 
