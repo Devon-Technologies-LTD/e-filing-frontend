@@ -265,15 +265,14 @@ export default function DocumentUploadComponent({
               disabled={deleteMutation.isPending}
               className=" text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500 disabled:font-bold"
               onClick={() => {
-                // if (documentId) {
-                //   const payload = {
-                //     document_ids: [documentId],
-                //   };
-                //   deleteMutation.mutate(payload);
-                // } else {
-                //   toast.error("Document ID not found");
-                // }
-                dispatch(deleteDocument({ title, subCase }));
+                if (documentId) {
+                  const payload = {
+                    document_ids: [documentId],
+                  };
+                  deleteMutation.mutate(payload);
+                } else {
+                  toast.error("Document ID not found");
+                }
               }}
             >
               {deleteMutation.isPending ? (
