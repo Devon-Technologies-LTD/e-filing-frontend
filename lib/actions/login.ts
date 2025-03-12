@@ -132,6 +132,7 @@ export async function ForgotPasswordAction(
 ) {
   const data = Object.fromEntries(formData);
   const result = EMailFormSchema.safeParse(data);
+  console.log(result);
 
   if (!result.success) {
     return {
@@ -144,7 +145,9 @@ export async function ForgotPasswordAction(
 
   try {
     // Simulate API call (uncomment when ready)
-    await authService.forgotPassword(result.data);
+  const resultz =  await authService.forgotPassword(result.data);
+  console.log(resultz);
+  
     // Store email in cookie/session
     cookies().set("otpEmail", result.data.email);
   } catch (err: any) {
