@@ -23,7 +23,7 @@ export default function Registerars() {
       headingText = "Central Registerar";
       descriptionText =
         "Assign a Central Registrar to review and validate filed cases before they proceed to the next stage.";
-      buttonText = "INVITE NEW CENTRAL MAGISTRATE";
+      buttonText = "INVITE NEW Central Registrar";
       break;
   }
 
