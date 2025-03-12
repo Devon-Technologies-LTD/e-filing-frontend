@@ -44,6 +44,7 @@ export function SingleCaseHeader({
     dispatch(addDocument([]));
     navigate.push(`${params?.id}/refile-documents`);
   };
+  console.log(data?.status);
 
   return (
     <div className="space-y-3 bg-white pt-4">
@@ -74,19 +75,19 @@ export function SingleCaseHeader({
             {/* Magistrates Buttons */}
             {userRole === ROLES.ASSIGNING_MAGISTRATE && (
               <div className="flex gap-2">
-                <AssignCaseSheet
-                   id={id}
-                  trigger={<Button variant="outline">ASSIGN CASE</Button>}
+
+                <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline">ASSIGN CASE</Button>}
                 />
+
                 {/* <ReAssignmentStatusSheet
                   id={id}
                   trigger={
                     <Button variant="outline">VIEW REQUEST STATUS</Button>
                   }
                 /> */}
-             
-             {/* <Button variant="outline" disabled={!!data?.status == ''}>REVIEW REQUEST</Button> */}
-             </div>
+
+                {/* <Button variant="outline" disabled={!!data?.status == ''}>REVIEW REQUEST</Button> */}
+              </div>
             )}
 
             {userRole === ROLES.DIRECTOR_MAGISTRATE && (

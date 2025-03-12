@@ -17,7 +17,7 @@ const directorMagostrateTabs = [
 ];
 const assigningMagostrateTabs = [
   { id: "all", label: "All (Presiding) Magistrates" },
-  { id: "registerars", label: "Central Registerars" },
+  { id: "registerars", label: "Central Registrar" },
   { id: "pending", label: "Pending Invitation" },
 ];
 const defaultTab = [

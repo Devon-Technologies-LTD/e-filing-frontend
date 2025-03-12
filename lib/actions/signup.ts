@@ -94,7 +94,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
 }
 
 export async function SignupAction(_prevState: unknown, formData: FormData) {
-    // Extract form data
     const data = Object.fromEntries(formData.entries());
     const image = formData.get("image") as File | null;
 
@@ -180,7 +179,6 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     // Redirect to OTP page
     redirect("/otp");
 }
-
 
 export async function invitationAction(_prevState: unknown, formData: FormData) {
     // Extract form data
@@ -289,4 +287,3 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
         return handleError(err);
     }
 }
-

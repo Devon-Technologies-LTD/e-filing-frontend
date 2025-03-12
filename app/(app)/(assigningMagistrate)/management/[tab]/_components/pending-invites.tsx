@@ -44,13 +44,13 @@ export default function PendingInvites() {
     case ROLES.ASSIGNING_MAGISTRATE:
       headingText = "Magistrate Information";
       descriptionText =
-        "Review and manage pending invitations sent to magistrates and central registrars. Track invitation statuses and resend or revoke invitations as needed.";
+        "Review and manage pending invitations sent to magistrates and Central Registrar. Track invitation statuses and resend or revoke invitations as needed.";
       buttonText = "LEARN MORE";
       break;
     default:
       headingText = "Magistrate Information";
       descriptionText =
-        "Review and manage pending invitations sent to magistrates and central registrars. Track invitation statuses and resend or revoke invitations as needed.";
+        "Review and manage pending invitations sent to magistrates and Central Registrar. Track invitation statuses and resend or revoke invitations as needed.";
       buttonText = "INVITE NEW MAGISTRATE";
   }
 

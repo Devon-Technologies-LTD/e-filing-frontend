@@ -48,14 +48,13 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
       if (tab === "central") {
-        headingText = "Invite New Central Magistrate";
-        descriptionText = "View and manage all central magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
+        headingText = "Invite New Central Registrar";
+        descriptionText = "View and manage all Central Registrar responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
       } else {
         headingText = "Invite New Presiding Magistrate";
         descriptionText = "View and manage all presiding magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
       }
       break;
-
     default:
       headingText = "Magistrate Information";
       descriptionText = "View general information about magistrates.";
@@ -191,15 +190,17 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 </>
               )}
 
-              {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
-                <DivisionAdmin
-                  id={user?.court_division_id ?? ""}
-                  placeholder="Select A Sub Division"
-                  value={selectedCourtSubDivision}
-                  onChange={handleCourtSubDivisionChange}
-                  error={caseTypeErrors?.sub_division}
-                />
-              )}
+
+              {tab != "central" &&
+                [ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+                  <DivisionAdmin
+                    id={user?.court_division_id ?? ""}
+                    placeholder="Select A Sub Division"
+                    value={selectedCourtSubDivision}
+                    onChange={handleCourtSubDivisionChange}
+                    error={caseTypeErrors?.sub_division}
+                  />
+                )}
 
               {(["first_name", "last_name", "email"] as const).map((field) => (
                 <div key={field} className="space-y-1">

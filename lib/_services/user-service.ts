@@ -19,6 +19,8 @@ export interface IDraftFilter {
 export interface Ipage {
   page?: number;
   size?: number;
+  role?: string;
+  search?: string;
 }
 
 const UserService = {
@@ -43,8 +45,10 @@ const UserService = {
   async getUserManagement(params: Ipage): Promise<any> {
     const response = await axiosInstance.get(`admin/user/`, {
       params: {
-        page: params.page ?? 1,
-        limit: params.size ?? 10,
+        page: params.page,
+        limit: params.size,
+        role: params.role,
+        search: params.search,
       },
     });
     return response.data;
