@@ -20,6 +20,7 @@ export interface Ipage {
   page?: number;
   size?: number;
   role?: string;
+  court_division_id?: string;
   search?: string;
 }
 
@@ -43,12 +44,13 @@ const UserService = {
   },
 
   async getUserManagement(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user/`, {
+    const response = await axiosInstance.get(`admin/user/`,{
       params: {
         page: params.page,
         limit: params.size,
         role: params.role,
         search: params.search,
+        court_division_id: params.court_division_id,
       },
     });
     return response.data;
