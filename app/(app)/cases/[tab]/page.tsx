@@ -42,6 +42,7 @@ export default function FilteredCases() {
         size: DEFAULT_PAGE_SIZE,
         status: getStatusByTab(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
+        role: user?.role,
       });
     },
     staleTime: 50000,
