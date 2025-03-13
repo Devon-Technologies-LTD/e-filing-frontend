@@ -72,7 +72,7 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
         <StatusBadge
           tooltip={""}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status as any}
+          status={row.original.status?.toLowerCase() as any}
         />
       );
     },
@@ -131,7 +131,7 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
         <StatusBadge
           tooltip={""}
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status as any}
+          status={row.original.status?.toLowerCase() as any}
         />
       );
     },

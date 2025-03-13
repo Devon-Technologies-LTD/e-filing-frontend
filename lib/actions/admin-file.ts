@@ -17,6 +17,7 @@ type ErrorResponse = {
     message?: string;
 };
 
+
 export async function getCaseFiles(payload: IDraftFilter) {
     console.log("this is the payload", payload);
 

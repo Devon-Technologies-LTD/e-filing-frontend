@@ -32,7 +32,6 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
     const dispatch = useDispatch();
     const { data: user } = useAppSelector((state) => state.profile);
-
     const { data: userData, isLoading: userLoading } = useQuery({
         queryKey: ["presidingM", currentPage],
         queryFn: async () => getUserManagement({
@@ -90,9 +89,9 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     return (
         <Sheet>
             <SheetTrigger disabled={status === "ASSIGNED"}
-                className={`${status === "ASSIGNED" ? "bg-gray-200 cursor-none border border-gray-100" : "bg-white border-black"}`}
+                className= {`bg-white  ${status === "ASSIGNED" ? "bg-gray-200 cursor-none border border-gray-100" : "bg-white border-black"}`}
             >{trigger}</SheetTrigger>
-            <SheetContent side="right" className="md:w-[505px] min-w-[505px]">
+            <SheetContent side="right" className="md:w-[505px] bg-white min-w-[505px]">
                 <div className="space-y-10 mx-auto">
                     <div className="space-y-6 w-full">
                         <p className="font-bold text-xl">Assign Case to a Presiding Magistrate</p>
