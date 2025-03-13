@@ -70,7 +70,8 @@ export default function LayoutPage({
             />
           </div>
         </header>
-        <div className="flex-1 container py-8 overflow-auto">{children}</div>
+        <div className="flex-1 container py-8 overflow-auto">
+          {children}</div>
       </div>
     </div>
   );
