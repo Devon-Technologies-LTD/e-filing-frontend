@@ -1,3 +1,4 @@
+'use client'
 import { LogoIcon } from "@/components/svg/logoIcon";
 import { ReactNode } from "react";
 import TermsAndPrivacy from "./auth/terms";

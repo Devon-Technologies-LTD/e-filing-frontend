@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   description: "Court Filing System",
 };
-const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] });
+const inter = Inter({ subsets: ['latin'], weight: ['300', '500'] });
 
 export default function RootLayout({
   children,

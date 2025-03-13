@@ -19,8 +19,6 @@ type ErrorResponse = {
 
 
 export async function getCaseFiles(payload: IDraftFilter) {
-    console.log("this is the payload", payload);
-
     try {
         const data = await CaseFileService.getCaseFilesAdmin(payload);
         return { ...data, success: true };
