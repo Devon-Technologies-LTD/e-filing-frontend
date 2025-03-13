@@ -17,7 +17,7 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     ),
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {
@@ -53,13 +53,19 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "PRESIDING MAGISTRATE",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex break-all items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-secondary-foreground text-black">
-              {(row.original as any).magistrate_name ?? ""}
+              {row.original.assignee_name
+                ? row.original.assignee_name
+                  .split(" ")
+                  .map((word) => word.charAt(0))
+                  .join("")
+                  .toUpperCase()
+                : ""}{" "}
             </AvatarFallback>
           </Avatar>
-          {(row.original as any)?.magistrate_name ?? "---------"}
+          {row.original?.assignee_name ?? "---------"}
         </div>
       );
     },
@@ -92,7 +98,7 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     ),
   },
   {
-    accessorKey: "caseId",
+    accessorKey: "case_suit_number",
     header: "Case Suit (ID)",
   },
   {

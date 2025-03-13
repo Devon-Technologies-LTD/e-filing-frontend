@@ -25,9 +25,7 @@ export default function FilteredCases() {
   const router = useRouter();
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const { data: user } = useAppSelector((state) => state.profile);
-
   const [currentPage, setCurrentPage] = useState(1);
-
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
       "get_cases",
@@ -38,20 +36,17 @@ export default function FilteredCases() {
         selectedCase,
       },
     ],
-
     queryFn: async () => {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         status: getStatusByTab(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
-        role: user?.role, // Move role inside the payload
       });
     },
     staleTime: 50000,
     refetchInterval: 10000,
   });
-
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
