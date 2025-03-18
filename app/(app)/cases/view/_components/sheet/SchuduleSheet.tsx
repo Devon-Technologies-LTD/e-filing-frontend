@@ -89,7 +89,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
           <div className="flex justify-between gap-2">
             <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" onClick={() => setIsOpen(!isOpen)}>
+                <Button variant="outline" className="w-full h-11 text-left border-2" onClick={() => setIsOpen(!isOpen)}>
                   {date ? format(date, "LLL dd, y") : "HEARING DATE"}
                   <ChevronDown className="ml-auto h-5 w-5" />
                 </Button>
