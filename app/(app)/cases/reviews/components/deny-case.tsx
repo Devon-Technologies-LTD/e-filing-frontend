@@ -63,8 +63,7 @@ const ReasonsModal = ({
           <section className="space-y-1">
             <Label
               htmlFor="denial-reason"
-              className=" flex justify-between items-center text-base font-bold "
-            >
+              className=" flex justify-between items-center text-base font-bold">
               Give reasons here
               {!isReasonValid && (
                 <p className="text-red-600 text-sm">Reason is required.</p>
