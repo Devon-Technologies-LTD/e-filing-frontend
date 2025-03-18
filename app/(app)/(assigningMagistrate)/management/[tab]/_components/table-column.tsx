@@ -25,7 +25,6 @@ export const createUserColumns = (
   type?: "pending" | "all"
 ): ColumnDef<IUsersColumn>[] => {
   const baseColumns: ColumnDef<IUsersColumn>[] = [
-
     {
       id: "name",
       header: "Name",
@@ -124,7 +123,7 @@ export const createUserColumns = (
   if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
     const assigningColumns: ColumnDef<IUsersColumn>[] = [
       {
-        accessorKey: "districts",
+        accessorKey: "court_division",
         header: "Districts",
       },
     ];

@@ -76,12 +76,12 @@ export default function CaseMetrics() {
             metric={data?.totalCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-          <MetricCard
+          {/* <MetricCard
             type="case"
             metricKey="active"
             metric={data?.activeCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
-          />
+          /> */}
           <MetricCard
             type="case"
             metricKey="assigned"
@@ -96,16 +96,16 @@ export default function CaseMetrics() {
           />
           <MetricCard
             type="case"
-            metricKey="reassigned"
+            metricKey="Under Review"
             metric={data?.reassignedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
           />
-          <MetricCard
+          {/* <MetricCard
             type="case"
             metricKey="concluded"
             metric={data?.concludedCases ?? { total: 0, difference: 0 }}
             rightModal={rightModal}
-          />
+          /> */}
 
         </div>
       </div>

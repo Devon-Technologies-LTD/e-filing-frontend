@@ -34,27 +34,29 @@ export default function Registerars() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["central", currentPage], // Include dependencies
+    queryKey: ["central", currentPage],
     queryFn: async () => {
       return await getUserManagement({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        role: "CENTRAL_REGISTRAR",
       });
     },
     staleTime: 100000, // Move this inside the object correctly
   });
-  const filteredData = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data.filter((magistrate: IUsersColumn) => {
-      if (magistrate.role != ROLES.CENTRAL_REGISTRAR) return false;
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        magistrate.first_name.toLowerCase().includes(searchLower) ||
-        magistrate.last_name.toLowerCase().includes(searchLower) ||
-        magistrate.email.toLowerCase().includes(searchLower)
-      );
-    });
-  }, [data, searchTerm]);
+
+  // const filteredData = useMemo(() => {
+  //   if (!data?.data) return [];
+  //   return data.data.filter((magistrate: IUsersColumn) => {
+  //     if (magistrate.role != ROLES.CENTRAL_REGISTRAR) return false;
+  //     const searchLower = searchTerm.toLowerCase();
+  //     return (
+  //       magistrate.first_name.toLowerCase().includes(searchLower) ||
+  //       magistrate.last_name.toLowerCase().includes(searchLower) ||
+  //       magistrate.email.toLowerCase().includes(searchLower)
+  //     );
+  //   });
+  // }, [data, searchTerm]);
 
 
   return (
@@ -91,7 +93,7 @@ export default function Registerars() {
       <DataTable
         columns={columns}
         loading={draftsLoading}
-        data={filteredData}
+        data={data?.data}
       />
     </div>
   );

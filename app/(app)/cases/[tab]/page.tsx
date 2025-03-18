@@ -82,7 +82,6 @@ export default function FilteredCases() {
           data={data?.data}
         />
       </div>
-
       {data?.data?.length > 0 && (
         <div className="fixed bottom-0 container left-0 right-0 py-2">
           <div className="flex justify-center">

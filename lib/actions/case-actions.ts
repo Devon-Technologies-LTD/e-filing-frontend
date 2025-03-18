@@ -39,6 +39,7 @@ export async function requestReAssigment(payload: any, id: string) {
 }
 export async function deliverJudgement(payload: any, id: string) {
     try {
+        console.log("This is a payload == >" + payload);
         const data = await CaseActionService.deliverJudgement(payload, id);
         console.log(data);
         return { ...data, success: true };
@@ -50,6 +51,16 @@ export async function deliverJudgement(payload: any, id: string) {
 export async function getSingleCaseHistory(id: string) {
     try {
         const data = await CaseActionService.getSingleCaseHistory(id);
+        console.log(data);
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        const error = err as ErrorResponse;
+        return handleApiError2(error);
+    }
+}
+export async function reassignmentHistory(id: string) {
+    try {
+        const data = await CaseActionService.reassignmentHistory(id);
         console.log(data);
         return { ...data, success: true };
     } catch (err: unknown) {
