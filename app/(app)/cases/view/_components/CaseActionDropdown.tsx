@@ -20,8 +20,6 @@ interface CaseActionDropdownProps {
     id: string,
 }
 
-
-
 const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => {
     const userRole = user?.role;
     if (

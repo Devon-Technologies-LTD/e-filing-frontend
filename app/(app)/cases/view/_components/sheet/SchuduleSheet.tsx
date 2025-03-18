@@ -23,6 +23,8 @@ interface ScheduleSheetProps {
 
 export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
   const [date, setDate] = useState<Date | undefined>();
+  const [isOpen, setIsOpen] = useState(false);
+
   const [time, setTime] = useState<string | null>(null);
   const [details, setDetails] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,27 +87,49 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
           </div>
           <div className="flex justify-between gap-2">
-            <Popover>
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !date && "text-muted-foreground")}>{date ? format(date, "LLL dd, y") : "HEARING DATE"} <ChevronDown className="ml-auto h-5 w-5" /></Button>
+                <Button variant="outline" onClick={() => setIsOpen(!isOpen)}>
+                  {date ? format(date, "LLL dd, y") : "HEARING DATE"}
+                  <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
               </PopoverTrigger>
-              <PopoverContent align="start">
-                <Calendar mode="single" selected={date} onSelect={setDate} />
+              <PopoverContent align="start" forceMount className="pointer-events-auto">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(selectedDate) => {
+                    setDate(selectedDate);
+                    setIsOpen(false); // Close popover on selection
+                  }}
+                  className="cursor-pointer"
+                />
               </PopoverContent>
             </Popover>
-            
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !time && "text-muted-foreground")}>{time ?? "TIME"} <ChevronDown className="ml-auto h-5 w-5" /></Button>
+                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !time && "text-muted-foreground")}>
+                  {time ?? "TIME"} <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
               </PopoverTrigger>
-              <PopoverContent align="start">
+              <PopoverContent align="start" forceMount className="pointer-events-auto">
                 <div className="flex flex-col space-y-1">
                   {timeSlots.map((slot) => (
-                    <button key={slot} onClick={() => setTime(slot)} className="text-sm text-gray-700 hover:bg-gray-100 p-2 rounded w-full text-left">{slot}</button>
+                    <button
+                      key={slot}
+                      onClick={() => {
+                        setTime(slot);
+                      }}
+                      className="text-sm text-gray-700 hover:bg-gray-100 p-2 rounded w-full text-left cursor-pointer"
+                    >
+                      {slot}
+                    </button>
                   ))}
                 </div>
               </PopoverContent>
             </Popover>
+
+
           </div>
           <div className="space-y-2">
             <p className="font-bold text-base">Other details (Optional)</p>
