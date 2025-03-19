@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import {
@@ -11,6 +10,8 @@ import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 import { HelpCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getOtherDocumentsByCaseType } from "@/lib/actions/public";
 
 export const OtherDocumentMapping: any = {
   ["CIVIL CASE"]: CivilOtherDocumentTitles,
@@ -24,25 +25,35 @@ export default function DocumentUploadForm() {
     caseType: { case_type },
   } = useAppSelector((state) => state.caseFileForm);
 
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["case_types_documents", case_type],
+    queryFn: () => getOtherDocumentsByCaseType("other documents", case_type),
+    enabled: !!case_type,
+    staleTime: 50000,
+  });
+  const documentTitles = data?.data
+    ? data?.data?.map((doc: any) => doc.title)
+    : null;
+
   const uploadedDocuments = useAppSelector((state) =>
     state.caseFileForm.documents?.filter((doc) =>
-      Object.values(OtherDocumentMapping[case_type] || [])
-        .map((value: any) => value?.toLowerCase())
-        .includes(doc.title?.toLowerCase())
+      documentTitles?.includes(doc.title)
     )
   );
 
-  const availableDocTypes: any = Object.values(
-    OtherDocumentMapping[case_type]
-  ).filter(
-    (doc) => !uploadedDocuments?.some((uploaded) => uploaded.title === doc)
-  );
-
-  const handleDocTypeSelect = (value: any) => {
-    setSelectedDocType(value);
-  };
+  const availableDocTypes = data?.data
+    ? data.data.filter(
+        (doc: any) =>
+          !uploadedDocuments.some(
+            (uploaded) =>
+              uploaded.title.trim().toLowerCase() ===
+              doc.title.trim().toLowerCase()
+          )
+      )
+    : [];
 
   const handleSuccess = (data: any) => {
+    console.log("first", data);
     if (selectedDocType) {
       toast.success("Upload successful");
       setSelectedDocType("");
@@ -50,53 +61,6 @@ export default function DocumentUploadForm() {
   };
 
   return (
-    // </div><div className="space-y-6">
-    //   {uploadedDocuments?.map((data: IDocumentFileType) => (
-    //     <DocumentUploadComponent
-    //       subTitle={"OTHER DOCUMENTS"}
-    //       key={data.id}
-    //       title={data.title}
-    //       caseType={case_type}
-    //       subCase={selectedDocType}
-    //       canDelete={true}
-    //       onSuccess={(data) => handleSuccess(data)}
-    //     />
-    //   ))}
-    // </div>
-
-    // {selectedDocType && (
-    //   <DocumentUploadComponent
-    //     subTitle={"OTHER DOCUMENTS"}
-    //     title={selectedDocType}
-    //     caseType={case_type}
-    //     subCase={selectedDocType}
-    //     onSuccess={(data) => handleSuccess(data)}
-    //   />
-    // )}
-
-    //   {availableDocTypes?.length > 0 && (
-    //     <Select value={selectedDocType} onValueChange={handleDocTypeSelect}>
-    //       <SelectTrigger variant={"underlined"}>
-    //         <SelectValue
-    //           className="text-neutral-700 text-xs"
-    //           placeholder={"Select a Document to Upload"}
-    //         />
-    //       </SelectTrigger>
-    //       <SelectContent className="bg-white text-zinc-900">
-    //         {availableDocTypes.map((subCase: any) => (
-    //           <SelectItem
-    //             variant="underlined"
-    //             key={subCase}
-    //             value={subCase}
-    //             className="py-2 uppercase"
-    //           >
-    //             {subCase}
-    //           </SelectItem>
-    //         ))}
-    //       </SelectContent>
-    //     </Select>
-    //   )}
-    // </div>
     <div className="space-y-10">
       <div className="space-y-6">
         {uploadedDocuments?.map((data: IDocumentFileType) => (
@@ -105,7 +69,7 @@ export default function DocumentUploadForm() {
             key={data.id}
             title={data.title}
             caseType={case_type}
-            subCase={data.sub_title}
+            subCase={"other documents"}
             canDelete={true}
             onSuccess={(data) => handleSuccess(data)}
           />
@@ -116,7 +80,7 @@ export default function DocumentUploadForm() {
           subTitle={"OTHER DOCUMENTS"}
           title={selectedDocType}
           caseType={case_type}
-          subCase={selectedDocType}
+          subCase={"other documents"}
           onSuccess={(data) => handleSuccess(data)}
         />
       )}
@@ -133,13 +97,13 @@ export default function DocumentUploadForm() {
               <div
                 key={index}
                 className={`p-2 uppercase px-4 text-sm cursor-pointer text-zinc-900  hover:bg-secondary-foreground hover:bg-gray-50 ${
-                  selectedDocType === doc
+                  selectedDocType === doc.title
                     ? "bg-secondary-foreground font-bold"
                     : "font-semibold"
                 }`}
-                onClick={() => setSelectedDocType(doc)}
+                onClick={() => setSelectedDocType(doc.title)}
               >
-                {doc}
+                {doc?.title}
               </div>
             ))}
           </div>

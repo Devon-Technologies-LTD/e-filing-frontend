@@ -26,7 +26,7 @@ import { DownloadSampleButton } from "@/components/ui/download-sample-document."
 import { CaseTypeData, CivilDocumentTitles } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
-export const CivilCaseForm4 = () => {
+export const CivilCaseForm4 = (documents: any) => {
   const dispatch = useDispatch();
   const {
     caseType: {
@@ -385,8 +385,31 @@ export const CivilCaseForm4 = () => {
           </div>
         </div>
 
+        <InputField
+          id="counsel_name"
+          name="counsel_name"
+          type="text"
+          label="NAME"
+          placeholder="e.g claimant/counsel name"
+          value={counsel_name}
+          onChange={({ target }) => {
+            handleChange("counsel_name", target.value);
+          }}
+          error={caseTypeErrors?.counsel_name ?? ""}
+        />
         <div className="space-y-6">
-          <div className="space-y-3">
+          {documents?.documents?.map((doc: any) => (
+            <div className="bg-white p-4 lg:w-1/2 w-full">
+              <DocumentUploadComponent
+                required
+                subTitle={case_type}
+                title={doc.title}
+                caseType={case_type}
+                subCase={sub_case_type}
+              />
+            </div>
+          ))}
+          {/* <div className="space-y-3">
             <p className="text-base items-center gap-3 text-neutral-600 font-bold">
               SIGNATURE{" "}
               <span className="text-xs text-red-500 ">
@@ -404,18 +427,6 @@ export const CivilCaseForm4 = () => {
             </div>
           </div>
 
-          <InputField
-            id="counsel_name"
-            name="counsel_name"
-            type="text"
-            label="NAME"
-            placeholder="e.g claimant/counsel name"
-            value={counsel_name}
-            onChange={({ target }) => {
-              handleChange("counsel_name", target.value);
-            }}
-            error={caseTypeErrors?.counsel_name ?? ""}
-          />
           <div className="mt-3 lg:w-1/2">
             <DocumentUploadComponent
               required
@@ -425,8 +436,9 @@ export const CivilCaseForm4 = () => {
               subCase={sub_case_type}
               errorMessage={caseTypeErrors?.plaintParticulars ?? ""}
             />
-          </div>
+          </div> */}
         </div>
+        {}
       </div>
     </div>
   );

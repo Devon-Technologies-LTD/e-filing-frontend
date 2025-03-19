@@ -25,13 +25,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import {
-  CaseTypeData,
-  CivilDocumentTitles,
-} from "@/constants";
+import { CaseTypeData, CivilDocumentTitles } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
-export const CivilCaseForm5 = () => {
+export const CivilCaseForm5 = (documents: any) => {
   const dispatch = useDispatch();
   const {
     caseType: {
@@ -451,36 +448,32 @@ export const CivilCaseForm5 = () => {
             </Popover>
           </div>
         </div>
+        <InputField
+          id="counsel_name"
+          name="counsel_name"
+          type="text"
+          label="NAME"
+          placeholder="e.g claimant/counsel name"
+          value={counsel_name}
+          onChange={({ target }) => {
+            handleChange("counsel_name", target.value);
+          }}
+          error={caseTypeErrors?.counsel_name ?? ""}
+        />
 
         <div className="space-y-6">
-          <div className="space-y-3">
-            <p className="text-base items-center gap-3 text-neutral-600 font-bold">
-              SIGNATURE
-            </p>
+          {documents?.documents?.map((doc: any) => (
             <div className="bg-white p-4 lg:w-1/2 w-full">
+              
               <DocumentUploadComponent
                 required
-                errorMessage={caseTypeErrors?.signature ?? ""}
-                subTitle={CaseTypeData.CIVIL_CASE}
-                title={"E-SIGNATURE"}
+                subTitle={case_type}
+                title={doc.title}
                 caseType={case_type}
                 subCase={sub_case_type}
               />
             </div>
-          </div>
-
-          <InputField
-            id="counsel_name"
-            name="counsel_name"
-            type="text"
-            label="NAME"
-            placeholder="e.g claimant/counsel name"
-            value={counsel_name}
-            onChange={({ target }) => {
-              handleChange("counsel_name", target.value);
-            }}
-            error={caseTypeErrors?.counsel_name ?? ""}
-          />
+          ))}
         </div>
       </div>
     </div>
