@@ -56,7 +56,7 @@ export enum OtherDocuments {
 
 export enum CriminalCaseSubType {
   FIRST_INFORMATION_REPORT = "FIRST INFORMATION REPORT (FIR)",
-  DIRECT_COMPLAIN = "DIRECT CRIMINAL COMPLAIN",
+  DIRECT_COMPLAIN = "DIRECT CRIMINAL COMPLAINT",
   REQUEST_FOR_REMAND_ORDER = "REQUEST FOR REMAND ORDER (EXPARTE)",
 }
 
@@ -98,17 +98,14 @@ export enum CivilOtherDocumentTitles {
 export enum FamilyDocumentTitles {
   Form49 = "Form 49",
   Form48 = "Form 48",
-  OathAffidavit = "Affidavit",
+  Affidavit = "Affidavit",
   ApplicationForPublicAdoption = "Application for Public adoption",
   MemorandumOfConditionalAppearance = "Memorandum of conditional appearance",
-  ExhibitForPrivateAdoption = "Exhibit for Private Adoption",
-  MotionExparte_Family = "Motion Exparte",
-  ExhibitForApplicationForPublicAdoption = "Exhibit for Application for public adoption",
+  MotionExparte = "Motion Exparte",
   LegalGuardianship = "Legal Guardianship",
   NoticeOfIntentionToDefend = "Notice of Intention to Defend",
-  MotionOnNotice_Family = "Motion on Notice",
+  MotionOnNotice = "Motion on Notice",
   PrivateAdoption = "Private Adoption",
-  ExhibitForLegalGuardianship = "Exhibit for Legal Guardianship",
   ApplicationForCommencement = "Application for Commencement",
 }
 

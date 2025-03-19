@@ -18,6 +18,7 @@ export const DirectCriminalComplaintForm = () => {
     },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
+  
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(
       ContentState?.createFromText(direct_complain ?? " ")
@@ -55,6 +56,7 @@ export const DirectCriminalComplaintForm = () => {
           name="claimant"
           type="text"
           label="CLAIMANT"
+          disabled
           value={claimant_name}
           tooltipText="Enter the name of the claimant"
           tooltipIcon={InfoIcon}
@@ -73,6 +75,7 @@ export const DirectCriminalComplaintForm = () => {
           id="defendant"
           name="defendant"
           type="text"
+          disabled
           label="DEFENDANT"
           value={defendant_name}
           tooltipText="Enter the name of the defendant"

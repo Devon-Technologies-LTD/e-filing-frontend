@@ -179,12 +179,15 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ title: string; subCase: string }>
     ) => {
-      state.documents = state.documents?.filter(
-        (document) =>
-          document.title.toLowerCase() !== action.payload.title.toLowerCase() &&
-          document.sub_title.toLowerCase() !==
-            action.payload.subCase.toLowerCase()
-      );
+     state.documents = state.documents?.filter(
+       (document) =>
+         !(
+           document.title.toLowerCase() ===
+             action.payload.title.toLowerCase() &&
+           document.sub_title.toLowerCase() ===
+             action.payload.subCase.toLowerCase()
+         )
+     );
     },
 
     clearForm: (state) => {

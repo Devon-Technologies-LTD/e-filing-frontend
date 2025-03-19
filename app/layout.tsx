@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from 'next/font/google';
+// import { Inter } from 'next/font/google';
+
 import "./globals.css";
 import { AppProvider } from "@/lib/provider";
 import NextTopLoader from "nextjs-toploader";
@@ -8,6 +9,7 @@ import React, { Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import SuspenseLoader from "@/components/suspense-loader";
+import { inter } from "./fonts";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   },
   description: "Court Filing System",
 };
-const inter = Inter({ subsets: ['latin'], weight: ['300', '500'] });
+// const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] });
 
 export default function RootLayout({
   children,
@@ -31,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={inter.variable}>
       <Head>
         <title>E-Filing Portal</title>
         <meta
@@ -42,7 +44,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" />
       </Head>
       <body
-        className={`${inter.className} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
+        className={`${inter.variable} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
       >
         <Suspense fallback={<SuspenseLoader />}>
           <Toaster richColors expand={true} position="top-center" />

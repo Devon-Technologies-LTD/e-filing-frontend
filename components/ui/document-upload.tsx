@@ -84,7 +84,6 @@ export default function DocumentUploadComponent({
     },
   });
 
-
   const deleteMutation = useMutation({
     mutationFn: (data: DeleteDocumentPayload) => deleteDocumentAction(data),
     onSuccess: (data) => {
@@ -120,7 +119,6 @@ export default function DocumentUploadComponent({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log("file", file);
     if (!file) return;
     if (!allowedUploadTypes.includes(file.type)) {
       toast.error(

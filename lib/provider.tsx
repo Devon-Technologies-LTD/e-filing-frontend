@@ -13,6 +13,7 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
+        refetchOnReconnect: true,
         refetchOnWindowFocus: false,
         retry: 5,
       },
