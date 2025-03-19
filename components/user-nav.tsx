@@ -13,14 +13,7 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useAppSelector } from "@/hooks/redux";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import { useAuth } from "../lib/auth";
 import { Icons } from "./svg/icons";
 import { deleteSession } from "@/lib/server/auth";
@@ -45,12 +38,9 @@ export function UserNav() {
   const handleLogout = async (e: any) => {
     setLoading(true);
     try {
-      // Wait for the deleteSession to complete before redirecting
       await deleteSession();
       await signOut();
-      // Close the dialog before redirecting
       setDialogOpen(false);
-      // Add a small delay before redirecting to ensure state updates are processed
       await new Promise((resolve) => setTimeout(resolve, 100));
       router.push("/login");
     } catch (error) {
@@ -73,7 +63,7 @@ export function UserNav() {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 space-y-3" align="end" forceMount>
+        <DropdownMenuContent className="w-80 space-y-6" align="end" forceMount>
           <DropdownMenuLabel className="font-normal flex items-center gap-3">
             <Avatar className="h-8 w-8">
               <AvatarImage
@@ -82,14 +72,21 @@ export function UserNav() {
               />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{name}</p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {user?.email}
-              </p>
+            <div className="flex flex-col space-y-2">
+              <p className="text-sm font-medium leading-none">{user?.role}</p>
+              <p className="text-sm font-medium leading-none">{user?.first_name} {user?.last_name}</p>
+              <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+              <p className="text-xs leading-none text-bold text-muted-foreground">{user?.court_divison}</p>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuGroup className="space-y-1">
+          <DropdownMenuGroup className="space-y-3 p-4">
+            <DropdownMenuItem asChild>
+              <span className="flex gap-3">
+                <Icons.Court />
+                <p className="text-sm uppercase text-app-primary font-semibold">{user?.court_type}</p>
+              </span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link
                 className="w-full uppercase font-semibold text-xs"

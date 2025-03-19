@@ -1,4 +1,4 @@
-
+"use client";
 
 
 import React, { useState } from "react";
@@ -23,10 +23,10 @@ interface ScheduleSheetProps {
 
 export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
   const [date, setDate] = useState<Date | undefined>();
+  const [isOpen, setIsOpen] = useState(false);
+
   const [time, setTime] = useState<string | null>(null);
   const [details, setDetails] = useState<string>("");
-  const [isDateOpen, setDateOpen] = useState(false);
-  const [isTimeOpen, setTimeOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const timeSlots = [
@@ -47,7 +47,6 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
     if (!date) return toast.error("Please select a hearing date.");
     if (!time) return toast.error("Please select a time.");
 
-    
     setIsSubmitting(true);
     const parsedTime = parse(time, "hh:mm a", new Date());
     try {
@@ -58,18 +57,14 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
         casefile_id: data.id,
       };
       const response = await createCaseFile(formData, data.id);
-      console.log(response);
       if (response.success) {
-        toast.success("successful");
+        toast.success("Schedule confirmed successfully.");
       } else {
-        const errorMessage = response.data.message;
-        const detailedError = response.data.error;
-        toast.error(`${errorMessage}:  ${detailedError}`);
+        toast.error(`${response.data.message}: ${response.data.error}`);
       }
-    } catch (err: unknown) {
+    } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.message);
-      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +72,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
 
   return (
     <Sheet>
-      <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
+      <SheetTrigger>{trigger}</SheetTrigger>
       <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
         <div className="space-y-8 mx-auto">
           <div>
@@ -91,33 +86,55 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
             <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
           </div>
-
           <div className="flex justify-between gap-2">
-            <Popover open={isDateOpen} onOpenChange={setDateOpen}>
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !date && "text-muted-foreground")}>{date ? format(date, "LLL dd, y") : "HEARING DATE"} <ChevronDown className="ml-auto h-5 w-5" /></Button>
+                <Button variant="outline" className="w-full h-11 text-left border-2" onClick={() => setIsOpen(!isOpen)}>
+                  {date ? format(date, "LLL dd, y") : "HEARING DATE"}
+                  <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
               </PopoverTrigger>
-              <PopoverContent><Calendar mode="single" selected={date} onSelect={(d) => { setDate(d); setDateOpen(false); }} /></PopoverContent>
+              <PopoverContent align="start" forceMount className="pointer-events-auto">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(selectedDate) => {
+                    setDate(selectedDate);
+                    setIsOpen(false); // Close popover on selection
+                  }}
+                  className="cursor-pointer"
+                />
+              </PopoverContent>
             </Popover>
-
-            <Popover open={isTimeOpen} onOpenChange={setTimeOpen}>
+            <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !time && "text-muted-foreground")}>{time ?? "TIME"} <ChevronDown className="ml-auto h-5 w-5" /></Button>
+                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !time && "text-muted-foreground")}>
+                  {time ?? "TIME"} <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent align="start" forceMount className="pointer-events-auto">
                 <div className="flex flex-col space-y-1">
                   {timeSlots.map((slot) => (
-                    <button key={slot} onClick={() => { setTime(slot); setTimeOpen(false); }} className="text-sm text-gray-700 hover:bg-gray-100 p-2 rounded">{slot}</button>
+                    <button
+                      key={slot}
+                      onClick={() => {
+                        setTime(slot);
+                      }}
+                      className="text-sm text-gray-700 hover:bg-gray-100 p-2 rounded w-full text-left cursor-pointer"
+                    >
+                      {slot}
+                    </button>
                   ))}
                 </div>
               </PopoverContent>
             </Popover>
+
+
           </div>
           <div className="space-y-2">
             <p className="font-bold text-base">Other details (Optional)</p>
             <Textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Type here." className="bg-neutral-100 border-b-2 h-52 border-gray-300" />
           </div>
-
           <form onSubmit={handleSubmit}>
             <Button type="submit" disabled={isSubmitting || !date || !time}>
               {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}

@@ -44,6 +44,7 @@ export function SingleCaseHeader({
     dispatch(addDocument([]));
     navigate.push(`${params?.id}/refile-documents`);
   };
+  console.log(data?.status);
 
   return (
     <div className="space-y-3 bg-white pt-4">
@@ -66,44 +67,35 @@ export function SingleCaseHeader({
             </h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
-              <StatusBadge status={data?.status} />
+              <StatusBadge status={data?.status.toLowerCase()} />
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Magistrates Buttons */}
             {userRole === ROLES.ASSIGNING_MAGISTRATE && (
               <div className="flex gap-2">
-                <AssignCaseSheet
-                   id={id}
-                  trigger={<Button variant="outline">ASSIGN CASE</Button>}
-                />
-                {/* <ReAssignmentStatusSheet
-                  id={id}
-                  trigger={
-                    <Button variant="outline">VIEW REQUEST STATUS</Button>
-                  }
-                /> */}
-             
-             {/* <Button variant="outline" disabled={!!data?.status == ''}>REVIEW REQUEST</Button> */}
-             </div>
+                <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs" >ASSIGN CASE</Button>} />
+                {/* <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs" >RE-ASSIGN CASE</Button>} />
+                <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/>
+                <Button variant="outline" className="text-xs"  >REVIEW REQUEST</Button> */}
+              </div>
             )}
 
             {userRole === ROLES.DIRECTOR_MAGISTRATE && (
               <CaseRequestSheet
                 id={id}
-                trigger={<Button variant="outline"> REQUEST THIS CASE</Button>}
+                trigger={<Button variant="outline" className="text-xs" > REQUEST THIS CASE</Button>}
               />
             )}
 
             {userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE && (
               <RequestSheet
                 trigger={
-                  <Button variant="outline"> REQUEST RE-ASSIGNMENT</Button>
+                  <Button variant="outline" className="text-xs" > REQUEST RE-ASSIGNMENT</Button>
                 }
               />
             )}
-
             <CaseActionDropdown user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">

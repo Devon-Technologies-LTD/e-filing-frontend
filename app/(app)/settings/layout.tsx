@@ -79,8 +79,6 @@ export default function SettingsModal({ children }: SettingsLayoutProps) {
               </div>
             </nav>
           </div>
-
-          {/* Content */}
           <p>{children}</p>
         </div>
       </DialogContent>

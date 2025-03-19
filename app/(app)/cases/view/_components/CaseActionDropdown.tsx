@@ -20,8 +20,6 @@ interface CaseActionDropdownProps {
     id: string,
 }
 
-
-
 const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => {
     const userRole = user?.role;
     if (
@@ -29,7 +27,6 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
     ) {
         return null;
     }
-
     return (
         <>
             <DropdownMenu>
@@ -38,7 +35,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        {(userRole === ROLES.PRESIDING_MAGISTRATE) && (
+                        {/* {(userRole === ROLES.PRESIDING_MAGISTRATE) && ( */}
                             <>
                                 <ScheduleSheet id={id}
                                     trigger={
@@ -62,7 +59,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                                     }
                                 />
                             </>
-                        )}
+                        {/* )} */}
 
                         <HearingSheet
                             id={id}

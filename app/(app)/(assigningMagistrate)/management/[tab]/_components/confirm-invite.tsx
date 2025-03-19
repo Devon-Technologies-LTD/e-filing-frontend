@@ -32,11 +32,9 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, isOpen, setIsOpen
   // const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-
   const handleInvite = async () => {
     setLoading(true);
     setErrorMessages([]);
-
     try {
       console.log(formValues);
 

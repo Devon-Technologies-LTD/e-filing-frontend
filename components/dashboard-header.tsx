@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Icons } from "./svg/icons";
 import HelpCircleComponent from "./help-circle";
 import Notifications from "./notifications";
+import { TextHeader } from "./textHeader";
 
 export function DashboardHeader() {
   return (
@@ -19,7 +20,10 @@ export function DashboardHeader() {
         </div>
 
         <div className="ml-auto flex items-center space-x-4 md:space-x-6">
+          <TextHeader />
+
           {/* <SearchMenu /> */}
+
           <HelpCircleComponent />
           <Notifications />
           <UserNav />

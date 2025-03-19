@@ -17,7 +17,7 @@ const directorMagostrateTabs = [
 ];
 const assigningMagostrateTabs = [
   { id: "all", label: "All (Presiding) Magistrates" },
-  { id: "registerars", label: "Central Registerars" },
+  { id: "registerars", label: "Central Registrar" },
   { id: "pending", label: "Pending Invitation" },
 ];
 const defaultTab = [
@@ -49,19 +49,22 @@ export default function LayoutPage({
   }, [user?.role]);
 
   return (
-    <div className="bg-zinc-100 min-h-dvh space-y-4">
-      <header className="bg-white shadow-md pt-6 sticky top-0 z-10">
-        <div className="container space-y-3">
-          <h1 className="text-xl font-bold uppercase">USER MANAGEMENT</h1>
-          <ReusableTabs
-            tabs={tabs}
-            onTabChange={handleTabChange}
-            activeTab={activeTab}
-          />
+    <div className="h-full bg-white">
+      <div className="flex flex-col h-full mx-auto gap-3">
+        <header className="shadow-md space-y-4">
+          <div className="container space-y-3 pt-4">
+            <h1 className="text-xl font-semibold uppercase">USER MANAGEMENT</h1>
+            <ReusableTabs
+              tabs={tabs}
+              onTabChange={handleTabChange}
+              activeTab={activeTab}
+            />
+          </div>
+        </header>
+        {/* <div className="container py-3 overflow-y-auto h-[calc(100dvh - 150px)]"> */}
+        <div className="flex-1 container py-8 overflow-auto">
+          {children}
         </div>
-      </header>
-      <div className="container py-3 overflow-y-auto h-[calc(100dvh - 150px)]">
-        {children}
       </div>
     </div>
   );

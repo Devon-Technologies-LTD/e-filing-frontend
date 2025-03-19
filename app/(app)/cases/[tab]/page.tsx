@@ -25,9 +25,7 @@ export default function FilteredCases() {
   const router = useRouter();
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const { data: user } = useAppSelector((state) => state.profile);
-
   const [currentPage, setCurrentPage] = useState(1);
-
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [
       "get_cases",
@@ -38,20 +36,18 @@ export default function FilteredCases() {
         selectedCase,
       },
     ],
-
     queryFn: async () => {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         status: getStatusByTab(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
-        role: user?.role, // Move role inside the payload
+        role: user?.role,
       });
     },
     staleTime: 50000,
     refetchInterval: 10000,
   });
-
   const getColumns = () => {
     switch (tab) {
       case "unassigned":
@@ -86,7 +82,6 @@ export default function FilteredCases() {
           data={data?.data}
         />
       </div>
-
       {data?.data?.length > 0 && (
         <div className="fixed bottom-0 container left-0 right-0 py-2">
           <div className="flex justify-center">

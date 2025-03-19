@@ -17,9 +17,8 @@ type ErrorResponse = {
     message?: string;
 };
 
-export async function getCaseFiles(payload: IDraftFilter) {
-    console.log("this is the payload", payload);
 
+export async function getCaseFiles(payload: IDraftFilter) {
     try {
         const data = await CaseFileService.getCaseFilesAdmin(payload);
         return { ...data, success: true };

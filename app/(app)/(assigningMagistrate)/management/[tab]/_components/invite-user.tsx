@@ -48,14 +48,13 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
       if (tab === "central") {
-        headingText = "Invite New Central Magistrate";
-        descriptionText = "View and manage all central magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
+        headingText = "Invite New Central Registrar";
+        descriptionText = "View and manage all Central Registrar responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
       } else {
         headingText = "Invite New Presiding Magistrate";
         descriptionText = "View and manage all presiding magistrates responsible for presiding over cases. Monitor their activity, case requests, and re-assignment requests across different districts.";
       }
       break;
-
     default:
       headingText = "Magistrate Information";
       descriptionText = "View general information about magistrates.";
@@ -77,8 +76,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
         return "CENTRAL";
     }
   });
-  console.log(tab);
-
 
   const [formValues, setFormValues] = useState<FormValues>({ first_name: "", last_name: "", email: "" });
   const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
@@ -92,11 +89,9 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));
   };
-
   const handleSelectChange = (value: string) => {
     setSelectedDistrict(value);
   };
-
   const handleCourtDivisionChange = (value: string) => {
     setSelectedCourtDivision(value);
     handleChanges("court_division", value);
@@ -132,7 +127,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
     setIsValid(true);
     return true;
   };
-
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
@@ -142,7 +136,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
       console.log("Form has errors, modal will not open.");
     }
   };
-
 
   return (
     <Sheet>
@@ -165,8 +158,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
             </div>
             <form onSubmit={onSubmit} className="space-y-6">
               <Input type="hidden" id="role" value={role} />
-
-
               {[ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
                 <>
                   <Select onValueChange={handleSelectChange}>
@@ -191,15 +182,17 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 </>
               )}
 
-              {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
-                <DivisionAdmin
-                  id={user?.court_division_id ?? ""}
-                  placeholder="Select A Sub Division"
-                  value={selectedCourtSubDivision}
-                  onChange={handleCourtSubDivisionChange}
-                  error={caseTypeErrors?.sub_division}
-                />
-              )}
+
+              {tab != "central" &&
+                [ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+                  <DivisionAdmin
+                    id={user?.court_division_id ?? ""}
+                    placeholder="Select A Sub Division"
+                    value={selectedCourtSubDivision}
+                    onChange={handleCourtSubDivisionChange}
+                    error={caseTypeErrors?.sub_division}
+                  />
+                )}
 
               {(["first_name", "last_name", "email"] as const).map((field) => (
                 <div key={field} className="space-y-1">
@@ -218,13 +211,18 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                   {formErrors[field] && <p className="text-red-500 text-sm">{formErrors[field]}</p>}
                 </div>
               ))}
-
               <Button type="submit" onClick={onSubmit}>SEND INVITE</Button>
               {isValid && (
                 <ConfirmInvite
                   isOpen={showConfirmInvite}
                   setIsOpen={setShowConfirmInvite}
-                  formValues={{ ...formValues, role, court_type: selectedCourt, court_division_id: selectedCourtDivision, sub_division: selectedCourtSubDivision }}
+                  formValues={{
+                    ...formValues,
+                    role,
+                    court_type: selectedCourt,
+                    court_division_id: selectedCourtDivision ,
+                    sub_division: selectedCourtSubDivision,
+                  }}
                   trigger={<span />}
                 />
               )}

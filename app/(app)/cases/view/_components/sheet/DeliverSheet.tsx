@@ -7,6 +7,8 @@ import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { toast } from "sonner";
 import { deliverJudgement } from "@/lib/actions/case-actions";
 import { ErrorResponse } from "@/types/auth";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface DeliverJugdement {
   trigger: React.ReactNode;
@@ -16,6 +18,7 @@ interface DeliverJugdement {
 export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null); // State for file
+  const [reason, setReason] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
@@ -40,13 +43,15 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
       const formData = new FormData();
       formData.append("casefile_id", data.id);
       formData.append("file", file); // Append file to FormData
-
+      formData.append("reason", reason);
+      formData.append("status", "JUDGEMENT DELIVERED");
       console.log("Submitting FormData:", formData);
       const response = await deliverJudgement(formData, data.id);
-
       console.log(response);
       if (response.success) {
         toast.success(response.message);
+                toast.success("Judgement Delivered successful");
+        
       } else {
         const errorMessage = response.data.message;
         const detailedError = response.data.error;
@@ -78,11 +83,24 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
               <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
               <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
             </div>
-
             <div className="space-y-2">
               <p className="font-bold text-base">Upload Files (PDF)</p>
               <UploadPdf onFileSelect={setFile} /> {/* Pass file selection function */}
             </div>
+
+
+            <Label htmlFor="reason" className=" flex justify-between items-center text-base font-bold ">
+              Give reasons here
+            </Label>
+            <Textarea
+              id="reason"
+              name="reason"
+              placeholder="Type here"
+              className="placeholder:text-neutral-400  pb-3 text-base font-semibold min-h-[200px] border-0 outline-none shadow-none focus-visible:ring-0 border-b-2 border-b-app-tertiary bg-neutral-100 resize-none"
+              onChange={({ target }) => {
+                setReason(target.value);
+              }}
+            />
 
             <Button onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? "Submitting..." : "SUBMIT"}

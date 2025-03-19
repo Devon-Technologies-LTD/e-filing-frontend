@@ -44,7 +44,7 @@ export default function UploadPdf({ onFileSelect }: UploadPdfProps) {
                         {...getRootProps()}
                         className="h-[300px] mb-3 flex items-center bg-[#FDF5EC] justify-center cursor-pointer"
                     >
-                        <input name="pdf" {...getInputProps()} />
+                        <input name="file" {...getInputProps()} />
                         <p className="text-center text-sm font-medium text-gray-600">
                             {pdfFile ? (
                                 <iframe

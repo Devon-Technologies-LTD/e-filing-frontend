@@ -32,7 +32,6 @@ export function CasesDataTableToolbar({
           className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
         />
       </div>
-
       <section className="flex gap-3">
         <PopoverCalendar initialDate={new Date()} />
         <FilterDropdown

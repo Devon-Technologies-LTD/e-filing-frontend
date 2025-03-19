@@ -73,8 +73,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   });
 
   console.log("single case details", data);
-
-
+  
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());

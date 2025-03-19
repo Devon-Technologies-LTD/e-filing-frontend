@@ -21,7 +21,6 @@ export default function FilteredCases() {
   const tab = params.tab as TCaseFilterType;
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
 
-
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [tab, {
       search: "", currentPage, status: getStatusByTab(tab),
@@ -31,6 +30,7 @@ export default function FilteredCases() {
       await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        casetype: selectedCase === "all" ? null : selectedCase,
         status: getStatusByTab(tab),
       }),
     staleTime: 50000,
@@ -52,16 +52,21 @@ export default function FilteredCases() {
         setSelectedCase={setSelectedCase}
       />
       <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
-      <div className="flex justify-end">
-        <Pagination
-          currentPage={currentPage}
-          total={data?.total_rows ?? 0}
-          rowsPerPage={DEFAULT_PAGE_SIZE}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-          }}
-        />
-      </div>
+
+      {data?.data?.length > 0 && (
+        <div className="fixed bottom-0 container left-0 right-0 py-2">
+          <div className="flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              total={data?.total_rows ?? 0}
+              rowsPerPage={DEFAULT_PAGE_SIZE}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

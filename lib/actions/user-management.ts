@@ -17,6 +17,9 @@ type ErrorResponse = {
 export interface Ipage {
     page?: number;
     size?: number;
+    role?: string;
+    court_division_id?: string;
+    search?: string;
 }
 
 
