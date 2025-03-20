@@ -197,7 +197,7 @@ export const CivilCaseForm5 = (documents: any) => {
         </div>
         <div className="space-y-3">
           <div className="text-lg font-bold">
-            At the suit of this complainant, this plaint is taking out with
+            At the suit of this complaint, this plaint is taking out with
             respect to
           </div>
           <p className="flex justify-between items-center gap-1 text-sm font-bold  text-neutral-600">
@@ -256,7 +256,7 @@ export const CivilCaseForm5 = (documents: any) => {
         </div>
         <div className="space-y-3">
           <div className="text-lg font-bold">
-            The relief(s) sought by the complainant are
+            The relief(s) sought by the complaint are
           </div>
           <p className="flex justify-between  items-center gap-1 text-sm font-bold  text-neutral-600">
             <span className="flex items-center gap-1 ">
@@ -291,7 +291,7 @@ export const CivilCaseForm5 = (documents: any) => {
           </p>
           <div className="flex ">
             <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">COMPLAINANT DETAILS</p>
+              <p className="text-base font-bold">COMPLAINT DETAILS</p>
               <InputField
                 id="claimant_address"
                 name="claimant_address"
