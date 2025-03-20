@@ -56,21 +56,21 @@ export const FORM_FIELDS: FormField[] = [
     name: "title",
     label: "CASE TITLE",
     tooltipText: "Enter the title of the case",
-    placeholder: "Prince Joe",
+    placeholder: "Enter title here",
     required: true,
   },
   {
     id: "claimant-phone",
     name: "claimant_phone_number",
     label: "CLAIMANT PHONE NUMBER",
-    placeholder: "Prince Joe",
+    placeholder: "08112213729",
     required: true,
   },
   {
     id: "claimant-email",
     name: "claimant_email_address",
     label: "CLAIMANT EMAIL ADDRESS",
-    placeholder: "Prince Joe",
+    placeholder: "example@email.com",
     required: true,
   },
   {
@@ -78,7 +78,7 @@ export const FORM_FIELDS: FormField[] = [
     name: "claimant_address",
     label: "CLAIMANT PHYSICAL ADDRESS",
     tooltipText: "Enter the physical address of the claimant",
-    placeholder: "Prince Joe",
+    placeholder: "Enter address here",
     required: true,
   },
 ];
