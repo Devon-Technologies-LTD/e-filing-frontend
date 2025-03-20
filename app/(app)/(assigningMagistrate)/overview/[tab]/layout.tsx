@@ -10,12 +10,16 @@ import { useMemo } from "react";
 const defaultTabs: { id: MCaseFilterType; label: string }[] = [];
 
 const assigningMTabs: { id: MCaseFilterType; label: string }[] = [
-  { id: "case", label: "Cases Metrics" },
-  { id: "magistrate", label: "Magistrate Cases" },
+  { id: "case", label: "Case Metrics" },
+  { id: "magistrate", label: "Magistrate Metrics" },
+];
+const directorMTabs: { id: MCaseFilterType; label: string }[] = [
+  { id: "case", label: "Case Metrics" },
+  { id: "magistrate", label: "Magistrate Metrics" },
 ];
 const chiefJudgeTabs = [
-  { id: "case", label: "Cases Metric" },
-  { id: "magistrate", label: "Magistrate Cases" },
+  { id: "case", label: "Case Metrics" },
+  { id: "magistrate", label: "Magistrate Metrics" },
   { id: "financial", label: "Financial Metrics" },
 ];
 
@@ -36,6 +40,7 @@ export default function LayoutPage({
   const roleToTabs: RoleToTabs = {
     [ROLES.CHIEF_JUDGE]: chiefJudgeTabs,
     [ROLES.ASSIGNING_MAGISTRATE]: assigningMTabs,
+    [ROLES.DIRECTOR_MAGISTRATE]: directorMTabs,
   };
   const tabs = useMemo(() => {
     return roleToTabs[user?.role as string] || defaultTabs;
