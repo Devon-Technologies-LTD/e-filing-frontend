@@ -1,4 +1,7 @@
+import { FamilyDocumentMainTitles, FamilyDocumentTitles } from "@/constants";
+import { addCaseTypeError, ICaseTypes } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 type HookProps = {
   documents?: any;
@@ -6,30 +9,33 @@ type HookProps = {
 
 const useFamilyCaseFormValidator = ({ documents }: HookProps) => {
   const dispatch = useDispatch();
-  // const checkDocuments = (callback: () => void) => {
-  //   const requiredDocuments = Object.values(FamilyDocumentTitles);
-  //   const isAtLeastOnePresent = documents?.some((doc: any) =>
-  //     requiredDocuments?.includes(doc.title as FamilyDocumentTitles)
-  //   );
-
-  //   // if (isAtLeastOnePresent) {
-  //     callback?.();
-  //   // } else {
-  //   //   dispatch(
-  //   //     addCaseTypeError({
-  //   //       familyDoc: "Please upload at least one document",
-  //   //     })
-  //   //   );
-  //   //   toast.error("Please upload at least one document");
-  //   // }
-  // };
+  const validateDocument = (
+    docTitle: FamilyDocumentMainTitles,
+    errorKey: string
+  ) => {
+    const doc = documents?.find(
+      (doc: any) => doc.title.toLowerCase() === docTitle.toLowerCase()
+    );
+    console.log("first doc", doc);
+    if (!doc) {
+      dispatch(addCaseTypeError({ [errorKey]: "Required" }));
+      return false;
+    } else {
+      dispatch(addCaseTypeError({ [errorKey]: "" }));
+      return true;
+    }
+  };
 
   const validate = async (_callback?: () => void) => {
-    if (_callback) {
-      // checkDocuments(_callback);
-      _callback;
+    if (
+      validateDocument(
+        FamilyDocumentMainTitles.WitnessStatementOnOath,
+        "witnessDoc"
+      )
+    ) {
+      _callback?.();
     } else {
-      console.log("No callback provided.");
+      toast.error("Fill all required fields");
     }
   };
 

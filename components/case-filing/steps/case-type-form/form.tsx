@@ -129,7 +129,7 @@ export default function CaseTypesForm() {
         </Select>
 
         {/* subcase type */}
-        {case_type && case_type !== CaseTypeData.FAMILY_CASE && (
+        {case_type && (
           <Select
             onValueChange={(value) => {
               dispatch(
@@ -188,6 +188,7 @@ export default function CaseTypesForm() {
               subCase={sub_case_type}
             />
           )}
+
 
         {case_type && sub_case_type && hasWorth?.includes(sub_case_type) && (
           <Select

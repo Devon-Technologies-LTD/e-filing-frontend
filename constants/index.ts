@@ -66,6 +66,9 @@ export enum CriminalDocumentTitles {
   DIRECT_COMPLAIN = "Direct Criminal Complaint (DCC)",
   REQUEST_FOR_REMAND_ORDER = "Request for Remand Order (Exparte)",
 }
+export enum FamilyDocumentMainTitles {
+  WitnessStatementOnOath = "Witness Statement on Oath",
+}
 export enum CriminalOtherDocumentTitles {
   ChargeSheet = "Charge Sheet",
   MotionForBail = "Motion for Bail",

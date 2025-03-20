@@ -18,6 +18,7 @@ import { useCivilCaseFormValidator } from "./validators/civil-case-form-validato
 import { CaseTypeData } from "@/constants";
 import { useCriminalCaseFormValidator } from "./validators/criminal-case-validator";
 import { toast } from "sonner";
+import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 
 interface Iprops {
   isRefiling?: boolean;
@@ -38,6 +39,9 @@ export function StepperNavigation({ isRefiling }: Iprops) {
   });
   const { validate: validateCriminalCase } = useCriminalCaseFormValidator({
     store: caseType,
+    documents,
+  });
+  const { validate: validateFamilyCase } = useFamilyCaseFormValidator({
     documents,
   });
   const {
@@ -85,7 +89,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         );
       }
       if (caseType.case_type === CaseTypeData.FAMILY_CASE) {
-        dispatch(updateStep(current_step + 1));
+        await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
       }
     } else if (current_step === 5) {
       saveForm({
