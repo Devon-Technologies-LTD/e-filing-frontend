@@ -63,7 +63,7 @@ export const FORM_FIELDS: FormField[] = [
     id: "claimant-phone",
     name: "claimant_phone_number",
     label: "CLAIMANT PHONE NUMBER",
-    placeholder: "08112213729",
+    placeholder: "08123456789",
     required: true,
   },
   {
