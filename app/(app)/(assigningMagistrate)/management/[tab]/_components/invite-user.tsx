@@ -1,6 +1,6 @@
 
 'use client'
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
@@ -35,6 +35,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
   const dispatch = useDispatch();
   const [showConfirmInvite, setShowConfirmInvite] = useState(false);
+
 
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
@@ -81,10 +82,16 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
   const [isValid, setIsValid] = useState(false);
 
-  // State for selected court_type and court division
   const [selectedCourt, setSelectedDistrict] = useState<string>("");
   const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
   const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
+
+  useEffect(() => {
+    console.log(user);
+    setSelectedCourtDivision(user?.court_division_id ?? "");
+    setSelectedDistrict(user?.court_type ?? "");
+  }, []);
+
 
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));
@@ -206,11 +213,17 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                     placeholder={`Enter ${field.replace("_", " ")}`}
                     value={formValues[field]}
                     onChange={handleChange}
+                    onKeyDown={(e) => {
+                      if (field !== "email" && /\d/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className="placeholder:text-zinc-400 border-zinc-300"
                   />
                   {formErrors[field] && <p className="text-red-500 text-sm">{formErrors[field]}</p>}
                 </div>
               ))}
+
               <Button type="submit" onClick={onSubmit}>SEND INVITE</Button>
               {isValid && (
                 <ConfirmInvite
@@ -220,7 +233,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                     ...formValues,
                     role,
                     court_type: selectedCourt,
-                    court_division_id: selectedCourtDivision ,
+                    court_division_id: selectedCourtDivision,
                     sub_division: selectedCourtSubDivision,
                   }}
                   trigger={<span />}

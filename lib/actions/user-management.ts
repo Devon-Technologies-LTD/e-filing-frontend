@@ -1,18 +1,12 @@
+
 "use server";
 import UserService from "../_services/user-service";
+
 type ErrorResponse = {
-    response?: {
-        status: number;
-        data: {
-            message: string;
-            data?: { error?: string };
-            error: string;
-        };
-    };
+    response?: { status: number; data: { message: string; data?: { error?: string }; error: string } };
     request?: unknown;
     message?: string;
 };
-
 
 export interface Ipage {
     page?: number;
@@ -22,353 +16,73 @@ export interface Ipage {
     search?: string;
 }
 
-
-export async function getUserManagement(params: Ipage) {
-    try {
-        const data = await UserService.getUserManagement(params);
-        return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
+const handleError = (err: unknown) => {
+    console.error("API Error:", err);
+    const error = err as ErrorResponse;
+    if (error?.response) {
+        return {
+            status: error.response.status,
+            message: error.response.data.message,
+            errors: error.response.data.data,
+            success: false,
+            data: [],
+        };
+    } else if (error?.request) {
+        return {
+            status: 504,
+            message: "Something went wrong. Please try again.",
+            errors: "Unable to process request.",
+            success: false,
+            data: [],
+        };
+    } else {
+        return {
+            status: 500,
+            message: error.message || "An unexpected error occurred.",
+            errors: error.message || "Unknown error.",
+            success: false,
+            data: [],
+        };
     }
-}
+};
 
-export async function getAllUser() {
+const fetchData = async (serviceMethod: Function, params?: any) => {
     try {
-        const data = await UserService.getAllUser();
+        const data = await serviceMethod(params);
         return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
+    } catch (err) {
+        return handleError(err);
     }
-}
-
-export async function getPendingUser(params: Ipage) {
+};
+const fetchData2 = async (serviceMethod: Function, params?: any) => {
     try {
-        const data = await UserService.getPendingUsers(params);
-        return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
+        return await serviceMethod(params);
+    } catch (err) {
+        return handleError(err);
     }
-}
+};
 
+export const getUserManagement = (params: Ipage) => fetchData(UserService.getUserManagement, params);
+export const getAllUser = () => fetchData(UserService.getAllUser);
+export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendingUsers, params);
+export const getOversight = () => fetchData(UserService.magistrateOversight);
+export const getCaseMetric = () => fetchData(UserService.caseMetric);
+export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
+export const getMagisterateBreakDown = (id: string) => fetchData(UserService.getMagisterateBreakDown, id);
+export const magistrateMetric = () => fetchData(UserService.magistrateMetric);
+export const getCaseDistribution = () => fetchData(UserService.getCaseDistribution);
 
-export async function InviteUserAction(_prevState: unknown, formData: FormData) {
+const handleFormAction = async (serviceMethod: Function, formData: FormData) => {
     const formDataObject = Object.fromEntries(formData.entries());
-
     console.log("Received Form Data:", formDataObject);
-
     try {
-        const data = await UserService.addUserManagement(formDataObject);
+        const data = await serviceMethod(formDataObject);
         console.log("Response from server:", data);
         return { data, success: true, status: 200 };
-    } catch (err: unknown) {
-        console.error("Error in InviteUserAction:", err);
-        const error = err as ErrorResponse;
-
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: error.message || "An unexpected error occurred.",
-                errors: error.message || "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
+    } catch (err) {
+        return handleError(err);
     }
-}
-export async function ActiveUserAction(_prevState: unknown, formData: FormData) {
-    const formDataObject = Object.fromEntries(formData.entries());
+};
 
-    console.log("Received Form Data:", formDataObject);
-
-    try {
-        const data = await UserService.addUserManagement(formDataObject);
-        console.log("Response from server:", data);
-        return { data, success: true, status: 200 };
-    } catch (err: unknown) {
-        console.error("Error in InviteUserAction:", err);
-        const error = err as ErrorResponse;
-
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: error.message || "An unexpected error occurred.",
-                errors: error.message || "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-    }
-}
-
-
-
-
-export async function getOversight() {
-    try {
-        const data = await UserService.magistrateOversight();
-        // console.log("magisterate over sight" + data);
-
-        return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
-    }
-}
-
-export async function getCaseMetric() {
-    try {
-        const data = await UserService.caseMetric();
-        return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
-    }
-}
-export async function getCaseDistribution() {
-    try {
-        const data = await UserService.getCaseDistribution();
-        return { ...data, success: true };
-    } catch (err: unknown) {
-        console.log(err);
-        const error = err as ErrorResponse;
-        if (error?.response) {
-            return {
-                status: error.response.status,
-                message: error.response.data.message,
-                errors: error.response.data.data,
-                success: false,
-                data: [],
-            };
-        } else if (error?.request) {
-            return {
-                status: 504,
-                message: "Something went wrong. Please try again.",
-                errors: "Unable to process request.",
-                success: false,
-                data: [],
-            };
-        } else if (error?.message) {
-            return {
-                status: 500,
-                message: error.message,
-                errors: error.message,
-                success: false,
-                data: [],
-            };
-        } else {
-            return {
-                status: 500,
-                message: "An unexpected error occurred.",
-                errors: "Unknown error.",
-                success: false,
-                data: [],
-            };
-        }
-
-    }
-}
+export const InviteUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);
+export const ActiveUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);

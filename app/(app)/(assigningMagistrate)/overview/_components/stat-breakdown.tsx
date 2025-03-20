@@ -1,12 +1,6 @@
 "use client";
+
 import { AllCasesFilter } from "@/components/filters/all-cases";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -15,69 +9,81 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getCaseBreakDown, getMagisterateBreakDown } from "@/lib/actions/user-management";
 import { cn, formatNumber } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import CountUp from "react-countup";
+import { Loader2 } from "lucide-react"; // Loading icon
 
-interface Division {
-  name: string;
-  cases: number;
+interface DivisionData {
+  division_name: string;
+  case_count: number;
 }
 
 interface StatBreakdownProps {
-  title: string;
-  type: "case" | "magistrate" | "finances";
-  value: number;
-  change: number;
-  description: string;
-  divisions: Division[];
+  metric?: { total: number; difference: number };
+  metricKey?: string;
+  value?: string;
+  type?: string;
   variant?: string;
+  description?: string;
 }
 
 export function StatBreakdown({
-  title,
-  value,
-  change,
   description,
-  divisions,
+  metric,
+  metricKey,
   type,
+  value,
   variant = "default",
 }: StatBreakdownProps) {
-  const bgColors: any = {
-    total: "bg-neutral-200",
-    active: "bg-green-50",
-    activedir: "bg-sky-50",
-    unassigned: "bg-orange-50",
-    reassigned: "bg-red-50",
-    concluded: "bg-purple-50",
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["caseBreakdown", metricKey],
+    queryFn: async (): Promise<DivisionData[]> => {
+      if (!metricKey) return [];
+      console.log("my id => " + metricKey);
+      console.log("my type => " + type);
+      if (type == "case") {
+        return await getCaseBreakDown(metricKey);
+      }
+      if (type == "magistrate") {
+        return await getMagisterateBreakDown(metricKey);
+      }
+      return [];
+    },
+    staleTime: 100000,
+    enabled: !!metricKey,
+  });
+
+  // Debugging - check if `data` is updating
+  console.log("Raw Data Before Mapping:", data);
+
+  const tableHeader = "TOTAL CASES";
+  const bgColors: Record<string, string> = {
+    default: "bg-gray-100",
+    primary: "bg-blue-100",
+    secondary: "bg-green-100",
   };
-
-  let tableHeader = "";
-
-  if (type === "magistrate") {
-    tableHeader = "NUMBER OF MAGISTRATES";
-  } else if (type === "case") {
-    tableHeader = "NUMBER OF CASES";
-  } else if (type === "finances") {
-    tableHeader = "COST ACCRUED";
-  }
 
   return (
     <div className="space-y-8 flex flex-col max-h-full">
       <div className="max-w-lg">
-        <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-base font-medium">{description}</p>
+        <h2 className="text-sm font-bold">{value}</h2>
       </div>
-
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-4xl text-app-primary font-semibold">
-            <CountUp start={0} end={value} separator="," />
+            {isLoading ? (
+              <Loader2 className="animate-spin h-8 w-8 text-app-primary" />
+            ) : (
+              <CountUp start={0} end={metric?.total || 0} separator="," />
+            )}
           </p>
           <div className="text-sm">
-            {change > 0 && "↑"}
-            {change < 0 && "↓"}{" "}
+            {"↑"}
             <span className="font-medium">
-              {formatNumber(Math.abs(change))}
+              {formatNumber(Number(metric?.difference) || 0)}
             </span>{" "}
             in the last year
           </div>
@@ -88,33 +94,49 @@ export function StatBreakdown({
         </div>
       </div>
 
-      <div className="rounded-md flex-grow overflow-auto  h-fit">
+      <div className="rounded-md flex-grow overflow-auto h-fit">
         <Table>
+
           <TableHeader>
             <TableRow
               className={cn(
                 "font-bold border-none text-base",
-                bgColors[variant]
-              )}
-            >
-              <TableHead className="font-bold py-4 ">DIVISIONS</TableHead>
-              <TableHead className="text-right font-bold">
-                {tableHeader}
-              </TableHead>
+                bgColors[variant] || bgColors.default
+              )}>
+              <TableHead className="font-bold py-4">DIVISIONS</TableHead>
+              <TableHead className="text-right font-bold">{tableHeader}</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {divisions.map((division) => (
-              <TableRow key={division.name}>
-                <TableCell className="font-semibold text-sm py-5">
-                  {division.name}
-                </TableCell>
-                <TableCell className="font-semibold text-sm py-5 text-right">
-                  {formatNumber(division.cases)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+
+          {isLoading ? (
+            <div className="flex justify-center  items-center py-6">
+              <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
+              <span className="ml-2 text-gray-500">Loading cases...</span>
+            </div>
+          ) : (
+
+            <TableBody>
+              {(data || []).length > 0 ? (
+                (data || []).map((division) => (
+                  <TableRow key={division.division_name}>
+                    <TableCell className="font-semibold text-sm py-5">
+                      {division.division_name}
+                    </TableCell>
+                    <TableCell className="font-semibold text-sm py-5 text-right">
+                      {formatNumber(division.case_count)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={2} className="text-center py-6 text-gray-500">
+                    No case data available
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          )}
+
         </Table>
       </div>
     </div>

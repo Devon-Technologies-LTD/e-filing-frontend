@@ -4,6 +4,7 @@ import { cn, formatNumber } from "@/lib/utils";
 import React, { useState } from "react";
 import CountUp from "react-countup";
 import Link from "next/link";
+import { StatBreakdown } from "./stat-breakdown";
 
 export interface ColorToVariant {
   [key: string]: string;
@@ -15,7 +16,9 @@ export const MetricCard: React.FC<{
   type: "case" | "magistrate" | "finances";
   rightModal: boolean | undefined;
   className?: string;
-}> = ({ metric, className, rightModal, type, metricKey }) => {
+  description?: string;
+  value?: string;
+}> = ({ metric, description, className, rightModal, type, metricKey , value }) => {
   const bgColors: ColorToVariant = {
     total: "bg-neutral-200",
     active: "bg-green-50",
@@ -32,12 +35,12 @@ export const MetricCard: React.FC<{
       <div className="space-y-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
         <div
           className={cn(
-            "p-4 sm:p-3 text-black font-bold uppercase text-lg sm:text-base",
+            "p-4 sm:p-3 text-black font-semibold text-sm sm:text-base",
             className,
             bgColors[metricKey as keyof typeof bgColors] || "bg-neutral-100"
           )}
         >
-          {metricKey} Cases
+          {value} 
         </div>
         <div className="p-4 sm:p-3 py-6 sm:py-4">
           <p className="text-3xl sm:text-lg text-app-primary font-bold flex items-center gap-1">
@@ -80,15 +83,13 @@ export const MetricCard: React.FC<{
           side="right"
           className="bg-white w-full max-w-[90vw] md:w-[500px] md:!w-[613px] min-w-[300px] !max-w-none"
         >
-          {/* <StatBreakdown
+          <StatBreakdown
             type={type}
-            title={metric.title}
-            value={+metric.total}
-            change={+metric.lastYear}
-            description={metric.description}
-            divisions={metric.districts}
-            variant={metric.variant}
-          /> */}
+            metricKey={metricKey}
+            value={value}
+            description={description}
+            metric={metric}
+          />
         </SheetContent>
       </Sheet>
     </>
