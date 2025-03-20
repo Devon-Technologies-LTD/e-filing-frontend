@@ -1,11 +1,10 @@
 import {
   CaseTypeData,
-  CivilCaseSubType,
-  CivilDocumentTitles,
+  CriminalCaseSubType,
   CriminalDocumentTitles,
+  DEFAULT_CHARGES_PERCENTAGE,
   DEFAULT_EXHIBIT_FEE,
   DEFAULT_SEAL_FEE,
-  FamilyDocumentTitles,
 } from "@/constants";
 import { getDocumentFees } from "@/lib/actions/public";
 import { cn, getTitleByRecoveryAmount } from "@/lib/utils";
@@ -44,49 +43,43 @@ export default function CostAssessment({
   sub_case_type?: any;
   variant?: keyof typeof variants.header;
 }) {
-  const { data:fees, isLoading } = useQuery({
+  const { data: fees, isLoading } = useQuery({
     queryKey: ["get_document_fees"],
     queryFn: async () => {
       return await getDocumentFees();
     },
   });
-  const data = [...(fees?.document_fees ?? []), ...(fees?.sub_document_fees ?? [])];
+  const data = [
+    ...(fees?.document_fees ?? []),
+    ...(fees?.sub_document_fees ?? []),
+  ];
   const dispatch = useDispatch();
 
   const getFeeByTitle = (title: any) => {
     const item = Array.isArray(data)
-      ? data?.find(
-          (item) => item.title?.toLowerCase() === title?.toLowerCase()
-        )
+      ? data?.find((item) => item.title?.toLowerCase() === title?.toLowerCase())
       : null;
     return item ? Number(item.fee) : 0;
   };
 
   const documentGroups = useMemo(
     () => ({
-      criminal:
-        documents?.filter((doc) =>
-          Object.values(CriminalDocumentTitles).some(
-            (title) => title?.toLowerCase() === doc.title?.toLowerCase()
-          )
-        ) || [],
-      civil:
+      case_docs:
         documents?.filter(
           (doc) =>
-            Object.values(CivilDocumentTitles).some(
-              (title) => title?.toLowerCase() === doc.title?.toLowerCase()
-            ) && doc.sub_title === sub_case_type
+            doc.case_type_name.toLowerCase() === case_type.toLowerCase() &&
+            doc.sub_title.toLowerCase() === sub_case_type.toLowerCase()
         ) || [],
+      other_documents:
+        documents?.filter(
+          (doc) =>
+            doc.case_type_name.toLowerCase() === case_type.toLowerCase() &&
+            doc.sub_title.toLowerCase() === "other documents"
+        ) || [],
+
       exhibits:
         documents?.filter(
           (doc) => doc.case_type_name.toLowerCase() === "exhibits"
-        ) || [],
-      other:
-        documents?.filter((doc) =>
-          Object.values(OtherDocumentMapping[case_type] ?? {}).some(
-            (value) =>
-              (value as string)?.toLowerCase() === doc.title?.toLowerCase()
-          )
         ) || [],
     }),
     [documents, case_type, sub_case_type]
@@ -94,37 +87,30 @@ export default function CostAssessment({
 
   const costItems = useMemo(
     () => ({
-      criminal: documentGroups.criminal.map((doc) => ({
+      case_docs: documentGroups.case_docs.map((doc) => ({
         category: doc.case_type_name,
         name: doc.title,
-        amount: getFeeByTitle(doc.title),
+        amount: doc.amount,
       })),
-      civil: documentGroups.civil.map((doc) => ({
+      other_documents: documentGroups.other_documents.map((doc) => ({
         category: doc.case_type_name,
         name: doc.title,
-        amount: getFeeByTitle(doc.title),
+        amount: doc.amount,
       })),
       exhibits: documentGroups.exhibits.map((doc) => ({
         category: doc.case_type_name,
         name: doc.title,
         amount: DEFAULT_EXHIBIT_FEE,
       })),
-      other: documentGroups.other.map((doc) => ({
-        category: doc.case_type_name,
-        name: doc.title,
-        amount: getFeeByTitle(doc.title) || DEFAULT_EXHIBIT_FEE,
-      })),
     }),
     [documentGroups, data]
   );
 
   const displayedItems = useMemo(() => {
-    let items =
-      case_type === CaseTypeData.CRIMINAL_CASE
-        ? costItems.criminal
-        : case_type === CaseTypeData.CIVIL_CASE
-        ? costItems.civil
-        : [];
+    let items = [
+      ...(costItems.case_docs || []),
+      ...(costItems.other_documents || []),
+    ];
 
     if (
       !isRefiling &&
@@ -144,17 +130,46 @@ export default function CostAssessment({
         },
       ];
     }
+    if (
+      !isRefiling &&
+      case_type === CaseTypeData.CRIMINAL_CASE &&
+      sub_case_type === CriminalCaseSubType.DIRECT_COMPLAIN
+    ) {
+      items = [
+        ...items,
+        {
+          name: CriminalCaseSubType.DIRECT_COMPLAIN.toLowerCase(),
+          category: CaseTypeData.CRIMINAL_CASE,
+          amount: getFeeByTitle(CriminalDocumentTitles.DIRECT_COMPLAIN),
+        },
+      ];
+    }
     return items;
   }, [case_type, costItems, recovery_amount, sub_case_type]);
 
-  const totalAmount = useMemo(() => {
+  const subtotal = useMemo(() => {
     return [
       ...displayedItems,
-      ...costItems.other,
       ...costItems.exhibits,
       { amount: DEFAULT_SEAL_FEE },
     ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
   }, [displayedItems, costItems]);
+
+  const additionalCharges = useMemo(() => {
+    return subtotal * (DEFAULT_CHARGES_PERCENTAGE / 100);
+  }, [subtotal]);
+
+  const totalAmount = useMemo(() => {
+    return subtotal + additionalCharges;
+  }, [subtotal, additionalCharges]);
+
+  // const totalAmount = useMemo(() => {
+  //   return [
+  //     ...displayedItems,
+  //     ...costItems.exhibits,
+  //     { amount: DEFAULT_SEAL_FEE },
+  //   ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+  // }, [displayedItems, costItems]);
 
   useEffect(() => {
     dispatch(setTotalAmount(totalAmount));
@@ -177,8 +192,7 @@ export default function CostAssessment({
         </h2>
         {isLoading ? (
           <p>Loading...</p>
-        ) : !Array.isArray(data) ||
-          !data?.length ? (
+        ) : !Array.isArray(data) || !data?.length ? (
           <p className="py-6">Unable to fetch document fees</p>
         ) : (
           <div className="space-y-3 uppercase">
@@ -201,23 +215,6 @@ export default function CostAssessment({
                 </span>
               </div>
             ))}
-
-            {/* Other Documents */}
-            {costItems.other.length > 0 && (
-              <div className="space-y-1">
-                {costItems.other.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-1 justify-between items-center text-sm"
-                  >
-                    <span className="text-xs font-medium">{item.name}</span>
-                    <span className="text-base font-medium">
-                      ₦{formatAmount(item.amount)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* Exhibits */}
             {costItems.exhibits.length > 0 && (
@@ -244,6 +241,16 @@ export default function CostAssessment({
               </p>
               <span className="text-base font-medium">
                 ₦{formatAmount(DEFAULT_SEAL_FEE)}
+              </span>
+            </div>
+            
+            {/* Additional Charges (10%) */}
+            <div className="flex justify-between items-center text-sm">
+              <p className="text-primary text-xs font-semibold">
+                Additional Charges (10%)
+              </p>
+              <span className="text-base font-medium">
+                ₦{formatAmount(additionalCharges)}
               </span>
             </div>
 
