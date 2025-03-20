@@ -9,6 +9,8 @@ import { FilterDropdown } from "@/components/ui/filter-dropdown";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import MModal from "./_components/mModal";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 export default function LayoutPage({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -66,7 +68,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
               )}
             </div>
           </div>
-          
+
 
           <ReusableTabs tabs={tabs} onTabChange={handleTabChange} activeTab={activeTab} />
 
@@ -83,14 +85,31 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
             </div>
 
             <section className="flex gap-3">
-              <FilterDropdown
+              {/* <FilterDropdown
                 triggerVariant="outline"
                 itemVariant="outline"
                 placeholder="All Status"
                 options={districtFilterOptions}
                 value={selectedCase}
                 onChange={handleCaseTypeChange}
-              />
+              /> */}
+              <section className="flex gap-3">
+                {/* <Select onValueChange={handleStatusChange} > */}
+                <Select>
+                  <SelectTrigger variant="outline" className="h-11" >
+                    <SelectValue placeholder="All Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem className="min-w-60" value="ACTIVE">
+                      ACTIVE MAGISTRATE
+                    </SelectItem>
+                    <SelectItem className="min-w-60" value="INACTIVE">
+                      INACTIVE MAGISTRATE
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </section>
+
 
               {activeTab === "all" && (
                 <FilterDropdown
