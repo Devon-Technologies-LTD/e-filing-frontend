@@ -59,7 +59,6 @@ export function StatBreakdown({
   // Debugging - check if `data` is updating
   console.log("Raw Data Before Mapping:", data);
 
-  const tableHeader = "TOTAL CASES";
   const bgColors: Record<string, string> = {
     default: "bg-gray-100",
     primary: "bg-blue-100",
@@ -104,7 +103,7 @@ export function StatBreakdown({
                 bgColors[variant] || bgColors.default
               )}>
               <TableHead className="font-bold py-4">DIVISIONS</TableHead>
-              <TableHead className="text-right font-bold">{tableHeader}</TableHead>
+              <TableHead className="text-right uppercase font-bold">TOTAL { value }</TableHead>
             </TableRow>
           </TableHeader>
 

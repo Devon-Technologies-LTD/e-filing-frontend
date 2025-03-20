@@ -5,7 +5,7 @@ import { TCaseFilterType } from "@/types/case";
 import { useParams, useRouter } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
 import { mainColumns, unassignedColumns } from "./_components/table-columns";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
 import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
@@ -20,6 +20,7 @@ export default function FilteredCases() {
   const [currentPage, setCurrentPage] = useState(1);
   const tab = params.tab as TCaseFilterType;
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [tab, {
@@ -33,6 +34,7 @@ export default function FilteredCases() {
         casetype: selectedCase === "all" ? null : selectedCase,
         status: getStatusByTab(tab),
       }),
+
     staleTime: 50000,
   });
 
@@ -50,6 +52,8 @@ export default function FilteredCases() {
       <CasesDataTableToolbar
         selectedCase={selectedCase}
         setSelectedCase={setSelectedCase}
+        selectedStatus={selectedStatus}
+        setSelectedStatus={setSelectedStatus}
       />
       <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
 

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { getAdminDivision } from "@/lib/actions/division";
 import { getUserManagement } from "@/lib/actions/user-management";
@@ -41,6 +41,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState("");
+    const queryClient = useQueryClient();
 
     const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
     const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
         try {
             const response = await CaseAssignment({ assigned_to_id: userId }, id);
             if (response.success) {
+                // queryClient.invalidateQueries(["get_single_case_by_id"]);
                 toast.success("Case assigned successfully");
                 setIsOpen(false);
             } else {

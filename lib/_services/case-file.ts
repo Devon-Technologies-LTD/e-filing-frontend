@@ -67,6 +67,7 @@ export interface IDraftFilter {
   start_data?: string | null;
   status?: CaseStatus[] | null;
   user_id?: string | null;
+  assignee_id?: string | null;
   page?: number;
   size?: number;
 }
