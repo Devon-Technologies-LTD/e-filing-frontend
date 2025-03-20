@@ -38,13 +38,25 @@ const UserService = {
     const response = await axiosInstance.get(`admin/analyitcs/case-metrics`);
     return response.data;
   },
+  async getCaseBreakDown(id: string): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/case-breakdown/${id}`);
+    return response.data;
+  },
+  async getMagisterateBreakDown(id: string): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/magistrate-breakdown/${id}`);
+    return response.data;
+  },
+  async magistrateMetric(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/magistrate-metrics`);
+    return response.data;
+  },
   async getCaseDistribution(): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/case-distribution`);
     return response.data;
   },
 
   async getUserManagement(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user/`,{
+    const response = await axiosInstance.get(`admin/user/`, {
       params: {
         page: params.page,
         limit: params.size,
