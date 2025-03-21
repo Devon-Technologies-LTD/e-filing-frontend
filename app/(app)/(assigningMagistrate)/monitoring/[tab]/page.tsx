@@ -36,7 +36,6 @@ export default function FilteredCases() {
         casetype: selectedCase === "all" ? null : selectedCase,
         status: getStatusByTab(tab),
       }),
-
     staleTime: 50000,
   });
 
