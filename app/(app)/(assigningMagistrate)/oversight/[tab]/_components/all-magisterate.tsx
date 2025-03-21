@@ -62,8 +62,6 @@ export default function MagistratesTable() {
     }
   }, [data, setTotalMagistrates]);
 
-
-
   const columns = useMemo(() => createUserColumns(user?.role!, "all"), [user?.role]);
   return (
     <div className="bg-white h-screen overflow-hidden flex flex-col space-y-4">

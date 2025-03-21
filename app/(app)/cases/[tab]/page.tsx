@@ -40,7 +40,7 @@ export default function FilteredCases() {
       return await getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
-        assignee_id: user?.id,
+        // assignee_id: user?.id,
         status: getStatusByTab(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
         role: user?.role,
