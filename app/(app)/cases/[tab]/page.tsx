@@ -70,8 +70,8 @@ export default function FilteredCases() {
     }
   };
   return (
-    <div className="container flex flex-col py-2 h-full">
-      <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]">
+    <div className="">
+      <div className="bg-white overflow-auto space-y-6 max-h-[calc(100vh-220px)]">
         <CasesDataTableToolbar
           selectedCase={selectedCase}
           setSelectedCase={setSelectedCase}

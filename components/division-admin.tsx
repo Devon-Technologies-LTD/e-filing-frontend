@@ -54,9 +54,6 @@ export const DivisionAdmin = ({
         : data?.data && Array.isArray(data.data)
             ? data.data
             : [];
-
-    console.log("Fetched Sub-Divisions:", subDivisions);
-
     return (
         <div className="w-full space-y-4">
             <Select onValueChange={handleSubDivisionChange} value={selectedSubDivision || value}>

@@ -160,7 +160,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
         <div className="space-y-8 mx-auto">
           <div className="space-y-6 w-full">
             <div className="border-b space-y-1">
-              <h2 className="text-xl font-bold">{headingText}</h2>
+              <h2 className="text-xl uppercase font-bold">{headingText}</h2>
               <p className="text-sm font-semibold">{descriptionText}</p>
             </div>
             <form onSubmit={onSubmit} className="space-y-6">

@@ -24,7 +24,7 @@ export const createUserColumns = (
 
     {
       id: "Name",
-      header: "Name",
+      header: "Magistrate Name",
       accessorKey: "Name",
       cell: ({ row }) => {
         const Name = row.original.Name || "";
@@ -49,7 +49,7 @@ export const createUserColumns = (
 
     {
       id: "Type",
-      header: "Type",
+      header: " Magistrate Type",
       accessorKey: "Type",
     },
 
