@@ -85,6 +85,7 @@ export const getCaseMetric = () => fetchData(UserService.caseMetric);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
 export const getMagisterateBreakDown = (id: string) => fetchData(UserService.getMagisterateBreakDown, id);
 export const magistrateMetric = () => fetchData(UserService.magistrateMetric);
+export const getFinancialMetric = () => fetchData(UserService.getFinancialMetric);
 export const getCaseDistribution = () => fetchData(UserService.getCaseDistribution);
 
 const handleFormAction = async (serviceMethod: Function, formData: FormData) => {

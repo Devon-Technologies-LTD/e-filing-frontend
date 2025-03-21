@@ -50,12 +50,12 @@ export const navigationLinks: NavItem[] = [
     roles: [ROLES.CENTRAL_REGISTRAR], //mote remove cheif judge role
     isActive: (pathname) => pathname?.startsWith("/cases"),
   },
-  {
-    title: "Audit Logs",
-    href: "/audit",
-    roles: [ROLES.CENTRAL_REGISTRAR],
-    isActive: (pathname) => pathname?.startsWith("/audit"),
-  },
+  // {
+  //   title: "Audit Logs",
+  //   href: "/audit",
+  //   roles: [ROLES.CENTRAL_REGISTRAR],
+  //   isActive: (pathname) => pathname?.startsWith("/audit"),
+  // },
   {
     title: "Case Monitoring",
     href: "/monitoring/case",

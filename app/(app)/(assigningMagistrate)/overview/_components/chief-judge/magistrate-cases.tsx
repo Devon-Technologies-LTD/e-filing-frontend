@@ -44,13 +44,12 @@ export default function MagistrateCases() {
   return (
     <>
       <div className="bg-white py-12">
-        <div className="container grid bg-white  grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="w-full container  px-4 sm:px-8 grid gap-6 grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
           {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
-
               <MetricCard
                 type="magistrate"
-                metricKey="total"
+                metricKey="totalUsers"
                 value="Total Magistrates"
                 metric={data?.totalUsers ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
@@ -79,7 +78,7 @@ export default function MagistrateCases() {
             <>
               <MetricCard
                 type="magistrate"
-                metricKey="active"
+                metricKey="activeMagistrate"
                 value="Active Magistrates Handling cases"
                 metric={data?.activeMagistrate ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
@@ -87,9 +86,6 @@ export default function MagistrateCases() {
             </>
           )}
 
-          {/* {data.map((metric) => (
-            <MetricCard type="magistrate" key={metric.id} metric={metric} rightModal={undefined} />
-          ))} */}
         </div>
       </div >
       <div className="bg-white">

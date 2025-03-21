@@ -48,8 +48,12 @@ export function StatBreakdown({
         return await getCaseBreakDown(metricKey);
       }
       if (type == "magistrate") {
+        console.log(metricKey);
         return await getMagisterateBreakDown(metricKey);
       }
+      // if (type == "magistrate") {
+      //   return await getMagisterateBreakDown(metricKey);
+      // }
       return [];
     },
     staleTime: 100000,
@@ -102,8 +106,8 @@ export function StatBreakdown({
                 "font-bold border-none text-base",
                 bgColors[variant] || bgColors.default
               )}>
-              <TableHead className="font-bold py-4">DIVISIONS</TableHead>
-              <TableHead className="text-right uppercase font-bold">TOTAL { value }</TableHead>
+              <TableHead className="font-bold py-4">{(type == "magistrate") ? "DIVISIONS" : "DIVISIONS"} </TableHead>
+              <TableHead className="text-right uppercase font-bold">{(type == "magistrate") ? "NUMBER OF MAGISTERATE" : value}</TableHead>
             </TableRow>
           </TableHeader>
 

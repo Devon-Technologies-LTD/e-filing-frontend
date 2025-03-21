@@ -74,6 +74,10 @@ const UserService = {
     const response = await axiosInstance.get(`admin/analyitcs/magistrate-metrics`);
     return response.data;
   },
+  async getFinancialMetric(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/financial-metrics`);
+    return response.data;
+  },
   async getCaseDistribution(): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/case-distribution`);
     return response.data;
