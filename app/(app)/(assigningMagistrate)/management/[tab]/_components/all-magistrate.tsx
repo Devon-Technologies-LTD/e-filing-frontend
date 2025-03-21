@@ -10,9 +10,8 @@ import { createUserColumns, IUsersColumn } from "./table-column";
 import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
-import { getUserManagement } from "@/lib/actions/user-management";
+import { getUserManagement, getUserManagementFilter } from "@/lib/actions/user-management";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search } from "lucide-react";
 
 export default function AllMagistrates() {
@@ -22,7 +21,6 @@ export default function AllMagistrates() {
   const handleCourtTypeChange = (value: string) => {
     setSelectedCourt(value as CaseTypes);
   };
-  console.log(user);
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
     case ROLES.CHIEF_JUDGE:
@@ -56,38 +54,20 @@ export default function AllMagistrates() {
     () => createUserColumns(user?.role!, "all"),
     [user?.role]
   );
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["userManagement", currentPage],
+    queryKey: ["userManagement", currentPage, selectedCourt, searchTerm], // ✅ Now React Query tracks changes
     queryFn: async () => {
       return await getUserManagement({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        query: searchTerm,
+        court_type: selectedCourt,
       });
     },
-    staleTime: 100000, // Move this inside the object correctly
+    staleTime: 100000,
   });
-
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredData = useMemo(() => {
-    if (!data?.data) return [];
-
-    return data.data.filter((magistrate: IUsersColumn) => {
-      const searchLower = searchTerm.toLowerCase();
-      const matchesSearch =
-        magistrate.first_name.toLowerCase().includes(searchLower) ||
-        magistrate.last_name.toLowerCase().includes(searchLower) ||
-        magistrate.email.toLowerCase().includes(searchLower) ||
-        magistrate.court_type.toLowerCase().includes(searchLower) ||
-        magistrate.court_division.toLowerCase().includes(searchLower);
-
-      const matchesCourt =
-        selectedCourt === "all" || magistrate.court_type === selectedCourt;
-
-      return matchesSearch && matchesCourt;
-    });
-  }, [data, searchTerm, selectedCourt]);
 
   return (
     <div className="bg-white py-2 space-y-6">
@@ -120,22 +100,22 @@ export default function AllMagistrates() {
           />
         </div>
       </div>
-      <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
-          <Input
-            type="search"
-            variant="ghost"
-            autoComplete="off"
-            data-form-type="other"
-            placeholder="e.g Search Magistrate Name"
-            className="pl-9 h-12 md:w-[100px] lg:w-[500px]"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <DataTable columns={columns} loading={draftsLoading} data={filteredData} />
+      {/* <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]"> */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
+        <Input
+          type="search"
+          variant="ghost"
+          autoComplete="off"
+          data-form-type="other"
+          placeholder="e.g Search Magistrate Name"
+          className="pl-9 h-12 md:w-[100px] lg:w-[500px]"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+      <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
+      {/* </div> */}
 
       {data?.data?.length > 0 && (
         <div className="fixed bottom-0 container left-0 right-0 py-2">

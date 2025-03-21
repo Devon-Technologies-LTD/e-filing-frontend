@@ -1,32 +1,27 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, createContext } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { TCaseFilterType } from "@/types/case";
 import { CaseTypes, COURT_TYPE, ALL_DISTRICT } from "@/types/files/case-type";
 import ReusableTabs from "@/components/ui/reusable-tabs";
-import { FilterDropdown } from "@/components/ui/filter-dropdown";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { ROLES } from "@/types/auth";
 import MModal from "./_components/mModal";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAppSelector } from "@/hooks/redux";
+import { DivisionAdmin } from "@/components/division-admin";
+import { LocationAdmin } from "@/components/location-admin";
+import { MagistrateContext } from "@/context/MagistrateContext";
+
 
 
 export default function LayoutPage({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const params = useParams();
   const activeTab = params?.tab as string;
+  const { data: user } = useAppSelector((state) => state.profile);
+  const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
 
-  const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
-  const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
-
-  const handleCourtTypeChange = useCallback((value: string) => {
-    setSelectedCourt(value as CaseTypes);
-  }, []);
-
-  const handleCaseTypeChange = useCallback((value: string) => {
-    setSelectedCase(value as CaseTypes);
-  }, []);
+  const [totalMagistrates, setTotalMagistrates] = useState<number>(0);
 
   const handleTabChange = useCallback((newTab: string) => {
     router.push(`/oversight/${newTab}`);
@@ -36,99 +31,174 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
     { id: "all", label: "All Magistrates" },
     { id: "performing", label: "Magistrate Performance" },
   ];
+  const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
+  const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
+  const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
+  const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+  const handleCourtDivisionChange = (value: string) => {
+    setSelectedCourtDivision(value);
+    // handleChanges("court_division", value);
+    // dispatch(addCaseTypeError({ court_division: "" }));
+  };
+  // const handleCourtTypeChange = useCallback((value: string) => {
+  //   setSelectedCourt(value as CaseTypes);
+  // }, []);
 
-  const courtFilterOptions = [{ value: "all", label: "ALL COURT TYPE" }, ...COURT_TYPE];
-  const districtFilterOptions = [{ value: "all", label: "ALL DISTRICTS" }, ...ALL_DISTRICT];
+  // const handleCaseTypeChange = useCallback((value: string) => {
+  //   setSelectedCase(value as CaseTypes);
+  // }, []);
+
+  const handleCourtSubDivisionChange = (value: string) => {
+    setSelectedCourtSubDivision(value);
+  };
+
 
   return (
-    <div className="bg-zinc-100 min-h-dvh space-y-2">
-      <header className="bg-white shadow-md py-6 sticky top-0 z-10">
-        <div className="container space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <FilterDropdown
-                triggerVariant="outline"
-                itemVariant="outline"
-                placeholder="ALL DISTRICTS"
-                className="bg-primary text-white"
-                options={districtFilterOptions}
-                value={selectedCase}
-                onChange={handleCaseTypeChange}
-              />
+    <MagistrateContext.Provider value={{ totalMagistrates, setTotalMagistrates }}>
+      <div className="bg-white h-full overflow-hidden space-y-2 flex flex-col">
+        <header className="shadow-md">
+          <div className="container space-y-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+                  <LocationAdmin
+                    placeholder="Select Division"
+                    value={selectedCourtDivision}
+                    onChange={handleCourtDivisionChange}
+                    error={caseTypeErrors?.court_division}
+                  />
+                )}
+                {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+                  <DivisionAdmin
+                    id={user?.court_division_id ?? ""}
+                    placeholder="Select District"
+                    value={selectedCourtSubDivision}
+                    className="bg-app-primary text-white"
+                    onChange={handleCourtSubDivisionChange}
+                    error={caseTypeErrors?.sub_division}
+                  />
+                )}
+              </div>
+              <div className="text-primary text-end">
+                {activeTab === "all" ? (
+                  <>
+                    <p className="text-2xl font-bold">{totalMagistrates}</p>
+                    <p className="text-sm font-bold">Total Magistrates across all divisions</p>
+                  </>
+                ) : (
+                  <MModal />
+                )}
+                
+              </div>
             </div>
-
-            <div className="text-primary text-end">
-              {activeTab === "all" ? (
-                <>
-                  <p className="text-2xl font-bold">6</p>
-                  <p className="text-sm font-bold">Total Magistrates across all divisions</p>
-                </>
-              ) : (
-                <MModal />
-              )}
-            </div>
+            <ReusableTabs tabs={tabs} onTabChange={handleTabChange} activeTab={activeTab} />
           </div>
-
-
-          <ReusableTabs tabs={tabs} onTabChange={handleTabChange} activeTab={activeTab} />
-
-          <div className="flex items-center justify-between">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
-              <Input
-                type="search"
-                variant="ghost"
-                autoComplete="off"
-                placeholder="e.g. Search Magistrate Name"
-                className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
-              />
-            </div>
-
-            <section className="flex gap-3">
-              {/* <FilterDropdown
-                triggerVariant="outline"
-                itemVariant="outline"
-                placeholder="All Status"
-                options={districtFilterOptions}
-                value={selectedCase}
-                onChange={handleCaseTypeChange}
-              /> */}
-              <section className="flex gap-3">
-                {/* <Select onValueChange={handleStatusChange} > */}
-                <Select>
-                  <SelectTrigger variant="outline" className="h-11" >
-                    <SelectValue placeholder="All Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem className="min-w-60" value="ACTIVE">
-                      ACTIVE MAGISTRATE
-                    </SelectItem>
-                    <SelectItem className="min-w-60" value="INACTIVE">
-                      INACTIVE MAGISTRATE
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </section>
-
-
-              {activeTab === "all" && (
-                <FilterDropdown
-                  triggerVariant="outline"
-                  itemVariant="outline"
-                  placeholder="SELECT COURT TYPE"
-                  options={courtFilterOptions}
-                  value={selectedCourt}
-                  onChange={handleCourtTypeChange}
-                />
-              )}
-            </section>
-          </div>
-        </div>
-      </header>
-
-      <main className="container py-3 overflow-y-auto h-[calc(100dvh - 150px)]">
-        {children}
-      </main>
-    </div>
+        </header>
+        <div className="flex-1 container py-4 overflow-auto">{children}</div>
+      </div>
+    </MagistrateContext.Provider>
   );
 }
+
+
+// "use client";
+
+// import { useState, useCallback } from "react";
+// import { useParams, useRouter } from "next/navigation";
+// import { TCaseFilterType } from "@/types/case";
+// import { CaseTypes, COURT_TYPE, ALL_DISTRICT } from "@/types/files/case-type";
+// import ReusableTabs from "@/components/ui/reusable-tabs";
+// import { ROLES } from "@/types/auth";
+
+// import MModal from "./_components/mModal";
+// import { useAppSelector } from "@/hooks/redux";
+// import { DivisionAdmin } from "@/components/division-admin";
+// import { LocationAdmin } from "@/components/location-admin";
+
+
+// export default function LayoutPage({ children }: { children: React.ReactNode }) {
+//   const router = useRouter();
+//   const params = useParams();
+//   const activeTab = params?.tab as string;
+//   const { data: user } = useAppSelector((state) => state.profile);
+
+//   const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
+//   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+//   const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
+
+//   const handleCourtTypeChange = useCallback((value: string) => {
+//     setSelectedCourt(value as CaseTypes);
+//   }, []);
+
+//   const handleCaseTypeChange = useCallback((value: string) => {
+//     setSelectedCase(value as CaseTypes);
+//   }, []);
+
+//   const handleTabChange = useCallback((newTab: string) => {
+//     router.push(`/oversight/${newTab}`);
+//   }, [router]);
+
+//   const tabs: { id: TCaseFilterType; label: string }[] = [
+//     { id: "all", label: "All Magistrates" },
+//     { id: "performing", label: "Magistrate Performance" },
+//   ];
+//   const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
+
+//   const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
+
+//   const courtFilterOptions = [{ value: "all", label: "ALL COURT TYPE" }, ...COURT_TYPE];
+//   const districtFilterOptions = [{ value: "all", label: "ALL DISTRICTS" }, ...ALL_DISTRICT];
+//   const handleCourtSubDivisionChange = (value: string) => {
+//     setSelectedCourtSubDivision(value);
+//   };
+//   const handleCourtDivisionChange = (value: string) => {
+//     setSelectedCourtDivision(value);
+//     // handleChanges("court_division", value);
+//     // dispatch(addCaseTypeError({ court_division: "" }));
+//   };
+
+//   return (
+//     <div className="bg-white h-full overflow-hidden space-y-2 flex flex-col">
+//       <header className="shadow-md">
+//         <div className="container space-y-4">
+//           <div className="flex items-center justify-between gap-3">
+//             <div>
+//               {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+//                 <LocationAdmin
+//                   placeholder="Select Division"
+//                   value={selectedCourtDivision}
+//                   onChange={handleCourtDivisionChange}
+//                   error={caseTypeErrors?.court_division}
+//                 />
+//               )}
+//               {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+//                 <DivisionAdmin
+//                   id={user?.court_division_id ?? ""}
+//                   placeholder="Select District"
+//                   value={selectedCourtSubDivision}
+//                   className="bg-app-primary text-white"
+//                   onChange={handleCourtSubDivisionChange}
+//                   error={caseTypeErrors?.sub_division}
+//                 />
+//               )}
+//             </div>
+//             <div className="text-primary text-end">
+//               {activeTab === "all" ? (
+//                 <>
+//                   <p className="text-2xl font-bold">6</p> //total magisterata
+//                   <p className="text-sm font-bold">Total Magistrates across all divisions</p>
+//                 </>
+//               ) : (
+//                 <MModal />
+//               )}
+//             </div>
+//           </div>
+//           <ReusableTabs tabs={tabs} onTabChange={handleTabChange} activeTab={activeTab} />
+//         </div>
+//       </header>
+//       <div className="flex-1 container py-4 overflow-auto">
+//         {children}
+//       </div>
+//     </div>
+//   );
+// }

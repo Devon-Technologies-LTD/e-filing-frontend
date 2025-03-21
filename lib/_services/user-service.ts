@@ -3,6 +3,7 @@ import { axiosInstance } from "../_api/axios-config";
 import {
   TaddAdmin,
 } from "@/lib/_definitions";
+import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
 
 
 export interface IDraftFilter {
@@ -21,7 +22,19 @@ export interface Ipage {
   size?: number;
   role?: string;
   court_division_id?: string;
+  division_id?: string;
   search?: string;
+  court_type?: string,
+  end_date?: string,
+  start_date?: string,
+  invited_by?: string,
+  query?: string,
+  usertype?: string,
+  status?: string,
+  sub_division?: string,
+  casetype?: string,
+  user_id?: string,
+  year?: string,
 }
 
 const UserService = {
@@ -30,8 +43,19 @@ const UserService = {
     console.log(response.data);
     return response.data;
   },
-  async magistrateOversight(): Promise<any> {
-    const response = await axiosInstance.get(`admin/analyitcs/magistrate-oversight`);
+  async magistrateOversight(params: Ipage): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/magistrate-oversight`,
+      {
+        params: {
+          page: params.page ?? 1,
+          limit: params.size ?? 10,
+          division_id: params.division_id,
+          search: params.search,
+          usertype: params.usertype,
+          casetype: params.casetype,
+        },
+      },
+    );
     return response.data;
   },
   async caseMetric(): Promise<any> {
@@ -67,6 +91,30 @@ const UserService = {
     });
     return response.data;
   },
+
+  async getUserManagementFilter(params: Ipage): Promise<any> {
+    const response = await axiosInstance.get(`admin/user/user-filter`, {
+      params: {
+        page: params.page,
+        limit: params.size,
+        role: params.role,
+        search: params.search,
+        court_division_id: params.court_division_id,
+        court_type: params.court_type,
+        end_date: params.end_date,
+        start_date: params.start_date,
+        invited_by: params.invited_by,
+        query: params.query,
+        status: params.status,
+        sub_division: params.sub_division,
+        user_id: params.user_id,
+        year: params.year,
+      },
+    });
+    return response.data;
+  },
+
+
 
   async getPendingUsers(params: Ipage): Promise<any> {
     const response = await axiosInstance.get(`admin/user/filter-user/pending`, {
