@@ -27,14 +27,14 @@ const notifications: Notification[] = [
     icon: "check",
     message:
       "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 hours ago",
   },
   {
     id: "2",
     icon: "scale",
     message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 hours ago",
   },
   {
@@ -42,7 +42,7 @@ const notifications: Notification[] = [
     icon: "initials",
     initials: "AA",
     message: "Magistrate Adebayo Adekoya is now presiding over your case",
-    caseNumber: "CV/Wuse/233456789/2024 Stay tuned for updates!",
+    caseNumber: "CV/WZ2/001e/Year Stay tuned for updates!",
     timestamp: "2 hours ago",
   },
   {
@@ -50,19 +50,17 @@ const notifications: Notification[] = [
     icon: "check",
     message:
       "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 weeks ago",
   },
   {
     id: "5",
     icon: "scale",
     message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 weeks ago",
   },
 ];
-
-
 
 export default function Notifications() {
   return (
@@ -75,7 +73,11 @@ export default function Notifications() {
           </Badge>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-white min-h-[36rem]" align="end" forceMount>
+      <DropdownMenuContent
+        className="bg-white min-h-[36rem]"
+        align="end"
+        forceMount
+      >
         <div className="w-full min-w-[32rem] max-w-lg mx-auto  rounded-lg">
           <div className="p-6 py-4 flex items-center justify-between">
             <h1 className="text-2xl font-semibold ">Notifications</h1>

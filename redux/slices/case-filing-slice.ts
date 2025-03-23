@@ -161,17 +161,20 @@ const formSlice = createSlice({
       state.documents = action.payload;
     },
     updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
+      console.log("action payload", action.payload);
       if (!state.documents) {
         state.documents = [];
       }
       const index = state?.documents?.findIndex(
         (d) =>
-          d.title === action.payload.title &&
+          d.title.toLowerCase() === action.payload.title.toLowerCase() &&
           d.sub_title.toLowerCase() === action.payload.sub_title.toLowerCase()
       );
       if (index !== -1) {
+        console.log("should replace");
         state.documents[index] = action.payload;
       } else {
+        console.log("should update");
         state.documents?.push(action.payload);
       }
     },
@@ -179,15 +182,15 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ title: string; subCase: string }>
     ) => {
-     state.documents = state.documents?.filter(
-       (document) =>
-         !(
-           document.title.toLowerCase() ===
-             action.payload.title.toLowerCase() &&
-           document.sub_title.toLowerCase() ===
-             action.payload.subCase.toLowerCase()
-         )
-     );
+      state.documents = state.documents?.filter(
+        (document) =>
+          !(
+            document.title.toLowerCase() ===
+              action.payload.title.toLowerCase() &&
+            document.sub_title.toLowerCase() ===
+              action.payload.subCase.toLowerCase()
+          )
+      );
     },
 
     clearForm: (state) => {

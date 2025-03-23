@@ -76,7 +76,6 @@ export default function CostAssessment({
             doc.case_type_name.toLowerCase() === case_type.toLowerCase() &&
             doc.sub_title.toLowerCase() === "other documents"
         ) || [],
-
       exhibits:
         documents?.filter(
           (doc) => doc.case_type_name.toLowerCase() === "exhibits"
@@ -84,6 +83,9 @@ export default function CostAssessment({
     }),
     [documents, case_type, sub_case_type]
   );
+
+    console.log("document", documents);
+    console.log("documentGroups", documentGroups);
 
   const costItems = useMemo(
     () => ({
@@ -163,6 +165,8 @@ export default function CostAssessment({
     return subtotal + additionalCharges;
   }, [subtotal, additionalCharges]);
 
+
+  console.log("displayedItems", displayedItems);
   // const totalAmount = useMemo(() => {
   //   return [
   //     ...displayedItems,

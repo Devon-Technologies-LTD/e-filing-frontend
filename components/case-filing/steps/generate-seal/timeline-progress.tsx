@@ -62,7 +62,7 @@ export default function TimelineProgress({
                   ...step,
                   status: "completed",
                   title: "PAYMENT SUCCESSFUL",
-                  description: "Confirmed from REMITA Services"
+                  description: "Confirmed from REMITA Services",
                 }
               : step
           )
@@ -76,7 +76,7 @@ export default function TimelineProgress({
               ? {
                   ...step,
                   status: "failed",
-                  title:"PAYMENT UNSUCCESSFUL",
+                  title: "PAYMENT UNSUCCESSFUL",
                   description: verifyData.data.data,
                 }
               : step
@@ -198,7 +198,7 @@ export default function TimelineProgress({
 
                   {index === 1 && step.status === "completed" && (
                     <span className="text-sm h-7 font-semibold text-primary">
-                      CV/Wuse/233456789/2024
+                      CV/WZ2/001e/Year
                     </span>
                   )}
 

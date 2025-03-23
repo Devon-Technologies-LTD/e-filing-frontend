@@ -58,7 +58,6 @@ export const management: TManagement[] = [
   },
 ];
 
-
 // export const mockUsers: IUsersColumn[] = [
 //   {
 //     id: "1",
@@ -90,14 +89,14 @@ export const notifications: INotification[] = [
     icon: "check",
     message:
       "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 hours ago",
   },
   {
     id: "2",
     icon: "scale",
     message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 hours ago",
   },
   {
@@ -105,7 +104,7 @@ export const notifications: INotification[] = [
     icon: "initials",
     initials: "AA",
     message: "Magistrate Adebayo Adekoya is now presiding over your case",
-    caseNumber: "CV/Wuse/233456789/2024 Stay tuned for updates!",
+    caseNumber: "CV/WZ2/001e/Year Stay tuned for updates!",
     timestamp: "2 hours ago",
   },
   {
@@ -113,21 +112,21 @@ export const notifications: INotification[] = [
     icon: "check",
     message:
       "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 weeks ago",
   },
   {
     id: "5",
     icon: "scale",
     message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 weeks ago",
   },
   {
     id: "6",
     icon: "hearings",
     message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     timestamp: "2 weeks ago",
   },
 ];
@@ -159,7 +158,7 @@ export const documentHistory: INotification[] = [
 ];
 
 export const demoData = {
-  caseNumber: "CV/Wuse/233456789/2024",
+  caseNumber: "CV/WZ2/001e/Year",
   title:
     "Johnathan Smith and Associates vs. The Federal Housing Development Corporation",
   filedDate: "12/02/2024",
@@ -603,7 +602,7 @@ export const chiefJudgeMagistrateMetric = {
 
 export const hearings = [
   {
-    caseNumber: "CV/Wuse/233456789/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     parties:
       "Johnathan Smith and Associates vs. The Federal Housing Development Corporation of the State of New Lagos",
     description:
@@ -613,7 +612,7 @@ export const hearings = [
     displayDate: "12/01/2025",
   },
   {
-    caseNumber: "CV/Wuse/233456790/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     parties:
       "Doe Legal Services vs. The City Planning Authority of Greater Abuja",
     description:
@@ -623,7 +622,7 @@ export const hearings = [
     displayDate: "15/02/2025",
   },
   {
-    caseNumber: "CV/Wuse/233456791/2024",
+    caseNumber: "CV/WZ2/001e/Year",
     parties: "Green Energy Ltd. vs. National Power Grid Authority",
     description: "Contractual Violations in Renewable Energy Supply Agreements",
     hearingDate: "20th March, 2025",

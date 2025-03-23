@@ -40,19 +40,24 @@ export default function RootLayout({
           name="description"
           content="E-Filing Portal - Manage your records seamlessly."
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
         <link rel="icon" href="/favicon.png" />
       </Head>
       <body
         className={`${inter.variable} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
       >
-        <Suspense fallback={<SuspenseLoader />}>
-          <Toaster richColors expand={true} position="top-center" />
-          <TooltipProvider>
-            <AppProvider>{children}</AppProvider>
-            <NextTopLoader showSpinner={false} color="#6F4E37" />
-          </TooltipProvider>
-        </Suspense>
+        <AppProvider>
+          <Suspense fallback={<SuspenseLoader />}>
+            <Toaster richColors expand={true} position="top-center" />
+            <TooltipProvider>
+              {children}
+              <NextTopLoader showSpinner={false} color="#6F4E37" />
+            </TooltipProvider>
+          </Suspense>
+        </AppProvider>
       </body>
     </html>
   );

@@ -70,7 +70,7 @@ export default function TrackCaseSearch() {
             </CommandGroup>{" "}
             <CommandSeparator className="bg-neutral-100" />
             <CommandGroup>
-              <CommandItem className="font-semibold text-xs text-zinc-900 cursor-pointer">CV/Wuse/233456789/2024 </CommandItem>
+              <CommandItem className="font-semibold text-xs text-zinc-900 cursor-pointer">CV/WZ2/001e/Year </CommandItem>
             </CommandGroup>
           </CommandList>
         )}
