@@ -13,7 +13,19 @@ export interface Ipage {
     size?: number;
     role?: string;
     court_division_id?: string;
+    division_id?: string;
     search?: string;
+    court_type?: string,
+    end_date?: string,
+    start_date?: string,
+    usertype?: string,
+    invited_by?: string,
+    query?: string,
+    status?: string,
+    casetype?: string,
+    sub_division?: string,
+    user_id?: string,
+    year?: string,
 }
 
 const handleError = (err: unknown) => {
@@ -48,6 +60,8 @@ const handleError = (err: unknown) => {
 
 const fetchData = async (serviceMethod: Function, params?: any) => {
     try {
+        console.log(params);
+
         const data = await serviceMethod(params);
         return { ...data, success: true };
     } catch (err) {
@@ -63,13 +77,15 @@ const fetchData2 = async (serviceMethod: Function, params?: any) => {
 };
 
 export const getUserManagement = (params: Ipage) => fetchData(UserService.getUserManagement, params);
+export const getUserManagementFilter = (params: Ipage) => fetchData(UserService.getUserManagementFilter, params);
 export const getAllUser = () => fetchData(UserService.getAllUser);
 export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendingUsers, params);
-export const getOversight = () => fetchData(UserService.magistrateOversight);
+export const getOversight = (params: Ipage) => fetchData(UserService.magistrateOversight, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
 export const getMagisterateBreakDown = (id: string) => fetchData(UserService.getMagisterateBreakDown, id);
 export const magistrateMetric = () => fetchData(UserService.magistrateMetric);
+export const getFinancialMetric = () => fetchData(UserService.getFinancialMetric);
 export const getCaseDistribution = () => fetchData(UserService.getCaseDistribution);
 
 const handleFormAction = async (serviceMethod: Function, formData: FormData) => {

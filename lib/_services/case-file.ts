@@ -64,9 +64,11 @@ export interface IDraftFilter {
   casefile_title?: string | null;
   court_division_id?: string | null;
   end_date?: string | null;
-  start_data?: string | null;
+  start_date?: string | null;
   status?: CaseStatus[] | null;
   user_id?: string | null;
+  year?: string | null;
+  assignee_id?: string | null;
   page?: number;
   size?: number;
 }
@@ -101,6 +103,7 @@ const CaseFileService = {
     );
     return response.data;
   },
+
   async getCaseFilesAdmin(payload: IDraftFilter): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
       `admin/casefile/case-filter`,

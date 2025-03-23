@@ -19,7 +19,8 @@ type ErrorResponse = {
 export async function GET(req: NextRequest) {
     try {
 
-        const url = `admin/analyitcs/magistrate-oversight`;
+        const url = `/admin/analyitcs/centrar-metrics`;
+        // Sending request to external API
         const response = await axiosInstance.get(url);
         console.log("API Response:", response.data);
 

@@ -32,18 +32,16 @@ export const MetricCard: React.FC<{
 
   return (
     <>
-      <div className="space-y-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
-        <div
-          className={cn(
+      <div className="space-y-4 pb-4 my-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
+        <div className={cn(
             "p-4 sm:p-3 text-black font-semibold text-sm sm:text-base",
             className,
             bgColors[metricKey as keyof typeof bgColors] || "bg-neutral-100"
-          )}
-        >
+          )}>
           {value} 
         </div>
         <div className="p-4 sm:p-3 py-6 sm:py-4">
-          <p className="text-3xl sm:text-lg text-app-primary font-bold flex items-center gap-1">
+          <p className="text-3xl  text-app-primary font-bold flex items-center gap-1">
             {type === "finances" ? <Icons.naira /> : ""}
             <CountUp start={0} end={Number(metric?.total) || 0} separator="," />
           </p>
@@ -60,7 +58,7 @@ export const MetricCard: React.FC<{
         </div>
 
         {rightModal ? (
-          <Link href="/your-cases">
+          <Link href="/cases/under-review">
             <div className="flex items-center space-x-2 cursor-pointer px-4 sm:px-3 py-2 sm:py-1">
               <span className="text-xs sm:text-[10px] font-bold">VIEW BREAKDOWN</span>
               <Icons.rightArrow className="h-4 w-4 sm:h-3 sm:w-3 text-neutral" />

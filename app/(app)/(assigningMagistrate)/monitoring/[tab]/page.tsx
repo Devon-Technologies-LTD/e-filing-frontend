@@ -5,13 +5,14 @@ import { TCaseFilterType } from "@/types/case";
 import { useParams, useRouter } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
 import { mainColumns, unassignedColumns } from "./_components/table-columns";
-import { useState } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
 import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab } from "@/lib/utils";
 import { CaseTypes } from "@/types/files/case-type";
 import Pagination from "@/components/ui/pagination";
+import { MonitoringContext } from "@/context/MonitoringContext";
 
 export default function FilteredCases() {
   const params = useParams();
@@ -20,6 +21,8 @@ export default function FilteredCases() {
   const [currentPage, setCurrentPage] = useState(1);
   const tab = params.tab as TCaseFilterType;
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const { totalCase, setTotalCase } = useContext(MonitoringContext); // Use the context properly
 
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: [tab, {
@@ -45,11 +48,19 @@ export default function FilteredCases() {
     router.push(`/monitoring/view/${encodeURIComponent(row.id)}`);
   };
 
+  useEffect(() => {
+    if (data?.total_rows !== undefined) {
+      setTotalCase(data.total_rows);
+    }
+  }, [data, setTotalCase]);
+
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar
         selectedCase={selectedCase}
         setSelectedCase={setSelectedCase}
+        selectedStatus={selectedStatus}
+        setSelectedStatus={setSelectedStatus}
       />
       <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
 

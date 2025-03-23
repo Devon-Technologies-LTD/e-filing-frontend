@@ -19,9 +19,9 @@ export interface FileInputProps {
 
 // Define constants for case types and their options
 export const CASE_TYPES: CaseOption[] = [
-  { value: "criminal", label: "CRIMINAL CASE" },
-  { value: "civil", label: "CIVIL CASE" },
-  { value: "family", label: "FAMILY CASE" },
+  { value: "CRIMINAL CASE", label: "CRIMINAL CASE" },
+  { value: "CIVIL CASE", label: "CIVIL CASE" },
+  { value: "FAMILY CASE", label: "FAMILY CASE" },
 ];
 export const COURT_TYPE: CaseOption[] = [
   { value: "Magistrate Court", label: "MAGISTRATE COURT" },
