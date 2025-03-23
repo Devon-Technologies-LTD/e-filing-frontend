@@ -13,7 +13,7 @@ export function CasesDataTableToolbar() {
   const handleCaseTypeChange = (value: string) => {
     setSelectedCase(value as CaseTypes);
   };
-  const caseFilter = [{value: 'all', label: 'ALL CASE TYPE'}, ...CASE_TYPES];
+  const caseFilter = [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES];
   return (
     <div className="flex items-center justify-between">
       <div className="relative">
@@ -23,7 +23,7 @@ export function CasesDataTableToolbar() {
           variant="ghost"
           autoComplete="off"
           data-form-type="other"
-          placeholder="e.g CV/Wuse/233456789/2024, "
+          placeholder="e.g CV/WZ2/001e/Year, "
           className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
         />
       </div>

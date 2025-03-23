@@ -38,7 +38,7 @@ export function CasesDataTableToolbar({
           variant="ghost"
           autoComplete="off"
           data-form-type="other"
-          placeholder="e.g CV/Wuse/233456789/2024"
+          placeholder="e.g CV/WZ2/001e/Year, "
           className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
         />
       </div>

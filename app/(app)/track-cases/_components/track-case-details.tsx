@@ -26,7 +26,7 @@ export function TrackCaseDetails() {
       <div className="flex justify-between items-start mb-6">
         <div className="">
           <div className="flex items-center gap-4">
-            <h2 className="font-bold text-lg">CV/Wuse/233456789/2024</h2>
+            <h2 className="font-bold text-lg">CV/WZ2/001e/Year</h2>
             <StatusBadge status={CaseStatus.Approved}>
               CRIMINAL CASE - CLAIMANT
             </StatusBadge>
@@ -40,7 +40,7 @@ export function TrackCaseDetails() {
         </div>
         <Button
           onClick={() =>
-            router.push(`/cases/view/${encodeURIComponent("CV/Wuse/233456789/2024")}`)
+            router.push(`/cases/view/${encodeURIComponent("CV/WZ2/001e/Year")}`)
           }
           variant={"default"}
           className="font-semibold text-sm"
@@ -48,8 +48,6 @@ export function TrackCaseDetails() {
           VIEW CASE PAGE
         </Button>
       </div>
-
-      
 
       <ReusableTabs
         tabs={tabs}

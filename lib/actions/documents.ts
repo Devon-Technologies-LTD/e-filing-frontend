@@ -19,6 +19,7 @@ type ErrorResponse = {
 export async function uploadDocumentAction(formData: FormData) {
   try {
     const data = await DocumentService.uploadDocument(formData);
+    console.log("first on response", data)
     return { data: data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

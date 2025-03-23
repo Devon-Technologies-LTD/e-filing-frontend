@@ -72,6 +72,7 @@ export default function DocumentUploadComponent({
   const uploadMutation = useMutation({
     mutationFn: (data: FormData) => uploadDocumentAction(data),
     onSuccess: (data) => {
+      console.log("docsss", data);
       if (data?.success) {
         if (onSuccess) onSuccess(data);
         dispatch(updateDocument(data?.data as any));
@@ -105,6 +106,8 @@ export default function DocumentUploadComponent({
   const updateMutation = useMutation({
     mutationFn: (data: FormData) => updateDocumentAction(data),
     onSuccess: (data) => {
+      console.log("update  docsss", data);
+
       if (data?.success) {
         if (onSuccess) onSuccess(data);
         dispatch(updateDocument(data?.data as any));
