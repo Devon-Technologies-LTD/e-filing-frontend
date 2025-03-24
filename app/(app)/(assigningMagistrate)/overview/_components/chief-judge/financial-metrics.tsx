@@ -78,33 +78,33 @@ export default function FinancialMetrics() {
           {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               <MetricCard
-                key="total"
+                key="total_cases"
                 type="finances"
-                metricKey="total"
+                metricKey="total_cases"
                 value="Total Cost Accrued"
                 metric={data?.total ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
               />
               <MetricCard
-                key="criminal"
+                key="criminal_cases"
                 type="finances"
-                metricKey="criminal"
+                metricKey="criminal_cases"
                 value="Total Transaction - Criminal Case"
                 metric={data?.criminal ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
               />
               <MetricCard
-                key="civil"
+                key="civil_cases"
                 type="finances"
-                metricKey="civil"
+                metricKey="civil_cases"
                 value="Total Transaction - Civil Case"
                 metric={data?.civil ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
               />
               <MetricCard
-                key="family"
+                key="family_cases"
                 type="finances"
-                metricKey="family"
+                metricKey="family_cases"
                 value="Total Transaction - Family Case"
                 metric={data?.family ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
