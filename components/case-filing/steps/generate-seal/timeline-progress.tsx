@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { validatePayment } from "@/lib/actions/payment";
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface TimelineStep {
   title: string;
@@ -26,10 +27,12 @@ export default function TimelineProgress({
   onComplete,
 }: TimelineProgressProps) {
   const [steps, setSteps] = useState(initialSteps);
+  const [sealNumber, setSealNumber] = useState("");
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const {
     caseType: { case_file_id, reference },
   } = useAppSelector((state) => state.caseFileForm);
+  const router = useRouter();
   // const VerifyPaymentTransaction = async (endpoint: string) => {
   //   const response = await fetch(endpoint);
   //   if (!response.ok)
@@ -53,8 +56,8 @@ export default function TimelineProgress({
         )
       );
     } else if (verifyData) {
-      console.log("verifyDataaa", verifyData);
       if (verifyData.success) {
+        setSealNumber(verifyData?.data?.case_suit_number ?? "");
         setSteps((current) =>
           current.map((step, index) =>
             index === 0
@@ -76,7 +79,7 @@ export default function TimelineProgress({
               ? {
                   ...step,
                   status: "failed",
-                  title: "PAYMENT UNSUCCESSFUL",
+                  title: verifyData?.data?.data,
                   description: verifyData.data.data,
                 }
               : step
@@ -154,7 +157,7 @@ export default function TimelineProgress({
                   )}
                 >
                   <h3
-                    className={cn("text-base font-semibold", {
+                    className={cn("text-base uppercase font-semibold", {
                       "text-neutral-400": step.status === "pending",
                       "text-black": step.status !== "pending",
                     })}
@@ -198,7 +201,7 @@ export default function TimelineProgress({
 
                   {index === 1 && step.status === "completed" && (
                     <span className="text-sm h-7 font-semibold text-primary">
-                      CV/WZ2/001e/Year
+                      {sealNumber}
                     </span>
                   )}
 
@@ -225,6 +228,9 @@ export default function TimelineProgress({
                   {index === steps.length - 1 &&
                     step.status === "completed" && (
                       <Button
+                        onClick={() => {
+                          router.push("/cases");
+                        }}
                         size={"sm"}
                         variant={"ghost"}
                         className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"

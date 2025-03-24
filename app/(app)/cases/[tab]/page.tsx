@@ -108,7 +108,7 @@ export default function FilteredCases() {
               type="search"
               variant="ghost"
               autoComplete="off"
-              placeholder="e.g CV/Wuse/233456789/2024"
+              placeholder="e.g CV/WZ2/001e/Year"
               className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
             />
           </div>
@@ -118,7 +118,10 @@ export default function FilteredCases() {
             {/* Date Range Picker */}
             <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="h-11 border-app-tertiary border-2">
+                <Button
+                  variant="outline"
+                  className="h-11 border-app-tertiary border-2"
+                >
                   {formattedStartDate && formattedEndDate
                     ? `${formattedStartDate} - ${formattedEndDate}`
                     : "FILED ON : MOST RECENT"}
@@ -133,7 +136,10 @@ export default function FilteredCases() {
                   className="rounded-lg border border-gray-200 p-2"
                 />
                 <div className="flex justify-end mt-3">
-                  <Button className="bg-app-primary text-white px-4 py-2 rounded-md" onClick={handleApplyFilter}>
+                  <Button
+                    className="bg-app-primary text-white px-4 py-2 rounded-md"
+                    onClick={handleApplyFilter}
+                  >
                     Done
                   </Button>
                 </div>
@@ -141,25 +147,38 @@ export default function FilteredCases() {
             </Popover>
 
             {/* Case Type Filter */}
-            <Select onValueChange={(value) => setSelectedCase(value as "all" | CaseTypes)} value={selectedCase}>
+            <Select
+              onValueChange={(value) =>
+                setSelectedCase(value as "all" | CaseTypes)
+              }
+              value={selectedCase}
+            >
               <SelectTrigger className="h-11" variant="outline">
                 <SelectValue placeholder="SELECT CASE TYPE" />
               </SelectTrigger>
               <SelectContent>
                 {caseFilter.map((option) => (
-                  <SelectItem className="min-w-40" variant="outline" key={option.value} value={option.value}>
+                  <SelectItem
+                    className="min-w-40"
+                    variant="outline"
+                    key={option.value}
+                    value={option.value}
+                  >
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-
-
           </section>
         </div>
 
         {/* Data Table */}
-        <DataTable onRowClick={handleRowClick} columns={getColumns} loading={draftsLoading} data={data?.data} />
+        <DataTable
+          onRowClick={handleRowClick}
+          columns={getColumns}
+          loading={draftsLoading}
+          data={data?.data}
+        />
       </div>
 
       {/* Pagination */}

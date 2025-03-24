@@ -9,9 +9,15 @@ import {
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Loader } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getOtherDocumentsByCaseType } from "@/lib/actions/public";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const OtherDocumentMapping: any = {
   ["CIVIL CASE"]: CivilOtherDocumentTitles,
@@ -53,12 +59,26 @@ export default function DocumentUploadForm() {
     : [];
 
   const handleSuccess = (data: any) => {
-    console.log("first", data);
     if (selectedDocType) {
       toast.success("Upload successful");
       setSelectedDocType("");
     }
   };
+
+  if (loading)
+    return (
+      <Select onValueChange={() => {}} value={"value"}>
+        <SelectTrigger loading={true} disabled={true} variant={"underlined"}>
+          <SelectValue
+            className="text-neutral-700 text-xs"
+            placeholder="Select A Filing Location"
+          />
+        </SelectTrigger>
+        <SelectContent className="bg-white text-zinc-900">
+          <></>
+        </SelectContent>
+      </Select>
+    );
 
   return (
     <div className="space-y-10">

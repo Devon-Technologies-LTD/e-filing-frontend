@@ -21,6 +21,9 @@ import {
 import { getCaseTypeFields } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { toast } from "sonner";
 
 interface IProps {
   data: ICaseTypes & { id: string; documents: IDocumentFileType[] };
@@ -29,6 +32,8 @@ interface IProps {
 export function CaseDocumentList({ data }: IProps) {
   const navigate = useRouter();
   const dispatch = useDispatch();
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   //grouped the documents by date
   const groupedDocuments = (data?.documents || [])?.reduce(
@@ -53,7 +58,6 @@ export function CaseDocumentList({ data }: IProps) {
     }))
     .filter((group) => group.documents.length > 0);
 
-  // const documentGroups = Object.values(groupedDocuments);
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -63,12 +67,75 @@ export function CaseDocumentList({ data }: IProps) {
     navigate.push(`${data?.id}/refile-documents`);
   };
 
-  const handleDownload = (documentId: string) => {
-    console.log(`Downloading document ${documentId}`);
-  };
+  const handleDownload = async (fileUrl: string, fileName: string) => {
+    try {
+      const proxyUrl = `/api/download?url=${encodeURIComponent(
+        fileUrl
+      )}&name=${encodeURIComponent(fileName)}`;
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error("Failed to download file");
 
-  const handleDownloadAll = (date: string) => {
-    console.log(`Downloading all documents for ${date}`);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      toast.error("Failed to download file");
+    }
+  };
+  const handleDownloadAll = async (date?: string) => {
+    setIsDownloading(true);
+
+    const group = date
+      ? filteredGroups?.find((g) => g.date === date)
+      : { documents: data.documents };
+    if (!group) {
+      setIsDownloading(false);
+      return;
+    }
+
+    const zip = new JSZip();
+    let fileCount = 0;
+
+    const downloadPromises = group.documents.map(async (doc: any) => {
+      try {
+        const proxyUrl = `/api/download?url=${encodeURIComponent(
+          doc.file_path
+        )}&name=${encodeURIComponent(doc.title)}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+          return;
+        }
+
+        const blob = await response.blob();
+        const fileExtension = doc.file_type.split("/")[1] || "file"; // Extract file extension
+
+        zip.file(`${doc.title || `document-${doc.id}`}.${fileExtension}`, blob);
+        fileCount++;
+      } catch (error) {
+        setIsDownloading(false);
+      }
+    });
+
+    await Promise.all(downloadPromises);
+
+    if (fileCount === 0) {
+      toast.error("No files were downloaded.");
+      setIsDownloading(false);
+      return;
+    }
+
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      saveAs(content, `Documents_${date}.zip`);
+      setIsDownloading(false);
+    });
   };
 
   return (
@@ -105,7 +172,13 @@ export function CaseDocumentList({ data }: IProps) {
             >
               Refile other process{" "}
             </DropdownMenuItem>
-            <DropdownMenuItem variant="outline" className="uppercase text-xs">
+            <DropdownMenuItem
+              onClick={() => {
+                handleDownloadAll();
+              }}
+              variant="outline"
+              className="uppercase text-xs"
+            >
               Download all documents{" "}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -125,11 +198,12 @@ export function CaseDocumentList({ data }: IProps) {
                 </div>
                 <Button
                   variant="ghost"
+                  disabled={isDownloading}
                   size="sm"
                   className="font-semibold text-sm"
                   onClick={() => handleDownloadAll(group.date)}
                 >
-                  Download All
+                  {isDownloading ? "Downloading..." : "Download All"}
                 </Button>
               </div>
               <div className="divide-y divide-gray-200">
@@ -141,7 +215,9 @@ export function CaseDocumentList({ data }: IProps) {
                     <div className="flex items-center gap-3">
                       <Icons.pdf className="h-6 w-6" />
                       <span className="text-sm font-bold">
-                        {doc.case_type_name === "EXHIBITS"
+                        {doc.sub_title.toLowerCase() === "other documents"
+                          ? doc.title
+                          : doc.case_type_name === "EXHIBITS"
                           ? `Exhibit - ${doc.title}`
                           : doc.sub_title}
                       </span>
@@ -150,7 +226,13 @@ export function CaseDocumentList({ data }: IProps) {
                       variant="ghost"
                       size="icon"
                       className="text-gray-500 hover:text-gray-700"
-                      onClick={() => handleDownload(doc.id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDownload(
+                          doc?.file_path ?? "",
+                          doc.title || `document-${doc.id}`
+                        );
+                      }}
                     >
                       <Download className="h-4 w-4 text-black" />
                       <span className="sr-only">Download {doc.sub_title}</span>
