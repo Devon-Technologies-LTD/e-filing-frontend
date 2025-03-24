@@ -1,5 +1,4 @@
 import React from "react";
-import { MetricCard } from "../metric-card";
 import MagistrateDistributionBarChart from "./magistrate-distribution-chart";
 import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
@@ -10,6 +9,7 @@ import UpcomingHearing from "../upcoming-hearing";
 import { getCaseDistribution, getCaseMetric, magistrateMetric } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
 import OverViewSkeleton from "../../overview-skeleton";
+import { MetricCard } from "../metric-card";
 
 export default function MagistrateCases() {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -49,7 +49,7 @@ export default function MagistrateCases() {
             <>
               <MetricCard
                 type="magistrate"
-                metricKey="totalUsers"
+                metricKey="TOTAL_USER"
                 value="Total Magistrates"
                 metric={data?.totalUsers ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}

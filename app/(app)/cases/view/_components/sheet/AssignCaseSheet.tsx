@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { getAdminDivision } from "@/lib/actions/division";
-import { getUserManagement } from "@/lib/actions/user-management";
+import { getUserManagementFilter } from "@/lib/actions/user-management";
 import { useAppSelector } from "@/hooks/redux";
 import { LocationAdmin } from "@/components/location-admin";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -42,18 +42,17 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState("");
     const queryClient = useQueryClient();
-
     const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
     const dispatch = useDispatch();
     const { data: user } = useAppSelector((state) => state.profile);
 
     const { data: userData, isLoading: userLoading } = useQuery({
         queryKey: ["presidingM", currentPage],
-        queryFn: async () => getUserManagement({
+        queryFn: async () => getUserManagementFilter({
             page: currentPage,
             size: DEFAULT_PAGE_SIZE,
             role: "PRESIDING_MAGISTRATE",
-            court_division_id: user?.court_division_id,
+            query: searchTerm,
         }),
         staleTime: 100000,
     });
@@ -67,7 +66,6 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
         try {
             const response = await CaseAssignment({ assigned_to_id: userId }, id);
             if (response.success) {
-                // queryClient.invalidateQueries(["get_single_case_by_id"]);
                 toast.success("Case assigned successfully");
                 setIsOpen(false);
             } else {
@@ -81,11 +79,8 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     };
 
     const handleCourtSubDivisionChange = (value: string) => {
+        console.log("sub_division " + value);
         setSelectedCourtSubDivision(value);
-    };
-
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value.trim());
     };
 
     const clearFilter = () => {
@@ -118,7 +113,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                     placeholder="e.g. magistrate name"
                                     className="pl-9 border-app-secondary h10 w-full placeholder:text-gray-400"
                                     value={searchTerm}
-                                    onChange={handleSearchChange}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
                             <div className="relative w-full flex items-center">
@@ -154,7 +149,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                                         <p className="text-xs">{user.court_division ?? "-"}</p>
                                                     </div>
                                                 </div>
-                                                <p className="text-sm font-bold text-app-primary">{user.caseCount ?? "120"} Cases</p>
+                                                <p className="text-sm font-bold text-app-primary">{user.case_count ?? "0"} Cases</p>
                                             </div>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="bg-white">
