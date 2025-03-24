@@ -33,9 +33,9 @@ jobs:
 
       - name: Copy build files to the remote server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SERVER_KEY }}
+          REMOTE_USER: ${{ secrets.STAGING_SERVER_USERNAME }}
+          REMOTE_HOST: ${{ secrets.STAGING_SERVER_IP }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
