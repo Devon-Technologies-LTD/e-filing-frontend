@@ -24,8 +24,8 @@ jobs:
         run: yarn install
 
       - name: Build Next.js app
-        env: ${{ secrets.STAGING_ENV_FILE }}
         run: |
+          echo "${{ secrets.STAGING_ENV_FILE }}" > .env
           yarn build
 
       - name: Compress .next directory
