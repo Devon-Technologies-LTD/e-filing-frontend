@@ -84,9 +84,6 @@ export default function CostAssessment({
     [documents, case_type, sub_case_type]
   );
 
-    console.log("document", documents);
-    console.log("documentGroups", documentGroups);
-
   const costItems = useMemo(
     () => ({
       case_docs: documentGroups.case_docs.map((doc) => ({
@@ -166,7 +163,6 @@ export default function CostAssessment({
   }, [subtotal, additionalCharges]);
 
 
-  console.log("displayedItems", displayedItems);
   // const totalAmount = useMemo(() => {
   //   return [
   //     ...displayedItems,
