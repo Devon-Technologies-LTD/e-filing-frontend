@@ -1,73 +1,69 @@
-name: Deploy Based on Branch
+name: Deploy Next.js to Remote Server
 
 on:
   push:
     branches:
-      - staging
-      - production
+      - staging  # Replace with your branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
-      - name: Setup SSH
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+    # Install yarn
+      - name: Install yarn
+        run: |
+         npm install -g yarn
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build Next.js app
+        env: ${{ secrets.STAGING_ENV_FILE }}
+        run: |
+          yarn build
+
+      - name: Compress .next directory
+        run: tar -czf next_and_node_modules.tar.gz .next node_modules
+
+      - name: Copy build files to the remote server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         run: |
           mkdir -p ~/.ssh
-          if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-            echo "${{ secrets.STAGING_SERVER_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-          elif [ "${{ github.ref }}" == "refs/heads/production" ]; then
-            echo "${{ secrets.PROD_SERVER_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-          fi
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-      - name: Deploy Application
+          ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
+          
+          # Copy .next folder, public folder, and node_modules to the server
+          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/home/devonadmin/e-filing-frontend/"
+
+      # Step 6: SSH into the server, pull latest code, and run docker-compose
+      - name: SSH into the server, pull latest code, and run Docker Compose
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SERVER_KEY }}
+          REMOTE_USER: ${{ secrets.STAGING_SERVER_USERNAME }}
+          REMOTE_HOST: ${{ secrets.STAGING_SERVER_IP }}
         run: |
-          DEPLOY_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
-          DEPLOY_SERVER_IP=""
-          DEPLOY_SERVER_PORT=""
-          DEPLOY_SERVER_KEY=""
-          if [ "$DEPLOY_BRANCH" == "staging" ]; then
-            DEPLOY_SERVER_IP="${{ secrets.STAGING_SERVER_IP }}"
-            DEPLOY_SERVER_KEY="${{ secrets.STAGING_SERVER_KEY }}"
-            DEPLOY_SERVER_USERNAME="${{ secrets.STAGING_SERVER_USERNAME }}"
-          elif [ "$DEPLOY_BRANCH" == "production" ]; then
-            DEPLOY_SERVER_IP="${{ secrets.PROD_SERVER_IP }}"
-            DEPLOY_SERVER_PORT="${{ secrets.PROD_SERVER_PORT }}"
-            DEPLOY_SERVER_KEY="${{ secrets.PROD_SERVER_KEY }}"
-            DEPLOY_SERVER_USERNAME="${{ secrets.PROD_SERVER_USERNAME }}"
-          else
-            echo "No deployment logic for branch: $DEPLOY_BRANCH"
-            exit 0
-          fi
-           ssh -p "${DEPLOY_SERVER_PORT:-22}" "${DEPLOY_SERVER_USERNAME}@${DEPLOY_SERVER_IP}" << EOF
-            if [ "$DEPLOY_BRANCH" == "staging" ]; then
-              cd /home/devonadmin/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json yarn.lock
-              git stash
-              git checkout staging
-              git pull origin staging
-              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              yarn install || exit 1
-              yarn build || exit 1
-              sudo systemctl restart efiling-frontend.service
-              sudo systemctl status efiling-frontend.service
-              docker compose up --build -d
-              echo "Successfully deployed to Staging"
-            elif [ "$DEPLOY_BRANCH" == "production" ]; then
-              cd /home/devonadmin/e-filing-frontend
-              git stash
-              git checkout production
-              git pull origin production
-              cp ~/configs/efiling-frontend/.env ~/e-filing-frontend
-              sudo rm -rf node_modules package-lock.json
-              yarn install || exit 1
-              yarn build || exit 1
-              sudo systemctl restart efiling-frontend.service
-              sudo systemctl status efiling-frontend.service
-              #docker compose up --build -d
-              echo "Successfully deployed to Production"
-            fi
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
+
+          # SSH into the server, pull the latest code, and run docker-compose
+          ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
+            # Navigate to the project directory
+            cd /home/devonadmin/e-filing-frontend || exit
+            # Pull latest code from the repo
+            git pull origin staging || exit
+            tar -xzf next_and_node_modules.tar.gz
+            rm next_and_node_modules.tar.gz
+            docker compose up --build -d
           EOF
