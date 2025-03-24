@@ -11,6 +11,7 @@ import { Icons } from "@/components/svg/icons";
 import { Input } from "@/components/ui/input";
 import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 import { useCaseFile } from "../components/case-file-context";
+import { FilePreview } from "@/components/ui/file-preview";
 
 function CaseTypeSection({
   caseType,
@@ -81,8 +82,11 @@ function DocumentItem({ doc }: { doc: IDocumentFileType }) {
             </div>
             <Icons.lock />
           </Label>
-          <p className="uppercase mt-2 font-bold text-xs text-primary">
-            Click to view file
+          <p className="uppercase font-bold text-xs text-primary">
+            <FilePreview
+              preview={doc.file_path}
+              filename={doc.notes}
+            />
           </p>
         </div>
       </div>
