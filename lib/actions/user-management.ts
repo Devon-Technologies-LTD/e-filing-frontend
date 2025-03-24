@@ -83,10 +83,20 @@ export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendin
 export const getOversight = (params: Ipage) => fetchData(UserService.magistrateOversight, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
-export const getMagisterateBreakDown = (id: string) => fetchData(UserService.getMagisterateBreakDown, id);
+export const getMagisterateBreakDown = (id: string) => fetchData2(UserService.getMagisterateBreakDown, id);
+export const getFinanceBreakDown = (id: string) => fetchData2(UserService.getFinanceBreakDown, id);
 export const magistrateMetric = () => fetchData(UserService.magistrateMetric);
 export const getFinancialMetric = () => fetchData(UserService.getFinancialMetric);
 export const getCaseDistribution = () => fetchData(UserService.getCaseDistribution);
+export const breakdown = (type: string, id: string) => {
+    if (type === "magistrate") {
+        return fetchData2(UserService.getMagisterateBreakDown, id);
+    } else if (type === "case") {
+        return fetchData2(UserService.getCaseBreakDown, id);
+    } else if (type === "finances") {
+        return fetchData2(UserService.getFinanceBreakDown, id);
+    }
+};
 
 const handleFormAction = async (serviceMethod: Function, formData: FormData) => {
     const formDataObject = Object.fromEntries(formData.entries());

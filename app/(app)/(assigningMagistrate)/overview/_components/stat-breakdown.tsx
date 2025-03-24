@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getCaseBreakDown, getMagisterateBreakDown } from "@/lib/actions/user-management";
+import { breakdown, getCaseBreakDown, getMagisterateBreakDown } from "@/lib/actions/user-management";
 import { cn, formatNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import CountUp from "react-countup";
@@ -18,6 +18,7 @@ import { Loader2 } from "lucide-react"; // Loading icon
 interface DivisionData {
   division_name: string;
   case_count: number;
+  cost_accured: number;
 }
 
 interface StatBreakdownProps {
@@ -38,27 +39,23 @@ export function StatBreakdown({
   variant = "default",
 }: StatBreakdownProps) {
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["caseBreakdown", metricKey],
+  const { data = [], isLoading, error } = useQuery({
+    queryKey: ["CaseBreakdown", metricKey ?? "", type ?? ""],
     queryFn: async (): Promise<DivisionData[]> => {
       if (!metricKey) return [];
-      console.log("my id => " + metricKey);
-      console.log("my type => " + type);
-      if (type == "case") {
-        return await getCaseBreakDown(metricKey);
+      try {
+        const response = await breakdown(type ?? "", metricKey ?? "");
+        console.log("Fetched case breakdown:", response);
+        return response || [];
+      } catch (err) {
+        console.error("Error fetching case breakdown:", err);
+        return [];
       }
-      if (type == "magistrate") {
-        console.log(metricKey);
-        return await getMagisterateBreakDown(metricKey);
-      }
-      // if (type == "magistrate") {
-      //   return await getMagisterateBreakDown(metricKey);
-      // }
-      return [];
     },
     staleTime: 100000,
     enabled: !!metricKey,
   });
+
 
   // Debugging - check if `data` is updating
   console.log("Raw Data Before Mapping:", data);
@@ -93,7 +90,7 @@ export function StatBreakdown({
         </div>
 
         <div>
-          <AllCasesFilter />
+          {/* <AllCasesFilter /> */}
         </div>
       </div>
 
@@ -126,7 +123,7 @@ export function StatBreakdown({
                       {division.division_name}
                     </TableCell>
                     <TableCell className="font-semibold text-sm py-5 text-right">
-                      {formatNumber(division.case_count)}
+                      {formatNumber(division.case_count ?? division.cost_accured)}
                     </TableCell>
                   </TableRow>
                 ))

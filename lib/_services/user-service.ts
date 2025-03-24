@@ -37,6 +37,25 @@ export interface Ipage {
   year?: string,
 }
 
+
+interface IPage {
+  page: number;
+  size: number;
+  role?: string;
+  search?: string;
+  court_division_id?: string;
+  court_type?: string;
+  end_date?: string;
+  start_date?: string;
+  invited_by?: string;
+  query?: string;
+  status?: string;
+  sub_division?: string;
+  user_id?: string;
+  year?: string;
+}
+
+
 const UserService = {
   async getAllUser(): Promise<any> {
     const response = await axiosInstance.get(`admin/user`);
@@ -70,6 +89,10 @@ const UserService = {
     const response = await axiosInstance.get(`admin/analyitcs/magistrate-breakdown/${id}`);
     return response.data;
   },
+  async getFinanceBreakDown(id: string): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/financial-breakdown/${id}`);
+    return response.data;
+  },
   async magistrateMetric(): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/magistrate-metrics`);
     return response.data;
@@ -96,26 +119,15 @@ const UserService = {
     return response.data;
   },
 
-  async getUserManagementFilter(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user/user-filter`, {
-      params: {
-        page: params.page,
-        limit: params.size,
-        role: params.role,
-        search: params.search,
-        court_division_id: params.court_division_id,
-        court_type: params.court_type,
-        end_date: params.end_date,
-        start_date: params.start_date,
-        invited_by: params.invited_by,
-        query: params.query,
-        status: params.status,
-        sub_division: params.sub_division,
-        user_id: params.user_id,
-        year: params.year,
-      },
-    });
-    return response.data;
+  // async const getUserManagementFilter = async (params: IPage): Promise<any> => {
+  async getUserManagementFilter(params: IPage): Promise<any> {
+    try {
+      const response = await axiosInstance.post("/admin/user/user-filter", params);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user management filter:", error);
+      throw error;
+    }
   },
 
 

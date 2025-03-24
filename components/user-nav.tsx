@@ -80,12 +80,14 @@ export function UserNav() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuGroup className="space-y-3 p-4">
-            <DropdownMenuItem asChild>
-              <span className="flex gap-3">
-                <Icons.Court />
-                <p className="text-sm uppercase text-app-primary font-semibold">{user?.court_type}</p>
-              </span>
-            </DropdownMenuItem>
+            {user?.court_type != "" || user?.court_type != null && (
+              <DropdownMenuItem asChild>
+                <span className="flex gap-3">
+                  <Icons.Court />
+                  <p className="text-sm uppercase text-app-primary font-semibold">{user?.court_type}</p>
+                </span>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link

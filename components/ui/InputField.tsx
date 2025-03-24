@@ -88,16 +88,17 @@ const InputField: React.FC<InputFieldProps> = ({
         <Label
           htmlFor={id}
           className={clsx(
-            "flex items-center justify-between w-full text-sm font-bold",
+            "flex items-center justify-between w-full text-xs font-bold",
             error ? "text-red-500" : "text-neutral-600"
           )}
         >
           <span className="flex items-center">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className="text-red-500 ml-1 text-lg">*</span>}
           </span>
+
           {showErrorInLabel && error && (
-            <p className="text-xs text-red-500 mt-1">{error}</p>
+            <p className="text-lg text-red-500 mt-1">{error}</p>
           )}
         </Label>
       </div>
@@ -117,7 +118,7 @@ const InputField: React.FC<InputFieldProps> = ({
           autoComplete="off"
           autoFocus={autoFocus}
           className={clsx(
-            "w-full p-2 m border-0 border-b-[1px] placeholder:text-lg text-lg placeholder:font-semibold placeholder:text-zinc-400 shadow-none focus:outline-none focus:border-b-2  border-app-secondary",
+            "w-full p-2 m border-0 border-b-[1px] placeholder:text-md text-lg placeholder:font-semibold placeholder:text-zinc-400 shadow-none focus:outline-none focus:border-b-2  border-app-secondary",
             error
               ? "border-red-500 focus:border-red-500"
               : "border-neutral-200 ",

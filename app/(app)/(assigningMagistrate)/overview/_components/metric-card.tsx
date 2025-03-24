@@ -27,9 +27,7 @@ export const MetricCard: React.FC<{
     reassigned: "bg-red-50",
     concluded: "bg-purple-50",
   };
-
   const [open, setOpen] = useState(false);
-
   return (
     <>
       <div className="space-y-4 pb-4 my-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
@@ -56,7 +54,6 @@ export const MetricCard: React.FC<{
             </p>
           </span>
         </div>
-
         {rightModal ? (
           <Link href="/cases/under-review">
             <div className="flex items-center space-x-2 cursor-pointer px-4 sm:px-3 py-2 sm:py-1">
@@ -79,8 +76,7 @@ export const MetricCard: React.FC<{
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="right"
-          className="bg-white w-full max-w-[90vw] md:w-[500px] md:!w-[613px] min-w-[300px] !max-w-none"
-        >
+          className="bg-white w-full max-w-[90vw] md:w-[500px] md:!w-[613px] min-w-[300px] !max-w-none">
           <StatBreakdown
             type={type}
             metricKey={metricKey}
