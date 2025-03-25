@@ -32,11 +32,12 @@ export default function Registerars() {
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: ["central-registeral", currentPage, searchTerm],
     queryFn: async () => {
-      return await getUserManagement({
+      return await getUserManagementFilter({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         role: "CENTRAL_REGISTRAR",
         query: searchTerm,
+        invited_by: user?.id,
       });
     },
     staleTime: 100000, // Move this inside the object correctly
