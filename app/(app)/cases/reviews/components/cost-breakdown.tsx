@@ -1,4 +1,11 @@
-import { CaseTypeData, CivilCaseSubType, DEFAULT_SEAL_FEE } from "@/constants";
+import {
+  CaseTypeData,
+  CriminalCaseSubType,
+  CriminalDocumentTitles,
+  DEFAULT_CHARGES_PERCENTAGE,
+  DEFAULT_EXHIBIT_FEE,
+  DEFAULT_SEAL_FEE,
+} from "@/constants";
 import { IDataProps } from "./side-nav";
 import { useMemo } from "react";
 import { getTitleByRecoveryAmount } from "@/lib/utils";
@@ -25,52 +32,84 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       : null;
     return item ? Number(item.fee) : 0;
   };
-  const filteredCriminalDocuments = documents?.filter(
-    (doc) => doc.case_type_name === CaseTypeData.CRIMINAL_CASE
-  );
-  const filteredCivilDocuments = documents?.filter(
-    (doc) => doc.case_type_name === CaseTypeData.CIVIL_CASE
-  );
-  const filteredFamilyDocuments = documents?.filter(
-    (doc) => doc.case_type_name === CaseTypeData.FAMILY_CASE
+  const documentGroups = useMemo(
+    () => ({
+      case_docs:
+        documents?.filter(
+          (doc) =>
+            doc.case_type_name.toLowerCase() === case_type_name.toLowerCase() &&
+            doc.sub_title.toLowerCase() === sub_case_type_name.toLowerCase()
+        ) || [],
+      other_documents:
+        documents?.filter(
+          (doc) =>
+            doc.case_type_name.toLowerCase() === case_type_name.toLowerCase() &&
+            doc.sub_title.toLowerCase() === "other documents"
+        ) || [],
+      exhibits:
+        documents?.filter(
+          (doc) => doc.case_type_name.toLowerCase() === "exhibits"
+        ) || [],
+    }),
+    [documents, case_type_name, sub_case_type_name]
   );
 
-  const filteredExhibitsDocuments = documents?.filter(
-    (doc) => doc.case_type_name === "EXHIBITS"
+  const costItems = useMemo(
+    () => ({
+      case_docs: documentGroups.case_docs.map((doc) => ({
+        category: doc.case_type_name,
+        name: doc.title,
+        amount: doc.amount,
+      })),
+      other_documents: documentGroups.other_documents.map((doc) => ({
+        category: doc.case_type_name,
+        name: doc.title,
+        amount: doc.amount,
+      })),
+      exhibits: documentGroups.exhibits.map((doc) => ({
+        category: doc.case_type_name,
+        name: doc.title,
+        amount: DEFAULT_EXHIBIT_FEE,
+      })),
+    }),
+    [documentGroups, data]
   );
-  const costCriminalItems = filteredCriminalDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: doc.amount,
-  }));
-  const costCivilItems = filteredCivilDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: doc.amount,
-  }));
-  const costFamilyItems = filteredFamilyDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: doc.amount,
-  }));
-  const costExhibitsItems = filteredExhibitsDocuments?.map((doc) => ({
-    category: doc.case_type_name,
-    name: doc.title,
-    amount: doc.amount,
-  }));
+
+  // const displayedItems = useMemo(() => {
+  //   let items =
+  //     case_type_name === CaseTypeData.CRIMINAL_CASE
+  //       ? costCriminalItems
+  //       : case_type_name === CaseTypeData.CIVIL_CASE
+  //       ? costCivilItems
+  //       : [];
+
+  //   if (case_type_name === CaseTypeData.CIVIL_CASE && recovery_amount) {
+  //     const recoveryTitle = getTitleByRecoveryAmount({
+  //       recoveryAmount: recovery_amount as any,
+  //       type: sub_case_type_name as CivilCaseSubType,
+  //     });
+  //     items = [
+  //       ...items,
+  //       {
+  //         name: recoveryTitle,
+  //         category: CaseTypeData.CIVIL_CASE,
+  //         amount: getFeeByTitle(recoveryTitle),
+  //       },
+  //     ];
+  //   }
+  //   return items;
+  // }, [case_type_name, recovery_amount, sub_case_type_name]);
 
   const displayedItems = useMemo(() => {
-    let items =
-      case_type_name === CaseTypeData.CRIMINAL_CASE
-        ? costCriminalItems
-        : case_type_name === CaseTypeData.CIVIL_CASE
-        ? costCivilItems
-        : [];
+    let items = [
+      ...(costItems.case_docs || []),
+      ...(costItems.other_documents || []),
+    ];
 
     if (case_type_name === CaseTypeData.CIVIL_CASE && recovery_amount) {
       const recoveryTitle = getTitleByRecoveryAmount({
         recoveryAmount: recovery_amount as any,
-        type: sub_case_type_name as CivilCaseSubType,
+        type: sub_case_type_name as any,
       });
       items = [
         ...items,
@@ -81,16 +120,37 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
         },
       ];
     }
+    if (
+      case_type_name === CaseTypeData.CRIMINAL_CASE &&
+      sub_case_type_name === CriminalCaseSubType.DIRECT_COMPLAIN
+    ) {
+      items = [
+        ...items,
+        {
+          name: CriminalCaseSubType.DIRECT_COMPLAIN.toLowerCase(),
+          category: CaseTypeData.CRIMINAL_CASE,
+          amount: getFeeByTitle(CriminalDocumentTitles.DIRECT_COMPLAIN),
+        },
+      ];
+    }
     return items;
-  }, [case_type_name, recovery_amount, sub_case_type_name]);
+  }, [case_type_name, costItems, recovery_amount, sub_case_type_name]);
 
-  const totalAmount = useMemo(() => {
+  const subtotal = useMemo(() => {
     return [
       ...displayedItems,
-      ...costExhibitsItems,
+      ...costItems.exhibits,
       { amount: DEFAULT_SEAL_FEE },
     ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
-  }, [displayedItems]);
+  }, [displayedItems, costItems]);
+
+  const additionalCharges = useMemo(() => {
+    return subtotal * (DEFAULT_CHARGES_PERCENTAGE / 100);
+  }, [subtotal]);
+
+  const totalAmount = useMemo(() => {
+    return subtotal + additionalCharges;
+  }, [subtotal, additionalCharges]);
 
   return (
     <div className="w-full max-w-2xl">
@@ -104,101 +164,28 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       </div>
       <div className="space-y-3">
         <div className="text-sm font-semibold">{case_type_name}</div>
-        <div>
-          {filteredCriminalDocuments?.length > 0 && (
-            <>
-              {case_type_name === CaseTypeData.CRIMINAL_CASE && (
-                <div className="space-y-1">
-                  <div className="bg-zinc-100 py-1.5 w-full flex justify-between text-xs font-semibold">
-                    <span className="text-xs font-extrabold text-black">
-                      UPLOADED DOCUMENTS
-                    </span>
-                    <span className="font-semibold">Amount </span>
-                  </div>
-                  {costCriminalItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center text-sm"
-                    >
-                      <span className="text-xs font-medium">{item.name}</span>
-                      <span className="text-base font-medium">
-                        {formatAmount(item?.amount ?? 0)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-
-          {filteredCivilDocuments?.length > 0 && (
-            <>
-              {case_type_name === CaseTypeData.CIVIL_CASE && (
-                <div className="space-y-1">
-                  <div className="bg-zinc-100 py-1.5 w-full flex justify-between text-xs font-semibold">
-                    <span className="text-xs font-extrabold text-black">
-                      UPLOADED DOCUMENTS
-                    </span>
-                    <span className="font-semibold">Amount </span>
-                  </div>
-                  {costCivilItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center text-sm"
-                    >
-                      <span className="text-xs font-medium">{item.name}</span>
-                      <span className="text-base font-medium">
-                        {formatAmount(item?.amount ?? 0)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-          {filteredFamilyDocuments?.length > 0 && (
-            <>
-              {case_type_name === CaseTypeData.FAMILY_CASE && (
-                <div className="space-y-1">
-                  <div className="bg-zinc-100 py-1.5 w-full flex justify-between text-xs font-semibold">
-                    <span className="text-xs font-extrabold text-black">
-                      UPLOADED DOCUMENTS
-                    </span>
-                    <span className="font-semibold">Amount </span>
-                  </div>
-                  {costFamilyItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center text-sm"
-                    >
-                      <span className="text-xs font-medium">{item.name}</span>
-                      <span className="text-base font-medium">
-                        {formatAmount(item?.amount ?? 0)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </div>
-        {filteredExhibitsDocuments?.length > 0 && (
+        {displayedItems.map((item, index) => (
+          <div
+            key={index}
+            className="flex gap-1 justify-between items-start text-sm"
+          >
+            <span className="text-sm font-medium capitalize">{item.name}</span>
+            <span className="text-base font-medium">
+              {formatAmount(item.amount!)}
+            </span>
+          </div>
+        ))}
+        {costItems.exhibits.length > 0 && (
           <div className="space-y-1">
-            <div className="bg-zinc-100 py-1.5 w-full flex justify-between text-xs font-semibold">
-              {" "}
-              <span className="text-xs font-extrabold text-black">
-                SUBMITTED EXHIBITS{" "}
-              </span>
-              <span className="font-semibold">Amount </span>
-            </div>
-            {costExhibitsItems?.map((item, index) => (
+            <p className="text-primary text-xs font-semibold">Exhibits</p>
+            {costItems.exhibits.map((item, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center text-sm"
+                className="flex gap-1 justify-between items-center text-sm"
               >
-                <span className="text-xs font-medium">{item.name}</span>
+                <span className="text-xs">{item.name}</span>
                 <span className="text-base font-medium">
-                  {formatAmount(item?.amount ?? 0)}
+                  ₦{formatAmount(item.amount)}
                 </span>
               </div>
             ))}
@@ -209,6 +196,14 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
           <span className="font-extrabold text-xs">Seal Generation</span>
           <span className="text-base font-medium">
             {formatAmount(DEFAULT_SEAL_FEE)}
+          </span>
+        </div>
+        <div className="flex justify-between items-center text-sm">
+          <p className="text-primary text-xs font-semibold">
+            Additional Charges (10%)
+          </p>
+          <span className="text-base font-medium">
+            {formatAmount(additionalCharges)}
           </span>
         </div>
 

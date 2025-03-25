@@ -4,6 +4,7 @@ const nextConfig = {
     NEXT_BASE_URL: process.env.NEXT_BASE_URL,
   },
   images: {
+    domains: ["api.efiling.staging.devontech.io"],
     remotePatterns: [
       {
         protocol: "https",
