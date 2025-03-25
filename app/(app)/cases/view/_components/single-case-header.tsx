@@ -45,7 +45,7 @@ export function SingleCaseHeader({
     navigate.push(`${params?.id}/refile-documents`);
   };
   console.log(data?.status);
-
+  console.log(data?.assigned_to);
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
@@ -75,8 +75,12 @@ export function SingleCaseHeader({
             {/* Magistrates Buttons */}
             {userRole === ROLES.ASSIGNING_MAGISTRATE && (
               <div className="flex gap-2">
-                <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs" >ASSIGN CASE</Button>} />
-                {/* <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs" >RE-ASSIGN CASE</Button>} />
+                {data?.assigned_to == user?.id ? (
+                  <AssignCaseSheet id={id} status="RE-ASSIGN" trigger={<Button variant="outline" className="text-xs">RE-ASSIGN CASE</Button>} />
+                ) : (
+                  <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs">ASSIGN CASE</Button>} />
+                )}
+                {/*
                 <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/>
                 <Button variant="outline" className="text-xs"  >REVIEW REQUEST</Button> */}
               </div>
@@ -96,7 +100,7 @@ export function SingleCaseHeader({
                 }
               />
             )}
-            <CaseActionDropdown user={user} id={id} />
+            <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
                 <QrCode className="h-10 w-10 text-gray-400" />

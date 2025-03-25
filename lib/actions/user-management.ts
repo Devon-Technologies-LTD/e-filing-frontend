@@ -81,6 +81,7 @@ export const getUserManagementFilter = (params: Ipage) => fetchData(UserService.
 export const getAllUser = () => fetchData(UserService.getAllUser);
 export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendingUsers, params);
 export const getOversight = (params: Ipage) => fetchData(UserService.magistrateOversight, params);
+export const getPerformance = (params: Ipage) => fetchData(UserService.getPerformance, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
 export const getMagisterateBreakDown = (id: string) => fetchData2(UserService.getMagisterateBreakDown, id);

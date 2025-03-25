@@ -43,25 +43,39 @@ const LawyerComponent = () => {
   }, [state]);
   return (
     <div className="flex flex-col md:flex-row w-full h-full md:space-y-0 md:space-x-6">
-      <form
-        id="lawyer-form"
-        onSubmit={handleSubmit}
-        className="md:w-2/3 space-y-10"
-      >
+      <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10"  autoComplete="off">
         <input type="hidden" name="role" value="LAWYER" />
-        <input type="hidden" name="first_name" value="first_user" />
-        <input type="hidden" name="last_name" value="last_user" />
         <input type="hidden" name="gender" value="male" />
         <div
           className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
-          style={{ height: "calc(100vh - 300px)" }}
-        >
+          style={{ height: "calc(100vh - 300px)" }}>
           <div>
             <p className="font-bold text-sm text-neutral-500">
               Fields marked with an asterisk (*) are required.
             </p>
-
             <br />
+            <InputField
+              id="first"
+              type="text"
+              label="First Name"
+              name="first_name"
+              placeholder="John"
+              required
+              error={errors.first_name?.[0]}
+            />
+          </div>
+          <div>
+            <InputField
+              id="lastName"
+              type="text"
+              label="Last Name"
+              name="last_name"
+              placeholder="Doe"
+              required
+              error={errors.last_name?.[0]}
+            />
+          </div>
+          <div>
             <InputField
               id="email"
               type="email"
@@ -70,6 +84,9 @@ const LawyerComponent = () => {
               placeholder="name@gmail.com"
               required
               error={errors.email?.[0]}
+              onChange={(e) => {
+                e.target.value = e.target.value.replace(/\s/g, ''); // Remove spaces
+            }}
             />
           </div>
           <div className="space-y-6">
@@ -108,8 +125,8 @@ const LawyerComponent = () => {
               required
               error={errors.phone_number?.[0]}
             />
-            <LoginPasswordField error={errors.password?.[0]} showStrength={true} label="PASSWORD" name="password" placeholder="Enter Password" />
-            <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
+            <LoginPasswordField error={errors.password?.[0]} showStrength={true} label="PASSWORD" name="password" placeholder="********" />
+            <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="********" />
 
           </div>
         </div>

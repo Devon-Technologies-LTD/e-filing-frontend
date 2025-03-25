@@ -71,6 +71,7 @@ export interface IDraftFilter {
   assignee_id?: string | null;
   page?: number;
   size?: number;
+  isHearing?: boolean;
 }
 export interface IChangeStatus {
   status: CaseStatus;

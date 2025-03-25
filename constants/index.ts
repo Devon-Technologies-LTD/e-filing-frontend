@@ -20,6 +20,7 @@ export enum CaseStatus {
   UnderReview = "under review",
   Denied = "denied",
   Assigned = "assigned",
+  Hearing = "IsHearing",
   ActionRequired = "action required",
 }
 

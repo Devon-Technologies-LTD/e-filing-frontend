@@ -19,7 +19,7 @@ export default function FilteredCases() {
   };
   const PageComponent = getColumns();
   return (
-    <div className="bg-white p-6 space-y-6">
+    <div className="bg-white space-y-6">
       <PageComponent />
     </div>
   );

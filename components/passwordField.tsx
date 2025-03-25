@@ -57,13 +57,13 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
 
       <div className="grid grid-cols-1 grid-rows-0 place-items-center relative">
         <Input
-          className={clsx(
-            "col-span-full  placeholder:text-md text-lg placeholder:font-semibold placeholder:text-zinc-500 text-md border-0 border-app-secondary row-span-full bg-transparent border-none border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer",
+          className={clsx("col-span-full text-2xl focus:text-2xl leading-relaxed font-sans border-0 border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer  placeholder:text-md placeholder:font-semibold placeholder:text-zinc-500 text-md border-app-secondary row-span-full bg-transparent border-none peer",
             error ? "border-red-500 focus:border-red-500" : "border-neutral-200"
           )}
           name={name}
           type={showPassword ? "text" : "password"}
           id={id}
+          autoComplete="off"
           placeholder={placeholder}
           value={password}
           onChange={(e) => {

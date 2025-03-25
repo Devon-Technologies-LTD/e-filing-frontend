@@ -24,7 +24,7 @@ export default function CaseFilingLayout({
   return (
     <>
       <FormProvider>
-        <header className="w-[1512px] bg-white shadow-sm px-2 py-6 container">
+        <header className="bg-white shadow-sm px-2 py-6">
           <div className="flex items-center justify-between mx-8">
             <div className="flex items-center space-x-4">
               <LogoIcon className="h-8 w-8" />
