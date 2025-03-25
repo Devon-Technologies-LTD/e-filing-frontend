@@ -304,7 +304,7 @@ export const getStatusByTab2 = (tab: TCaseFilterType) => {
         CaseStatus.ToBeAssigned,
       ];
     case "active":
-      return [];
+      return [CaseStatus.Approved, CaseStatus.Assigned];
     case "assigned":
       return [CaseStatus.Assigned];
     case "submitted":

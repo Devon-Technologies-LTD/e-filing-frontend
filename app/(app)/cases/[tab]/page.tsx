@@ -20,7 +20,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { Search } from "lucide-react";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
-import { CASE_TYPES, CaseTypes } from "@/types/files/case-type";
+import { CASE_TYPES, CASE_TYPES2, CaseTypes } from "@/types/files/case-type";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 
@@ -54,26 +54,66 @@ export default function FilteredCases() {
     setIsOpen(false); // Close popover
   };
 
-  const caseFilter = useMemo(() => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES],[]);
+  const caseFilter = useMemo(() => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2], []);
 
-  const { data,  isLoading: draftsLoading , refetch } = useQuery({
-    queryKey: ["get_cases", tab, currentPage, selectedCase, selectedYear, formattedStartDate, formattedEndDate, user?.role],
-    queryFn: () =>
-      getCaseFiles({
-        page: currentPage,
-        size: DEFAULT_PAGE_SIZE,
-        status: getStatusByTab2(tab),
-        casetype: selectedCase === "all" ? null : selectedCase,
-        role: user?.role,
-        year: selectedYear === "All Year" ? "" : selectedYear,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-        isHearing: (tab == "case") ? true : false,
-        assignee_id: user?.id,
-      }),
+
+  let status = {
+    page: currentPage,
+    size: DEFAULT_PAGE_SIZE,
+    status: getStatusByTab2(tab),
+    casetype: selectedCase === "all" ? null : selectedCase,
+    role: user?.role,
+    year: selectedYear === "All Year" ? "" : selectedYear,
+    start_date: formattedStartDate,
+    end_date: formattedEndDate,
+    assignee_id: user?.id,
+  };
+
+  switch (user?.role) {
+    case ROLES.CHIEF_JUDGE:
+    case ROLES.DIRECTOR_MAGISTRATE:
+      break;
+    case ROLES.ASSIGNING_MAGISTRATE:
+    case ROLES.PRESIDING_MAGISTRATE:
+      status = { ...status, };
+      break;
+    default:
+      status = { ...status, assignee_id: "" };
+  }
+
+  const { data, isLoading: draftsLoading, refetch } = useQuery({
+    queryKey: [
+      "get_cases",
+      tab,
+      currentPage,
+      selectedCase,
+      selectedYear,
+      formattedStartDate,
+      formattedEndDate,
+      user?.role
+    ],
+    queryFn: () => getCaseFiles(status),
     staleTime: 50000,
     refetchInterval: 10000,
   });
+
+  // const { data, isLoading: draftsLoading, refetch } = useQuery({
+  //   queryKey: ["get_cases", tab, currentPage, selectedCase, selectedYear, formattedStartDate, formattedEndDate, user?.role],
+  //   queryFn: () =>
+  //     getCaseFiles({
+  //       page: currentPage,
+  //       size: DEFAULT_PAGE_SIZE,
+  //       status: getStatusByTab2(tab),
+  //       casetype: selectedCase === "all" ? null : selectedCase,
+  //       role: user?.role,
+  //       year: selectedYear === "All Year" ? "" : selectedYear,
+  //       start_date: formattedStartDate,
+  //       end_date: formattedEndDate,
+  //       isHearing: (tab == "case") ? true : false,
+  //     }),
+  //   staleTime: 50000,
+  //   refetchInterval: 10000,
+  // });
 
   const getColumns = useMemo(() => {
     switch (tab) {
