@@ -60,7 +60,6 @@ export default function LayoutPage({
           />
         </div>
       </header>
-      {/* <div className="container py-3 overflow-y-auto h-[calc(100dvh - 150px)]"> */}
       <div className="flex-1 container py-4 overflow-auto">
         {children}
       </div>
