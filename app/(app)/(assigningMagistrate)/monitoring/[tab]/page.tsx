@@ -32,9 +32,8 @@ export default function FilteredCases() {
     queryFn: async () =>
       await getCaseFiles({
         page: currentPage,
-        casetype:"FAMILY",
         size: DEFAULT_PAGE_SIZE,
-        // casetype: selectedCase === "all" ? null : selectedCase,
+        casetype: selectedCase === "all" ? null : selectedCase,
         status: getStatusByTab(tab),
       }),
     staleTime: 50000,

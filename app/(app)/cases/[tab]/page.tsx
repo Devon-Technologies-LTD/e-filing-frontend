@@ -67,6 +67,7 @@ export default function FilteredCases() {
     start_date: formattedStartDate,
     end_date: formattedEndDate,
     assignee_id: user?.id,
+    is_hearing: false,
   };
 
   switch (user?.role) {
@@ -75,7 +76,7 @@ export default function FilteredCases() {
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
     case ROLES.PRESIDING_MAGISTRATE:
-      status = { ...status, };
+      status = { ...status, is_hearing: true, status : [] };
       break;
     default:
       status = { ...status, assignee_id: "" };
