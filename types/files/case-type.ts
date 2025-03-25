@@ -23,6 +23,10 @@ export const CASE_TYPES: CaseOption[] = [
   { value: "CIVIL CASE", label: "CIVIL CASE" },
   { value: "FAMILY CASE", label: "FAMILY CASE" },
 ];
+export const CASE_TYPES2: CaseOption[] = [
+  { value: "CRIMINAL CASE", label: "CRIMINAL CASE" },
+  { value: "CIVIL CASE", label: "CIVIL CASE" },
+];
 export const COURT_TYPE: CaseOption[] = [
   { value: "Magistrate Court", label: "MAGISTRATE COURT" },
   { value: "Family Court", label: "FAMILY COURT" },
