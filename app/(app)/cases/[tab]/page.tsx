@@ -68,7 +68,8 @@ export default function FilteredCases() {
         year: selectedYear === "All Year" ? "" : selectedYear,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
-        isHearing: (tab == "case") ? true : false
+        isHearing: (tab == "case") ? true : false,
+        assignee_id: user?.id,
       }),
     staleTime: 50000,
     refetchInterval: 10000,
