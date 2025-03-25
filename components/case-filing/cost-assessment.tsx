@@ -99,7 +99,7 @@ export default function CostAssessment({
       exhibits: documentGroups.exhibits.map((doc) => ({
         category: doc.case_type_name,
         name: doc.title,
-        amount: DEFAULT_EXHIBIT_FEE,
+        amount: doc.amount,
       })),
     }),
     [documentGroups, data]
