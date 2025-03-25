@@ -35,6 +35,10 @@ export default function MagistratesTable() {
 
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
+      // case ROLES.CHIEF_JUDGE:
+      //   return "DIRECTOR_MAGISTRATE";
+      // case ROLES.DIRECTOR_MAGISTRATE:
+      //   return "ASSIGNING_MAGISTRATE";
       case ROLES.ASSIGNING_MAGISTRATE:
         return "PRESIDING_MAGISTRATE";
       default:
@@ -55,7 +59,6 @@ export default function MagistratesTable() {
     staleTime: 50000,
   });
 
-
   useEffect(() => {
     if (data?.total_rows !== undefined) {
       setTotalMagistrates(data.total_rows);
@@ -65,7 +68,7 @@ export default function MagistratesTable() {
   const columns = useMemo(() => createUserColumns(user?.role!, "all"), [user?.role]);
   return (
     <div className="bg-white h-screen overflow-hidden flex flex-col space-y-4">
-      <div className="flex items-center justify-between p-4">
+      <div className="flex items-center justify-between ">
         <div className="relative w-full max-w-lg">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
           <Input
@@ -79,14 +82,17 @@ export default function MagistratesTable() {
           />
         </div>
         <div className="flex gap-3">
-          <FilterDropdown
-            triggerVariant="outline"
-            itemVariant="outline"
-            placeholder="SELECT COURT TYPE"
-            options={courtFilterOptions}
-            value={selectedCourt}
-            onChange={handleCourtTypeChange}
-          />
+          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+            <FilterDropdown
+              triggerVariant="outline"
+              itemVariant="outline"
+              placeholder="SELECT COURT TYPE"
+              options={courtFilterOptions}
+              value={selectedCourt}
+              onChange={handleCourtTypeChange}
+            />
+          )}
+
           <Select>
             <SelectTrigger variant="outline" className="h-11">
               <SelectValue placeholder="All Status" />

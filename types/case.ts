@@ -13,6 +13,7 @@ export type TCaseFilterType =
   | "unassigned"
   | "concluded"
   | "performing"
+  | "IsHearing"
   | "request"
   | "submitted";
 export type MCaseFilterType = "case" | "magistrate" | "financial";

@@ -15,7 +15,7 @@ import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/case-file";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
-import { getStatusByTab } from "@/lib/utils";
+import { getStatusByTab, getStatusByTab2 } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { Search } from "lucide-react";
@@ -54,10 +54,7 @@ export default function FilteredCases() {
     setIsOpen(false); // Close popover
   };
 
-  const caseFilter = useMemo(
-    () => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES],
-    []
-  );
+  const caseFilter = useMemo(() => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES],[]);
 
   const { data,  isLoading: draftsLoading , refetch } = useQuery({
     queryKey: ["get_cases", tab, currentPage, selectedCase, selectedYear, formattedStartDate, formattedEndDate, user?.role],
@@ -65,12 +62,13 @@ export default function FilteredCases() {
       getCaseFiles({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
-        status: getStatusByTab(tab),
+        status: getStatusByTab2(tab),
         casetype: selectedCase === "all" ? null : selectedCase,
         role: user?.role,
         year: selectedYear === "All Year" ? "" : selectedYear,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
+        isHearing: (tab == "case") ? true : false
       }),
     staleTime: 50000,
     refetchInterval: 10000,

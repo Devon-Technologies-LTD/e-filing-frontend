@@ -77,6 +77,21 @@ const UserService = {
     );
     return response.data;
   },
+  async getPerformance(params: Ipage): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/magistrate-performance`,
+      {
+        params: {
+          page: params.page ?? 1,
+          limit: params.size ?? 10,
+          division_id: params.division_id,
+          search: params.search,
+          usertype: params.usertype,
+          casetype: params.casetype,
+        },
+      },
+    );
+    return response.data;
+  },
   async caseMetric(): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/case-metrics`);
     return response.data;

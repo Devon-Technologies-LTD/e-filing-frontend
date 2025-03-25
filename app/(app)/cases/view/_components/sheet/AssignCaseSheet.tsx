@@ -38,6 +38,7 @@ import {
 const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id: string, status: string }) => {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState("");
@@ -67,7 +68,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
             const response = await CaseAssignment({ assigned_to_id: userId }, id);
             if (response.success) {
                 toast.success("Case assigned successfully");
-                setIsOpen(false);
+                setIsOpen2(false);
             } else {
                 toast.error(response.data.message);
             }
@@ -97,7 +98,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     };
 
     return (
-        <Sheet>
+        <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger disabled={status === "ASSIGNED"}
                 className={`bg-white  ${status === "ASSIGNED" ? "bg-gray-200 cursor-none border border-gray-100" : "bg-white border-black"}`}
             >{trigger}</SheetTrigger>
@@ -111,7 +112,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                 <Input
                                     type="search"
                                     placeholder="e.g. magistrate name"
-                                    className="pl-9 border-app-secondary h10 w-full placeholder:text-gray-400"
+                                    className="pl-9 border-app-secondary border-0  h10 w-full placeholder:text-gray-400"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -129,7 +130,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                 )}
                             </div>
                         </div>
-                        <ScrollArea className="h-[600px] w-full p-4">
+                        <ScrollArea className="h-[600px] w-full ">
                             {userLoading ? (
                                 <p>Loading...</p>
                             ) : filteredUsers?.length ? (

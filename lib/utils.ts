@@ -159,12 +159,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-      .getHours()
-      .toString()
-      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-      .getSeconds()
-      .toString()
-      .padStart(2, "0")}`,
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+          .getSeconds()
+          .toString()
+          .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -263,6 +263,48 @@ export const getStatusByTab = (tab: TCaseFilterType) => {
       ];
     case "active":
       return [CaseStatus.Approved, CaseStatus.Assigned];
+    case "assigned":
+      return [CaseStatus.Assigned];
+    case "submitted":
+      return [CaseStatus.Assigned];
+    case "under-review":
+      return [CaseStatus.UnderReview];
+    case "approved-review":
+      return [CaseStatus.Approved];
+    case "denied-review":
+      return [CaseStatus.Denied];
+    case "unassigned":
+      return [CaseStatus.UnderReview, CaseStatus.ToBeAssigned];
+    case "concluded":
+      return [CaseStatus.JudgementDelivered];
+    default:
+      return [
+        CaseStatus.Approved,
+        CaseStatus.Assigned,
+        CaseStatus.Denied,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.Pending,
+        CaseStatus.StruckOut,
+        CaseStatus.ToBeAssigned,
+        CaseStatus.UnderReview,
+      ];
+  }
+};
+export const getStatusByTab2 = (tab: TCaseFilterType) => {
+  switch (tab) {
+    case "pending":
+      return [CaseStatus.Pending, CaseStatus.UnderReview];
+    case "case":
+      return [];
+    case "recent":
+      return [
+        CaseStatus.UnderReview,
+        CaseStatus.Assigned,
+        CaseStatus.Approved,
+        CaseStatus.ToBeAssigned,
+      ];
+    case "active":
+      return [];
     case "assigned":
       return [CaseStatus.Assigned];
     case "submitted":

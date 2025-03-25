@@ -16,11 +16,12 @@ import StruckSheet from "./sheet/StruckSheet";
 import HearingSheet from "./sheet/HearingSheet";
 
 interface CaseActionDropdownProps {
-    user: any;
+    user: any,
+    data: any,
     id: string,
 }
 
-const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => {
+const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data }) => {
     const userRole = user?.role;
     if (
         ![ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(userRole!)
@@ -35,7 +36,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        {/* {(userRole === ROLES.PRESIDING_MAGISTRATE) && ( */}
+                        {data?.assigned_to == user?.id && (
                             <>
                                 <ScheduleSheet id={id}
                                     trigger={
@@ -54,13 +55,13 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id }) => 
                                 <StruckSheet id={id}
                                     trigger={
                                         <DropdownMenuLabel className="w-full text-left">
-                                            STRUCK OUT
+                                            STRICK OUT
                                         </DropdownMenuLabel>
                                     }
                                 />
                             </>
+                        )}
                         {/* )} */}
-
                         <HearingSheet
                             id={id}
                             trigger={

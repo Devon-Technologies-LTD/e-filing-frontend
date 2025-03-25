@@ -50,6 +50,7 @@ export default function AllMagistrates() {
     ...COURT_TYPE,
   ];
 
+
   const columns = useMemo(
     () => createUserColumns(user?.role!, "all"),
     [user?.role]
@@ -59,11 +60,11 @@ export default function AllMagistrates() {
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: ["userManagement", currentPage, selectedCourt, searchTerm], // ✅ Now React Query tracks changes
     queryFn: async () => {
-      return await getUserManagement({
+      return await getUserManagementFilter({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
-        court_type: selectedCourt,
+        invited_by: user?.id,
       });
     },
     staleTime: 100000,
@@ -79,7 +80,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
                 triggerVariant="outline"

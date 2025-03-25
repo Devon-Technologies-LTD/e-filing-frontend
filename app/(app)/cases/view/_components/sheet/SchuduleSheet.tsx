@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format, parse, isToday, isAfter, setHours, setMinutes } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,7 +13,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
-import { parse, format } from "date-fns";
 import { createCaseFile } from "@/lib/actions/case-actions";
 import { ErrorResponse } from "@/types/auth";
 
@@ -24,12 +24,14 @@ interface ScheduleSheetProps {
 export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
   const [date, setDate] = useState<Date | undefined>();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isOpenTime, setIsOpenTime] = useState(false);
   const [time, setTime] = useState<string | null>(null);
+  const [isOpen2, setIsOpen2] = useState(false);
   const [details, setDetails] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const timeSlots = [
+
+  const allTimeSlots = [
     "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM",
     "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM",
   ];
@@ -70,8 +72,20 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
     }
   };
 
+  // Get the current time rounded to the nearest hour
+  const currentTime = new Date();
+  const roundedCurrentTime = setMinutes(setHours(currentTime, currentTime.getHours()), 0); // Rounds to full hour
+
+  // ✅ Filter time slots dynamically if today is selected
+  const filteredTimeSlots = isToday(date ?? new Date())
+    ? allTimeSlots.filter((slot) => {
+      const slotTime = parse(slot, "hh:mm a", new Date());
+      return isAfter(slotTime, roundedCurrentTime); // Only show future times
+    })
+    : allTimeSlots;
+
   return (
-    <Sheet>
+    <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
       <SheetTrigger>{trigger}</SheetTrigger>
       <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
         <div className="space-y-8 mx-auto">
@@ -89,47 +103,116 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
           <div className="flex justify-between gap-2">
             <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full h-11 text-left border-2" onClick={() => setIsOpen(!isOpen)}>
+                <Button
+                  variant="outline"
+                  className="w-full font-semibold h-11 text-left border-2"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
                   {date ? format(date, "LLL dd, y") : "HEARING DATE"}
                   <ChevronDown className="ml-auto h-5 w-5" />
                 </Button>
               </PopoverTrigger>
+
               <PopoverContent align="start" forceMount className="pointer-events-auto">
                 <Calendar
                   mode="single"
                   selected={date}
                   onSelect={(selectedDate) => {
-                    setDate(selectedDate);
-                    setIsOpen(false); // Close popover on selection
+                    if (selectedDate && selectedDate >= new Date()) {
+                      setDate(selectedDate);
+                      setIsOpen(false);
+                    }
                   }}
+                  disabled={{ before: new Date() }}
                   className="cursor-pointer"
                 />
               </PopoverContent>
             </Popover>
-            <Popover>
+            <Popover open={isOpenTime} onOpenChange={setIsOpenTime}>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("h-11 w-full text-left border-2", !time && "text-muted-foreground")}>
-                  {time ?? "TIME"} <ChevronDown className="ml-auto h-5 w-5" />
+                <Button
+                  variant="outline"
+                  className={cn("h-11 w-full font-semibold text-left border-2", !time && "text-muted-foreground")}
+                  onClick={() => setIsOpenTime(!isOpenTime)}
+                >
+                  {time ?? "TIME"}
+                  <ChevronDown className="ml-auto h-5 w-5" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="start" forceMount className="pointer-events-auto">
-                <div className="flex flex-col space-y-1">
-                  {timeSlots.map((slot) => (
+
+              <PopoverContent align="start" forceMount className="pointer-events-auto w-auto">
+                {filteredTimeSlots.length > 0 ? (
+                  filteredTimeSlots.map((slot) => (
                     <button
                       key={slot}
                       onClick={() => {
                         setTime(slot);
+                        setIsOpenTime(false); // 🚀 Close popover after selection
                       }}
-                      className="text-sm text-gray-700 hover:bg-gray-100 p-2 rounded w-full text-left cursor-pointer"
+                      className="text-md flex font-semibold hover:bg-gray-100 p-2 rounded w-auto text-left cursor-pointer"
                     >
                       {slot}
                     </button>
-                  ))}
-                </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 p-2">No available times</p>
+                )}
               </PopoverContent>
             </Popover>
+            {/* <Popover open={isOpen} onOpenChange={setIsOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full font-semibold h-11 text-left border-2"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  {date ? format(date, "LLL dd, y") : "HEARING DATE"}
+                  <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
+              </PopoverTrigger>
 
+              <PopoverContent align="start" forceMount className="pointer-events-auto">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(selectedDate) => {
+                    if (selectedDate && selectedDate >= new Date()) {
+                      setDate(selectedDate);
+                      setIsOpen(false);
+                    }
+                  }}
+                  disabled={{ before: new Date() }}
+                  className="cursor-pointer"
+                />
+              </PopoverContent>
+            </Popover>
+            <Popover open={isOpenTime} onOpenChange={setIsOpenTime}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn("h-11 w-full font-semibold text-left border-2", !time && "text-muted-foreground")}
+                  onClick={() => setIsOpenTime(!isOpen)}
+                >
+                  {time ?? "TIME"}
+                  <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
+              </PopoverTrigger>
 
+              <PopoverContent align="start" forceMount className="pointer-events-auto w-auto">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    onClick={() => {
+                      setTime(slot);
+                      setIsOpenTime(false); // 🚀 Close popover after selection
+                    }}
+                    className="text-md flex font-semibold hover:bg-gray-100 p-2 rounded w-auto text-left cursor-pointer"
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </PopoverContent>
+            </Popover> */}
           </div>
           <div className="space-y-2">
             <p className="font-bold text-base">Other details (Optional)</p>
