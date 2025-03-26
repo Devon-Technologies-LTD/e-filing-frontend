@@ -77,13 +77,22 @@ export default function FilteredCases() {
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
       status = { ...status, is_hearing: true, status: [] };
+    case ROLES.CENTRAL_REGISTRAR:
+      if (tab === "under-review") {
+        status = { ...status, assignee_id: "", is_hearing: false };
+      } else if (tab === "approved-review") {
+        status = { ...status, status: [], assignee_id: "", is_hearing: true };
+      } else {
+        status = { ...status, assignee_id: "",};
+      }
+      break;
     case ROLES.PRESIDING_MAGISTRATE:
       if (tab === "submitted") {
-        status = { ...status, request_reassignment: true, status: [], };
+        status = { ...status, request_reassignment: true, status: [] };
       } else if (tab === "concluded") {
         status = { ...status };
       } else {
-        status = { ...status, status: [], };
+        status = { ...status, status: [], is_hearing: true, };
       }
       break;
     default:
