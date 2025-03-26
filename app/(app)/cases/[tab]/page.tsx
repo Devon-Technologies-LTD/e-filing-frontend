@@ -72,7 +72,6 @@ export default function FilteredCases() {
   };
 
   switch (user?.role) {
-    case ROLES.CHIEF_JUDGE:
     case ROLES.DIRECTOR_MAGISTRATE:
       if (tab === "submitted") {
         status = { ...status, request_reassignment: true,};
@@ -102,6 +101,13 @@ export default function FilteredCases() {
       }
       break;
     case ROLES.USER:
+      if (tab === "active") {
+        status = { ...status, assignee_id: "", is_hearing: true, status: []};
+      } else {
+        status = { ...status, assignee_id: "" };
+      }
+      break;
+    case ROLES.LAWYER:
       if (tab === "active") {
         status = { ...status, assignee_id: "", is_hearing: true, status: []};
       } else {
