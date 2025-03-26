@@ -22,7 +22,7 @@ interface CaseRequestSheetProps {
 export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
-
+  const [isOpen2, setIsOpen2] = useState(false);
     const { data, isLoading } = useQuery({
         queryKey: ["get_single_case_by_id"],
         queryFn: async () => {
@@ -49,6 +49,7 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
             // };
             // console.log(formData);
             // const response = await requestReAssigment(formData, data.id);
+            setIsOpen2(false);
             // console.log(response);
             // if (response.success) {
             //     toast.success(response.message);
@@ -68,7 +69,7 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
     };
 
     return (
-        <Sheet>
+        <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
             <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
                 <div className="space-y-8 mx-auto">

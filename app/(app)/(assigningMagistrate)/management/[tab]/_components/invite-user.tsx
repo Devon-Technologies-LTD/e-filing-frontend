@@ -36,7 +36,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const dispatch = useDispatch();
   const [showConfirmInvite, setShowConfirmInvite] = useState(false);
 
-
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
     case ROLES.CHIEF_JUDGE:

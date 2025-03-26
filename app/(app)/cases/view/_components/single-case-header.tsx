@@ -21,6 +21,7 @@ import AssignCaseSheet from "./sheet/AssignCaseSheet";
 import ReAssignmentSheet from "./sheet/ReAssignmentSheet";
 import ReAssignmentStatusSheet from "./sheet/ReAssignmentStatus";
 import CaseRequestSheet from "./sheet/CaseRequestSheet";
+import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
 
 export function SingleCaseHeader({
   data,
@@ -46,6 +47,7 @@ export function SingleCaseHeader({
   };
   console.log(data?.status);
   console.log(data?.assigned_to);
+  console.log(userRole);
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
@@ -82,9 +84,10 @@ export function SingleCaseHeader({
                 )}
                 {/*
                 <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/>
-                <Button variant="outline" className="text-xs"  >REVIEW REQUEST</Button> */}
+                */}
               </div>
             )}
+
 
             {userRole === ROLES.DIRECTOR_MAGISTRATE && (
               <CaseRequestSheet
@@ -93,13 +96,24 @@ export function SingleCaseHeader({
               />
             )}
 
-            {userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE && (
+            {(userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE) && data?.status !== "TO BE ASSIGNED" && (
               <RequestSheet
                 trigger={
-                  <Button variant="outline" className="text-xs" > REQUEST RE-ASSIGNMENT</Button>
+                  <Button variant="outline" className="text-xs">REQUEST RE-ASSIGNMENT</Button>
                 }
               />
             )}
+
+            {(userRole === ROLES.PRESIDING_MAGISTRATE && data?.status == "TO BE ASSIGNED") && (
+              <ReviewRequestSheet
+                trigger={
+                  <Button variant="outline" className="text-xs">REVIEW REQUEST</Button>
+                }
+              />
+              // <Button variant="outline" className="text-xs"  >REVIEW REQUEST</Button>
+            )}
+
+
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">

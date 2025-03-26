@@ -17,7 +17,7 @@ interface ScheduleSheetProps {
     id: string;
 }
 
-export default function RequestSheet({ trigger, id }: any) {
+export default function ReviewRequestSheet({ trigger, id }: any) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
@@ -38,36 +38,6 @@ export default function RequestSheet({ trigger, id }: any) {
         return initials.toUpperCase();
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        try {
-            const formData = {
-                casefile_id: data.id,
-                reason: reason,
-            };
-            console.log(formData);
-            const response = await requestReAssigment(formData, data.id);
-            console.log(response);
-            if (response.success) {
-                // toast.success(response.message);
-                toast.success("Re-assignment confirmed successfully.");
-                setIsOpen2(false);
-            } else {
-                const errorMessage = response.data.message;
-                const detailedError = response.data.error;
-                toast.error(`${errorMessage}:  ${detailedError}`);
-            }
-
-        } catch (err: unknown) {
-            const error = err as ErrorResponse;
-            toast.error(error.message);
-            console.log(error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
@@ -75,9 +45,9 @@ export default function RequestSheet({ trigger, id }: any) {
                 <div className="space-y-10 mx-auto">
                     <div className="space-y-6 w-full">
                         <div>
-                            <p className="font-bold text-xl">Re-assignment Request</p>
+                            <p className="font-bold text-xl">Re-assignment Status</p>
                             <div className="font-semibold text-sm">
-                                This case will be submitted to the assigning magisterate for review. You will ge notified on the decision
+                                stay updated on the status of your submitted request
                             </div>
                         </div>
                         <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
@@ -101,7 +71,14 @@ export default function RequestSheet({ trigger, id }: any) {
                             <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
                             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
                         </div>
-                        <form onSubmit={handleSubmit} className="space-y-2">
+
+
+                        <p className="text-stone-600 text-sm font-bold mb-2">Reason for denial</p>
+                        <div className="border-b-2 bg-zinc-300 pb-3">
+                            <p>-</p>
+                        </div>
+
+                        {/* <form onSubmit={handleSubmit} className="space-y-2">
                             <div className="space-y-2">
                                 <p className="font-bold text-base">Reason for Re-assignment *</p>
                                 <Textarea placeholder="Type here." required name="reason" className="bg-neutral-100 border-b-2 h-52 border-gray-300" onChange={(e) => setReason(e.target.value)} />
@@ -110,7 +87,7 @@ export default function RequestSheet({ trigger, id }: any) {
                                 {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
                                 SUBMIT REQUEST
                             </Button>
-                        </form>
+                        </form> */}
                     </div>
                 </div>
             </SheetContent>
