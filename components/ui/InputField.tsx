@@ -98,7 +98,7 @@ const InputField: React.FC<InputFieldProps> = ({
           </span>
 
           {showErrorInLabel && error && (
-            <p className="text-lg text-red-500 mt-1">{error}</p>
+            <p className="text-xs text-red-500 mt-1">{error}</p>
           )}
         </Label>
       </div>

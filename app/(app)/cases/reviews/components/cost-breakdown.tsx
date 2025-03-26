@@ -185,7 +185,7 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
               >
                 <span className="text-xs">{item.name}</span>
                 <span className="text-base font-medium">
-                  ₦{formatAmount(item.amount)}
+                  {formatAmount(item.amount)}
                 </span>
               </div>
             ))}

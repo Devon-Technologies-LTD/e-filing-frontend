@@ -23,7 +23,7 @@ export function FilePreview({
   className,
 }: FilePreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
+  // const [imageLoading, setImageLoading] = useState(true);
   // Extract file extension from URL or filename
   const getFileExtension = () => {
     const name = filename || preview;
@@ -76,19 +76,19 @@ export function FilePreview({
             ) : isImage ? (
               <div className="relative min-h-48 flex justify-center w-full">
                 {" "}
-                {imageLoading && (
+                {/* {imageLoading && (
                   <div className="absolute inset-0 bg-muted animate-pulse flex items-center justify-center">
                     <ImageIcon className="h-8 w-8 text-muted-foreground/50" />
                   </div>
-                )}
-                <Image
-                  src={preview || "/placeholder.svg"}
+                )} */}
+                <img
+                  src={preview}
                   alt={displayName}
                   width={1200}
                   height={800}
-                  onLoadingComplete={() => setImageLoading(false)}
-                  onError={() => setImageLoading(false)}
-                  className="max-h-[70vh] w-auto object-contain"
+                  // onLoadingComplete={() => setImageLoading(false)}
+                  // onError={() => setImageLoading(false)}
+                  className="max-h-[50vh] w-auto object-contain"
                 />
               </div>
             ) : (
