@@ -9,26 +9,14 @@ import {
 import React from "react";
 import { CaseStatus } from "@/constants";
 
-// export enum CaseStatus {
-//   Draft = "draft",
-//   Pending = "pending",
-//   ToBeAssigned = "to be assigned",
-//   JudgementDelivered = "judgement delivered",
-//   StruckOut = "struck out",
-//   Approved = "approved",
-//   UnderReview = "under review",
-//   Denied = "denied",
-//   Assigned = "assigned",
-//   ActionRequired = "action required",
-// }
 
 const VARIANT_STYLES: Record<CaseStatus, string> = {
   draft: "bg-amber-100 text-amber-900 border-amber-300",
   pending: "bg-amber-100 text-amber-900 border-amber-300",
   approved: "bg-green-100 text-green-900 border-green-300",
   "to be assigned": "bg-red-100 text-red-900 border-red-300",
-  "judgement delivered": "bg-blue-100 text-blue-900 border-blue-300",
-  "struck out": "bg-green-100 text-green-900 border-green-300",
+  "judgement delivered": "bg-gray-100 text-gray-900 border-gray-300",
+  "struck out": "bg-gray-100 text-gray-900 border-gray-300",
   "under review": "bg-rose-100 text-rose-900 border-rose-300",
   denied: "bg-rose-100 text-rose-900 border-rose-300",
   assigned: "bg-lime-100 text-lime-900 border-lime-300",
@@ -52,7 +40,7 @@ export function StatusBadge({
   tooltipProps,
 }: StatusBadgeProps) {
   const variantClass =
-    VARIANT_STYLES[status] || "bg-gray-100 text-gray-900 border-gray-300";
+    VARIANT_STYLES[status] || "bg-gray-100 text-green-900 border-green-300";
 
   const badgeElement = (
     <Badge

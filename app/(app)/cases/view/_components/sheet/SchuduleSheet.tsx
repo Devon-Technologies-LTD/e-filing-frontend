@@ -61,6 +61,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
       const response = await createCaseFile(formData, data.id);
       if (response.success) {
         toast.success("Schedule confirmed successfully.");
+        setIsOpen2(false);
       } else {
         toast.error(`${response.data.message}: ${response.data.error}`);
       }
@@ -83,6 +84,8 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
       return isAfter(slotTime, roundedCurrentTime); // Only show future times
     })
     : allTimeSlots;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to midnight
 
   return (
     <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
@@ -118,12 +121,12 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
                   mode="single"
                   selected={date}
                   onSelect={(selectedDate) => {
-                    if (selectedDate && selectedDate >= new Date()) {
+                    if (selectedDate && selectedDate >= today) {
                       setDate(selectedDate);
                       setIsOpen(false);
                     }
                   }}
-                  disabled={{ before: new Date() }}
+                  disabled={{ before: today }} // Use updated `today`
                   className="cursor-pointer"
                 />
               </PopoverContent>

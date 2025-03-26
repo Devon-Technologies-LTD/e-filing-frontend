@@ -19,6 +19,7 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null); // State for file
   const [reason, setReason] = useState("");
+  const [isOpen2, setIsOpen2] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
@@ -50,8 +51,8 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
       console.log(response);
       if (response.success) {
         toast.success(response.message);
-                toast.success("Judgement Delivered successful");
-        
+        toast.success("Judgement Delivered successful");
+        setIsOpen2(false);
       } else {
         const errorMessage = response.data.message;
         const detailedError = response.data.error;
@@ -67,7 +68,7 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
       <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
         <div className="space-y-8 mx-auto">

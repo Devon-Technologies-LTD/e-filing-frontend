@@ -68,6 +68,7 @@ export default function FilteredCases() {
     end_date: formattedEndDate,
     assignee_id: user?.id,
     is_hearing: false,
+    request_reassignment: false,
   };
 
   switch (user?.role) {
@@ -75,8 +76,15 @@ export default function FilteredCases() {
     case ROLES.DIRECTOR_MAGISTRATE:
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
+      status = { ...status, is_hearing: true, status: [] };
     case ROLES.PRESIDING_MAGISTRATE:
-      status = { ...status, is_hearing: true, status : [] };
+      if (tab === "submitted") {
+        status = { ...status, request_reassignment: true, status: [], };
+      } else if (tab === "concluded") {
+        status = { ...status };
+      } else {
+        status = { ...status, status: [], };
+      }
       break;
     default:
       status = { ...status, assignee_id: "" };

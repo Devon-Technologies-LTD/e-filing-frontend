@@ -28,12 +28,12 @@ export default function LayoutPage({
   ];
   const directorTabs = [
     { id: "assigned", label: "Assigned To Me" },
-    { id: "submitted", label: "Submitted Cases" },
+    { id: "submitted", label: "Submitted Request" },
     { id: "concluded", label: "Concluded Cases" },
   ];
   const presidingTabs = [
     { id: "assigned", label: "Assigned To Me" },
-    { id: "submitted", label: "Submitted Cases" },
+    { id: "submitted", label: "Submitted Request" },
     { id: "concluded", label: "Concluded Cases" },
   ];
   const assigningMagistrateTabs = [
