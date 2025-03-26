@@ -83,10 +83,7 @@ function DocumentItem({ doc }: { doc: IDocumentFileType }) {
             <Icons.lock />
           </Label>
           <p className="uppercase font-bold text-xs text-primary">
-            <FilePreview
-              preview={doc.file_path}
-              filename={doc.notes}
-            />
+            <FilePreview preview={doc.file_path} filename={doc.notes} />
           </p>
         </div>
       </div>
@@ -103,19 +100,25 @@ function DocumentsSection({ documents }: { documents: IDocumentFileType[] }) {
       </div>
       <div className="w-full">
         <div className="space-y-6">
-          {documents
+            {documents
             .filter((doc) => doc?.case_type_name?.toLowerCase() !== "exhibits")
-            .map((doc, index) => (
+            .length === 0 ? (
+            <p className="text-center text-neutral-500">No documents available</p>
+            ) : (
+            documents
+              .filter((doc) => doc?.case_type_name?.toLowerCase() !== "exhibits")
+              .map((doc, index) => (
               <div key={index} className="grid grid-cols-5 items-center">
                 <div className="col-span-3">
-                  <DocumentItem doc={doc} />
+                <DocumentItem doc={doc} />
                 </div>
                 <div></div>
                 <div className="col-span-1 text-right font-semibold">
-                  ₦ {doc.amount}
+                ₦ {doc.amount}
                 </div>
               </div>
-            ))}
+              ))
+            )}
         </div>
       </div>
     </div>

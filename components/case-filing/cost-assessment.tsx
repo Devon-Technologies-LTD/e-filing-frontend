@@ -3,7 +3,6 @@ import {
   CriminalCaseSubType,
   CriminalDocumentTitles,
   DEFAULT_CHARGES_PERCENTAGE,
-  DEFAULT_EXHIBIT_FEE,
   DEFAULT_SEAL_FEE,
 } from "@/constants";
 import { getDocumentFees } from "@/lib/actions/public";
@@ -15,7 +14,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { OtherDocumentMapping } from "./steps/document-upload/form";
 
 const variants = {
   header: {
@@ -162,7 +160,6 @@ export default function CostAssessment({
     return subtotal + additionalCharges;
   }, [subtotal, additionalCharges]);
 
-
   // const totalAmount = useMemo(() => {
   //   return [
   //     ...displayedItems,
@@ -243,7 +240,6 @@ export default function CostAssessment({
                 ₦{formatAmount(DEFAULT_SEAL_FEE)}
               </span>
             </div>
-            
             {/* Additional Charges (10%) */}
             <div className="flex justify-between items-center text-sm">
               <p className="text-primary text-xs font-semibold">
