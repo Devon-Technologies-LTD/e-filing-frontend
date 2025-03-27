@@ -30,11 +30,11 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
   }
 }
 // Updated getCaseFiles function
-export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }) {
+export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }, page: number, size: number) {
   try {
     console.log(payload);
     if ([ROLES.PRESIDING_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, ROLES.CENTRAL_REGISTRAR].includes(payload.role as ROLES)) {
-      const data = await CaseFileService.getCaseFilesAdmin(payload);
+      const data = await CaseFileService.getCaseFilesAdmin(payload, page, size);
       return { ...data, success: true };
     } else {
       const data = await CaseFileService.getCaseFiles(payload);
@@ -68,6 +68,24 @@ export async function getAdminCaseFilesById(id: string) {
   try {
     const data = await CaseFileService.getAdminCaseFilesbyId(id);
     return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getReassignmentHistory(id: string) {
+  try {
+    const data = await CaseFileService.getReassignmentHistory(id);
+    return { ...data.data[0] };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function changeReassignmentStatus(id: string, status: string) {
+  try {
+    const data = await CaseFileService.changeReassignmentStatus(id, status);
+    return { ...data.data[0] };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);

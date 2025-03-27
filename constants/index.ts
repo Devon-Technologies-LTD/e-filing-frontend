@@ -24,6 +24,16 @@ export enum CaseStatus {
   ActionRequired = "action required",
 }
 
+export const getInitials = (name: string | undefined) => {
+  if (!name) return "CN";
+  const initials = name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  return initials.toUpperCase();
+};
+
+
 export enum CaseTypeData {
   CIVIL_CASE = "CIVIL CASE",
   FAMILY_CASE = "FAMILY CASE",

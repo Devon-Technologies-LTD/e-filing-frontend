@@ -43,7 +43,6 @@ export default function FilteredCases() {
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const { data: user } = useAppSelector((state) => state.profile);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [selectedYear, setSelectedYear] = useState<string>("All Year");
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [isOpen, setIsOpen] = useState(false);
@@ -55,11 +54,7 @@ export default function FilteredCases() {
   };
 
   const caseFilter = useMemo(() => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2], []);
-
-
   let status = {
-    page: currentPage,
-    size: DEFAULT_PAGE_SIZE,
     status: getStatusByTab2(tab),
     casetype: selectedCase === "all" ? null : selectedCase,
     role: user?.role,
@@ -69,18 +64,25 @@ export default function FilteredCases() {
     assignee_id: user?.id,
     is_hearing: false,
     request_reassignment: false,
+    is_active: false,
   };
 
   switch (user?.role) {
     case ROLES.DIRECTOR_MAGISTRATE:
       if (tab === "submitted") {
-        status = { ...status, request_reassignment: true,};
-      }else{
+        status = { ...status, request_reassignment: true, };
+      } else {
         status = { ...status, assignee_id: "" };
       }
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
-      status = { ...status, is_hearing: true, status: [] };
+      if (tab === "concluded") {
+        status = { ...status, assignee_id: "" };
+      } else if (tab === "case") {
+        status = { ...status, status: []};
+      }else {
+        status = { ...status, status: [], is_active: true, };
+      }
       break;
     case ROLES.CENTRAL_REGISTRAR:
       if (tab === "under-review") {
@@ -102,14 +104,16 @@ export default function FilteredCases() {
       break;
     case ROLES.USER:
       if (tab === "active") {
-        status = { ...status, assignee_id: "", is_hearing: true, status: []};
-      } else {
         status = { ...status, assignee_id: "" };
+      } else if (tab === "recent") {
+        status = { ...status, assignee_id: "", status: [] };
+      } else {
+        status = { ...status, assignee_id: "", };
       }
       break;
     case ROLES.LAWYER:
       if (tab === "active") {
-        status = { ...status, assignee_id: "", is_hearing: true, status: []};
+        status = { ...status, assignee_id: "", is_hearing: true, status: [] };
       } else {
         status = { ...status, assignee_id: "" };
       }
@@ -122,35 +126,17 @@ export default function FilteredCases() {
     queryKey: [
       "get_cases",
       tab,
-      currentPage,
       selectedCase,
       selectedYear,
       formattedStartDate,
       formattedEndDate,
       user?.role
     ],
-    queryFn: () => getCaseFiles(status),
+    queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,
   });
 
-  // const { data, isLoading: draftsLoading, refetch } = useQuery({
-  //   queryKey: ["get_cases", tab, currentPage, selectedCase, selectedYear, formattedStartDate, formattedEndDate, user?.role],
-  //   queryFn: () =>
-  //     getCaseFiles({
-  //       page: currentPage,
-  //       size: DEFAULT_PAGE_SIZE,
-  //       status: getStatusByTab2(tab),
-  //       casetype: selectedCase === "all" ? null : selectedCase,
-  //       role: user?.role,
-  //       year: selectedYear === "All Year" ? "" : selectedYear,
-  //       start_date: formattedStartDate,
-  //       end_date: formattedEndDate,
-  //       isHearing: (tab == "case") ? true : false,
-  //     }),
-  //   staleTime: 50000,
-  //   refetchInterval: 10000,
-  // });
 
   const getColumns = useMemo(() => {
     switch (tab) {

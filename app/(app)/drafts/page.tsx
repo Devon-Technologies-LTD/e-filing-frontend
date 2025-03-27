@@ -44,14 +44,15 @@ export default function Page() {
     ],
     queryFn: async () => {
       return await getCaseFiles({
-        page: currentPage,
-        size: DEFAULT_PAGE_SIZE,
+
         status: [CaseStatus.Draft],
         start_date: date?.from
           ? dateFormatter(date?.from as Date).isoFormat
           : null,
         end_date: date?.to ? dateFormatter(date?.to as Date).isoFormat : null,
-      });
+      },
+        currentPage,
+        DEFAULT_PAGE_SIZE);
     },
     staleTime: 50000,
     refetchInterval: 10000,

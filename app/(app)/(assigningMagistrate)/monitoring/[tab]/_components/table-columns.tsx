@@ -74,11 +74,12 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
+      const status = row.original.status?.toLowerCase() || ""; // Safe fallback
       return (
         <StatusBadge
-          tooltip={""}
+          tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status?.toLowerCase() as any}
+          status={status === "to be assigned" ? row.original.reassignment_status : status}
         />
       );
     },
@@ -133,13 +134,15 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
+      const status = row.original.status?.toLowerCase() || ""; // Safe fallback
       return (
         <StatusBadge
-          tooltip={""}
+          tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status?.toLowerCase() as any}
+          status={status === "to be assigned" ? row.original.reassignment_status : status}
         />
       );
     },
   },
+
 ];
