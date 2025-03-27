@@ -140,6 +140,7 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     },
   },
 ];
+
 export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "case_suit_number",
