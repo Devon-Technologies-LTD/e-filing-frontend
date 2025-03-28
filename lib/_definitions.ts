@@ -82,7 +82,7 @@ export type TUpdateType =
   | "updateRemoveArray";
 
 export const LoginFormSchema = z.object({
-  email: z.string().min(1, { message: "Email field must not be empty." }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(1, { message: "Password field must not be empty." }),
 });
 

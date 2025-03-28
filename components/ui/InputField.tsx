@@ -63,6 +63,18 @@ const InputField: React.FC<InputFieldProps> = ({
   autoFocus = false,
   state,
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newValue = e.target.value;
+    // Remove spaces if type is email
+    if (type === "email") {
+      newValue = newValue.trimStart().replace(/\s+/g, "");
+    }
+    onChange?.({
+      ...e,
+      target: { ...e.target, value: newValue },
+    });
+  };
+
   return (
     <div className="relative w-full space-y-1">
       <div className="flex items-center gap-1">
@@ -114,14 +126,12 @@ const InputField: React.FC<InputFieldProps> = ({
           readOnly={readonly}
           disabled={disabled}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           autoComplete="off"
           autoFocus={autoFocus}
           className={clsx(
-            "w-full p-2 m border-0 border-b-[1px] placeholder:text-md text-lg placeholder:font-semibold placeholder:text-zinc-400 shadow-none focus:outline-none focus:border-b-2  border-app-secondary",
-            error
-              ? "border-red-500 focus:border-red-500"
-              : "border-neutral-200 ",
+            "w-full p-2 border-0 border-b-[1px] text-lg placeholder:font-semibold placeholder:text-zinc-400 focus:outline-none focus:border-b-2 border-app-secondary",
+            error ? "border-red-500 focus:border-red-500" : "border-neutral-200",
             disabled && "opacity-50 cursor-not-allowed",
             Icon && "pr-10",
             className

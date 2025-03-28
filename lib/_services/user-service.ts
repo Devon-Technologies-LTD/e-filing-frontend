@@ -138,6 +138,7 @@ const UserService = {
   async getUserManagementFilter(params: IPage): Promise<any> {
     try {
       const response = await axiosInstance.post("/admin/user/user-filter", params);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching user management filter:", error);
@@ -145,15 +146,8 @@ const UserService = {
     }
   },
 
-
-
   async getPendingUsers(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user/filter-user/pending`, {
-      params: {
-        page: params.page ?? 1,
-        limit: params.size ?? 10,
-      },
-    });
+    const response = await axiosInstance.get(`admin/user/filter-user/pending?page=${params.page}&size=${params.size}`);
     console.log("pending users management response", response.data);
     return response.data;
   },
