@@ -37,7 +37,7 @@ export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }, pag
       const data = await CaseFileService.getCaseFilesAdmin(payload, page, size);
       return { ...data, success: true };
     } else {
-      const data = await CaseFileService.getCaseFiles(payload);
+      const data = await CaseFileService.getCaseFiles(payload, page, size);
       return { ...data, success: true };
     }
   } catch (err: unknown) {

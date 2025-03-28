@@ -88,7 +88,7 @@ export default function FilteredCases() {
       if (tab === "under-review") {
         status = { ...status, assignee_id: "", is_hearing: false };
       } else if (tab === "approved-review") {
-        status = { ...status, status: [], assignee_id: "", is_hearing: true };
+        status = { ...status, status: [], is_active: true, assignee_id: "", };
       } else {
         status = { ...status, assignee_id: "", };
       }
@@ -106,7 +106,7 @@ export default function FilteredCases() {
       break;
     case ROLES.USER:
       if (tab === "active") {
-        status = { ...status, assignee_id: "" };
+        status = { ...status, is_active: true, status: [], assignee_id: "", };
       } else if (tab === "recent") {
         status = { ...status, assignee_id: "", status: [] };
       } else {
@@ -115,7 +115,7 @@ export default function FilteredCases() {
       break;
     case ROLES.LAWYER:
       if (tab === "active") {
-        status = { ...status, assignee_id: "" };
+        status = { ...status, is_active: true, status: [], };
       } else if (tab === "recent") {
         status = { ...status, assignee_id: "", status: [] };
       } else {
@@ -127,8 +127,7 @@ export default function FilteredCases() {
   }
 
   const { data, isLoading: draftsLoading, refetch } = useQuery({
-    queryKey: ["get_cases", tab, selectedCase, selectedYear, formattedStartDate, 
-      formattedEndDate, currentPage, selectedCase],
+    queryKey: ["get_cases", tab, selectedCase, currentPage],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,

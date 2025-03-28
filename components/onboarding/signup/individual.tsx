@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import InputField from '@/components/ui/InputField';
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
@@ -9,10 +9,14 @@ import { LoginPasswordField } from "@/components/passwordField";
 import DragDropUploader from "./DragDropUploaderNIN";
 import { SignupAction } from "@/lib/actions/signup";
 import { isFieldErrorObject } from "@/types/auth";
+import { OnboardingContext } from '@/context/OnboardingContext';
+
 
 const IndividualComponent = () => {
     const [state, dispatch] = useFormState(SignupAction, undefined);
-    const [loading, setLoading] = useState<boolean>(false);
+    const { loading, setLoading } = useContext(OnboardingContext);
+    const [email, setEmail] = useState("");
+
     const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
     useEffectAfterMount(() => {
         if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -44,7 +48,6 @@ const IndividualComponent = () => {
             <div className="flex flex-col md:flex-row w-full h-full  md:space-y-0 md:space-x-6">
                 <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10" autoComplete="off">
                     <input type="hidden" name="role" value="USER" />
-                    <input type="hidden" name="last_name" value="last_user" />
                     <input type="hidden" name="gender" value="male" />
                     <div
                         className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
@@ -87,9 +90,8 @@ const IndividualComponent = () => {
                                 placeholder="name@gmail.com"
                                 required
                                 error={errors.email?.[0]}
-                                onChange={(e) => {
-                                    e.target.value = e.target.value.replace(/\s/g, ''); // Remove spaces
-                                }}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value.trimStart().replace(/\s+/g, ""))}
                             />
                         </div>
                         <div className="space-y-6">
@@ -124,11 +126,7 @@ const IndividualComponent = () => {
 
                         </div>
                     </div>
-                    {loading && (
-                        <div className="flex justify-center items-center mt-1">
-                            <div className="spinner"></div> {/* Add spinner */}
-                        </div>
-                    )}
+
                 </form>
             </div>
         </>

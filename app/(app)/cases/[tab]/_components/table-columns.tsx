@@ -24,13 +24,33 @@ export const MainColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "title",
     header: "Case Title",
+    cell: ({ row }) => {
+      const title = row.original?.title || "N/A";
+
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className="truncate max-w-[200px] cursor-pointer"
+              title={title}
+            >
+              {title}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>{title}</span>
+          </TooltipContent>
+        </Tooltip>
+      );
+    },
   },
   {
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
-      const casetype = row.original.case_type_name;
-      const subName = row.original.sub_case_type_name?.toLowerCase();
+      const casetype = row.original?.case_type_name || "N/A";
+      const subName = row.original?.sub_case_type_name?.toLowerCase() || "";
+
       return (
         <div>
           <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
@@ -43,28 +63,26 @@ export const MainColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "court",
     header: "MGT. DIVISION/COURT",
-    cell: ({ row }) => {
-      return <span>{row.original.division_name}</span>;
-    },
+    cell: ({ row }) => <span>{row.original?.division_name || "N/A"}</span>,
   },
   {
     accessorKey: "magistrate",
-    header: "PRESIDING MAGISTRATE",
+    header: "Presiding Magistrate",
     cell: ({ row }) => {
+      const assigneeName = row.original?.assignee_name || "---------";
+
       return (
         <div className="flex break-all items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-secondary-foreground text-black">
-              {row.original.assignee_name
-                ? row.original.assignee_name
-                    .split(" ")
-                    .map((word) => word.charAt(0))
-                    .join("")
-                    .toUpperCase()
-                : ""}{" "}
+              {assigneeName
+                .split(" ")
+                .map((word) => word.charAt(0))
+                .join("")
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          {row.original?.assignee_name ?? "---------"}
+          {assigneeName}
         </div>
       );
     },
@@ -72,15 +90,13 @@ export const MainColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      return (
-        <StatusBadge
-          tooltip={""}
-          tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status?.toLowerCase() as any}
-        />
-      );
-    },
+    cell: ({ row }) => (
+      <StatusBadge
+        tooltip=""
+        tooltipProps={{ delayDuration: 200 }}
+        status={row.original?.status?.toLowerCase() as any}
+      />
+    ),
   },
 ];
 
@@ -101,15 +117,12 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Case Suit (ID)",
   },
   {
-    accessorKey: "title",
-    header: "Case Title",
-  },
-  {
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
-      const casetype = row.original.case_type_name;
-      const subName = row.original.sub_case_type_name?.toLowerCase();
+      const casetype = row.original?.case_type_name || "N/A";
+      const subName = row.original?.sub_case_type_name?.toLowerCase() || "";
+
       return (
         <div>
           <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
@@ -122,22 +135,18 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "court",
     header: "MGT. DIVISION/COURT",
-    cell: ({ row }) => {
-      return <span>{row.original.division_name}</span>;
-    },
+    cell: ({ row }) => <span>{row.original?.division_name || "N/A"}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      return (
-        <StatusBadge
-          tooltip={""}
-          tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status?.toLowerCase() as any}
-        />
-      );
-    },
+    cell: ({ row }) => (
+      <StatusBadge
+        tooltip=""
+        tooltipProps={{ delayDuration: 200 }}
+        status={row.original?.status?.toLowerCase() as any}
+      />
+    ),
   },
 ];
 
@@ -150,12 +159,13 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "title",
     header: "Case Title",
     cell: ({ row }) => {
-      const title = row.original.title;
+      const title = row.original?.title || "N/A";
+
       return (
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <div
-              className="max-w-32 text-left line-clamp-2 break-words"
+              className="max-w-32 text-left truncate break-words cursor-pointer"
               title={title}
             >
               {title}
@@ -165,12 +175,7 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
             side="bottom"
             className="text-zinc-700 bg-white border-0 font-medium text-xs"
           >
-            <div className="max-w-32 line-clamp-2 break-words" title={title}>
-              {title} Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Corrupti corporis enim excepturi quaerat necessitatibus eius
-              impedit ullam aliquid facilis laudantium, odit ex? Ducimus,
-              exercitationem odit. Cum incidunt aliquid ducimus iure?
-            </div>
+            <div className="max-w-32 truncate break-words">{title}</div>
           </TooltipContent>
         </Tooltip>
       );
@@ -180,8 +185,9 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
-      const casetype = row.original.case_type_name;
-      const subName = row.original.sub_case_type_name?.toLowerCase();
+      const casetype = row.original?.case_type_name || "N/A";
+      const subName = row.original?.sub_case_type_name?.toLowerCase() || "";
+
       return (
         <div>
           <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
@@ -205,21 +211,17 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "court",
     header: "MGT. DISTRICT",
-    cell: ({ row }) => {
-      return <span>{row.original.division_name}</span>;
-    },
+    cell: ({ row }) => <span>{row.original?.division_name || "N/A"}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      return (
-        <StatusBadge
-          tooltip={row.original.status?.toLowerCase()}
-          tooltipProps={{ delayDuration: 200 }}
-          status={row.original.status?.toLowerCase() as any}
-        />
-      );
-    },
+    cell: ({ row }) => (
+      <StatusBadge
+        tooltip={row.original?.status?.toLowerCase()}
+        tooltipProps={{ delayDuration: 200 }}
+        status={row.original?.status?.toLowerCase() as any}
+      />
+    ),
   },
 ];

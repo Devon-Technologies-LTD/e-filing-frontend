@@ -21,6 +21,8 @@ const LoginComponent = () => {
 
   const [state, dispatch] = useFormState(LoginAction, undefined);
   const [formDisabled, setFormDisabled] = useState(false);
+  const [email, setEmail] = useState("");
+
 
   const errors = isFieldErrorObject(state?.errors)
     ? state.errors
@@ -49,6 +51,11 @@ const LoginComponent = () => {
     }
   }, [state]);
 
+  useEffect(() => {
+    setEmail((prev) => prev.trimStart().replace(/\s+/g, ""));
+  }, [email]); // Runs every time `email` updates
+
+  
   return (
     <>
       <div className="heading">
@@ -70,9 +77,8 @@ const LoginComponent = () => {
           name="email"
           placeholder="name@gmail.com"
           error={errors.email?.[0]}
-          onChange={(e) => {
-            e.target.value = e.target.value.replace(/\s/g, ''); // Remove spaces
-          }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <LoginPasswordField error={errors.password?.[0]} />

@@ -35,6 +35,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
   const dispatch = useDispatch();
   const [showConfirmInvite, setShowConfirmInvite] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
 
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
@@ -80,7 +81,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const [formValues, setFormValues] = useState<FormValues>({ first_name: "", last_name: "", email: "" });
   const [formErrors, setFormErrors] = useState<Partial<FormValues>>({});
   const [isValid, setIsValid] = useState(false);
-
   const [selectedCourt, setSelectedDistrict] = useState<string>("");
   const [selectedCourtDivision, setSelectedCourtDivision] = useState<string>(caseType.court_division);
   const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
@@ -90,7 +90,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
     setSelectedCourtDivision(user?.court_division_id ?? "");
     setSelectedDistrict(user?.court_type ?? "");
   }, []);
-
 
   const handleChanges = (name: keyof ICaseTypes, value: string) => {
     dispatch(updateCaseTypeName({ [name]: value }));
@@ -144,10 +143,9 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
       <SheetTrigger onClick={(e) => {
         e.stopPropagation();
-
         setFormValues({
           first_name: "",
           last_name: "",
@@ -228,6 +226,7 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                 <ConfirmInvite
                   isOpen={showConfirmInvite}
                   setIsOpen={setShowConfirmInvite}
+                  setIsOpen2={setIsOpen2}
                   formValues={{
                     ...formValues,
                     role,
@@ -243,6 +242,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
           </div>
         </div>
       </SheetContent>
-    </Sheet>
+    </Sheet >
   );
 }

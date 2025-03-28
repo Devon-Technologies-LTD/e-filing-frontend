@@ -5,15 +5,19 @@ import LegalCard2 from '@/public/assets/images/Legal-card2.png';
 import { FrontIcon } from '@/components/svg/front-icon';
 import Link from 'next/link';
 import { useCaseFilingForm } from '@/context/file-case';
-import { useEffect } from 'react';
+
+import { useContext, useEffect } from 'react';
 
 const Signup = () => {
+
     const { currentStep, setCurrentStep } = useCaseFilingForm();
     useEffect(() => {
         if (currentStep !== 1) {
             setCurrentStep(2 as 3);
         }
     }, [1, currentStep, setCurrentStep]);
+
+
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full space-y-6 md:space-y-0 md:space-x-6 p-4">

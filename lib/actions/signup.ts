@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { handleError, LoginResponseData, ROLES } from "@/types/auth";
 import authService from "../_services/auth-service";
-import { createSession } from "../server/auth";
+import { createSession, deleteSession } from "../server/auth";
 import { defaultLoginRedirect } from "@/routes";
 import { NEXT_BASE_URL } from "@/lib/_constants"
 
@@ -122,7 +122,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
     }
 
     // Validate file size (5MB max)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 6 * 1024 * 1024; // 5MB
     if (image.size > maxSize) {
         return {
             status: 400,
@@ -274,6 +274,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             };
         }
 
+        deleteSession();
         cookies().delete("TempToken");
         cookies().delete("TempID");
 

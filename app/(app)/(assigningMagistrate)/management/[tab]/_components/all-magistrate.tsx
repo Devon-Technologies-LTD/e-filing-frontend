@@ -50,7 +50,6 @@ export default function AllMagistrates() {
     ...COURT_TYPE,
   ];
 
-
   const columns = useMemo(
     () => createUserColumns(user?.role!, "all"),
     [user?.role]

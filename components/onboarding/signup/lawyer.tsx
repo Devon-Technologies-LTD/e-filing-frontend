@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner"
 import InputField from "@/components/ui/InputField";
 import { useFormState } from "react-dom";
@@ -10,11 +10,13 @@ import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
 import { LoginPasswordField } from "@/components/passwordField";
 import DragDropUploaderNIN from "./DragDropUploaderNIN";
 import { isFieldErrorObject } from "@/types/auth";
+import { OnboardingContext } from '@/context/OnboardingContext';
 
 const LawyerComponent = () => {
   const [state, dispatch] = useFormState(SignupAction, undefined);
-  const [loading, setLoading] = useState<boolean>(false);
-
+  // const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+  const { loading, setLoading } = useContext(OnboardingContext);
   const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
   useEffectAfterMount(() => {
     if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -43,7 +45,7 @@ const LawyerComponent = () => {
   }, [state]);
   return (
     <div className="flex flex-col md:flex-row w-full h-full md:space-y-0 md:space-x-6">
-      <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10"  autoComplete="off">
+      <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10" autoComplete="off">
         <input type="hidden" name="role" value="LAWYER" />
         <input type="hidden" name="gender" value="male" />
         <div
@@ -84,9 +86,9 @@ const LawyerComponent = () => {
               placeholder="name@gmail.com"
               required
               error={errors.email?.[0]}
-              onChange={(e) => {
-                e.target.value = e.target.value.replace(/\s/g, ''); // Remove spaces
-            }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value.trimStart().replace(/\s+/g, ""))
+              }
             />
           </div>
           <div className="space-y-6">
@@ -127,14 +129,8 @@ const LawyerComponent = () => {
             />
             <LoginPasswordField error={errors.password?.[0]} showStrength={true} label="PASSWORD" name="password" placeholder="********" />
             <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="********" />
-
           </div>
         </div>
-        {loading && (
-          <div className="flex justify-center items-center mt-1">
-            <div className="spinner"></div> {/* Add spinner */}
-          </div>
-        )}
       </form>
     </div>
   );

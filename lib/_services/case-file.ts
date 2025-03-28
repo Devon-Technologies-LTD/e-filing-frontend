@@ -129,11 +129,10 @@ const CaseFileService = {
     );
     return response.data;
   },
-  async getCaseFiles(payload: IDraftFilter): Promise<any> {
-    const { page, size, ...rest } = payload;
+  async getCaseFiles(payload: IDraftFilter , page: number, size: number): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
-      `casefile/case-filter?page=${payload.page}&size=${payload.size}`,
-      rest
+      `casefile/case-filter?page=${page}&size=${size}`,
+      payload
     );
     return response.data;
   },
