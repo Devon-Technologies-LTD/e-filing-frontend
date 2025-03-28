@@ -73,9 +73,9 @@ export default function StruckSheet({ trigger, id }: StruckSheetProps) {
           <div className="space-y-6 w-full">
             <form onSubmit={handleSubmit}>
               <div>
-                <p className="font-bold text-xl">Struke Out Case</p>
+                <p className="font-bold text-xl">Strike Out Case</p>
                 <div className="font-semibold text-sm">
-                  This case will be marked as struck out. All parties will be notified accordingly. No further actions can be taken unless refiled
+                  This case will be marked as Strike out. All parties will be notified accordingly. No further actions can be taken unless refiled
                 </div>
               </div>
               <div className="grid border-b-2 pb-3">
@@ -102,7 +102,7 @@ export default function StruckSheet({ trigger, id }: StruckSheetProps) {
                 }}
               />
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null} CONFIRM STRUCK OUT
+                {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null} CONFIRM STRIKE OUT
               </Button>
             </form>
           </div>
