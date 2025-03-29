@@ -14,8 +14,6 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Search } from "lucide-react";
 import { COURT_TYPE, CaseTypes } from "@/types/files/case-type";
 
-
-
 export interface IUsersColumn {
   id?: string;
   name: string;
@@ -28,12 +26,9 @@ export interface IUsersColumn {
   resolutionTime?: string;
 }
 
-
 export default function PerformanceMagisterate() {
   const { data: user } = useAppSelector((state) => state.profile);
 
-  // const magistrateContext = useContext(MagistrateContext);
-  // const setTotalMagistrates = magistrateContext?.setTotalMagistrates || (() => { });
   const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,15 +40,13 @@ export default function PerformanceMagisterate() {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
-
   // const courtFilterOptions = [{ value: "all", label: "ALL COURT TYPE" }, ...COURT_TYPE];
-
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
-      // case ROLES.CHIEF_JUDGE:
-      //   return "DIRECTOR_MAGISTRATE";
-      // case ROLES.DIRECTOR_MAGISTRATE:
-      //   return "ASSIGNING_MAGISTRATE";
+      case ROLES.CHIEF_JUDGE:
+        return "DIRECTOR_MAGISTRATE";
+      case ROLES.DIRECTOR_MAGISTRATE:
+        return "ASSIGNING_MAGISTRATE";
       case ROLES.ASSIGNING_MAGISTRATE:
         return "PRESIDING_MAGISTRATE";
       default:

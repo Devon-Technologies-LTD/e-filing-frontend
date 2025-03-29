@@ -155,7 +155,7 @@ export async function ForgotPasswordAction(
       return {
         status: err.response.status,
         message: err.response.data.message,
-        errors: err.response.data.data,
+        errors: err.response.data.data['error'],
         success: false,
       };
     } else if (err.request) {

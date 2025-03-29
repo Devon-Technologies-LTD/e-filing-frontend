@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UploadPdf from "@/components/uploadPDF";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { toast } from "sonner";
 import { deliverJudgement } from "@/lib/actions/case-actions";
@@ -16,6 +16,8 @@ interface DeliverJugdement {
 }
 
 export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement) {
+    const queryClient = useQueryClient();
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null); // State for file
   const [reason, setReason] = useState("");
@@ -50,8 +52,9 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
       const response = await deliverJudgement(formData, data.id);
       console.log(response);
       if (response.success) {
-        toast.success(response.message);
         toast.success("Judgement Delivered successful");
+        queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+
         setIsOpen2(false);
       } else {
         const errorMessage = response.data.message;
@@ -74,7 +77,7 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
         <div className="space-y-8 mx-auto">
           <div className="space-y-6 w-full">
             <div>
-              <p className="font-bold text-xl">Delivery Judgment</p>
+              <p className="font-bold text-xl">Deliver Judgment</p>
               <div className="font-semibold text-sm">
                 Upload your judgment file to finalize the case. Parties involved will be notified upon submission. Ensure all details are accurate, as this action cannot be undone.
               </div>
@@ -88,7 +91,6 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
               <p className="font-bold text-base">Upload Files (PDF)</p>
               <UploadPdf onFileSelect={setFile} /> {/* Pass file selection function */}
             </div>
-
 
             <Label htmlFor="reason" className=" flex justify-between items-center text-base font-bold ">
               Give reasons here

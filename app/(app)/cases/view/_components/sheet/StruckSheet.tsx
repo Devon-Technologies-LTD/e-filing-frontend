@@ -4,7 +4,7 @@ import React, { ReactNode, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import UploadPdf from "@/components/uploadPDF";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -22,6 +22,8 @@ interface StruckSheetProps {
 
 
 export default function StruckSheet({ trigger, id }: StruckSheetProps) {
+  const queryClient = useQueryClient();
+  const [isOpen2, setIsOpen2] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null); // State for file
   const [reason, setReason] = useState("");
@@ -52,6 +54,8 @@ export default function StruckSheet({ trigger, id }: StruckSheetProps) {
       console.log(response);
       if (response.success) {
         toast.success("casefile struck out successful");
+        queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+        setIsOpen2(false);
       } else {
         const errorMessage = response.data.message;
         const detailedError = response.data.error;
@@ -66,7 +70,7 @@ export default function StruckSheet({ trigger, id }: StruckSheetProps) {
 
 
   return (
-    <Sheet>
+    <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
       <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
         <div className="space-y-8 mx-auto">

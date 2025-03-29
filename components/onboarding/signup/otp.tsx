@@ -19,7 +19,7 @@ import { OnboardingContext } from '@/context/OnboardingContext';
 const OtpComponent = () => {
     const [state, dispatch] = useFormState(OTPAction, undefined);
     const [otpState, dispatchOTP] = useFormState(reSendOtpAction, undefined);
-    const [timeLeft, setTimeLeft] = useState(10);
+    const [timeLeft, setTimeLeft] = useState(60 * 5);
     const [email, setEmail] = useState<string>("");
     const [isResending, setIsResending] = useState(false);
     const { loading, setLoading } = useContext(OnboardingContext);
@@ -122,9 +122,8 @@ const OtpComponent = () => {
                         <form onSubmit={handleResendOTP}>
                             <button
                                 type="submit"
-                                className={`text-xs font-bold mt-3 z-10 cursor-pointer ${
-                                    timeLeft > 0 || isResending ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'
-                                }`}
+                                className={`text-xs font-bold mt-3 z-10 cursor-pointer ${timeLeft > 0 || isResending ? 'text-gray-400 cursor-not-allowed' : 'text-app-primary'
+                                    }`}
                                 disabled={timeLeft > 0 || isResending}
                             >
                                 {isResending ? 'Resending...' : 'Resend Code'}
@@ -197,7 +196,7 @@ export { OtpComponent };
 
 //     useEffect(() => {
 //         const fetchEmail = async () => {
-//             const emailCookie = await getOtpEmail(); 
+//             const emailCookie = await getOtpEmail();
 //             if (!emailCookie) {
 //                 router.back();
 //             } else {

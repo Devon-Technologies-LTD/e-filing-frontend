@@ -11,10 +11,12 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { createCaseFile } from "@/lib/actions/case-actions";
 import { ErrorResponse } from "@/types/auth";
+import { Input } from "@/components/ui/input";
+
 
 interface ScheduleSheetProps {
   trigger: React.ReactNode;
@@ -22,6 +24,7 @@ interface ScheduleSheetProps {
 }
 
 export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
+  const queryClient = useQueryClient();
   const [date, setDate] = useState<Date | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTime, setIsOpenTime] = useState(false);
@@ -29,7 +32,6 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
   const [isOpen2, setIsOpen2] = useState(false);
   const [details, setDetails] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const allTimeSlots = [
     "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM",
@@ -61,6 +63,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
       const response = await createCaseFile(formData, data.id);
       if (response.success) {
         toast.success("Schedule confirmed successfully.");
+        queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
         setIsOpen2(false);
       } else {
         toast.error(`${response.data.message}: ${response.data.error}`);
@@ -131,91 +134,23 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
                 />
               </PopoverContent>
             </Popover>
-            <Popover open={isOpenTime} onOpenChange={setIsOpenTime}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("h-11 w-full font-semibold text-left border-2", !time && "text-muted-foreground")}
-                  onClick={() => setIsOpenTime(!isOpenTime)}
-                >
-                  {time ?? "TIME"}
-                  <ChevronDown className="ml-auto h-5 w-5" />
-                </Button>
-              </PopoverTrigger>
 
-              <PopoverContent align="start" forceMount className="pointer-events-auto w-auto">
-                {filteredTimeSlots.length > 0 ? (
-                  filteredTimeSlots.map((slot) => (
-                    <button
-                      key={slot}
-                      onClick={() => {
-                        setTime(slot);
-                        setIsOpenTime(false); // 🚀 Close popover after selection
-                      }}
-                      className="text-md flex font-semibold hover:bg-gray-100 p-2 rounded w-auto text-left cursor-pointer"
-                    >
-                      {slot}
-                    </button>
-                  ))
-                ) : (
-                  <p className="text-gray-500 p-2">No available times</p>
-                )}
-              </PopoverContent>
-            </Popover>
-            {/* <Popover open={isOpen} onOpenChange={setIsOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full font-semibold h-11 text-left border-2"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  {date ? format(date, "LLL dd, y") : "HEARING DATE"}
-                  <ChevronDown className="ml-auto h-5 w-5" />
-                </Button>
-              </PopoverTrigger>
+            <Input
+              type="time"
+              value={time ? format(parse(time, "hh:mm a", new Date()), "HH:mm") : ""} // Convert AM/PM back to 24-hour format for the input
+              min={isToday(date ?? new Date()) ? format(new Date(), "HH:mm") : undefined} // Prevent past times
+              onChange={(e) => {
+                const selectedTime = e.target.value;
+                if (selectedTime) {
+                  const formattedTime = format(parse(selectedTime, "HH:mm", new Date()), "hh:mm a"); // Convert to AM/PM
+                  setTime(formattedTime);
+                  setIsOpenTime(false);
+                }
+              }}
+              className="p-2 border-black w-full font-semibold h-11 text-left border-2"
+              
+            />
 
-              <PopoverContent align="start" forceMount className="pointer-events-auto">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(selectedDate) => {
-                    if (selectedDate && selectedDate >= new Date()) {
-                      setDate(selectedDate);
-                      setIsOpen(false);
-                    }
-                  }}
-                  disabled={{ before: new Date() }}
-                  className="cursor-pointer"
-                />
-              </PopoverContent>
-            </Popover>
-            <Popover open={isOpenTime} onOpenChange={setIsOpenTime}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("h-11 w-full font-semibold text-left border-2", !time && "text-muted-foreground")}
-                  onClick={() => setIsOpenTime(!isOpen)}
-                >
-                  {time ?? "TIME"}
-                  <ChevronDown className="ml-auto h-5 w-5" />
-                </Button>
-              </PopoverTrigger>
-
-              <PopoverContent align="start" forceMount className="pointer-events-auto w-auto">
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    onClick={() => {
-                      setTime(slot);
-                      setIsOpenTime(false); // 🚀 Close popover after selection
-                    }}
-                    className="text-md flex font-semibold hover:bg-gray-100 p-2 rounded w-auto text-left cursor-pointer"
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </PopoverContent>
-            </Popover> */}
           </div>
           <div className="space-y-2">
             <p className="font-bold text-base">Other details (Optional)</p>

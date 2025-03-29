@@ -8,12 +8,11 @@ import { mainColumns, unassignedColumns } from "./_components/table-columns";
 import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
-import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
+import {  DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab2 } from "@/lib/utils";
 import { CaseTypes } from "@/types/files/case-type";
 import Pagination from "@/components/ui/pagination";
 import { MonitoringContext } from "@/context/MonitoringContext";
-import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
 
 export default function FilteredCases() {
@@ -25,6 +24,9 @@ export default function FilteredCases() {
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { totalCase, setTotalCase } = useContext(MonitoringContext);
+
+  const [searchTerm, setSearchTerm] = useState<string>(""); // ✅ Correctly typed state
+
   const { data: user } = useAppSelector((state) => state.profile);
 
   const baseStatus = {
@@ -33,6 +35,7 @@ export default function FilteredCases() {
     is_hearing: false,
     request_reassignment: false,
     is_active: false,
+    case_name: searchTerm,
   };
 
   const roleBasedStatus: Partial<typeof baseStatus> = (() => {
@@ -51,7 +54,7 @@ export default function FilteredCases() {
   const status = { ...baseStatus, ...roleBasedStatus };
 
   const { data, isLoading: draftsLoading, refetch } = useQuery({
-    queryKey: ["get_cases", tab, currentPage, selectedCase],
+    queryKey: ["get_cases", tab, currentPage, selectedCase, searchTerm],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,
@@ -77,6 +80,8 @@ export default function FilteredCases() {
         setSelectedCase={setSelectedCase}
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
+        searchTerm={searchTerm} // ✅ Now correctly passed
+        setSearchTerm={setSearchTerm} // ✅ Now correctly passed
       />
       <DataTable onRowClick={handleRowClick} columns={columns} loading={draftsLoading} data={data?.data} />
       {data?.data?.length > 0 && (

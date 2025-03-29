@@ -82,7 +82,6 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
             ) : !history || !Array.isArray(history.data) || history.data.length === 0 ? (
               <div className="space-y-6">
                 <div className="gap-2 border-b-[1px] space-y-2 border-app-primary py-4">
-                  <p className="text-xs font-bold text-stone-600">-</p>
                   <div className="flex justify-start">
                     <div className="text-sm">
                       <p className="font-bold">-</p>

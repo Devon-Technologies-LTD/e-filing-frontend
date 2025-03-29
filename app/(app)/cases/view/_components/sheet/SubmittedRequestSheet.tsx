@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { changeReassignmentStatus, getAdminCaseFilesById, getReassignmentHistory } from "@/lib/actions/case-file";
 import { Loader2 } from "lucide-react";
 import { getInitials } from "@/constants";
@@ -15,6 +15,7 @@ interface SubmittedRequestSheetProps {
 }
 
 export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestSheetProps) {
+    const queryClient = useQueryClient();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState<string>("");
     const [date, setDate] = useState<string>("");
@@ -31,7 +32,6 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
     // Fetch reassignment history only when sheet is open
     useEffect(() => {
         if (!isOpen2) return;
-
         const fetchHistory = async () => {
             try {
                 console.log("Fetching reassignment history for case ID:", id);
@@ -56,6 +56,8 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
             const history = await changeReassignmentStatus(id, status);
             if (history) {
                 toast.success(history.message);
+        queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+
                 setIsOpen2(false);
             } else {
                 toast.error("Failed to update status");

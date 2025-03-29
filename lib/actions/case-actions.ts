@@ -51,7 +51,6 @@ export async function deliverJudgement(payload: any, id: string) {
 export async function getSingleCaseHistory(id: string) {
     try {
         const data = await CaseActionService.getSingleCaseHistory(id);
-        console.log(data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -70,7 +69,7 @@ export async function reassignmentHistory(id: string) {
 }
 export async function CaseAssignment(payload: any, id: string) {
     try {
-        const data = await CaseActionService.CaseAssignment(payload,id);
+        const data = await CaseActionService.CaseAssignment(payload, id);
         console.log(data);
         return { ...data, success: true };
     } catch (err: unknown) {

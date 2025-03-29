@@ -6,14 +6,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export interface IUsersColumn {
-  Division: string;
   Name: string;
   Type: string;
+  Division: string;
   court_division?: string;
   courtType?: string;
   Status?: string;
   TotalAssignedCases?: number;
   ActiveCases?: number;
+  subDivision?: string;
 }
 
 export const createUserColumns = (
@@ -21,7 +22,6 @@ export const createUserColumns = (
   type?: "pending" | "all"
 ): ColumnDef<IUsersColumn>[] => {
   const baseColumns: ColumnDef<IUsersColumn>[] = [
-
     {
       id: "Name",
       header: "Magistrate Name",
@@ -30,8 +30,8 @@ export const createUserColumns = (
         const Name = row.original.Name || "";
         const initials = Name
           ? Name.split(" ")
-            .map((part) => part.charAt(0).toUpperCase())
-            .join("")
+              .map((part) => part.charAt(0).toUpperCase())
+              .join("")
           : "";
 
         return (
@@ -46,28 +46,38 @@ export const createUserColumns = (
         );
       },
     },
-
     {
       id: "Type",
-      header: " Magistrate Type",
+      header: "Magistrate Type",
       accessorKey: "Type",
     },
-
     {
       id: "Division",
       header: "Division",
       accessorKey: "Division",
     },
+  ];
 
+  if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
+    baseColumns.push({
+      id: "sub_division",
+      header: "Sub Division",
+      accessorKey: "sub_division",
+    });
+  }
+
+  baseColumns.push(
     {
       id: "TotalAssignedCases",
       header: "Total Assigned Cases",
       accessorKey: "TotalAssignedCases",
+      cell: ({ row }) => `${row.original.TotalAssignedCases || 0} Case(s)`,
     },
     {
       id: "ActiveCases",
       header: "Active Cases",
       accessorKey: "ActiveCases",
+      cell: ({ row }) => `${row.original.ActiveCases || 0} Case(s)`,
     },
     {
       id: "Status",
@@ -75,13 +85,11 @@ export const createUserColumns = (
       accessorKey: "Status",
       cell: ({ row }) => {
         const status = row.original.Status ? row.original.Status.toLowerCase() : "N/A";
-
         const statusColors: Record<string, string> = {
           pending: "text-yellow-600 bg-yellow-100",
           active: "text-green-600 bg-green-100",
           inactive: "text-red-600 bg-red-100",
         };
-
         return (
           <StatusBadge
             tooltip=""
@@ -93,10 +101,8 @@ export const createUserColumns = (
           </StatusBadge>
         );
       },
-    },
-  ];
+    }
+  );
 
-  let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
-
-  return conditionalColumns;
+  return baseColumns;
 };

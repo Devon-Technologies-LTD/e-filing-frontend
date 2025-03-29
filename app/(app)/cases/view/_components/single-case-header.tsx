@@ -70,24 +70,24 @@ export function SingleCaseHeader({
             </h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
-
               {(data?.status.toLowerCase() === "to be assigned") ? (
                 <StatusBadge status={data?.reassignment_status.toLowerCase()} />
               ) : <StatusBadge status={data?.status.toLowerCase()} />}
+              {(data?.is_emergency) && (
+                <StatusBadge status="action required" />
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {(userRole === ROLES.ASSIGNING_MAGISTRATE && data?.status != "TO BE ASSIGNED") && (
+            {((userRole === ROLES.ASSIGNING_MAGISTRATE && data?.status != "TO BE ASSIGNED") && data?.status != "JUDGEMENT DELIVERED") && (
               <div className="flex gap-2">
                 {data?.assigned_to == user?.id ? (
                   <AssignCaseSheet id={id} status="RE-ASSIGN" trigger={<Button variant="outline" className="text-xs">RE-ASSIGN CASE</Button>} />
                 ) : (
                   <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs">ASSIGN CASE</Button>} />
                 )}
-                {/*
-                <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/>
-                */}
+                {/* <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/> */}
               </div>
             )}
 
