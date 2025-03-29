@@ -21,7 +21,7 @@ const VARIANT_STYLES: Record<CaseStatus, string> = {
   denied: "bg-rose-100 text-rose-900 border-rose-300",
   assigned: "bg-lime-100 text-lime-900 border-lime-300",
   "IsHearing": "bg-lime-100 text-lime-900 border-lime-300",
-  "action required": "bg-yellow-100 text-yellow-900 border-yellow-300",
+  "action required": "bg-red-100 text-red-900 border-red-300",
 };
 
 interface StatusBadgeProps {

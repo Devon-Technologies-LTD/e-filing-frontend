@@ -69,6 +69,8 @@ export default function PendingInvites() {
       return await getPendingUser({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        status: "PENDING",
+        invited_by: user?.id
       });
     },
     staleTime: 100000,

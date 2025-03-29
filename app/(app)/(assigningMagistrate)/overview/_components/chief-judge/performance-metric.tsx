@@ -2,12 +2,11 @@ import React from "react";
 import { YearSelector } from "@/components/year-selector";
 import { AllCasesFilter, AllFiledCasesFilter } from "@/components/filters/all-cases";
 import Histogram from "../Histogram";
-interface CaseDistributionBarChartProps {
+interface PerformanceMetricChartProps {
   caseData: { division_name: string; case_count: number }[];
   heading: string;
-  footer: string;
 }
-export default function CaseDistributionBarChart({ caseData = [], heading, footer }: CaseDistributionBarChartProps) {
+export default function PerformanceMetricChart({ caseData = [], heading }: PerformanceMetricChartProps) {
   // Ensure caseData is always an array and remove entries with empty division names
   const validCaseData = Array.isArray(caseData) ? caseData.filter((item) => item.division_name?.trim() !== "") : [];
   // Map division names as labels and case counts as data
@@ -30,8 +29,8 @@ export default function CaseDistributionBarChart({ caseData = [], heading, foote
         <Histogram
           labels={labels} // Pass cleaned division names
           data={data} // Pass case counts
-          label="Case Count"
-          histogramTitle={footer}
+          label="NO. Cases"
+          histogramTitle="CASE STATUSES"
         />
       </section>
     </div>

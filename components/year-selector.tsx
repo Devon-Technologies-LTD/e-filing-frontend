@@ -16,8 +16,7 @@ export function YearSelector() {
     { length: currentYear - 2015 + 1 },
     (_, i) => currentYear - i
   );
-  const allYears = ["All year", ...years];
-
+  const allYears = [...years];
   return (
     <Select defaultValue={selectedYear} onValueChange={setSelectedYear}>
       <SelectTrigger
@@ -29,8 +28,7 @@ export function YearSelector() {
         <SelectValue placeholder="Select Year">
           <span
             className={cn("ml-2 uppercase text-neutral-600 font-bold text-xs")}
-          >
-            YEAR FILLED: {selectedYear}
+          > {selectedYear}
           </span>
         </SelectValue>
       </SelectTrigger>

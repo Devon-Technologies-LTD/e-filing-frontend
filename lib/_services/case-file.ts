@@ -62,6 +62,8 @@ interface Claimant {
 export interface IDraftFilter {
   casetype?: string | null;
   casefile_title?: string | null;
+  case_name?: string | null;
+  case_suit_number?: string | null;
   court_division_id?: string | null;
   end_date?: string | null;
   start_date?: string | null;
@@ -74,6 +76,19 @@ export interface IDraftFilter {
   isHearing?: boolean;
   is_active?: boolean;
 }
+export interface IHearingFilter {
+  casefile_id?: string | null;
+  hearing_date?: string | null;
+  id?: string | null;
+  hearing_time?: string | null;
+  other_details?: string | null;
+  end_date?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+
 export interface IChangeStatus {
   status: CaseStatus;
   reason?: string;
@@ -116,13 +131,12 @@ const CaseFileService = {
     return response.data;
   },
 
-  // async getCaseFilesAdmin(payload: IDraftFilter): Promise<any> {
-  //   const response = await axiosInstance.post<IDraftFilter>(
-  //     `admin/casefile/case-filter`,
-  //     payload
-  //   );
-  //   return response.data;
-  // },
+  async getHearing(): Promise<any> {
+    const response = await axiosInstance.get<IHearingFilter>(
+      `admin/casefile/case-hearings`);
+    return response.data;
+  },
+
   async getCaseActivity(id: string): Promise<any> {
     const response = await axiosInstance.get<IDraftFilter>(
       `activity/case-activity/${id}`

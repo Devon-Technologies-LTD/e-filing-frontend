@@ -23,15 +23,11 @@ interface CaseFilterProps {
 
 function CaseFilter({ caseData, defaultLabel }: CaseFilterProps) {
   const [selectedCase, setSelectedCase] = useState<string>("all");
-
   const handleCaseTypeChange = (value: string) => {
     setSelectedCase(value);
   };
-
   const caseFilterOptions = [{ value: "all", label: defaultLabel }, ...caseData];
-
   return (
-    <div className="w-full min:w-24">
       <FilterDropdown
         triggerVariant="outline"
         itemVariant="outline"
@@ -40,7 +36,6 @@ function CaseFilter({ caseData, defaultLabel }: CaseFilterProps) {
         value={selectedCase}
         onChange={handleCaseTypeChange}
       />
-    </div>
   );
 }
 
@@ -49,7 +44,7 @@ export function AllCasesFilter() {
 }
 
 export function AllFiledCasesFilter() {
-  return <CaseFilter caseData={CASES_FILED} defaultLabel="ALL FILED CASE TYPES" />;
+  return <CaseFilter caseData={CASES_FILED} defaultLabel="ALL CASES FILED" />;
 }
 
 export function YearSelector() {

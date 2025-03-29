@@ -5,12 +5,13 @@ import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
 import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
-import { caseMetric, presidingmetric, hearings, centralMetric } from "@/lib/dummy-data";
+// import { caseMetric, presidingmetric,  centralMetric } from "@/lib/dummy-data";
 import UpcomingHearing from "../upcoming-hearing";
 import { getCaseDistribution, getCaseMetric } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
 import OverViewSkeleton from "../../overview-skeleton";
 import CaseStatusChart from "./case-status-chart";
+import PerformanceMetricChart from "./performance-metric";
 interface CaseData {
   division_name: string;
   case_count: number;
@@ -22,8 +23,10 @@ export default function CaseMetrics() {
   const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(user.role);
   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
-  const caseMetrics = isPresiding ? presidingmetric : (centeral) ? centralMetric : caseMetric;
   const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([
+    { division_name: "No Data", case_count: 0 },
+  ]);
+  const [setPerformance, setPerformanceMetric] = React.useState<CaseData[]>([
     { division_name: "No Data", case_count: 0 },
   ]);
   const [caseStatusData, setStatusData] = React.useState<CaseData[]>([
@@ -120,19 +123,32 @@ export default function CaseMetrics() {
         </div>
       </div>
       <div className="bg-white w-full overflow-x-auto px-4 sm:px-0">
-        {[ROLES.ASSIGNING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
-          <CaseDistributionBarChart heading="PERFORMANCE METRIC" caseData={caseMetricsData} />
+        {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+          <CaseDistributionBarChart
+            heading="CASE DISTRIBUTION ACROSS DIVISIONS (ABUJA)"
+            footer="Case Distribution by Division" caseData={caseMetricsData} />
         )}
-        {[ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE,].includes(user?.role as ROLES) && (
+        {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+          <CaseDistributionBarChart
+            heading={`CASE DISTRIBUTION ACROSS ${user?.court_divison.toUpperCase()}`}
+            footer={` ${user?.court_divison.toUpperCase()} DIVISION`}
+            caseData={caseMetricsData}
+          />
+        )}
+        {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+          <PerformanceMetricChart heading="PERFORMANCE METRIC" caseData={setPerformance} />
+        )}
+
+        {[ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user?.role as ROLES) && (
           <CaseStatusChart heading="REVIEW STATUS" caseData={caseStatusData} />
         )}
 
       </div>
-      {/* {isHearing && (
+      {isHearing && (
         <div className="bg-white py-6 sm:py-8">
-          <UpcomingHearing hearings={hearings} />
+          <UpcomingHearing />
         </div>
-      )} */}
+      )}
     </>
   );
 }

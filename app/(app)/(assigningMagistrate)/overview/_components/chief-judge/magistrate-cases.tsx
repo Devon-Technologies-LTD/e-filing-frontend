@@ -11,6 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import OverViewSkeleton from "../../overview-skeleton";
 import { MetricCard } from "../metric-card";
 
+interface CaseData {
+  division_name: string;
+  case_count: number;
+}
 export default function MagistrateCases() {
   const { data: user } = useAppSelector((state) => state.profile);
   const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
@@ -18,7 +22,25 @@ export default function MagistrateCases() {
   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
   const caseMetrics = isPresiding ? presidingmetric : (centeral) ? centralMetric : caseMetric;
+  const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([
+    { division_name: "No Data", case_count: 0 },
+  ]);
 
+  React.useEffect(() => {
+    fetch("/api/magistrate-distribution")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCaseMetricsData(data);
+        } else {
+          setCaseMetricsData([{ division_name: "No Data", case_count: 0 }]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching case data:", error);
+        setCaseMetricsData([{ division_name: "No Data", case_count: 0 }]);
+      });
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["MagisterateMetric"],
@@ -89,7 +111,14 @@ export default function MagistrateCases() {
         </div>
       </div >
       <div className="bg-white">
-        <MagistrateDistributionBarChart />
+        {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+          <MagistrateDistributionBarChart header="ZACTIVE MAGISTRATE HANDLING CASE ACROSS DIVISIONS (ABUJA)" caseData={caseMetricsData} />
+        )}
+        {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+          <MagistrateDistributionBarChart
+            header={`ACTIVE MAGISTRATE HANDLING CASE ACROSS ${user?.court_divison.toUpperCase()} DIVISION`}
+            caseData={caseMetricsData} />
+        )}
       </div>
     </>
   );

@@ -147,11 +147,15 @@ const UserService = {
   },
 
   async getPendingUsers(params: Ipage): Promise<any> {
-    const response = await axiosInstance.get(`admin/user/filter-user/pending?page=${params.page}&size=${params.size}`);
+    const { page, size, ...filteredParams } = params;
+    const response = await axiosInstance.post(
+      `admin/user/user-filter?page=${page}&size=${size}`,
+      filteredParams
+    );
     console.log("pending users management response", response.data);
     return response.data;
-  },
-
+  }
+  ,
   async addUserManagement(payload: any) {
     const response = await axiosInstance.post(`admin/user`, payload);
     return response.data;
