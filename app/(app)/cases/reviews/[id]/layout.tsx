@@ -35,7 +35,7 @@ export default function layout({
               CASE REVIEWS/{data?.case_suit_number}
             </div>
             {data.sub_case_type_name ===
-            CriminalCaseSubType.FIRST_INFORMATION_REPORT ? (
+            CriminalCaseSubType.REQUEST_FOR_REMAND_ORDER ? (
               <StatusBadge
                 tooltip=""
                 tooltipProps={{ delayDuration: 200 }}
