@@ -7,6 +7,7 @@ import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 export interface IDataProps {
   id: string;
   status: CaseStatus;
+  casetype: any[];
   case_suit_number: string;
   documents: IDocumentFileType[];
   case_type_name: string;
@@ -18,7 +19,6 @@ interface Iprops {
   data: IDataProps;
 }
 export function SideNav({ data }: Iprops) {
-  console.log("first sdddd", data);
   function getTitle(status: CaseStatus) {
     switch (status) {
       case CaseStatus.UnderReview:
