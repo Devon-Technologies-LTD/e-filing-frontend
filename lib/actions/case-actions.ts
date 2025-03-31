@@ -37,6 +37,16 @@ export async function requestReAssigment(payload: any, id: string) {
         return handleApiError2(error);
     }
 }
+export async function caseRequest(payload: any, id: string) {
+    try {
+        const data = await CaseActionService.caseRequest(payload, id);
+        console.log(data);
+        return { ...data, success: true };
+    } catch (err: unknown) {
+        const error = err as ErrorResponse;
+        return handleApiError2(error);
+    }
+}
 export async function deliverJudgement(payload: any, id: string) {
     try {
         console.log("This is a payload == >" + payload);

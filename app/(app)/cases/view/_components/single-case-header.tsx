@@ -21,6 +21,7 @@ import AssignCaseSheet from "./sheet/AssignCaseSheet";
 import CaseRequestSheet from "./sheet/CaseRequestSheet";
 import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
 import SubmittedRequestSheet from "./sheet/SubmittedRequestSheet";
+import CaseRequestStatusSheet from "./sheet/caseRequestStatus";
 
 export function SingleCaseHeader({
   data,
@@ -44,6 +45,10 @@ export function SingleCaseHeader({
     dispatch(addDocument([]));
     navigate.push(`${params?.id}/refile-documents`);
   };
+  console.log(data?.status);
+  console.log(data?.assigned_to);
+  console.log(userRole);
+
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
@@ -64,101 +69,76 @@ export function SingleCaseHeader({
               {data?.case_suit_number}
             </h1>
             <div className="flex items-center gap-3">
-              {data?.case_type_name && (
-                <StatusBadge status={data.case_type_name} />
+              <StatusBadge status={data?.case_type_name} />
+
+              {userRole === ROLES.DIRECTOR_MAGISTRATE && data?.reassignment_status !== "" ? (
+                <StatusBadge status={data?.reassignment_status} />
+              ) : data?.status.toLowerCase() === "to be assigned" ? (
+                <StatusBadge status={data?.reassignment_status.toLowerCase()} />
+              ) : data?.case_request_status !== "" ? (
+                <StatusBadge status={data?.case_request_status} />
+              ) : (
+                <StatusBadge status={data?.status.toLowerCase()} />
               )}
 
-              {data?.status ? (
-                <StatusBadge
-                  status={
-                    data.status.toLowerCase() === "to be assigned"
-                      ? data.reassignment_status?.toLowerCase() || "unknown"
-                      : data.status.toLowerCase()
-                  }
-                />
-              ) : null}
 
-              {data?.is_emergency && <StatusBadge status="action required" />}
+              {(data?.is_emergency) && (
+                <StatusBadge status="action required" />
+              )}
+
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {userRole === ROLES.ASSIGNING_MAGISTRATE &&
-              data?.status != "TO BE ASSIGNED" &&
-              data?.status != "JUDGEMENT DELIVERED" && (
-                <div className="flex gap-2">
-                  {data?.assigned_to == user?.id ? (
-                    <AssignCaseSheet
-                      id={id}
-                      status="RE-ASSIGN"
-                      trigger={
-                        <Button variant="outline" className="text-xs">
-                          RE-ASSIGN CASE
-                        </Button>
-                      }
-                    />
-                  ) : (
-                    <AssignCaseSheet
-                      id={id}
-                      status={data?.status}
-                      trigger={
-                        <Button variant="outline" className="text-xs">
-                          ASSIGN CASE
-                        </Button>
-                      }
+
+
+            {(data?.status !== "JUDGEMENT DELIVERED" && data?.status !== "STRUCK OUT") && (
+              <>
+                {userRole === ROLES.ASSIGNING_MAGISTRATE && (
+                  <>
+                    {data?.case_request_status?.toUpperCase() === "CASE REQUEST SUBMITTED" ? (
+                      <CaseRequestStatusSheet
+                        id={id}
+                        trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
+                      />
+                    ) : data?.status?.toUpperCase() === "TO BE ASSIGNED" ? (
+                      <SubmittedRequestSheet
+                        id={id}
+                        trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
+                      />
+                    ) : (
+                      <div className="flex gap-2">
+                        <AssignCaseSheet
+                          id={id}
+                          status={data?.assigned_to === user?.id ? "RE-ASSIGN" : data?.status}
+                          trigger={<Button variant="outline" className="text-xs">
+                            {data?.assigned_to === user?.id ? "RE-ASSIGN CASE" : "ASSIGN CASE"}
+                          </Button>}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+                {userRole === ROLES.PRESIDING_MAGISTRATE && data?.status?.toUpperCase() === "TO BE ASSIGNED" && (
+                  <ReviewRequestSheet
+                    trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
+                  />
+                )}
+
+                {(userRole === ROLES.DIRECTOR_MAGISTRATE && data?.status?.toUpperCase() === "UNDER REVIEW") && (
+                  <CaseRequestSheet
+                    id={id}
+                    trigger={<Button variant="outline" className="text-xs">REQUEST THIS CASE</Button>}
+                  />
+                )}
+
+                {((userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE) && (data?.case_request_status !== "")) &&
+                  data?.status !== "TO BE ASSIGNED" && (
+                    <RequestSheet trigger={<Button variant="outline" className="text-xs">REQUEST RE-ASSIGNMENT</Button>}
                     />
                   )}
-                  {/* <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/> */}
-                </div>
-              )}
-
-            {userRole === ROLES.PRESIDING_MAGISTRATE &&
-              data?.status?.toUpperCase() === "TO BE ASSIGNED" && (
-                <ReviewRequestSheet
-                  trigger={
-                    <Button variant="outline" className="text-xs">
-                      REVIEW REQUEST
-                    </Button>
-                  }
-                />
-              )}
-
-            {userRole === ROLES.ASSIGNING_MAGISTRATE &&
-              data?.status?.toUpperCase() === "TO BE ASSIGNED" && (
-                <SubmittedRequestSheet
-                  id={id}
-                  trigger={
-                    <Button variant="outline" className="text-xs">
-                      REVIEW REQUEST
-                    </Button>
-                  }
-                />
-              )}
-
-            {userRole === ROLES.DIRECTOR_MAGISTRATE && (
-              <CaseRequestSheet
-                id={id}
-                trigger={
-                  <Button variant="outline" className="text-xs">
-                    {" "}
-                    REQUEST THIS CASE
-                  </Button>
-                }
-              />
+              </>
             )}
-
-            {(userRole === ROLES.PRESIDING_MAGISTRATE ||
-              userRole === ROLES.DIRECTOR_MAGISTRATE) &&
-              data?.status !== "TO BE ASSIGNED" && (
-                <RequestSheet
-                  trigger={
-                    <Button variant="outline" className="text-xs">
-                      REQUEST RE-ASSIGNMENT
-                    </Button>
-                  }
-                />
-              )}
-
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">

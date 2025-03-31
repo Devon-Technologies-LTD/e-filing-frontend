@@ -23,7 +23,6 @@ const LoginComponent = () => {
   const [formDisabled, setFormDisabled] = useState(false);
   const [email, setEmail] = useState("");
 
-
   const errors = isFieldErrorObject(state?.errors)
     ? state.errors
     : {} as Record<string, string[]>;
