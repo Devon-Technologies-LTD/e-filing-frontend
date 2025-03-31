@@ -8,7 +8,7 @@ import { mainColumns, unassignedColumns } from "./_components/table-columns";
 import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
-import {  DEFAULT_PAGE_SIZE } from "@/constants";
+import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab2 } from "@/lib/utils";
 import { CaseTypes } from "@/types/files/case-type";
 import Pagination from "@/components/ui/pagination";
@@ -43,9 +43,14 @@ export default function FilteredCases() {
       return { request_reassignment: true, status: [] };
     } else if (tab === "case") {
       return { status: [] };
-    } else if (tab === "active") {
+    }
+    else if (tab === "active") {
       return { is_active: true, status: [] };
-    } else {
+    }
+    else if (tab === "request") {
+      return { case_request: true, status: [] };
+    }
+    else {
       return {};
     }
   })();

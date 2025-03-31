@@ -23,6 +23,12 @@ const CaseActionService = {
         );
         return response.data;
     },
+    async caseRequest(payload: any, id: string): Promise<any> {
+        const response = await axiosInstance.post<any>(`/admin/casefile/request-case/${id}`,
+            payload
+        );
+        return response.data;
+    },
     async deliverJudgement(payload: any, id: string): Promise<any> {
         console.log("This is a payload == >" + payload);
         const response = await axiosInstance.post<any>(`/admin/casefile/deliver-judgement/${id}`,

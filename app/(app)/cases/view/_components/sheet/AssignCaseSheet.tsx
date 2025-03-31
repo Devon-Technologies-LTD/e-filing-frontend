@@ -67,7 +67,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
         try {
             const response = await CaseAssignment({ assigned_to_id: userId }, id);
             if (response.success) {
-                toast.success("Case assigned successfully");
+                toast.success("Case assigned successful");
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
                 setIsOpen2(false);
             } else {

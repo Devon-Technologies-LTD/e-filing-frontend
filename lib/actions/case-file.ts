@@ -82,9 +82,27 @@ export async function getReassignmentHistory(id: string) {
     return handleApiError(error);
   }
 }
+export async function caseRequestHistory(id: string) {
+  try {
+    const data = await CaseFileService.caseRequestHistory(id);
+    return { ...data.data[0] };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function changeReassignmentStatus(id: string, status: string) {
   try {
     const data = await CaseFileService.changeReassignmentStatus(id, status);
+    return { ...data.data[0] };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function changeCaseRequestStatus(id: string, status: string) {
+  try {
+    const data = await CaseFileService.changeCaseRequestStatus(id, status);
     return { ...data.data[0] };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
