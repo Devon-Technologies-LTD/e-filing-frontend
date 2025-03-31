@@ -9,14 +9,16 @@ import {
 import { IDataProps } from "./side-nav";
 import { useMemo } from "react";
 import { getTitleByRecoveryAmount } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { getDocumentFees } from "@/lib/actions/public";
 
 interface CostBreakdownProps {
   data: IDataProps;
 }
 
 export function CostBreakdown({ data }: CostBreakdownProps) {
-  const { documents, case_type_name, recovery_amount, sub_case_type_name } =
-    data;
+  const { documents, case_type_name, sub_case_type_name } = data;
+  const recovery_amount = data?.casetype[0].recovery_amount;
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -26,9 +28,21 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       .format(amount)
       .replace("NGN", "₦ ");
   };
+  const { data: fees, isLoading } = useQuery({
+    queryKey: ["get_document_fees"],
+    queryFn: async () => {
+      return await getDocumentFees();
+    },
+  });
+  const amountData = [
+    ...(fees?.document_fees ?? []),
+    ...(fees?.sub_document_fees ?? []),
+  ];
   const getFeeByTitle = (title: any) => {
-    const item = Array.isArray(data)
-      ? data.find((item) => item.title?.toLowerCase() === title?.toLowerCase())
+    const item = Array.isArray(amountData)
+      ? amountData.find(
+          (item) => item.title?.toLowerCase() === title?.toLowerCase()
+        )
       : null;
     return item ? Number(item.fee) : 0;
   };
