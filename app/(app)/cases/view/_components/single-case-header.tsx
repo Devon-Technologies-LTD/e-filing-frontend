@@ -139,7 +139,6 @@ export function SingleCaseHeader({
                   )}
               </>
             )}
-
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
