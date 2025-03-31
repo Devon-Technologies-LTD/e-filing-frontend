@@ -1,5 +1,4 @@
 "use client";
-
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Icons } from "@/components/svg/icons";
@@ -81,7 +80,10 @@ const StepContent = ({
     ),
     4: step.status === "completed" && (
       <Button
-        onClick={() => router.push("/cases")}
+        disabled={!verifyData?.data?.case_suit_number}
+        onClick={() =>
+          router.push(`/cases/view/${verifyData?.data?.case_suit_number}`)
+        }
         size="sm"
         variant="ghost"
         className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
@@ -224,6 +226,15 @@ export default function TimelineProgress({
                 status: newStatus,
                 title: "QR Code Generation Failed",
                 description: "Failed to generate QR code",
+              };
+            }
+            if (index === 5 && !verifyData?.data?.case_suit_number) {
+              newStatus = "failed";
+              return {
+                ...step,
+                status: newStatus,
+                title: "Case Not Filed ",
+                description: "Failed to file case",
               };
             }
 
