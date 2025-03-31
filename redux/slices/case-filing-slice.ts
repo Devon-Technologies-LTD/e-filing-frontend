@@ -102,7 +102,7 @@ const initialState: FormState = {
     property_description: "",
     rental_value: "",
     relief_sought: "",
-    dated_this: undefined,
+    dated_this: new Date(),
     cost_claimed: "",
     sum_claimed: "",
     interest_claimed: "",

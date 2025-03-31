@@ -18,8 +18,6 @@ import { useDispatch } from "react-redux";
 import CaseActionDropdown from "./CaseActionDropdown";
 import RequestSheet from "./sheet/Request";
 import AssignCaseSheet from "./sheet/AssignCaseSheet";
-import ReAssignmentSheet from "./sheet/ReAssignmentSheet";
-import ReAssignmentStatusSheet from "./sheet/ReAssignmentStatus";
 import CaseRequestSheet from "./sheet/CaseRequestSheet";
 import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
 
@@ -45,9 +43,6 @@ export function SingleCaseHeader({
     dispatch(addDocument([]));
     navigate.push(`${params?.id}/refile-documents`);
   };
-  console.log(data?.status);
-  console.log(data?.assigned_to);
-  console.log(userRole);
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
@@ -69,7 +64,7 @@ export function SingleCaseHeader({
             </h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
-              <StatusBadge status={data?.status.toLowerCase()} />
+              <StatusBadge status={data ? data?.status?.toLowerCase():""} />
             </div>
           </div>
 

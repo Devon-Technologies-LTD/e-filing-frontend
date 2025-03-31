@@ -35,7 +35,7 @@ export interface Claimant {
 
 interface SaveFormParams {
   case_file_id?: string | null;
-  data: ICaseTypes;
+  data: Partial<ICaseTypes>;
   legal_counsels?: ILegalCounsels[];
 }
 
@@ -62,10 +62,12 @@ export const useSaveForm = ({
   step,
   isDraft = false,
   amount,
+  onSuccess,
 }: {
   step: number;
   isDraft?: boolean;
   amount?: any;
+  onSuccess?: () => void;
 }) => {
   const queryClient = useQueryClient();
   const navigate = useRouter();
@@ -186,7 +188,6 @@ export const useSaveForm = ({
       }
     },
     onSuccess: (data) => {
-      console.log("response from save data", data);
       if (!data?.success) {
         const errorMessage = formatErrors(data.errors);
         toast.error(
@@ -211,6 +212,9 @@ export const useSaveForm = ({
             dispatch(updateStep(step + 1));
           }
         }
+      }
+      if (onSuccess) {
+        onSuccess();
       }
     },
     onError: (error) => {
