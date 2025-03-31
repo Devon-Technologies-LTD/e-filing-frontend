@@ -10,18 +10,11 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData, CivilDocumentTitles } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm8 = (documents: any) => {
@@ -373,7 +366,22 @@ export const CivilCaseForm8 = (documents: any) => {
             </span>
           </p>
           <div className="flex items-end justify-start text-center">
-            <Popover>
+            <Button
+              disabled
+              variant={"outline"}
+              className={cn(
+                "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
+                !dated_this && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon />
+              {dated_this ? (
+                format(dated_this, "PPP")
+              ) : (
+                <span>Pick a date</span>
+              )}{" "}
+            </Button>
+            {/* <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -400,10 +408,12 @@ export const CivilCaseForm8 = (documents: any) => {
                   initialFocus
                 />
               </PopoverContent>
-            </Popover>
+            </Popover> */}
           </div>
         </div>
         <InputField
+          required
+          showErrorInLabel
           id="counsel_name"
           name="counsel_name"
           type="text"

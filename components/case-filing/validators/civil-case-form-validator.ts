@@ -69,6 +69,9 @@ export const civilCaseSchema = z
       .string()
       .nonempty("Claimant phone number is required")
       .regex(/^\d+$/, "Phone number must contain only numbers"),
+    counsel_name: z
+      .string()
+      .optional(),
     claimant_whats_app: z.string().optional(),
     // .nonempty("Claimant phone number is required")
     // .regex(/^\d+$/, "Phone number must contain only numbers"),
@@ -97,6 +100,11 @@ export const civilCaseSchema = z
           field: "court_division",
           check: requiredField,
           message: "Court division is required",
+        },
+        {
+          field: "counsel_name",
+          check: requiredField,
+          message: "Counsel Name is required",
         },
         {
           field: "recovery_amount",
@@ -146,6 +154,11 @@ export const civilCaseSchema = z
           message: "Recovery amount is required",
         },
         {
+          field: "counsel_name",
+          check: requiredField,
+          message: "Counsel Name is required",
+        },
+        {
           field: "court_division",
           check: requiredField,
           message: "Court division is required",
@@ -193,125 +206,6 @@ export const civilCaseSchema = z
       });
     }
   });
-
-// const validateRecoveryOfPremise = (data: any, ctx: z.RefinementCtx) => {
-//   const requiredFields = [
-//     { field: "court_division", message: "Court division is required" },
-//     { field: "recovery_amount", message: "Recovery Amount required" },
-//     { field: "defendant_address", message: "Address is required" },
-//     { field: "defendant_phone_number", message: "Phone Number is required" },
-//     // {
-//     //   field: "property_description",
-//     //   message: "Property Description is required",
-//     // },
-//     // { field: "rental_value", message: "Rental Value is required" },
-//     // { field: "relief_sought", message: "Relief Sought is required" },
-//     // { field: "dated_this", message: "Date is required" },
-//   ];
-
-//   const minValueFields = [
-//     {
-//       field: "defendant_address",
-//       minValue: 2,
-//       message: "Address must be at least 2 characters",
-//     },
-//   ];
-
-//   minValueFields.forEach(({ field, minValue, message }) => {
-//     if (data[field] && data[field].length < minValue) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-
-//   const regexFields = [
-//     {
-//       field: "defendant_phone_number",
-//       regex: /^\d+$/,
-//       message: "Phone number must contain only numbers",
-//     },
-//   ];
-
-//   regexFields.forEach(({ field, regex, message }) => {
-//     if (data[field] && !regex.test(data[field])) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-
-//   requiredFields.forEach(({ field, message }) => {
-//     if (!data[field]) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-// };
-
-// const validatePlaintForSummons = (data: any, ctx: z.RefinementCtx) => {
-//   const requiredFields = [
-//     { field: "recovery_amount", message: "Recovery Amount required" },
-//     { field: "court_division", message: "Court division is required" },
-//     { field: "sum_claimed", message: "Sum Claimed is required" },
-//     { field: "defendant_address", message: "Address is required" },
-//     { field: "defendant_phone_number", message: "Phone Number is required" },
-//     // { field: "interest_claimed", message: "Interest Claimed is required" },
-//     // { field: "cost_claimed", message: "Cost Claimed is required" },
-//     { field: "dated_this", message: "Date is required" },
-//   ];
-//   const regexFields = [
-//     {
-//       field: "defendant_phone_number",
-//       regex: /^\d+$/,
-//       message: "Phone number must contain only numbers",
-//     },
-//   ];
-//   const minValueFields = [
-//     {
-//       field: "defendant_address",
-//       minValue: 2,
-//       message: "Address must be at least 2 characters",
-//     },
-//   ];
-
-//   minValueFields.forEach(({ field, minValue, message }) => {
-//     if (data[field] && data[field].length < minValue) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-
-//   regexFields.forEach(({ field, regex, message }) => {
-//     if (data[field] && !regex.test(data[field])) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-
-//   requiredFields.forEach(({ field, message }) => {
-//     if (!data[field]) {
-//       ctx.addIssue({
-//         path: [field],
-//         message,
-//         code: z.ZodIssueCode.custom,
-//       });
-//     }
-//   });
-// };
 
 const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
   const dispatch = useDispatch();
