@@ -82,7 +82,9 @@ const StepContent = ({
       <Button
         disabled={!verifyData?.data?.case_suit_number}
         onClick={() =>
-          router.push(`/cases/view/${verifyData?.data?.case_suit_number}`)
+          router.push(
+            `/cases/view/${encodeURIComponent(verifyData?.data?.case_suit_number)}`
+          )
         }
         size="sm"
         variant="ghost"
