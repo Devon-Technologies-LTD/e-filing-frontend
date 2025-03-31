@@ -32,13 +32,13 @@ export function CaseUpdates({ id }: { id: string }) {
   };
 
   const { data, isLoading: activityLoading } = useQuery({
-    queryKey: ["get_case_activity"],
+    queryKey: ["get_case_activity", id],
     queryFn: async () => {
       return await getCaseActivity(id);
     },
     staleTime: 50000,
   });
-  const { data:hearingData, isLoading: hearingLoading } = useQuery({
+  const { data: hearingData, isLoading: hearingLoading } = useQuery({
     queryKey: ["get_case_hearing"],
     queryFn: async () => {
       return await getCaseActivity(id);

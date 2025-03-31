@@ -83,7 +83,7 @@ const StepContent = ({
         disabled={!verifyData?.data?.case_suit_number}
         onClick={() =>
           router.push(
-            `/cases/view/${encodeURIComponent(verifyData?.data?.case_suit_number)}`
+            `/cases/view/${encodeURIComponent(verifyData?.data?.id)}`
           )
         }
         size="sm"
