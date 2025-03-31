@@ -36,34 +36,39 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        {data?.assigned_to == user?.id &&
-                            (userRole === ROLES.ASSIGNING_MAGISTRATE &&
-                                data?.status !== "TO BE ASSIGNED" &&
-                                data?.status !== "JUDGEMENT DELIVERED") && (data?.hearing_status != "") && (
-                                <>
-                                    <ScheduleSheet id={id}
-                                        trigger={
-                                            <DropdownMenuLabel className="w-full text-left">
-                                                SCHEDULE A HEARING
-                                            </DropdownMenuLabel>
-                                        }
-                                    />
-                                    <DeliverJugdementSheet id={id}
-                                        trigger={
-                                            <DropdownMenuLabel className="w-full text-left">
-                                                DELIVER JUDGMENT
-                                            </DropdownMenuLabel>
-                                        }
-                                    />
-                                    <StruckSheet id={id}
-                                        trigger={
-                                            <DropdownMenuLabel className="w-full text-left">
-                                                STRIKE OUT
-                                            </DropdownMenuLabel>
-                                        }
-                                    />
-                                </>
-                            )}
+                        {
+
+                    data?.assigned_to == user?.id
+                    && ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE) 
+                    && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED"))
+                    && (data?.hearing_status != "") 
+                     
+                     && (
+                            <>
+                                <ScheduleSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            SCHEDULE A HEARING
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                                <DeliverJugdementSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            DELIVER JUDGMENT
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                                <StruckSheet id={id}
+                                    trigger={
+                                        <DropdownMenuLabel className="w-full text-left">
+                                            STRIKE OUT
+                                        </DropdownMenuLabel>
+                                    }
+                                />
+                            </>
+                        )}
+
                         <HearingSheet
                             id={id}
                             trigger={

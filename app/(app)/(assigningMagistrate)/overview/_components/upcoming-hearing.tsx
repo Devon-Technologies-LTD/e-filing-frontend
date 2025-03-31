@@ -23,10 +23,7 @@ export default function UpcomingHearing() {
             setLoading(true);
             try {
                 const response = await getHearing();
-                console.log("response =>" + response);
                 if (response.success) {
-                    console.log("response =>" + response.message);
-                    console.log("response =>" + response.data);
                     setHearings(response.data || []);
                 } else {
                     throw new Error(response.message || "Failed to fetch hearings");
@@ -37,7 +34,6 @@ export default function UpcomingHearing() {
                 setLoading(false);
             }
         };
-
         fetchHearings();
         const interval = setInterval(fetchHearings, 10000);
         return () => clearInterval(interval);

@@ -16,8 +16,10 @@ interface HearingSheetProps {
 export default function HearingSheet({ trigger, id }: HearingSheetProps) {
   // Fetch Case Details
   const { data, isLoading } = useQuery({
-    queryKey: ["get_single_case_by_id", id],
-    queryFn: async () => await getAdminCaseFilesById(id),
+    queryKey: ["get_single_case_by_id"],
+    queryFn: async () => {
+      return await getAdminCaseFilesById(id);
+    },
     enabled: !!id,
   });
 
@@ -65,12 +67,12 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
               </div>
             ) : (
               <ScrollArea className="h-[400px] w-full grow">
-                  {history.data.map((item: any, index: number) => (
-                    <div key={index} className="flex p-2 justify-between text-sm font-semibold pb-4 border-b-2 border-zinc-100">
-                      <p>{item.hearing_date || "-"}</p>
-                      <p>{item.hearing_time || "-"}</p>
-                    </div>
-                  ))}
+                {history.data.map((item: any, index: number) => (
+                  <div key={index} className="flex p-2 justify-between text-sm font-semibold pb-4 border-b-2 border-zinc-100">
+                    <p>{item.hearing_date || "-"}</p>
+                    <p>{item.hearing_time || "-"}</p>
+                  </div>
+                ))}
               </ScrollArea>
             )}
 

@@ -100,6 +100,7 @@ export interface LoginResponseData2 {
 
 export async function googleLoginAction(email: string) {
   let role: ROLES;
+  
   try {
     const res = await authService.googleLoginUser(email);
     const data = res.data as LoginResponseData2;
@@ -123,6 +124,7 @@ export async function googleLoginAction(email: string) {
   } catch (err: unknown) {
     return handleError(err);
   }
+
   redirect(defaultLoginRedirect(role));
 }
 

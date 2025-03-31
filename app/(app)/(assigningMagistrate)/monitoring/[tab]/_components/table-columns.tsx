@@ -75,11 +75,12 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status = row.original.status?.toLowerCase() || ""; // Safe fallback
+      const caseRequest = row.original.case_request_status || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={status === "to be assigned" ? row.original.reassignment_status : status}
+          status={(caseRequest === "CASE REQUEST SUBMITTED") ? caseRequest : (status === "to be assigned") ? row.original.reassignment_status : status}
         />
       );
     },
@@ -135,11 +136,12 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status = row.original.status?.toLowerCase() || ""; // Safe fallback
+      const caseRequest = row.original.case_request_status || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={status === "to be assigned" ? row.original.reassignment_status : status}
+          status={(caseRequest === "CASE REQUEST SUBMITTED") ? caseRequest : (status === "to be assigned") ? row.original.reassignment_status : status}
         />
       );
     },

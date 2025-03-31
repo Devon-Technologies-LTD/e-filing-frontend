@@ -1,9 +1,9 @@
 "use client"; // Ensure this is a client component
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAdminCaseFilesById } from "@/lib/actions/case-file";
+import { caseRequestHistory, changeCaseRequestStatus, getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,17 +12,21 @@ import { ErrorResponse } from "@/types/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { caseRequest } from "@/lib/actions/case-actions";
+import { getInitials } from "@/constants";
+// import { getInitials } from "@/constants";
 
-interface CaseRequestSheetProps {
+interface CaseRequestStatusSheetProps {
     trigger: React.ReactNode;
     id: string;
 }
 
-export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps) {
+export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatusSheetProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const queryClient = useQueryClient();
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState<string>("");
     const [isOpen2, setIsOpen2] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [date, setDate] = useState<string>("");
 
     const { data, isLoading } = useQuery({
         queryKey: ["get_single_case_by_id", id], // Ensure proper caching
@@ -30,13 +34,43 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
         enabled: !!id,
     });
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase();
+    // Fetch reassignment history only when sheet is open
+    useEffect(() => {
+        if (!isOpen2) return;
+        const fetchHistory = async () => {
+            try {
+                console.log("Fetching reassignment history for case ID:", id);
+                const history = await caseRequestHistory(id);
+                console.log(history);
+                setReason(history?.request_reason || "No reason provided");
+                setDate(history?.created_at || "-");
+            } catch (error) {
+                console.error("Failed to fetch reassignment history:", error);
+                setReason("Failed to load reason");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHistory();
+    }, [id, isOpen2]);
+
+    const changeCaseStatus = async (status: string) => {
+        setIsSubmitting(true);
+        try {
+            const history = await changeCaseRequestStatus(id, status);
+            if (history) {
+                toast.success(history.message);
+                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+                setIsOpen2(false);
+            } else {
+                toast.error("Failed to update status");
+            }
+        } catch (error) {
+            toast.error("An error occurred");
+            console.error(error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -75,15 +109,14 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
             <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
                 <div className="space-y-8 mx-auto">
                     <div>
-                        <p className="font-bold text-xl">Case Request</p>
+                        <p className="font-bold text-xl">Submitted Case Request</p>
                         <p className="font-semibold text-sm">
-                            This case will be submitted to the assigning magistrate for review. You will be notified of the decision.
+                            Requested on -
                         </p>
                     </div>
-
                     <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
                         <div>
-                            <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
+                            <p className="text-stone-600 text-sm">Requested From</p>
                             <p className="text-app-primary font-extrabold">{data?.division_name ?? "N/A"}</p>
                         </div>
                         <div className="flex gap-2">
@@ -100,28 +133,35 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
                     </div>
 
                     <div className="border-b-2 pb-3">
-                        <p className="text-stone-600 text-sm font-bold mb-2">Request for Re-assignment Case Suit Number</p>
+                        <p className="text-stone-600 text-sm font-bold mb-2">Request for Resignment Case Suit Number</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_suit_number ?? "N/A"}</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_type_name ?? "N/A"}</p>
-                        {data?.status && <StatusBadge status={data.status}>{data.status}</StatusBadge>}
+                        <div className="pt-3 font-semibold text-sm text-right text-app-primary">
+                            View Case Details
+                        </div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-2">
                         <div className="space-y-2">
-                            <p className="font-bold text-base">Reason for Request</p>
-                            <Textarea
-                                placeholder="Type here."
-                                required
-                                name="reason"
-                                className="bg-neutral-100 border-b-2 h-52 border-gray-300"
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
-                            />
+                            <p className="font-bold text-base">Reason for Case Request</p>
+                            <div className="border-b-2 bg-zinc-300 pb-3">
+                                {loading ? (
+                                    <div className="h-10 w-full bg-gray-300 rounded animate-pulse"></div>
+                                ) : (
+                                    <p className="p-2 text-sm font-semibold">{reason}</p>
+                                )}
+                            </div>
                         </div>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
-                            SUBMIT REQUEST
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button className="w-full" onClick={() => changeCaseStatus("approved")} disabled={isSubmitting}>
+                                {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                                APPROVE REQUEST
+                            </Button>
+                            <Button variant="outline" onClick={() => changeCaseStatus("deny")} className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                                DENY REQUEST
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </SheetContent>

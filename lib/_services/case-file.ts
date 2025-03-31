@@ -111,6 +111,7 @@ export interface CaseDetailsResponse {
   assigned_to: string;
   assignee_name: string;
   reassignment_status: string;
+  case_request_status: string;
 }
 
 const CaseFileService = {
@@ -143,7 +144,7 @@ const CaseFileService = {
     );
     return response.data;
   },
-  async getCaseFiles(payload: IDraftFilter , page: number, size: number): Promise<any> {
+  async getCaseFiles(payload: IDraftFilter, page: number, size: number): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
       `casefile/case-filter?page=${page}&size=${size}`,
       payload
@@ -158,8 +159,18 @@ const CaseFileService = {
     const response = await axiosInstance.get<any>(`admin/casefile/reassignment-history/${id}`);
     return response.data;
   },
+  async caseRequestHistory(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(`admin/case-request-history/${id}`);
+    return response.data;
+  },
   async changeReassignmentStatus(id: string, status: string): Promise<any> {
     const response = await axiosInstance.patch<any>(`admin/casefile/resassignment/${id}`, {
+      status: status
+    });
+    return response.data;
+  },
+  async changeCaseRequestStatus(id: string, status: string): Promise<any> {
+    const response = await axiosInstance.patch<any>(`admin/casefile/approve-case-request/${id}`, {
       status: status
     });
     return response.data;
