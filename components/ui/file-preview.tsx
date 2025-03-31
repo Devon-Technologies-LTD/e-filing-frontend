@@ -14,13 +14,17 @@ import { cn } from "@/lib/utils";
 interface FilePreviewProps {
   preview: string | undefined;
   filename?: string;
+  disabled?: boolean;
   className?: string;
+  buttonText?: string;
 }
 
 export function FilePreview({
   preview,
+  disabled,
   filename,
   className,
+  buttonText = " Click to view file",
 }: FilePreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
   // const [imageLoading, setImageLoading] = useState(true);
@@ -47,11 +51,12 @@ export function FilePreview({
   return (
     <div className={cn("w-full", className)}>
       <Button
+        disabled={disabled}
         variant={"ghost"}
         onClick={() => setIsOpen(true)}
         className="uppercase mt-2 p-0 h-fit font-bold text-xs text-primary"
       >
-        Click to view file
+        {buttonText}
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -94,10 +99,10 @@ export function FilePreview({
             ) : (
               <div className="flex flex-col items-center justify-center py-12">
                 <FileTypeIcon />
-                <p className="mt-4 text-center">
+                <p className="mt-4 text-center font-semibold">
                   This file type cannot be previewed directly.
                 </p>
-                <Button className="mt-4" asChild>
+                {/* <Button className="mt-4" asChild>
                   <a
                     href={preview}
                     download
@@ -107,7 +112,7 @@ export function FilePreview({
                     <DownloadIcon className="h-4 w-4 mr-2" />
                     Download File
                   </a>
-                </Button>
+                </Button> */}
               </div>
             )}
           </div>

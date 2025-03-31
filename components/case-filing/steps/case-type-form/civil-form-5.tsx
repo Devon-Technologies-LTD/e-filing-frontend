@@ -418,7 +418,22 @@ export const CivilCaseForm5 = (documents: any) => {
             </span>
           </p>
           <div className="flex items-end justify-start text-center">
-            <Popover>
+            <Button
+              disabled
+              variant={"outline"}
+              className={cn(
+                "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
+                !dated_this && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon />
+              {dated_this ? (
+                format(dated_this, "PPP")
+              ) : (
+                <span>Pick a date</span>
+              )}{" "}
+            </Button>
+            {/* <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -445,12 +460,14 @@ export const CivilCaseForm5 = (documents: any) => {
                   initialFocus
                 />
               </PopoverContent>
-            </Popover>
+            </Popover> */}
           </div>
         </div>
         <InputField
+          required
           id="counsel_name"
           name="counsel_name"
+          showErrorInLabel
           type="text"
           label="NAME"
           placeholder="e.g claimant/counsel name"
@@ -464,7 +481,6 @@ export const CivilCaseForm5 = (documents: any) => {
         <div className="space-y-6">
           {documents?.documents?.map((doc: any) => (
             <div className="bg-white p-4 lg:w-1/2 w-full">
-              
               <DocumentUploadComponent
                 required
                 subTitle={case_type}

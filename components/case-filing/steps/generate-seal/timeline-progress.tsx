@@ -10,6 +10,7 @@ import { validatePayment } from "@/lib/actions/payment";
 import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { FilePreview } from "@/components/ui/file-preview";
 
 interface TimelineStep {
   title: string;
@@ -22,9 +23,105 @@ interface TimelineProgressProps {
   onComplete?: () => void;
 }
 
+const StepIcon = ({ status }: { status: TimelineStep["status"] }) => {
+  const icons = {
+    pending: <Icons.timelinePendingCheck />,
+    completed: <Icons.timelineCheck />,
+    "in-progress": <CaseGenerationLoader />,
+    failed: <Icons.alert className="h-10 w-10" />,
+  };
+  return icons[status];
+};
+
+const StepContent = ({
+  step,
+  index,
+  sealNumber,
+  verifyData,
+  router,
+}: {
+  step: TimelineStep;
+  index: number;
+  sealNumber: string;
+  verifyData: any;
+  router: ReturnType<typeof useRouter>;
+}) => {
+  const isPending = step.status === "pending";
+  const textColor = isPending ? "text-neutral-400" : "text-black";
+
+  const actionButtons = {
+    0: step.status === "completed" && (
+      <Button
+        size="sm"
+        disabled
+        variant="ghost"
+        className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
+      >
+        View Receipts
+      </Button>
+    ),
+    1: step.status === "completed" && (
+      <span className="text-sm h-7 font-semibold text-primary">
+        {sealNumber}
+      </span>
+    ),
+    2: step.status === "completed" && (
+      <FilePreview
+        disabled={!verifyData?.data?.seal_path}
+        preview={verifyData?.data?.seal_path}
+        buttonText="View Court Seal"
+      />
+    ),
+    3: step.status === "completed" && (
+      <FilePreview
+        disabled={!verifyData?.data?.qrcode_path}
+        preview={verifyData?.data?.qrcode_path}
+        buttonText="QR Code"
+      />
+    ),
+    4: step.status === "completed" && (
+      <Button
+        onClick={() => router.push("/cases")}
+        size="sm"
+        variant="ghost"
+        className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
+      >
+        View Case
+      </Button>
+    ),
+  };
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col pt-2 transition-colors duration-500",
+        isPending && "text-muted-foreground"
+      )}
+    >
+      <h3 className={cn("text-base uppercase font-semibold", textColor)}>
+        {step.title}
+      </h3>
+      <p className={cn("text-sm capitalize font-medium", textColor)}>
+        {step.description}
+      </p>
+      {step.status !== "completed" && (
+        <Button
+          size="sm"
+          variant="ghost"
+          className={cn("text-sm h-8 font-semibold p-0 w-fit text-primary", {
+            "text-neutral-400": isPending || step.status === "in-progress",
+          })}
+        >
+          {step.status === "failed" ? "Failed" : "..."}
+        </Button>
+      )}
+      {actionButtons[index as keyof typeof actionButtons]}
+    </div>
+  );
+};
+
 export default function TimelineProgress({
   steps: initialSteps,
-  onComplete,
 }: TimelineProgressProps) {
   const [steps, setSteps] = useState(initialSteps);
   const [sealNumber, setSealNumber] = useState("");
@@ -33,237 +130,171 @@ export default function TimelineProgress({
     caseType: { case_file_id, reference },
   } = useAppSelector((state) => state.caseFileForm);
   const router = useRouter();
-  // const VerifyPaymentTransaction = async (endpoint: string) => {
-  //   const response = await fetch(endpoint);
-  //   if (!response.ok)
-  //     throw new Error(`Failed to fetch status from ${endpoint}`);
-  //   const data = await response.json();
-  //   return data.status; // Expecting "pending", "completed", or "failed"
-  // };
 
   const { data: verifyData, isLoading: verifyLoading } = useQuery({
     queryKey: ["verify_transaction"],
-    queryFn: async () => {
-      return await validatePayment(case_file_id, reference!);
-    },
+    queryFn: async () => validatePayment(case_file_id, reference!),
   });
 
+  // Payment verification effect
   useEffect(() => {
-    if (verifyLoading) {
-      setSteps((current) =>
-        current.map((step, index) =>
-          index === 0 ? { ...step, status: "in-progress" } : step
-        )
-      );
-    } else if (verifyData) {
-      if (verifyData.success) {
-        setSealNumber(verifyData?.data?.case_suit_number ?? "");
-        setSteps((current) =>
-          current.map((step, index) =>
-            index === 0
-              ? {
-                  ...step,
-                  status: "completed",
-                  title: "PAYMENT SUCCESSFUL",
-                  description: "Confirmed from REMITA Services",
-                }
-              : step
-          )
-        );
-        setCurrentStepIndex(1);
-      } else {
-        toast.error((verifyData as any)?.data?.data);
-        setSteps((current) =>
-          current.map((step, index) =>
-            index === 0
-              ? {
-                  ...step,
-                  status: "failed",
-                  title: verifyData?.data?.data,
-                  description: verifyData.data.data,
-                }
-              : step
-          )
-        );
-      }
+    setSteps((current) =>
+      current.map((step, index) =>
+        index === 0
+          ? {
+              ...step,
+              status: verifyLoading
+                ? "in-progress"
+                : verifyData?.success
+                ? "completed"
+                : "failed",
+              ...(verifyData?.success && {
+                title: "PAYMENT SUCCESSFUL",
+                description: "Confirmed from REMITA Services",
+              }),
+              ...(!verifyLoading &&
+                !verifyData?.success && {
+                  title: verifyData?.data?.data || "Payment Failed",
+                  description:
+                    verifyData?.data?.data || "Payment verification failed",
+                }),
+            }
+          : step
+      )
+    );
+
+    if (!verifyLoading && verifyData?.success) {
+      setSealNumber(verifyData.data?.case_suit_number ?? "");
+      setCurrentStepIndex(1);
+    } else if (!verifyLoading && !verifyData?.success) {
+      toast.error(verifyData?.data?.data || "Payment verification failed");
     }
   }, [verifyData, verifyLoading]);
 
+  // Step progression effect
   useEffect(() => {
-    if (currentStepIndex > 0) {
-      // Mark current step as in-progress
+    if (currentStepIndex > 0 && currentStepIndex < steps.length) {
       setSteps((current) =>
-        current.map((step, index) => ({
-          ...step,
-          status:
+        current.map((step, index) => {
+          // Base status based on progression
+          let newStatus: TimelineStep["status"] =
             index === currentStepIndex
               ? "in-progress"
               : index < currentStepIndex
               ? "completed"
-              : "pending",
-        }))
+              : "pending";
+
+          return {
+            ...step,
+            status: newStatus,
+          };
+        })
       );
 
-      // After 2 seconds, mark current step as completed and move to next step
       const timer = setTimeout(() => {
         setSteps((current) =>
-          current.map((step, index) => ({
-            ...step,
-            status: index <= currentStepIndex ? "completed" : "pending",
-          }))
+          current.map((step, index) => {
+            // Base completed status
+            let newStatus: TimelineStep["status"] =
+              index <= currentStepIndex ? "completed" : "pending";
+
+            // Maintain failure conditions
+            if (index === 1 && !verifyData?.data?.case_suit_number) {
+              newStatus = "failed";
+              return {
+                ...step,
+                status: newStatus,
+                title: "Seal Generation Failed",
+                description: "Failed to generate court seal",
+              };
+            }
+            if (index === 2 && !verifyData?.data?.seal_path) {
+              newStatus = "failed";
+              return {
+                ...step,
+                status: newStatus,
+                title: "Court Seal Generation Failed",
+                description: "Failed to generate court seal",
+              };
+            }
+            if (index === 3 && !verifyData?.data?.qrcode_path) {
+              newStatus = "failed";
+              return {
+                ...step,
+                status: newStatus,
+                title: "QR Code Generation Failed",
+                description: "Failed to generate QR code",
+              };
+            }
+
+            return {
+              ...step,
+              status: newStatus,
+            };
+          })
         );
         setCurrentStepIndex((prev) => prev + 1);
       }, 2000);
+
       return () => clearTimeout(timer);
     }
-  }, [currentStepIndex, steps.length]);
-
+  }, [currentStepIndex, steps.length, verifyData]);
   return (
     <div className="max-w-2xl p-6">
       <div className="relative">
-        {/* Vertical line */}
         <div
           style={{ height: `${steps.length * 80}px` }}
-          className="absolute -z-30 left-[27px] top-10 h-full w-[4px] bg-primary"
+          className="absolute -z-30 left-[27px] top-10 w-[4px] bg-primary"
         />
-
-        {/* Steps */}
         <div className="space-y-4">
           {steps.map((step, index) => (
             <div
               key={index}
-              className=" relative flex items-center justify-between gap-4"
+              className="relative flex items-center justify-between gap-4"
             >
-              {/* Status indicator */}
               <div className="flex items-center gap-4">
-                <div
-                  className={cn(
-                    "relative flex w-14 h-12 bg-white items-center justify-center rounded-full transition-colors duration-500"
-                  )}
-                >
-                  {step.status === "pending" && <Icons.timelinePendingCheck />}
-                  {step.status === "completed" && <Icons.timelineCheck />}
-                  {step.status === "in-progress" && <CaseGenerationLoader />}
-                  {step.status === "failed" && (
-                    <Icons.alert className="h-10 w-10" />
-                  )}
+                <div className="relative flex w-14 h-12 bg-white items-center justify-center rounded-full transition-colors duration-500">
+                  <StepIcon status={step.status} />
                 </div>
-
-                {/* Content */}
-                <div
-                  className={cn(
-                    "flex flex-col pt-2 transition-colors duration-500",
-                    step.status === "pending" && "text-muted-foreground"
-                  )}
-                >
-                  <h3
-                    className={cn("text-base uppercase font-semibold", {
-                      "text-neutral-400": step.status === "pending",
-                      "text-black": step.status !== "pending",
-                    })}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className={cn("text-sm capitalize font-medium", {
-                      "text-neutral-400": step.status === "pending",
-                      "text-black": step.status !== "pending",
-                    })}
-                  >
-                    {step.description}
-                  </p>
-                  {step.status !== "completed" && (
-                    <Button
-                      size={"sm"}
-                      variant={"ghost"}
-                      className={cn(
-                        "text-sm h-8 font-semibold p-0 w-fit text-primary",
-                        {
-                          "text-neutral-400":
-                            step.status === "pending" ||
-                            step.status === "in-progress",
-                        }
-                      )}
-                    >
-                      {step.status === "failed" ? "Failed" : "..."}
-                    </Button>
-                  )}
-
-                  {index === 0 && step.status === "completed" && (
-                    <Button
-                      size={"sm"}
-                      variant={"ghost"}
-                      className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
-                    >
-                      View Receipts
-                    </Button>
-                  )}
-
-                  {index === 1 && step.status === "completed" && (
-                    <span className="text-sm h-7 font-semibold text-primary">
-                      {sealNumber}
-                    </span>
-                  )}
-
-                  {index === 2 && step.status === "completed" && (
-                    <Button
-                      size={"sm"}
-                      variant={"ghost"}
-                      className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
-                    >
-                      View Court Seal
-                    </Button>
-                  )}
-
-                  {index === 3 && step.status === "completed" && (
-                    <Button
-                      size={"sm"}
-                      variant={"ghost"}
-                      className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
-                    >
-                      QR Code
-                    </Button>
-                  )}
-
-                  {index === steps.length - 1 &&
-                    step.status === "completed" && (
-                      <Button
-                        onClick={() => {
-                          router.push("/cases");
-                        }}
-                        size={"sm"}
-                        variant={"ghost"}
-                        className="text-sm h-7 font-semibold p-0 w-fit text-primary hover:underline"
-                      >
-                        View Case
-                      </Button>
-                    )}
-                </div>
+                <StepContent
+                  step={step}
+                  index={index}
+                  sealNumber={sealNumber}
+                  verifyData={verifyData}
+                  router={router}
+                />
               </div>
-
-              {/* Completed text for first step */}
               {index === 0 && step.status === "completed" && (
                 <div className="text-xs font-bold text-stone-600">
                   Completed
                 </div>
               )}
-              {[1, 2, 3].includes(index) && step.status === "completed" && (
-                <div className="text-xs font-bold text-stone-600">
-                  <Icons.verified />
-                </div>
-              )}
-
-              {/* Line connecting steps */}
-              {/* {index < steps.length - 1 && (
-               <div className="absolute left-[35px] top-[50%] h-[40px] w-[2px] bg-muted transform -translate-y-[50%]" />
-             )} */}
+              {([1, 2, 3].includes(index) && !["pending", "in-progress"].includes(step.status) && (
+                  <div className="text-xs font-bold text-stone-600">
+                    {index === 1 && verifyData?.data?.case_suit_number ? (
+                      <Icons.verified />
+                    ) : null}
+                    {index === 2 && verifyData?.data?.qrcode_path ? (
+                      <Icons.verified />
+                    ) : null}
+                    {index === 3 && verifyData?.data?.seal_path ? (
+                      <Icons.verified />
+                    ) : null}
+                    {index === 1 && !verifyData?.data?.case_suit_number ? (
+                      <Icons.alert />
+                    ) : null}
+                    {index === 2 && !verifyData?.data?.qrcode_path ? (
+                      <Icons.alert />
+                    ) : null}
+                    {index === 3 && !verifyData?.data?.seal_path ? (
+                      <Icons.alert />
+                    ) : null}
+                  </div>
+                ))}
             </div>
           ))}
         </div>
       </div>
     </div>
   );
-}
-function fetchStepStatus(endpoint: any): any {
-  throw new Error("Function not implemented.");
 }

@@ -84,6 +84,7 @@ const SelectTrigger = React.forwardRef<
       className={cn(
         "flex w-full items-center justify-between rounded-md text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
         selectTriggerVariants.variant[variant],
+        selectTriggerVariants.variant[variant],
         selectTriggerVariants.size[size],
         className
       )}
