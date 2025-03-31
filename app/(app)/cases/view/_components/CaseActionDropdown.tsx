@@ -36,7 +36,14 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        {data?.assigned_to == user?.id || ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE) || (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED")) && (data?.hearing_status != "") && (
+                        {
+
+                    data?.assigned_to == user?.id
+                    && ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE) 
+                    && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED"))
+                    && (data?.hearing_status != "") 
+                     
+                     && (
                             <>
                                 <ScheduleSheet id={id}
                                     trigger={
