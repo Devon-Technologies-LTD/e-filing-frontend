@@ -69,6 +69,8 @@ export default function PendingInvites() {
       return await getPendingUser({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
+        status: "PENDING",
+        invited_by: user?.id
       });
     },
     staleTime: 100000,
@@ -87,19 +89,18 @@ export default function PendingInvites() {
     }
   });
 
-
-  const filteredData = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data.filter((magistrate: IUsersColumn) => {
-      if (magistrate.role != role) return false;
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        magistrate.first_name.toLowerCase().includes(searchLower) ||
-        magistrate.last_name.toLowerCase().includes(searchLower) ||
-        magistrate.email.toLowerCase().includes(searchLower)
-      );
-    });
-  }, [data, searchTerm]);
+  // const filteredData = useMemo(() => {
+  //   if (!data?.data) return [];
+  //   return data.data.filter((magistrate: IUsersColumn) => {
+  //     if (magistrate.role != role) return false;
+  //     const searchLower = searchTerm.toLowerCase();
+  //     return (
+  //       magistrate.first_name.toLowerCase().includes(searchLower) ||
+  //       magistrate.last_name.toLowerCase().includes(searchLower) ||
+  //       magistrate.email.toLowerCase().includes(searchLower)
+  //     );
+  //   });
+  // }, [data, searchTerm]);
 
   return (
     <div className="bg-white py-2 space-y-6">
@@ -136,25 +137,26 @@ export default function PendingInvites() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <ScrollArea className="h-[600px] w-full p-4">
-        <DataTable
-          onRowClick={handleRowClick}
-          columns={columns}
-          loading={draftsLoading}
-          data={filteredData}
-        />
-      </ScrollArea>
-      <div className="flex justify-end">
-        {/* <Pagination
-          currentPage={currentPage}
-          total={data?.total_rows ?? 0}
-          rowsPerPage={DEFAULT_PAGE_SIZE}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-          }}
-        /> */}
-      </div>
-
+      <DataTable
+        onRowClick={handleRowClick}
+        columns={columns}
+        loading={draftsLoading}
+        data={data?.data}
+      />
+      {data?.data?.length > 0 && (
+        <div className="fixed bottom-0 container left-0 right-0 py-2">
+          <div className="flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              total={data?.total_rows ?? 0}
+              rowsPerPage={DEFAULT_PAGE_SIZE}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div >
   );
 }

@@ -7,12 +7,18 @@ import { CardFooter } from "@/components/ui/card";
 import { useCaseFilingForm } from "@/context/file-case";
 import { MoveLeft } from "lucide-react";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { useContext } from "react";
+import { OnboardingContext } from '@/context/OnboardingContext';
+
 
 interface OnboardingLayout {
     currentStep: number;
 }
 
 export function OnboaringFooter({ currentStep }: OnboardingLayout) {
+
+    const { loading, setLoading } = useContext(OnboardingContext);
+
     const router = useRouter();
     const { goToPreviousStep } = useCaseFilingForm();
     const handlePreviousStep = () => {
@@ -50,12 +56,12 @@ export function OnboaringFooter({ currentStep }: OnboardingLayout) {
 
             {currentStep === 2 && (
                 <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-                    <SubmitButton pendingValue="Processing..." submitform="lawyer-form" className="bg-app-primary font-bold text-white p-6" value="Create Account" />
+                    <SubmitButton loading={loading} pendingValue="Processing..." submitform="lawyer-form" className="bg-app-primary font-bold text-white p-6" value="Create Account" />
                 </div>
             )}
             {currentStep === 3 && (
                 <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-                    <SubmitButton pendingValue="Processing..." submitform="otp-form" className="bg-app-primary font-bold text-white p-6" value="Proceed" />
+                    <SubmitButton loading={loading} pendingValue="Processing..." submitform="otp-form" className="bg-app-primary font-bold text-white p-6" value="Proceed" />
                 </div>
             )}
         </CardFooter>

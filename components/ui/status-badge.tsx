@@ -21,11 +21,11 @@ const VARIANT_STYLES: Record<CaseStatus, string> = {
   denied: "bg-rose-100 text-rose-900 border-rose-300",
   assigned: "bg-lime-100 text-lime-900 border-lime-300",
   "IsHearing": "bg-lime-100 text-lime-900 border-lime-300",
-  "action required": "bg-yellow-100 text-yellow-900 border-yellow-300",
+  "action required": "bg-red-100 text-red-900 border-red-300",
 };
 
 interface StatusBadgeProps {
-  status: CaseStatus;
+  status: CaseStatus | string;
   className?: string;
   children?: React.ReactNode;
   tooltip?: React.ReactNode;
@@ -40,7 +40,9 @@ export function StatusBadge({
   tooltipProps,
 }: StatusBadgeProps) {
   const variantClass =
-    VARIANT_STYLES[status] || "bg-gray-100 text-green-900 border-green-300";
+    status in VARIANT_STYLES
+      ? VARIANT_STYLES[status as CaseStatus]
+      : "bg-gray-100 text-green-900 border-green-300";
 
   const badgeElement = (
     <Badge

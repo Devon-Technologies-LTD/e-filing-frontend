@@ -25,14 +25,13 @@ const CaseActionService = {
     },
     async deliverJudgement(payload: any, id: string): Promise<any> {
         console.log("This is a payload == >" + payload);
-
         const response = await axiosInstance.post<any>(`/admin/casefile/deliver-judgement/${id}`,
             payload
         );
         return response.data;
     },
     async getSingleCaseHistory(id: string): Promise<any> {
-        const response = await axiosInstance.get<any>(`/admin/casefile/hearing-history/${id}`);
+        const response = await axiosInstance.get<any>(`/admin/casefile/case-hearings?id=${id}`);
         return response.data;
     },
     async reassignmentHistory(id: string): Promise<any> {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner"
 import InputField from "@/components/ui/InputField";
 import { useFormState } from "react-dom";
@@ -11,11 +11,13 @@ import { LoginPasswordField } from "@/components/passwordField";
 import { isFieldErrorObject } from "@/types/auth";
 import DragDropUploaderNIN from "./signup/DragDropUploaderNIN";
 import { useRouter } from "next/navigation";
+import { OnboardingContext } from '@/context/OnboardingContext';
+
 
 const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) => {
+    const { loading, setLoading } = useContext(OnboardingContext);
     const router = useRouter();
     const [state, dispatch] = useFormState(invitationAction, undefined);
-    const [loading, setLoading] = useState<boolean>(false);
 
     const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
     useEffectAfterMount(() => {
@@ -115,11 +117,6 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
 
                     </div>
                 </div>
-                {loading && (
-                    <div className="flex justify-center items-center mt-1">
-                        <div className="spinner"></div> {/* Add spinner */}
-                    </div>
-                )}
             </form>
         </div>
     );

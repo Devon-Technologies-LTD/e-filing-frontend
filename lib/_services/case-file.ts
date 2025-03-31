@@ -62,6 +62,8 @@ interface Claimant {
 export interface IDraftFilter {
   casetype?: string | null;
   casefile_title?: string | null;
+  case_name?: string | null;
+  case_suit_number?: string | null;
   court_division_id?: string | null;
   end_date?: string | null;
   start_date?: string | null;
@@ -72,7 +74,21 @@ export interface IDraftFilter {
   page?: number;
   size?: number;
   isHearing?: boolean;
+  is_active?: boolean;
 }
+export interface IHearingFilter {
+  casefile_id?: string | null;
+  hearing_date?: string | null;
+  id?: string | null;
+  hearing_time?: string | null;
+  other_details?: string | null;
+  end_date?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+
 export interface IChangeStatus {
   status: CaseStatus;
   reason?: string;
@@ -94,6 +110,7 @@ export interface CaseDetailsResponse {
   updated_at: string;
   assigned_to: string;
   assignee_name: string;
+  reassignment_status: string;
 }
 
 const CaseFileService = {
@@ -105,29 +122,46 @@ const CaseFileService = {
     return response.data;
   },
 
-  async getCaseFilesAdmin(payload: IDraftFilter): Promise<any> {
+
+  async getCaseFilesAdmin(payload: IDraftFilter, page: number, size: number): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
-      `admin/casefile/case-filter`,
+      `admin/casefile/case-filter?page=${page}&size=${size}`,
       payload
     );
     return response.data;
   },
+
+  async getHearing(): Promise<any> {
+    const response = await axiosInstance.get<IHearingFilter>(
+      `admin/casefile/case-hearings`);
+    return response.data;
+  },
+
   async getCaseActivity(id: string): Promise<any> {
     const response = await axiosInstance.get<IDraftFilter>(
       `activity/case-activity/${id}`
     );
     return response.data;
   },
-  async getCaseFiles(payload: IDraftFilter): Promise<any> {
-    const { page, size, ...rest } = payload;
+  async getCaseFiles(payload: IDraftFilter , page: number, size: number): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
-      `casefile/case-filter?page=${payload.page}&size=${payload.size}`,
-      rest
+      `casefile/case-filter?page=${page}&size=${size}`,
+      payload
     );
     return response.data;
   },
   async getCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`CaseFile/${id}`);
+    return response.data;
+  },
+  async getReassignmentHistory(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(`admin/casefile/reassignment-history/${id}`);
+    return response.data;
+  },
+  async changeReassignmentStatus(id: string, status: string): Promise<any> {
+    const response = await axiosInstance.patch<any>(`admin/casefile/resassignment/${id}`, {
+      status: status
+    });
     return response.data;
   },
   async getAdminCaseFilesbyId(id: string): Promise<any> {

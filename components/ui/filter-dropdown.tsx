@@ -28,13 +28,13 @@ export const FilterDropdown = ({
   className?: string; // Allowing className to be passed
 }) => (
   <Select onValueChange={onChange} value={value}>
-    <SelectTrigger className={cn("h-11", className)} variant={triggerVariant}>
+    <SelectTrigger className={cn("h-11 min-w-fit", className)} variant={triggerVariant}>
       <SelectValue placeholder={placeholder} />
     </SelectTrigger>
     <SelectContent>
       {options.map((option) => (
         <SelectItem
-          className="min-w-40"
+          className="min-w-fit"
           variant={itemVariant}
           key={option.value}
           value={option.value}

@@ -20,6 +20,7 @@ import RequestSheet from "./sheet/Request";
 import AssignCaseSheet from "./sheet/AssignCaseSheet";
 import CaseRequestSheet from "./sheet/CaseRequestSheet";
 import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
+import SubmittedRequestSheet from "./sheet/SubmittedRequestSheet";
 
 export function SingleCaseHeader({
   data,
@@ -64,25 +65,43 @@ export function SingleCaseHeader({
             </h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
-              <StatusBadge status={data ? data?.status?.toLowerCase():""} />
+              {(data?.status.toLowerCase() === "to be assigned") ? (
+                <StatusBadge status={data?.reassignment_status.toLowerCase()} />
+              ) : <StatusBadge status={data?.status.toLowerCase()} />}
+              {(data?.is_emergency) && (
+                <StatusBadge status="action required" />
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Magistrates Buttons */}
-            {userRole === ROLES.ASSIGNING_MAGISTRATE && (
+            {((userRole === ROLES.ASSIGNING_MAGISTRATE && data?.status != "TO BE ASSIGNED") && data?.status != "JUDGEMENT DELIVERED") && (
               <div className="flex gap-2">
                 {data?.assigned_to == user?.id ? (
                   <AssignCaseSheet id={id} status="RE-ASSIGN" trigger={<Button variant="outline" className="text-xs">RE-ASSIGN CASE</Button>} />
                 ) : (
                   <AssignCaseSheet id={id} status={data?.status} trigger={<Button variant="outline" className="text-xs">ASSIGN CASE</Button>} />
                 )}
-                {/*
-                <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/>
-                */}
+                {/* <ReAssignmentStatusSheet id={id} trigger={<Button variant="outline" className="text-xs" >VIEW REQUEST STATUS</Button>}/> */}
               </div>
             )}
 
+            {(userRole === ROLES.PRESIDING_MAGISTRATE && data?.status?.toUpperCase() === "TO BE ASSIGNED") && (
+              <ReviewRequestSheet
+                trigger={
+                  <Button variant="outline" className="text-xs">REVIEW REQUEST</Button>
+                }
+              />
+            )}
+
+            {(userRole === ROLES.ASSIGNING_MAGISTRATE && data?.status?.toUpperCase() === "TO BE ASSIGNED") && (
+              <SubmittedRequestSheet
+                id={id}
+                trigger={
+                  <Button variant="outline" className="text-xs">REVIEW REQUEST</Button>
+                }
+              />
+            )}
 
             {userRole === ROLES.DIRECTOR_MAGISTRATE && (
               <CaseRequestSheet
@@ -98,16 +117,6 @@ export function SingleCaseHeader({
                 }
               />
             )}
-
-            {(userRole === ROLES.PRESIDING_MAGISTRATE && data?.status == "TO BE ASSIGNED") && (
-              <ReviewRequestSheet
-                trigger={
-                  <Button variant="outline" className="text-xs">REVIEW REQUEST</Button>
-                }
-              />
-              // <Button variant="outline" className="text-xs"  >REVIEW REQUEST</Button>
-            )}
-
 
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (

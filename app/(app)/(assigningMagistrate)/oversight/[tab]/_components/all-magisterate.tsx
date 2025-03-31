@@ -35,10 +35,10 @@ export default function MagistratesTable() {
 
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
-      // case ROLES.CHIEF_JUDGE:
-      //   return "DIRECTOR_MAGISTRATE";
-      // case ROLES.DIRECTOR_MAGISTRATE:
-      //   return "ASSIGNING_MAGISTRATE";
+      case ROLES.CHIEF_JUDGE:
+        return "DIRECTOR_MAGISTRATE";
+      case ROLES.DIRECTOR_MAGISTRATE:
+        return "ASSIGNING_MAGISTRATE";
       case ROLES.ASSIGNING_MAGISTRATE:
         return "PRESIDING_MAGISTRATE";
       default:

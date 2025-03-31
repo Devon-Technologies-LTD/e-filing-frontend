@@ -36,13 +36,13 @@ import {
 
 
 const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id: string, status: string }) => {
+    const queryClient = useQueryClient();
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState("");
-    const queryClient = useQueryClient();
     const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
     const dispatch = useDispatch();
     const { data: user } = useAppSelector((state) => state.profile);
@@ -68,6 +68,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
             const response = await CaseAssignment({ assigned_to_id: userId }, id);
             if (response.success) {
                 toast.success("Case assigned successfully");
+                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
                 setIsOpen2(false);
             } else {
                 toast.error(response.data.message);

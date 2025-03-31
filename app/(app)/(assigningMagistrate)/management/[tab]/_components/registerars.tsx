@@ -44,10 +44,10 @@ export default function Registerars() {
   });
 
   return (
-    <div className="bg-white p-6 space-y-6">
+    <div className="bg-white py-2 space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-base uppercase font-bold">{headingText}</h2>
+          <h2 className="text-base  font-bold">{headingText}</h2>
           <p className="text-black font-medium text-sm max-w-lg">
             {descriptionText}
           </p>

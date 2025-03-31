@@ -50,7 +50,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
   const AssigningMTabs = [
     { id: "case", label: "All Cases" },
     { id: "unassigned", label: "Unassigned Cases" },
-    { id: "request", label: "Cases Request" },
+    { id: "request", label: "Case Requests" },
     { id: "reassigned", label: "Re-assigned Cases" },
     { id: "active", label: "Active Cases" },
     { id: "concluded", label: "Concluded Cases" },

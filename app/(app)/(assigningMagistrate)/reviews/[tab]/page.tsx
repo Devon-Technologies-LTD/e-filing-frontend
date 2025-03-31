@@ -23,20 +23,22 @@ export default function FilteredCases() {
       },
     ],
     queryFn: async () => {
-      return await getCaseFiles({
-        page: currentPage,
-        size: DEFAULT_PAGE_SIZE,
-        status: [
-          CaseStatus.Approved,
-          CaseStatus.Assigned,
-          CaseStatus.Denied,
-          CaseStatus.JudgementDelivered,
-          CaseStatus.Pending,
-          CaseStatus.StruckOut,
-          CaseStatus.ToBeAssigned,
-          CaseStatus.UnderReview,
-        ],
-      });
+      return await getCaseFiles(
+        {
+          status: [
+            CaseStatus.Approved,
+            CaseStatus.Assigned,
+            CaseStatus.Denied,
+            CaseStatus.JudgementDelivered,
+            CaseStatus.Pending,
+            CaseStatus.StruckOut,
+            CaseStatus.ToBeAssigned,
+            CaseStatus.UnderReview,
+          ],
+        },
+        currentPage,
+        DEFAULT_PAGE_SIZE,
+      );
     },
     staleTime: 50000,
   });
