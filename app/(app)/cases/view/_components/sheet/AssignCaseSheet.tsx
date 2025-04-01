@@ -101,8 +101,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger disabled={status === "ASSIGNED"}
-                className={`bg-white  ${status === "ASSIGNED" ? "bg-gray-200 cursor-none border border-gray-100" : "bg-white border-black"}`}
-            >{trigger}</SheetTrigger>
+                className={`bg-white  ${status === "ASSIGNED" ? " text-slate-300 border-slate-300" : " border-black"}`}>{trigger}</SheetTrigger>
             <SheetContent side="right" className="md:w-[505px] bg-white min-w-[505px]">
                 <div className="space-y-10 mx-auto">
                     <div className="space-y-6 w-full">

@@ -6,11 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Loader2 } from "lucide-react";
 import { ErrorResponse } from "@/types/auth";
 import { requestReAssigment } from "@/lib/actions/case-actions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 
 interface ScheduleSheetProps {
     trigger: React.ReactNode;
@@ -18,6 +19,8 @@ interface ScheduleSheetProps {
 }
 
 export default function RequestSheet({ trigger, id }: any) {
+    const queryClient = useQueryClient();
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
@@ -52,6 +55,8 @@ export default function RequestSheet({ trigger, id }: any) {
             if (response.success) {
                 // toast.success(response.message);
                 toast.success("Re-assignment confirmed successfully.");
+                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+
                 setIsOpen2(false);
             } else {
                 const errorMessage = response.data.message;
