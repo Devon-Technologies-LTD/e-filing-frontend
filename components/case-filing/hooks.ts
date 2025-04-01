@@ -75,7 +75,6 @@ export const useSaveForm = ({
 
   const { triggerPayment } = useRemitaPayment({
     onSuccess: (response) => {
-      console.log("response from remita payment==>", response);
       dispatch(updateStep(step + 1));
     },
     onError: (response) => console.log("Payment Error:", response),
