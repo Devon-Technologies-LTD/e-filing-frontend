@@ -36,21 +36,24 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-2 grid text-left space-y-2">
-                        {
-                    data?.assigned_to == user?.id
-                    && ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE) 
-                    && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED")
-                    // && (data?.hearing_status != "")
-                    ) 
-                     && (
+                        {data?.assigned_to == user?.id
+                            && ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE)
+                                && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED"))
+                            && (
+                                <>
+                                    <ScheduleSheet id={id}
+                                        trigger={
+                                            <DropdownMenuLabel className="w-full text-left">
+                                                SCHEDULE A HEARING
+                                            </DropdownMenuLabel>
+                                        }
+                                    />
+
+                                </>
+                            )}
+
+                        {(data?.assigned_to == user?.id && data?.hearing_status != "") && (
                             <>
-                                <ScheduleSheet id={id}
-                                    trigger={
-                                        <DropdownMenuLabel className="w-full text-left">
-                                            SCHEDULE A HEARING
-                                        </DropdownMenuLabel>
-                                    }
-                                />
                                 <DeliverJugdementSheet id={id}
                                     trigger={
                                         <DropdownMenuLabel className="w-full text-left">
@@ -67,7 +70,6 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                                 />
                             </>
                         )}
-
                         <HearingSheet
                             id={id}
                             trigger={
