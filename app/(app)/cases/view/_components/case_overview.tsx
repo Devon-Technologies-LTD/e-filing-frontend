@@ -23,15 +23,17 @@ interface CaseOverviewProps {
   id: string;
   caseNumber: string;
   case_type_name: string;
+  sub_case_type_name: string;
   title: string;
   created_at: string;
   claimant: Claimant;
   defendant: Claimant;
   division_name: string;
-  casetype: (Partial<ICaseTypes> & {
+  casetype: Partial<ICaseTypes> & {
+    id: string;
     sub_case_type_name: string;
     case_type_name: string;
-  })[];
+  };
   documents: IDocumentFileType[];
 }
 
@@ -59,11 +61,19 @@ export function CaseOverview({ data }: IProps) {
     saveForm({
       data: {
         case_type: data?.case_type_name,
+        sub_case_type: data?.sub_case_type_name,
         case_file_id: data?.id,
+        case_type_id: data?.casetype?.id,
         defendant_address: formData.address,
         defendant_email_address: formData.email,
         defendant_name: formData.name,
         defendant_phone_number: formData.phone,
+        claimant_address: data?.claimant.address,
+        claimant_email_address: data?.claimant.email_address,
+        claimant_phone_number: data?.claimant.phone_number,
+        claimant_name: data?.claimant.name,
+        claimant_whats_app: data?.claimant.whats_app,
+        ...data,
       },
     });
   };
@@ -124,31 +134,17 @@ export function CaseOverview({ data }: IProps) {
             district="----"
             magistrate="----"
           />{" "}
-          {data?.casetype?.length > 0 && (
-            <CaseTypeInfo
-              kind={data?.casetype[0]?.sub_case_type_name || "----"}
-              type={data?.casetype[0]?.case_type_name || "----"}
-              worth={data?.casetype[0]?.recovery_amount || "----"}
-            />
-          )}
+          <CaseTypeInfo
+            kind={data?.casetype?.sub_case_type_name || "----"}
+            type={data?.casetype?.case_type_name || "----"}
+            worth={data?.casetype?.recovery_amount || "----"}
+          />
           <CostAssessment
-            sub_case_type={
-              data?.casetype?.length > 0
-                ? data?.casetype[0]?.sub_case_type_name
-                : ""
-            }
+            sub_case_type={data?.casetype?.sub_case_type_name || ""}
             variant="view"
             documents={data?.documents || []}
-            case_type={
-              data?.casetype?.length > 0
-                ? data?.casetype[0]?.case_type_name
-                : ""
-            }
-            recovery_amount={
-              data?.casetype?.length > 0
-                ? data?.casetype[0]?.recovery_amount
-                : ""
-            }
+            case_type={data?.casetype?.case_type_name || ""}
+            recovery_amount={data?.casetype?.recovery_amount || ""}
           />
         </div>
       </ScrollArea>

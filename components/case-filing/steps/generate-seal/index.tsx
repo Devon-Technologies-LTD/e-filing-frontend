@@ -1,12 +1,15 @@
 "use client";
 
+import { useAppSelector } from "@/hooks/redux";
 import TimelineProgress from "./timeline-progress";
 
 export default function GenerateSeal() {
+  const { paymentType } = useAppSelector((state) => state.caseFileForm);
+
   const steps = [
     {
       title: "VERIFYING PAYMENT",
-      description: "confirming from REMITA Services",
+      description: `confirming from ${paymentType?.toUpperCase()} Services`,
       status: "pending" as const,
     },
     {

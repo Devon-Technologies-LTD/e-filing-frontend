@@ -18,7 +18,7 @@ interface CostBreakdownProps {
 
 export function CostBreakdown({ data }: CostBreakdownProps) {
   const { documents, case_type_name, sub_case_type_name } = data;
-  const recovery_amount = data?.casetype[0]?.recovery_amount ?? "";
+  const recovery_amount = data?.casetype?.recovery_amount ?? "";
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
