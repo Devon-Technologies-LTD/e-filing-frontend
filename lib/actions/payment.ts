@@ -7,7 +7,6 @@ export async function generateRRR(caseFileId: string, amount?: any) {
   console.log("enteringggg generate");
   try {
     const data = await PaymentService.generateRRR(caseFileId, amount);
-    console.log("response from generating service rrr", data);
     return { data: data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

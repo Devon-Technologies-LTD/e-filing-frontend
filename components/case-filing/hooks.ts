@@ -92,8 +92,8 @@ export const useSaveForm = ({
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ?? "",
   };
 
-  const onPaystackSuccess = (reference: string) => {
-    console.log("reference", reference);
+  const onPaystackSuccess = (data: any) => {
+    dispatch(updateCaseTypeName({ reference: data?.reference }));
     dispatch(updateStep(step + 1));
   };
 
