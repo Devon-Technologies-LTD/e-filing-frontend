@@ -4,6 +4,7 @@ import {
   TaddAdmin,
 } from "@/lib/_definitions";
 import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
+import { resetPassword } from "../actions/login";
 
 
 export interface IDraftFilter {
@@ -118,6 +119,10 @@ const UserService = {
   },
   async getCaseDistribution(): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/case-distribution`);
+    return response.data;
+  },
+  async resetPassword(payload: any): Promise<any> {
+    const response = await axiosInstance.post(`/auth/change-password`, payload);
     return response.data;
   },
 

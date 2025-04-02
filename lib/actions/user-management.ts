@@ -1,7 +1,9 @@
 
 "use server";
+import { axiosInstance } from "../_api/axios-config";
+import axios from "axios";
+import { NEXT_BASE_URL } from "../_constants";
 import UserService from "../_services/user-service";
-
 type ErrorResponse = {
     response?: { status: number; data: { message: string; data?: { error?: string }; error: string } };
     request?: unknown;
@@ -113,3 +115,36 @@ const handleFormAction = async (serviceMethod: Function, formData: FormData) => 
 
 export const InviteUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);
 export const ActiveUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);
+
+
+
+
+// export const  = (params: any) => fetchData(
+
+//     UserService.resetPassword, params
+// );
+
+
+export async function resetPassword(
+    prevState: { success: boolean | null; message: string; errors?: any },
+    formData: FormData
+  ) {
+    const data = Object.fromEntries(formData.entries());
+  
+    try {
+      console.log(data);
+      await axiosInstance.post("/auth/change-password", data);
+  
+      return { success: true, message: "Password changed successfully", errors: {} };
+    } catch (err: any) {
+      if (err.response) {
+        return {
+          success: false,
+          message: err.response.data?.message || "An error occurred",
+          errors: err.response.data?.errors || {},
+        };
+      }
+      return { success: false, message: "Network error. Please try again.", errors: {} };
+    }
+  }
+  

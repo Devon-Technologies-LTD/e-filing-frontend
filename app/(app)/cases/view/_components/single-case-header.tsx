@@ -108,8 +108,6 @@ export function SingleCaseHeader({
           </div>
 
           <div className="flex items-center gap-3">
-
-
             {(data?.status !== "JUDGEMENT DELIVERED" && data?.status !== "STRUCK OUT") && (
               <>
                 {userRole === ROLES.ASSIGNING_MAGISTRATE && (
@@ -121,9 +119,7 @@ export function SingleCaseHeader({
                       />
                     ) : data?.status?.toUpperCase() === "TO BE ASSIGNED" ? (
                       <SubmittedRequestSheet
-                        id={id}
-                        trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
-                      />
+                        id={id} trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>} />
                     ) : (
                       <div className="flex gap-2">
                         <AssignCaseSheet
@@ -147,13 +143,12 @@ export function SingleCaseHeader({
                 {userRole === ROLES.DIRECTOR_MAGISTRATE && (
                   <>
                     {/* Request This Case */}
-                    {(data?.status || "").toUpperCase() === "UNDER REVIEW" && (
+                    {((data?.status || "").toUpperCase() === "UNDER REVIEW") && (data.case_request_status != "CASE REQUEST SUBMITTED") && (
                       <CaseRequestSheet
                         id={id}
                         trigger={<Button variant="outline" className="text-xs">REQUEST THIS CASE</Button>}
                       />
                     )}
-
                     {/* Request Re-assignment */}
                     {!data?.case_request_status && data?.assigned_to === user?.id && data?.status !== "TO BE ASSIGNED" && (
                       <RequestSheet
@@ -162,7 +157,6 @@ export function SingleCaseHeader({
                     )}
                   </>
                 )}
-
 
                 {userRole === ROLES.PRESIDING_MAGISTRATE && data?.assigned_to === user?.id && (
                   <>
