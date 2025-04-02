@@ -35,8 +35,8 @@ export const useRemitaPayment = ({
     }
 
     if (!window.RmPaymentEngine) {
-      toast.error("Payment engine not loaded. Please try again.");
-      return;
+      toast.error("Payment engine not loaded. Trying another gateway.");
+      return false;
     }
 
     const paymentEngine = window.RmPaymentEngine.init({
@@ -63,6 +63,7 @@ export const useRemitaPayment = ({
     });
 
     paymentEngine.showPaymentWidget();
+    return true;
   };
 
   return { triggerPayment };
