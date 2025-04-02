@@ -8,7 +8,11 @@ import { MoveLeft } from "lucide-react";
 import { useAppSelector } from "@/hooks/redux";
 import { useCaseOverviewFormValidator } from "./validators/case-overview-validator";
 import { useSaveForm } from "./hooks";
-import { addCaseTypeError, updatePaymentType, updateStep } from "@/redux/slices/case-filing-slice";
+import {
+  addCaseTypeError,
+  updatePaymentType,
+  updateStep,
+} from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ConfirmationModal } from "../confirmation-modal";
 import { Icons } from "../svg/icons";
@@ -208,7 +212,10 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         <Button
           size={"lg"}
           className="font-bold flex-end text-sm h-11"
-          onClick={handleNextStep}
+          onClick={() => {
+            handleNextStep();
+            dispatch(updatePaymentType("remita"));
+          }}
           disabled={formPending || generateRRRMutation.isPending}
         >
           {formPending || generateRRRMutation.isPending ? (

@@ -15,15 +15,17 @@ export async function generateRRR(caseFileId: string, amount?: any) {
   }
 }
 
-export async function validatePayment(casefile_id: string, reference: string) {
-  console.log("casefile_id on verify", casefile_id);
-  console.log("remita on verify", reference);
+export async function validatePayment(
+  casefile_id: string,
+  reference: string,
+  payment_method: string
+) {
   try {
     const data = await PaymentService.validatePayment({
       casefile_id,
       reference,
+      payment_method,
     });
-    console.log("response from validating service", data);
     return { data: data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
