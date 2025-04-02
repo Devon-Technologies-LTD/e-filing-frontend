@@ -12,6 +12,7 @@ import Pagination from "@/components/ui/pagination";
 import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
 import {
   addDocument,
+  updateCaseTypeName,
   updateLegalCounsels,
   updateMultipleCaseTypeFields,
 } from "@/redux/slices/case-filing-slice";
@@ -85,6 +86,7 @@ export default function Page() {
       dispatch(updateLegalCounsels(singleDraftData?.casetype?.legal_counsels));
       dispatch(addDocument(singleDraftData.documents));
       setSelectedRow(null);
+      dispatch(updateCaseTypeName({ reference: "" }));
       router.push(`/case-filing`);
     }
   }, [singleDraftData, dispatch]);

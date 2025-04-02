@@ -198,11 +198,12 @@ const formSlice = createSlice({
       );
     },
 
-    clearForm: (state) => {
-      state.current_step = initialState.current_step;
-      state.caseType = initialState.caseType;
-      state.legal_counsels = initialState.legal_counsels;
-      state.documents = initialState.documents;
+    clearForm: () => {
+      // state.current_step = initialState.current_step;
+      // state.caseType = initialState.caseType;
+      // state.legal_counsels = initialState.legal_counsels;
+      // state.documents = initialState.documents;
+      return initialState;
     },
   },
 });
