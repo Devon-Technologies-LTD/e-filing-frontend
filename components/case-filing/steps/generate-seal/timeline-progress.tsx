@@ -136,7 +136,7 @@ export default function TimelineProgress({
 
   const { data: verifyData, isLoading: verifyLoading } = useQuery({
     queryKey: ["verify_transaction"],
-    queryFn: async () => validatePayment(case_file_id, reference!),
+    queryFn: async () => validatePayment(case_file_id, reference!, paymentType),
   });
 
   // Payment verification effect

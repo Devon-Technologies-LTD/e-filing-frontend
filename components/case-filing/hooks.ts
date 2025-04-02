@@ -119,7 +119,6 @@ export const useSaveForm = ({
 
   const mutation = useMutation({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
-      console.log("first dataaaa", data);
       const saveStep1 = async () => {
         const payload = {
           // steps: String(step),
@@ -153,7 +152,7 @@ export const useSaveForm = ({
           // steps: String(step),
           id: data?.case_type_id,
           case_type_name: data.case_type,
-          // casefile_id: data.case_file_id,
+          casefile_id: data.case_file_id,
           claimant: {
             address: data.claimant_name,
             email_address: data.claimant_email_address,

@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -14,7 +13,7 @@ import Pagination from "@/components/ui/pagination";
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/case-file";
-import { DEFAULT_PAGE_SIZE } from "@/constants";
+import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
 import { getStatusByTab, getStatusByTab2 } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
@@ -32,7 +31,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
@@ -46,14 +49,21 @@ export default function FilteredCases() {
   const [selectedYear, setSelectedYear] = useState<string>("All Year");
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [isOpen, setIsOpen] = useState(false);
-  const formattedStartDate = selectedRange?.from ? format(selectedRange.from, "yyyy-MM-dd") : "";
-  const formattedEndDate = selectedRange?.to ? format(selectedRange.to, "yyyy-MM-dd") : "";
+  const formattedStartDate = selectedRange?.from
+    ? format(selectedRange.from, "yyyy-MM-dd")
+    : "";
+  const formattedEndDate = selectedRange?.to
+    ? format(selectedRange.to, "yyyy-MM-dd")
+    : "";
   const handleApplyFilter = () => {
     refetch(); // Manually trigger query refresh
     setIsOpen(false); // Close popover
   };
 
-  const caseFilter = useMemo(() => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2], []);
+  const caseFilter = useMemo(
+    () => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2],
+    []
+  );
   let status = {
     status: getStatusByTab2(tab),
     casetype: selectedCase === "all" ? null : selectedCase,
@@ -65,12 +75,18 @@ export default function FilteredCases() {
     is_hearing: false,
     request_reassignment: false,
     is_active: false,
+    exclude_status: [CaseStatus.Draft],
   };
 
   switch (user?.role) {
     case ROLES.DIRECTOR_MAGISTRATE:
       if (tab === "submitted") {
-        status = { ...status, request_reassignment: true, status: [], assignee_id: "", };
+        status = {
+          ...status,
+          request_reassignment: true,
+          status: [],
+          assignee_id: "",
+        };
       } else {
         status = { ...status, assignee_id: "" };
       }
@@ -81,16 +97,16 @@ export default function FilteredCases() {
       } else if (tab === "case") {
         status = { ...status, status: [] };
       } else {
-        status = { ...status, status: [], is_active: true, };
+        status = { ...status, status: [], is_active: true };
       }
       break;
     case ROLES.CENTRAL_REGISTRAR:
       if (tab === "under-review") {
         status = { ...status, assignee_id: "", is_hearing: false };
       } else if (tab === "approved-review") {
-        status = { ...status, status: [], is_active: true, assignee_id: "", };
+        status = { ...status, status: [], is_active: true, assignee_id: "" };
       } else {
-        status = { ...status, assignee_id: "", };
+        status = { ...status, assignee_id: "" };
       }
       break;
     case ROLES.PRESIDING_MAGISTRATE:
@@ -99,40 +115,52 @@ export default function FilteredCases() {
       } else if (tab === "concluded") {
         status = { ...status };
       } else if (tab === "submitted") {
-        status = { ...status, assignee_id: "", status: [], request_reassignment: true, };
+        status = {
+          ...status,
+          assignee_id: "",
+          status: [],
+          request_reassignment: true,
+        };
       } else {
-        status = { ...status, status: [], is_active: true, };
+        status = { ...status, status: [], is_active: true };
       }
       break;
     case ROLES.USER:
       if (tab === "active") {
-        status = { ...status, is_active: true, status: [], assignee_id: "", };
+        status = { ...status, is_active: true, status: [], assignee_id: "" };
       } else if (tab === "recent") {
-        status = { ...status, assignee_id: "", status: [] };
+        status = {
+          ...status,
+          assignee_id: "",
+          status: [],
+        };
       } else {
-        status = { ...status, assignee_id: "", };
+        status = { ...status, assignee_id: "" };
       }
       break;
     case ROLES.LAWYER:
       if (tab === "active") {
-        status = { ...status, is_active: true, status: [], };
+        status = { ...status, is_active: true, status: [] };
       } else if (tab === "recent") {
         status = { ...status, assignee_id: "", status: [] };
       } else {
-        status = { ...status, assignee_id: "", };
+        status = { ...status, assignee_id: "" };
       }
       break;
     default:
       status = { ...status, assignee_id: "" };
   }
 
-  const { data, isLoading: draftsLoading, refetch } = useQuery({
+  const {
+    data,
+    isLoading: draftsLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["get_cases", tab, selectedCase, currentPage],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,
   });
-
 
   const getColumns = useMemo(() => {
     switch (tab) {
@@ -255,4 +283,3 @@ export default function FilteredCases() {
     </div>
   );
 }
-
