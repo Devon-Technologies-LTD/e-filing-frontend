@@ -24,6 +24,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 import { usePaystackPayment } from "react-paystack";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -80,18 +81,20 @@ export const useSaveForm = ({
   const { data: user } = useAppSelector((state) => state.profile);
   const { paymentType } = useAppSelector((state) => state.caseFileForm);
   const { triggerPayment } = useRemitaPayment({
-    onSuccess: () => {
-      dispatch(updateStep(step + 1));
-    },
+    onSuccess: () => dispatch(updateStep(step + 1)),
     onError: (response) => console.log("Payment Error:", response),
   });
+  const [showPaystackInfoModal, setShowPaystackInfoModal] = useState(false);
 
-  const config = {
-    reference: new Date().getTime().toString(),
-    email: user?.email ?? "",
-    amount: amount * 100,
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ?? "",
-  };
+  const paystackConfig = useMemo(
+    () => ({
+      reference: new Date().getTime().toString(),
+      email: user?.email ?? "",
+      amount: (amount ?? 0) * 100,
+      publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ?? "",
+    }),
+    [user?.email, amount]
+  );
 
   const onPaystackSuccess = (data: any) => {
     dispatch(updateCaseTypeName({ reference: data?.reference }));
@@ -101,8 +104,13 @@ export const useSaveForm = ({
   const onClose = () => {
     console.log("closed");
   };
-
-  const initializePayment = usePaystackPayment(config);
+  const initializePaystackPayment = usePaystackPayment(paystackConfig);
+  const handlePaystackPayment = useCallback(() => {
+    initializePaystackPayment({
+      onSuccess: onPaystackSuccess,
+      onClose,
+    });
+  }, [initializePaystackPayment, onPaystackSuccess]);
 
   const generateRRRMutation = useMutation({
     mutationFn: async ({ caseFileId }: { caseFileId: string }) => {
@@ -112,12 +120,7 @@ export const useSaveForm = ({
       if (data?.success) {
         const response = triggerPayment(data?.data?.RRR, amount);
         if (!response) {
-          dispatch(updatePaymentType("paystack"));
-          initializePayment({
-            onClose,
-            onSuccess: onPaystackSuccess,
-            config,
-          });
+          setShowPaystackInfoModal(true);
         }
         dispatch(updateCaseTypeName({ reference: data?.data?.RRR }));
       } else {
@@ -239,11 +242,7 @@ export const useSaveForm = ({
           }
           if (step === 5) {
             if (paymentType === "paystack") {
-              initializePayment({
-                onClose,
-                onSuccess: onPaystackSuccess,
-                config,
-              });
+              handlePaystackPayment();
             } else generateRRRMutation.mutate({ caseFileId: data.casefile_id });
           } else if (step < 5) {
             dispatch(updateStep(step + 1));
@@ -260,5 +259,11 @@ export const useSaveForm = ({
     },
   });
 
-  return { mutation, generateRRRMutation };
+  return {
+    mutation,
+    generateRRRMutation,
+    initializePaymentFunction: handlePaystackPayment,
+    showPaystackInfoModal,
+    setShowPaystackInfoModal,
+  };
 };
