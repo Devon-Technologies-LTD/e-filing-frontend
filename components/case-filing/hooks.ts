@@ -15,6 +15,7 @@ import {
   ICaseTypes,
   ILegalCounsels,
   updateCaseTypeName,
+  updatePaymentType,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import {
@@ -109,7 +110,15 @@ export const useSaveForm = ({
     },
     onSuccess: (data) => {
       if (data?.success) {
-        triggerPayment(data.data?.RRR, amount);
+        const response = triggerPayment(data?.data?.RRR, amount);
+        if (!response) {
+          dispatch(updatePaymentType("paystack"));
+          initializePayment({
+            onClose,
+            onSuccess: onPaystackSuccess,
+            config,
+          });
+        }
         dispatch(updateCaseTypeName({ reference: data?.data?.RRR }));
       } else {
         toast.error(`Failed to generate RRR. ${data?.data.message}`);
