@@ -100,25 +100,29 @@ function DocumentsSection({ documents }: { documents: IDocumentFileType[] }) {
       </div>
       <div className="w-full">
         <div className="space-y-6">
-            {documents
-            .filter((doc) => doc?.case_type_name?.toLowerCase() !== "exhibits")
-            .length === 0 ? (
-            <p className="text-center text-neutral-500">No documents available</p>
-            ) : (
+          {documents?.filter(
+            (doc) => doc?.case_type_name?.toLowerCase() !== "exhibits"
+          )?.length === 0 ? (
+            <p className="text-center text-neutral-500">
+              No documents available
+            </p>
+          ) : (
             documents
-              .filter((doc) => doc?.case_type_name?.toLowerCase() !== "exhibits")
+              ?.filter(
+                (doc) => doc?.case_type_name?.toLowerCase() !== "exhibits"
+              )
               .map((doc, index) => (
-              <div key={index} className="grid grid-cols-5 items-center">
-                <div className="col-span-3">
-                <DocumentItem doc={doc} />
+                <div key={index} className="grid grid-cols-5 items-center">
+                  <div className="col-span-3">
+                    <DocumentItem doc={doc} />
+                  </div>
+                  <div></div>
+                  <div className="col-span-1 text-right font-semibold">
+                    ₦ {doc.amount}
+                  </div>
                 </div>
-                <div></div>
-                <div className="col-span-1 text-right font-semibold">
-                ₦ {doc.amount}
-                </div>
-              </div>
               ))
-            )}
+          )}
         </div>
       </div>
     </div>
@@ -134,7 +138,7 @@ function ExhibitsSection({ documents }: { documents: IDocumentFileType[] }) {
       <div className="w-full">
         <div className="space-y-6">
           {documents
-            .filter((doc) => doc?.case_type_name?.toLowerCase() === "exhibits")
+            ?.filter((doc) => doc?.case_type_name?.toLowerCase() === "exhibits")
             .map((doc, index) => (
               <div key={index} className="grid grid-cols-5 items-center">
                 <div className="col-span-3">

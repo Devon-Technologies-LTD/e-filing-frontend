@@ -73,10 +73,13 @@ export function SingleCaseHeader({
 
               {userRole !== ROLES.PRESIDING_MAGISTRATE && (
                 <>
-                  {(userRole === ROLES.DIRECTOR_MAGISTRATE) && data?.case_request_status !== "" ? (
+                  {userRole === ROLES.DIRECTOR_MAGISTRATE &&
+                  data?.case_request_status !== "" ? (
                     <StatusBadge status={data?.case_request_status} />
-                  ) : data?.status.toLowerCase() === "to be assigned" ? (
-                    <StatusBadge status={data?.case_request_status.toLowerCase()} />
+                  ) : (data?.status||"")?.toLowerCase() === "to be assigned" ? (
+                    <StatusBadge
+                      status={(data?.case_request_status||"")?.toLowerCase()}
+                    />
                   ) : data?.case_request_status !== "" ? (
                     <StatusBadge status={data?.case_request_status} />
                   ) : (
@@ -91,19 +94,22 @@ export function SingleCaseHeader({
                   {data?.reassignment_status && (
                     <StatusBadge status={data.reassignment_status} />
                   )}
-                  {((data?.status == "UNDER REVIEW") && (data?.review_status == "UNDER REVIEW")) && (
-                    <StatusBadge status={data.status} />
-                  )}
+                  {data?.status == "UNDER REVIEW" &&
+                    data?.review_status == "UNDER REVIEW" && (
+                      <StatusBadge status={data.status} />
+                    )}
                   {/* Show Status Badge if the case is "to be assigned" */}
-                  {(data?.status || "").toLowerCase() === "to be assigned" && data?.reassignment_status && (
-                    <StatusBadge status={data.reassignment_status.toLowerCase()} />
-                  )}
+                  {(data?.status || "").toLowerCase() === "to be assigned" &&
+                    data?.reassignment_status && (
+                      <StatusBadge
+                        status={(
+                          data?.reassignment_status || ""
+                        )?.toLowerCase()}
+                      />
+                    )}
                 </>
               )}
-              {(data?.is_emergency) && (
-                <StatusBadge status="action required" />
-              )}
-
+              {data?.is_emergency && <StatusBadge status="action required" />}
             </div>
           </div>
 
@@ -167,18 +173,20 @@ export function SingleCaseHeader({
                       />
                     )}
 
-                    {/* Review Request */}
-                    {data?.reassignment_status?.trim() && (
-                      <ReviewRequestSheet
-                        trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
-                      />
+                        {/* Review Request */}
+                        {data?.reassignment_status?.trim() && (
+                          <ReviewRequestSheet
+                            trigger={
+                              <Button variant="outline" className="text-xs">
+                                REVIEW REQUEST
+                              </Button>
+                            }
+                          />
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-
-
-              </>
-            )}
+                </>
+              )}
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">

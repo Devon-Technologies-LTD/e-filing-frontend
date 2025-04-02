@@ -7,7 +7,7 @@ import { IDocumentFileType } from "@/redux/slices/case-filing-slice";
 export interface IDataProps {
   id: string;
   status: CaseStatus;
-  casetype: any[];
+  casetype: Record<string, any>;
   case_suit_number: string;
   documents: IDocumentFileType[];
   case_type_name: string;

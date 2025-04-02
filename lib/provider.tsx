@@ -15,7 +15,7 @@ function makeQueryClient() {
       queries: {
         refetchOnReconnect: true,
         refetchOnWindowFocus: false,
-        retry: 5,
+        retry: 3, 
       },
     },
   });

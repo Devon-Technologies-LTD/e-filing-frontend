@@ -82,9 +82,7 @@ const StepContent = ({
       <Button
         disabled={!verifyData?.data?.case_suit_number}
         onClick={() =>
-          router.push(
-            `/cases/view/${encodeURIComponent(verifyData?.data?.id)}`
-          )
+          router.push(`/cases/view/${encodeURIComponent(verifyData?.data?.id)}`)
         }
         size="sm"
         variant="ghost"
@@ -132,12 +130,13 @@ export default function TimelineProgress({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const {
     caseType: { case_file_id, reference },
+    paymentType,
   } = useAppSelector((state) => state.caseFileForm);
   const router = useRouter();
 
   const { data: verifyData, isLoading: verifyLoading } = useQuery({
     queryKey: ["verify_transaction"],
-    queryFn: async () => validatePayment(case_file_id, reference!),
+    queryFn: async () => validatePayment(case_file_id, reference!, paymentType),
   });
 
   // Payment verification effect
@@ -154,7 +153,7 @@ export default function TimelineProgress({
                 : "failed",
               ...(verifyData?.success && {
                 title: "PAYMENT SUCCESSFUL",
-                description: "Confirmed from REMITA Services",
+                description: `Confirmed from ${paymentType?.toUpperCase()}  Services`,
               }),
               ...(!verifyLoading &&
                 !verifyData?.success && {
@@ -282,7 +281,8 @@ export default function TimelineProgress({
                   Completed
                 </div>
               )}
-              {([1, 2, 3].includes(index) && !["pending", "in-progress"].includes(step.status) && (
+              {[1, 2, 3].includes(index) &&
+                !["pending", "in-progress"].includes(step.status) && (
                   <div className="text-xs font-bold text-stone-600">
                     {index === 1 && verifyData?.data?.case_suit_number ? (
                       <Icons.verified />
@@ -303,7 +303,7 @@ export default function TimelineProgress({
                       <Icons.alert />
                     ) : null}
                   </div>
-                ))}
+                )}
             </div>
           ))}
         </div>

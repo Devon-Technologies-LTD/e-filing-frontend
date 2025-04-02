@@ -88,7 +88,6 @@ export interface IHearingFilter {
   updated_at?: string | null;
 }
 
-
 export interface IChangeStatus {
   status: CaseStatus;
   reason?: string;
@@ -123,8 +122,11 @@ const CaseFileService = {
     return response.data;
   },
 
-
-  async getCaseFilesAdmin(payload: IDraftFilter, page: number, size: number): Promise<any> {
+  async getCaseFilesAdmin(
+    payload: IDraftFilter,
+    page: number,
+    size: number
+  ): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
       `admin/casefile/case-filter?page=${page}&size=${size}`,
       payload
@@ -134,7 +136,8 @@ const CaseFileService = {
 
   async getHearing(): Promise<any> {
     const response = await axiosInstance.get<IHearingFilter>(
-      `admin/casefile/case-hearings`);
+      `admin/casefile/case-hearings`
+    );
     return response.data;
   },
 
@@ -144,7 +147,11 @@ const CaseFileService = {
     );
     return response.data;
   },
-  async getCaseFiles(payload: IDraftFilter, page: number, size: number): Promise<any> {
+  async getCaseFiles(
+    payload: IDraftFilter,
+    page: number,
+    size: number
+  ): Promise<any> {
     const response = await axiosInstance.post<IDraftFilter>(
       `casefile/case-filter?page=${page}&size=${size}`,
       payload
@@ -156,23 +163,33 @@ const CaseFileService = {
     return response.data;
   },
   async getReassignmentHistory(id: string): Promise<any> {
-    const response = await axiosInstance.get<any>(`admin/casefile/reassignment-history/${id}`);
+    const response = await axiosInstance.get<any>(
+      `admin/casefile/reassignment-history/${id}`
+    );
     return response.data;
   },
   async caseRequestHistory(id: string): Promise<any> {
-    const response = await axiosInstance.get<any>(`admin/case-request-history/${id}`);
+    const response = await axiosInstance.get<any>(
+      `admin/case-request-history/${id}`
+    );
     return response.data;
   },
   async changeReassignmentStatus(id: string, status: string): Promise<any> {
-    const response = await axiosInstance.patch<any>(`admin/casefile/resassignment/${id}`, {
-      status: status
-    });
+    const response = await axiosInstance.patch<any>(
+      `admin/casefile/resassignment/${id}`,
+      {
+        status: status,
+      }
+    );
     return response.data;
   },
   async changeCaseRequestStatus(id: string, status: string): Promise<any> {
-    const response = await axiosInstance.patch<any>(`admin/casefile/approve-case-request/${id}`, {
-      status: status
-    });
+    const response = await axiosInstance.patch<any>(
+      `admin/casefile/approve-case-request/${id}`,
+      {
+        status: status,
+      }
+    );
     return response.data;
   },
   async getAdminCaseFilesbyId(id: string): Promise<any> {
@@ -233,13 +250,14 @@ const CaseFileService = {
   },
   async patchCaseType({
     payload,
-    caseFileId,
+    caseTypeId,
   }: {
     payload: ICreateCaseFileData;
-    caseFileId: string;
+    caseTypeId: string;
   }): Promise<any> {
+
     const response = await axiosInstance.patch<ICreateCaseFileData>(
-      `casetype/${caseFileId}`,
+      `casetype/${caseTypeId}`,
       payload
     );
 

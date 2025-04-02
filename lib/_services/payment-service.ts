@@ -13,7 +13,8 @@ const PaymentService = {
   },
   async validatePayment(params: {
     reference: string;
-    casefile_id: String;
+    casefile_id: string;
+    payment_method: string;
   }): Promise<any> {
     try {
       const response = await axiosInstance.post<any>(
