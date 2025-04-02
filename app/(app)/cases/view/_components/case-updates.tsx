@@ -53,12 +53,12 @@ export function CaseUpdates({ id }: { id: string }) {
     time: dateFormatter(item?.created_at).fullDate,
   }));
   return (
-    <div className="bg-white space-y-4 w-full overflow-hidden p-4 rounded-lg shadow-sm">
+    <div className="bg-white space-y-4 w-full overflow-hidden p-4 px-2 rounded-lg shadow-sm">
       <div className="flex justify-between w-full items-center gap-4">
         <h2 className="flex items-center gap-3 font-semibold text-semibold">
           <Icons.recent /> CASE UPDATES
         </h2>
-        <p className="text-xs font-medium">4 Updates available</p>
+        <p className="text-xs font-medium"> Updates available</p>
       </div>
 
       <ReusableTabs
@@ -67,7 +67,7 @@ export function CaseUpdates({ id }: { id: string }) {
         onTabChange={handleTabChange}
         activeTab={activeTab}
       />
-      <ScrollArea className="h-[calc(100dvh-300px)] max-h-[calc(100dvh-300px)] overflow-y-auto rounded-md ">
+      <ScrollArea className="h-[calc(100dvh-300px)] max-h-[calc(100dvh-300px)] overflow-y-auto rounded-md px-2">
         <div className="py-4">
           {activeTab === "recent" && (
             <>
