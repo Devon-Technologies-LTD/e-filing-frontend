@@ -1,4 +1,5 @@
 import { CaseStatus } from "@/constants";
+import { useAppSelector } from "@/hooks/redux";
 import { useRemitaPayment } from "@/hooks/use-remita-payment";
 import {
   createCaseFile,
@@ -22,6 +23,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { usePaystackPayment } from "react-paystack";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
@@ -35,7 +37,9 @@ export interface Claimant {
 
 interface SaveFormParams {
   case_file_id?: string | null;
-  data: Partial<ICaseTypes>;
+  data: Partial<ICaseTypes> & {
+    id?: string;
+  };
   legal_counsels?: ILegalCounsels[];
 }
 
@@ -72,21 +76,38 @@ export const useSaveForm = ({
   const queryClient = useQueryClient();
   const navigate = useRouter();
   const dispatch = useDispatch();
-
+  const { data: user } = useAppSelector((state) => state.profile);
+  const { paymentType } = useAppSelector((state) => state.caseFileForm);
   const { triggerPayment } = useRemitaPayment({
-    onSuccess: (response) => {
-      console.log("response from remita payment==>", response);
+    onSuccess: () => {
       dispatch(updateStep(step + 1));
     },
     onError: (response) => console.log("Payment Error:", response),
   });
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: user?.email ?? "",
+    amount: amount * 100,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY ?? "",
+  };
+
+  const onPaystackSuccess = (reference: string) => {
+    console.log("reference", reference);
+    dispatch(updateStep(step + 1));
+  };
+
+  const onClose = () => {
+    console.log("closed");
+  };
+
+  const initializePayment = usePaystackPayment(config);
 
   const generateRRRMutation = useMutation({
     mutationFn: async ({ caseFileId }: { caseFileId: string }) => {
       return await generateRRR(caseFileId, amount);
     },
     onSuccess: (data) => {
-      console.log("first in client", data);
       if (data?.success) {
         triggerPayment(data.data?.RRR, amount);
         dispatch(updateCaseTypeName({ reference: data?.data?.RRR }));
@@ -98,6 +119,7 @@ export const useSaveForm = ({
 
   const mutation = useMutation({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
+      console.log("first dataaaa", data);
       const saveStep1 = async () => {
         const payload = {
           // steps: String(step),
@@ -129,8 +151,9 @@ export const useSaveForm = ({
       const saveStep2 = async () => {
         const payload = {
           // steps: String(step),
+          id: data?.case_type_id,
           case_type_name: data.case_type,
-          casefile_id: data.case_file_id,
+          // casefile_id: data.case_file_id,
           claimant: {
             address: data.claimant_name,
             email_address: data.claimant_email_address,
@@ -175,9 +198,9 @@ export const useSaveForm = ({
           registrar: data.registrar,
           status: isDraft && CaseStatus.Draft,
         };
-        console.log("payload to save", payload);
+        console.log("payloaddd", payload);
         return data?.case_type_id
-          ? updateCaseType({ payload: payload, caseFileId: data.case_type_id })
+          ? updateCaseType({ payload: payload, caseTypeId: data.case_type_id })
           : createCaseType(payload);
       };
 
@@ -207,7 +230,13 @@ export const useSaveForm = ({
             dispatch(updateCaseTypeName({ case_file_id: data.id }));
           }
           if (step === 5) {
-            generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+            if (paymentType === "paystack") {
+              initializePayment({
+                onClose,
+                onSuccess: onPaystackSuccess,
+                config,
+              });
+            } else generateRRRMutation.mutate({ caseFileId: data.casefile_id });
           } else if (step < 5) {
             dispatch(updateStep(step + 1));
           }

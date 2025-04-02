@@ -159,12 +159,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-          .getSeconds()
-          .toString()
-          .padStart(2, "0")}`,
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -202,37 +202,37 @@ export const getCaseTypeFields = (data: any) => ({
   claimant_email_address: data?.claimant?.email_address ?? "",
   claimant_name: data?.claimant?.name ?? "",
   claimant_phone_number: data?.claimant?.phone_number ?? "",
-  claimant_whats_app: data?.casetype?.[0]?.claimant?.whats_app ?? "",
+  claimant_whats_app: data?.casetype?.claimant?.whats_app ?? "",
   court_division: data?.court_division_id ?? "",
-  defendant_address: data?.casetype?.[0]?.defendant?.address ?? "",
-  defendant_email_address: data?.casetype?.[0]?.defendant?.email_address ?? "",
+  defendant_address: data?.casetype?.defendant?.address ?? "",
+  defendant_email_address: data?.casetype?.defendant?.email_address ?? "",
   defendant_name:
-    (data?.casetype?.[0]?.defendant?.name || data?.defendant?.name) ?? "",
-  defendant_phone_number: data?.casetype?.[0]?.defendant?.phone_number ?? "",
-  defendant_whats_app: data?.casetype?.[0]?.defendant?.whats_app ?? "",
+    (data?.casetype?.defendant?.name || data?.defendant?.name) ?? "",
+  defendant_phone_number: data?.casetype?.defendant?.phone_number ?? "",
+  defendant_whats_app: data?.casetype?.defendant?.whats_app ?? "",
   title: data?.title ?? "",
-  case_type: data?.casetype?.[0]?.case_type_name ?? "",
-  case_type_id: data?.casetype?.[0]?.id ?? "",
-  cost_claimed: data?.casetype?.[0]?.cost_claimed ?? "",
-  dated_this: data?.casetype?.[0]?.dated_this ?? "",
-  direct_complain: data?.casetype?.[0]?.direct_complain ?? "",
-  interest_claimed: data?.casetype?.[0]?.interest_claimed ?? "",
-  notes: data?.casetype?.[0]?.notes ?? "",
-  property_description: data?.casetype?.[0]?.property_description ?? "",
-  recovery_amount: data?.casetype?.[0]?.recovery_amount ?? "",
-  registrar: data?.casetype?.[0]?.registrar ?? "",
-  relief_sought: data?.casetype?.[0]?.relief_sought ?? "",
-  rental_value: data?.casetype?.[0]?.rental_value ?? "",
-  sub_case_type: data?.casetype?.[0]?.sub_case_type_name ?? "",
-  sum_claimed: data?.casetype?.[0]?.sum_claimed ?? "",
+  case_type: data?.casetype?.case_type_name ?? "",
+  case_type_id: data?.casetype?.id ?? "",
+  cost_claimed: data?.casetype?.cost_claimed ?? "",
+  dated_this: data?.casetype?.dated_this ?? "",
+  direct_complain: data?.casetype?.direct_complain ?? "",
+  interest_claimed: data?.casetype?.interest_claimed ?? "",
+  notes: data?.casetype?.notes ?? "",
+  property_description: data?.casetype?.property_description ?? "",
+  recovery_amount: data?.casetype?.recovery_amount ?? "",
+  registrar: data?.casetype?.registrar ?? "",
+  relief_sought: data?.casetype?.relief_sought ?? "",
+  rental_value: data?.casetype?.rental_value ?? "",
+  sub_case_type: data?.casetype?.sub_case_type_name ?? "",
+  sum_claimed: data?.casetype?.sum_claimed ?? "",
   summon_court_description:
-    data?.casetype?.[0]?.summon_details?.court_description ?? "",
-  summon_date: data?.casetype?.[0]?.summon_details?.data ?? "",
+    data?.casetype?.summon_details?.court_description ?? "",
+  summon_date: data?.casetype?.summon_details?.data ?? "",
   summon_state_location:
-    data?.casetype?.[0]?.summon_details?.state_location ?? "",
-  summon_time: data?.casetype?.[0]?.summon_details?.time ?? "",
-  value_worth: data?.casetype?.[0]?.value_worth ?? "",
-  counsel_name: data?.casetype?.[0]?.legal_counsels[0]?.name ?? "",
+    data?.casetype?.summon_details?.state_location ?? "",
+  summon_time: data?.casetype?.summon_details?.time ?? "",
+  value_worth: data?.casetype?.value_worth ?? "",
+  counsel_name: data?.casetype?.legal_counsels[0]?.name ?? "",
 });
 
 export const formatErrors = (errors: any) => {

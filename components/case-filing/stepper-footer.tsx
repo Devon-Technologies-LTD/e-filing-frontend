@@ -8,7 +8,7 @@ import { MoveLeft } from "lucide-react";
 import { useAppSelector } from "@/hooks/redux";
 import { useCaseOverviewFormValidator } from "./validators/case-overview-validator";
 import { useSaveForm } from "./hooks";
-import { addCaseTypeError, updateStep } from "@/redux/slices/case-filing-slice";
+import { addCaseTypeError, updatePaymentType, updateStep } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ConfirmationModal } from "../confirmation-modal";
 import { Icons } from "../svg/icons";
@@ -148,7 +148,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         </Button>
       </div>
 
-      <div className="w-1/2 flex justify-end ">
+      <div className="w-1/2 flex gap-3 justify-end ">
         {!isRefiling ? (
           <ConfirmationModal
             isOpen={isOpen}
@@ -217,11 +217,32 @@ export function StepperNavigation({ isRefiling }: Iprops) {
             `Pay ₦ ${totalAmount?.toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            })}`
+            })} with Remita`
           ) : (
             "Next"
           )}
         </Button>
+
+        {current_step === 5 && (
+          <Button
+            size={"lg"}
+            className="font-bold bg-blue-500 flex-end text-sm h-11"
+            onClick={() => {
+              handleNextStep();
+              dispatch(updatePaymentType("paystack"));
+            }}
+            disabled={formPending || generateRRRMutation.isPending}
+          >
+            {formPending || generateRRRMutation.isPending ? (
+              <>Loading...</>
+            ) : (
+              `Pay ₦ ${totalAmount?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })} with Paystack`
+            )}
+          </Button>
+        )}
       </div>
     </CardFooter>
   );

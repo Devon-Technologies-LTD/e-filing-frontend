@@ -67,6 +67,7 @@ export interface ILegalCounsels {}
 
 interface FormState {
   current_step: number;
+  paymentType: string;
   legal_counsels: ILegalCounsels[];
   caseType: ICaseTypes;
   totalAmount: number;
@@ -78,6 +79,7 @@ const initialState: FormState = {
   current_step: 1,
   totalAmount: 0,
   caseTypeErrors: {},
+  paymentType: "remita",
   caseType: {
     court_division: "",
     sub_division: "",
@@ -124,6 +126,9 @@ const formSlice = createSlice({
   reducers: {
     updateLegalCounsels: (state, action: any) => {
       state.legal_counsels = action.payload;
+    },
+    updatePaymentType: (state, action: PayloadAction<string>) => {
+      state.paymentType = action.payload;
     },
     setTotalAmount: (state, action: PayloadAction<number>) => {
       state.totalAmount = action.payload;
@@ -206,6 +211,7 @@ export const {
   updateLegalCounsels,
   updateStep,
   updateCaseTypeName,
+  updatePaymentType,
   resetStep,
   addDocument,
   clearForm,
