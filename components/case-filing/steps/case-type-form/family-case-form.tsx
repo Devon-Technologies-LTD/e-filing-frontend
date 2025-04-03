@@ -50,6 +50,8 @@ export default function FamilyCaseForm() {
       <div className="space-y-4">
         {uploadedDocuments?.map((data: IDocumentFileType) => (
           <DocumentUploadComponent
+            allowedUploadTypes={["application/pdf"]}
+            types={"PDF"}
             errorMessage={caseTypeErrors.familyDoc}
             subTitle={CaseTypeData.FAMILY_CASE}
             key={data.id}
@@ -65,6 +67,8 @@ export default function FamilyCaseForm() {
       <div className="space-y-6">
         {selectedDocType && (
           <DocumentUploadComponent
+            allowedUploadTypes={["application/pdf"]}
+            types={"PDF"}
             subTitle={CaseTypeData.FAMILY_CASE}
             title={selectedDocType}
             caseType={case_type}

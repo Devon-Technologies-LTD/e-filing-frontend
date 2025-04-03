@@ -20,6 +20,8 @@ export default function CriminalCaseForm() {
         return (
           <div className="lg:w-1/2">
             <DocumentUploadComponent
+              allowedUploadTypes={["application/pdf"]}
+              types={"PDF"}
               required
               errorMessage={caseTypeErrors?.firDoc ?? ""}
               subTitle={CaseTypeData.CRIMINAL_CASE}
@@ -33,6 +35,8 @@ export default function CriminalCaseForm() {
         return (
           <div className="lg:w-1/2">
             <DocumentUploadComponent
+              allowedUploadTypes={["application/pdf"]}
+              types={"PDF"}
               required
               errorMessage={caseTypeErrors?.exparte ?? ""}
               subTitle={CaseTypeData.CRIMINAL_CASE}

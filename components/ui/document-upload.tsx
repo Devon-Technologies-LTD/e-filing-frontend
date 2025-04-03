@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Label } from "./label";
 import { Button } from "./button";
 import { Icons } from "../svg/icons";
@@ -19,7 +19,7 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import {
-  allowedUploadTypes,
+  defaultAllowedUploadTypes,
   CaseTypeData,
   DOCUMENT_MAX_SIZE,
 } from "@/constants";
@@ -30,8 +30,10 @@ import { Loader } from "lucide-react";
 
 interface Iprops {
   caseType?: string;
+  allowedUploadTypes?: any;
   subCase: string;
   notes?: string;
+  types?: string;
   title: string;
   subTitle?: string;
   canDelete?: boolean;
@@ -52,6 +54,8 @@ export default function DocumentUploadComponent({
   required,
   errorMessage,
   canDelete = false,
+  types="PNG, PDF, JPEG, JPG",
+  allowedUploadTypes = defaultAllowedUploadTypes,
 }: Iprops) {
   const {
     caseType: { case_file_id },
@@ -72,7 +76,6 @@ export default function DocumentUploadComponent({
   const uploadMutation = useMutation({
     mutationFn: (data: FormData) => uploadDocumentAction(data),
     onSuccess: (data) => {
-      console.log("docsss", data);
       if (data?.success) {
         if (onSuccess) onSuccess(data);
         dispatch(updateDocument(data?.data as any));
@@ -125,7 +128,7 @@ export default function DocumentUploadComponent({
     if (!file) return;
     if (!allowedUploadTypes.includes(file.type)) {
       toast.error(
-        "Invalid file type. Only PDFs and images are allowed for upload."
+        `Invalid file type. Only ${types} allowed for upload.`
       );
       e.target.value = "";
       return;
@@ -217,7 +220,7 @@ export default function DocumentUploadComponent({
                 Choose File{" "}
                 <span className="text-xs text-gray-500">
                   (Max size: {DOCUMENT_MAX_SIZE / (1024 * 1024)}MB, Allowed
-                  types: PNG, PDF, JPEG, JPG)
+                  types: {types})
                 </span>
               </span>
             )}

@@ -2,7 +2,7 @@ export const DEFAULT_PAGE_SIZE = 10;
 export const DEFAULT_SEAL_FEE = 500;
 export const DEFAULT_EXHIBIT_FEE = 500;
 export const DEFAULT_CHARGES_PERCENTAGE = 10;
-export const allowedUploadTypes = [
+export const defaultAllowedUploadTypes = [
   "application/pdf",
   "image/jpeg",
   "image/pjpeg",
