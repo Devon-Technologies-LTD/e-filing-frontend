@@ -430,6 +430,8 @@ export const CivilCaseForm8 = (documents: any) => {
           {documents?.documents?.map((doc: any) => (
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
+                allowedUploadTypes={["application/pdf"]}
+                types={"PDF"}
                 required
                 subTitle={case_type}
                 title={doc.title}

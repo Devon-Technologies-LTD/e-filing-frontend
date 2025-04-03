@@ -100,7 +100,6 @@ export default function CaseTypesForm() {
               })
             );
             dispatch(clearCaseTypeError());
-          
           }}
           value={case_type}
         >
@@ -176,6 +175,8 @@ export default function CaseTypesForm() {
           selectedCase[0]?.Documents &&
           !selectedCase[0].FormType && (
             <DocumentUploadComponent
+              allowedUploadTypes={["application/pdf"]}
+              types={"PDF"}
               required
               errorMessage={caseTypeErrors?.interpleader ?? ""}
               title={
@@ -188,7 +189,6 @@ export default function CaseTypesForm() {
               subCase={sub_case_type}
             />
           )}
-
 
         {case_type && sub_case_type && hasWorth?.includes(sub_case_type) && (
           <Select

@@ -87,6 +87,8 @@ export default function DocumentUploadForm() {
       <div className="space-y-6">
         {uploadedDocuments?.map((data: IDocumentFileType) => (
           <DocumentUploadComponent
+            allowedUploadTypes={["application/pdf"]}
+            types={"PDF"}
             subTitle={"OTHER DOCUMENTS"}
             key={data.id}
             title={data.title}
@@ -99,6 +101,8 @@ export default function DocumentUploadForm() {
       </div>
       {selectedDocType && (
         <DocumentUploadComponent
+          allowedUploadTypes={["application/pdf"]}
+          types={"PDF"}
           subTitle={"OTHER DOCUMENTS"}
           title={selectedDocType}
           caseType={case_type}

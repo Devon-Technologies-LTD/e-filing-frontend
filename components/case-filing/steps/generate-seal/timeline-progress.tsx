@@ -10,6 +10,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FilePreview } from "@/components/ui/file-preview";
+import CaseNumberExplainer from "@/components/ui/case-number-explainer";
 
 interface TimelineStep {
   title: string;
@@ -252,62 +253,65 @@ export default function TimelineProgress({
     }
   }, [currentStepIndex, steps.length, verifyData]);
   return (
-    <div className="max-w-2xl p-6">
-      <div className="relative">
-        <div
-          style={{ height: `${steps.length * 80}px` }}
-          className="absolute -z-30 left-[27px] top-10 w-[4px] bg-primary"
-        />
-        <div className="space-y-4">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className="relative flex items-center justify-between gap-4"
-            >
-              <div className="flex items-center gap-4">
-                <div className="relative flex w-14 h-12 bg-white items-center justify-center rounded-full transition-colors duration-500">
-                  <StepIcon status={step.status} />
+    <section>
+      <div className="max-w-2xl p-6">
+        <div className="relative">
+          <div
+            style={{ height: `${steps.length * 80}px` }}
+            className="absolute -z-30 left-[27px] top-10 w-[4px] bg-primary"
+          />
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <div
+                key={index}
+                className="relative flex items-center justify-between gap-4"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative flex w-14 h-12 bg-white items-center justify-center rounded-full transition-colors duration-500">
+                    <StepIcon status={step.status} />
+                  </div>
+                  <StepContent
+                    step={step}
+                    index={index}
+                    sealNumber={sealNumber}
+                    verifyData={verifyData}
+                    router={router}
+                  />
                 </div>
-                <StepContent
-                  step={step}
-                  index={index}
-                  sealNumber={sealNumber}
-                  verifyData={verifyData}
-                  router={router}
-                />
-              </div>
-              {index === 0 && step.status === "completed" && (
-                <div className="text-xs font-bold text-stone-600">
-                  Completed
-                </div>
-              )}
-              {[1, 2, 3].includes(index) &&
-                !["pending", "in-progress"].includes(step.status) && (
+                {index === 0 && step.status === "completed" && (
                   <div className="text-xs font-bold text-stone-600">
-                    {index === 1 && verifyData?.data?.case_suit_number ? (
-                      <Icons.verified />
-                    ) : null}
-                    {index === 2 && verifyData?.data?.qrcode_path ? (
-                      <Icons.verified />
-                    ) : null}
-                    {index === 3 && verifyData?.data?.seal_path ? (
-                      <Icons.verified />
-                    ) : null}
-                    {index === 1 && !verifyData?.data?.case_suit_number ? (
-                      <Icons.alert />
-                    ) : null}
-                    {index === 2 && !verifyData?.data?.qrcode_path ? (
-                      <Icons.alert />
-                    ) : null}
-                    {index === 3 && !verifyData?.data?.seal_path ? (
-                      <Icons.alert />
-                    ) : null}
+                    Completed
                   </div>
                 )}
-            </div>
-          ))}
+                {[1, 2, 3].includes(index) &&
+                  !["pending", "in-progress"].includes(step.status) && (
+                    <div className="text-xs font-bold text-stone-600">
+                      {index === 1 && verifyData?.data?.case_suit_number ? (
+                        <Icons.verified />
+                      ) : null}
+                      {index === 2 && verifyData?.data?.qrcode_path ? (
+                        <Icons.verified />
+                      ) : null}
+                      {index === 3 && verifyData?.data?.seal_path ? (
+                        <Icons.verified />
+                      ) : null}
+                      {index === 1 && !verifyData?.data?.case_suit_number ? (
+                        <Icons.alert />
+                      ) : null}
+                      {index === 2 && !verifyData?.data?.qrcode_path ? (
+                        <Icons.alert />
+                      ) : null}
+                      {index === 3 && !verifyData?.data?.seal_path ? (
+                        <Icons.alert />
+                      ) : null}
+                    </div>
+                  )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      <CaseNumberExplainer />
+    </section>
   );
 }

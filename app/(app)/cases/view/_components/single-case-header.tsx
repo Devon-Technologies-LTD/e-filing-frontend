@@ -76,9 +76,10 @@ export function SingleCaseHeader({
                   {userRole === ROLES.DIRECTOR_MAGISTRATE &&
                   data?.case_request_status !== "" ? (
                     <StatusBadge status={data?.case_request_status} />
-                  ) : (data?.status||"")?.toLowerCase() === "to be assigned" ? (
+                  ) : (data?.status || "")?.toLowerCase() ===
+                    "to be assigned" ? (
                     <StatusBadge
-                      status={(data?.case_request_status||"")?.toLowerCase()}
+                      status={(data?.case_request_status || "")?.toLowerCase()}
                     />
                   ) : data?.case_request_status !== "" ? (
                     <StatusBadge status={data?.case_request_status} />
@@ -190,7 +191,9 @@ export function SingleCaseHeader({
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
-                <QrCode className="h-10 w-10 text-gray-400" />
+                <img src={data?.seal_path} className="h-10 w-10"/>
+                <img src={data?.qrcode_path} className="h-10 w-10"/>
+                {/* <QrCode className="h-10 w-10 text-gray-400" /> */}
                 <Button
                   onClick={handleRefileProcesses}
                   disabled={
