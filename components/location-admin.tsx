@@ -48,16 +48,6 @@ export const LocationAdmin = ({
         onChange(newValue); // Pass division value to parent
     };
 
-    // Handle Sub-Division Selection
-    const handleSubDivisionChange = (newSubValue: string) => {
-        setSelectedSubDivision(newSubValue);
-        onChange(newSubValue); // Pass sub-division value to parent
-    };
-
-    const selectedDivision = data?.data?.find(
-        (location: any) => location.ID === selectedTitle
-    );
-
     return (
         <div className="w-full space-y-4">
             {/* Select Court Division */}
@@ -83,23 +73,6 @@ export const LocationAdmin = ({
                 </SelectContent>
             </Select>
 
-            {/* Show Sub-Division Select Only for DIRECTOR_MAGISTRATE */}
-            {/* {[ROLES.DIRECTOR_MAGISTRATE].includes(user?.role) &&
-                selectedDivision &&
-                selectedDivision.sub_division?.length > 0 && (
-                    <Select onValueChange={handleSubDivisionChange} value={selectedSubDivision ?? undefined}>
-                        <SelectTrigger loading={loading} disabled={loading || disabled} variant={error ? "error" : "underlined"}>
-                            <SelectValue className="text-neutral-700 text-xs" placeholder="Select Sub-Division" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white text-zinc-900">
-                            {selectedDivision.sub_division.map((sub: string, index: number) => (
-                                <SelectItem key={index} value={sub} className="py-2">
-                                    {sub}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                )} */}
         </div>
     );
 };

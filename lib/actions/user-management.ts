@@ -80,11 +80,13 @@ const fetchData2 = async (serviceMethod: Function, params?: any) => {
 
 export const getUserManagement = (params: Ipage) => fetchData(UserService.getUserManagement, params);
 export const getUserManagementFilter = (params: Ipage) => fetchData(UserService.getUserManagementFilter, params);
+export const getUserCase = () => fetchData2(UserService.getUserCase);
 export const getAllUser = () => fetchData(UserService.getAllUser);
 export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendingUsers, params);
 export const getOversight = (params: Ipage) => fetchData(UserService.magistrateOversight, params);
 export const getPerformance = (params: Ipage) => fetchData(UserService.getPerformance, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
+export const getCaseMetric2 = () => fetchData(UserService.caseMetric2);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
 export const getMagisterateBreakDown = (id: string) => fetchData2(UserService.getMagisterateBreakDown, id);
 export const getFinanceBreakDown = (id: string) => fetchData2(UserService.getFinanceBreakDown, id);

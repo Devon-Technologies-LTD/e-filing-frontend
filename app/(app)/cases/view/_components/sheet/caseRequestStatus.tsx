@@ -41,7 +41,6 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
             try {
                 console.log("Fetching reassignment history for case ID:", id);
                 const history = await caseRequestHistory(id);
-                console.log(history);
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {
@@ -57,9 +56,13 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
     const changeCaseStatus = async (status: string) => {
         setIsSubmitting(true);
         try {
-            const history = await changeCaseRequestStatus(id, status);
-            if (history) {
-                toast.success(history.message);
+            console.log(id, status);
+            const data = await changeCaseRequestStatus(id, status);
+            console.log(data);
+
+            console.log(data);
+            if (data) {
+                toast.success(`Case Request ${status} successful`);
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
                 setIsOpen2(false);
             } else {
@@ -88,7 +91,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
             console.log(response);
             if (response.success) {
                 toast.success("Case Request successful");
-                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id", id] });
+                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
                 setIsOpen2(false);
                 setReason(""); // Reset reason after successful submission
             } else {
@@ -153,11 +156,11 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <Button className="w-full" onClick={() => changeCaseStatus("approved")} disabled={isSubmitting}>
+                            <Button className="w-full" onClick={() => changeCaseStatus("Approved")} disabled={isSubmitting}>
                                 {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
                                 APPROVE REQUEST
                             </Button>
-                            <Button variant="outline" onClick={() => changeCaseStatus("deny")} className="w-full" disabled={isSubmitting}>
+                            <Button variant="outline" onClick={() => changeCaseStatus("Denied")} className="w-full" disabled={isSubmitting}>
                                 {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
                                 DENY REQUEST
                             </Button>

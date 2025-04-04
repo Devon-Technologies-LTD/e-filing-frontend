@@ -47,7 +47,8 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, setIsOpen2, isOpe
       toast.success("User invited successfully!");
       console.log("User invited successfully:", data);
       queryClient.invalidateQueries({ queryKey: ["userManagement"] });
-
+      queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["central-registeral"] });
       setIsOpen(false);
       setIsOpen2(false);
     } catch (error: any) {

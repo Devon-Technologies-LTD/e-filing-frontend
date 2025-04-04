@@ -73,11 +73,9 @@ export function SingleCaseHeader({
 
               {userRole !== ROLES.PRESIDING_MAGISTRATE && (
                 <>
-                  {userRole === ROLES.DIRECTOR_MAGISTRATE &&
-                  data?.case_request_status !== "" ? (
+                  {userRole === ROLES.DIRECTOR_MAGISTRATE && data?.case_request_status !== "" ? (
                     <StatusBadge status={data?.case_request_status} />
-                  ) : (data?.status || "")?.toLowerCase() ===
-                    "to be assigned" ? (
+                  ) : (data?.status || "")?.toLowerCase() === "to be assigned" ? (
                     <StatusBadge
                       status={(data?.case_request_status || "")?.toLowerCase()}
                     />
@@ -88,28 +86,22 @@ export function SingleCaseHeader({
                   )}
                 </>
               )}
+              {userRole === ROLES.PRESIDING_MAGISTRATE && (() => {
+                const { reassignment_status, status, review_status } = data || {};
+                const lowerCaseStatus = (status || "").toLowerCase();
 
-              {userRole === ROLES.PRESIDING_MAGISTRATE && (
-                <>
-                  {/* Show Reassignment Status Badge if status is not empty */}
-                  {data?.reassignment_status && (
-                    <StatusBadge status={data.reassignment_status} />
-                  )}
-                  {data?.status == "UNDER REVIEW" &&
-                    data?.review_status == "UNDER REVIEW" && (
-                      <StatusBadge status={data.status} />
-                    )}
-                  {/* Show Status Badge if the case is "to be assigned" */}
-                  {(data?.status || "").toLowerCase() === "to be assigned" &&
-                    data?.reassignment_status && (
-                      <StatusBadge
-                        status={(
-                          data?.reassignment_status || ""
-                        )?.toLowerCase()}
-                      />
-                    )}
-                </>
-              )}
+                if (reassignment_status) {
+                  return <StatusBadge status={reassignment_status} />;
+                } else if (lowerCaseStatus === "to be assigned" && reassignment_status) {
+                  return <StatusBadge status={reassignment_status.toLowerCase()} />;
+                } else {
+                  return <StatusBadge status={status} />;
+                }
+
+                return null;
+              })()}
+
+
               {data?.is_emergency && <StatusBadge status="action required" />}
             </div>
           </div>
@@ -174,25 +166,25 @@ export function SingleCaseHeader({
                       />
                     )}
 
-                        {/* Review Request */}
-                        {data?.reassignment_status?.trim() && (
-                          <ReviewRequestSheet
-                            trigger={
-                              <Button variant="outline" className="text-xs">
-                                REVIEW REQUEST
-                              </Button>
-                            }
-                          />
-                        )}
-                      </>
+                    {/* Review Request */}
+                    {data?.reassignment_status?.trim() && (
+                      <ReviewRequestSheet
+                        trigger={
+                          <Button variant="outline" className="text-xs">
+                            REVIEW REQUEST
+                          </Button>
+                        }
+                      />
                     )}
-                </>
-              )}
+                  </>
+                )}
+              </>
+            )}
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
-                <img src={data?.seal_path} className="h-10 w-10"/>
-                <img src={data?.qrcode_path} className="h-10 w-10"/>
+                <img src={data?.seal_path} className="h-10 w-10" />
+                <img src={data?.qrcode_path} className="h-10 w-10" />
                 {/* <QrCode className="h-10 w-10 text-gray-400" /> */}
                 <Button
                   onClick={handleRefileProcesses}
