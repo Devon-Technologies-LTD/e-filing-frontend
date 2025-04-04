@@ -71,21 +71,22 @@ export function SingleCaseHeader({
             <div className="flex items-center gap-3">
               <StatusBadge status={data?.case_type_name} />
 
-              {userRole !== ROLES.PRESIDING_MAGISTRATE && (
-                <>
-                  {userRole === ROLES.DIRECTOR_MAGISTRATE && data?.case_request_status !== "" ? (
-                    <StatusBadge status={data?.case_request_status} />
-                  ) : (data?.status || "")?.toLowerCase() === "to be assigned" ? (
-                    <StatusBadge
-                      status={(data?.case_request_status || "")?.toLowerCase()}
-                    />
-                  ) : data?.case_request_status !== "" ? (
-                    <StatusBadge status={data?.case_request_status} />
-                  ) : (
-                    <StatusBadge status={data.status} />
-                  )}
-                </>
-              )}
+              {userRole !== ROLES.PRESIDING_MAGISTRATE && (() => {
+                let status = "";
+                const { reassignment_status, review_status } = data || {};
+                if (userRole === ROLES.DIRECTOR_MAGISTRATE && data?.case_request_status !== "") {
+                  status = data.case_request_status;
+                } else
+                  if (data?.status == "TO BE ASSIGNED" && data?.case_request_status != "") {
+                    status = data?.case_request_status;
+                  } else if (data?.reassignment_status !== "") {
+                    status = data.reassignment_status;
+                  } else {
+                    status = data.status;
+                  }
+                return <StatusBadge status={status} />;
+              })()}
+
               {userRole === ROLES.PRESIDING_MAGISTRATE && (() => {
                 const { reassignment_status, status, review_status } = data || {};
                 const lowerCaseStatus = (status || "").toLowerCase();
@@ -97,7 +98,6 @@ export function SingleCaseHeader({
                 } else {
                   return <StatusBadge status={status} />;
                 }
-
                 return null;
               })()}
 

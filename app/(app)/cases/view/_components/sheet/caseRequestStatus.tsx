@@ -129,8 +129,8 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                                 </AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="text-stone-600 text-sm">{data?.claimant?.name ?? "N/A"}</p>
-                                <p className="font-bold text-xs">{data?.claimant?.email_address ?? "N/A"}</p>
+                                <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name ?? "N/A"} {data?.assigned_to_data?.last_name ?? "N/A"}</p>
+                                <p className="font-bold text-xs">{data?.assigned_to_data?.email ?? "N/A"}</p>
                             </div>
                         </div>
                     </div>
