@@ -25,7 +25,7 @@ export default function FilteredCases() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { totalCase, setTotalCase } = useContext(MonitoringContext);
 
-  const [searchTerm, setSearchTerm] = useState<string>(""); // ✅ Correctly typed state
+  const [searchTerm, setSearchTerm] = useState<string>(""); 
 
   const { data: user } = useAppSelector((state) => state.profile);
 
