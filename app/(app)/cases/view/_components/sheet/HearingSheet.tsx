@@ -76,15 +76,7 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
               </ScrollArea>
             )}
 
-            {/* Schedule Hearing Button */}
-            <ScheduleSheet
-              id={id}
-              trigger={
-                <DropdownMenuLabel className="w-full text-left">
-                  <Button>SCHEDULE A HEARING</Button>
-                </DropdownMenuLabel>
-              }
-            />
+         
           </div>
         </div>
       </SheetContent>

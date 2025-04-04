@@ -320,3 +320,4 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
   }
   redirect("/login");
 }
+

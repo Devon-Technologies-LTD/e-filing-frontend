@@ -4,6 +4,7 @@ import {
   TaddAdmin,
 } from "@/lib/_definitions";
 import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
+import { resetPassword } from "../actions/login";
 
 
 export interface IDraftFilter {
@@ -96,6 +97,10 @@ const UserService = {
     const response = await axiosInstance.get(`admin/analyitcs/case-metrics`);
     return response.data;
   },
+  async caseMetric2(): Promise<any> {
+    const response = await axiosInstance.get(`admin/analyitcs/centrar-metrics`);
+    return response.data;
+  },
   async getCaseBreakDown(id: string): Promise<any> {
     const response = await axiosInstance.get(`admin/analyitcs/case-breakdown/${id}`);
     return response.data;
@@ -120,6 +125,10 @@ const UserService = {
     const response = await axiosInstance.get(`admin/analyitcs/case-distribution`);
     return response.data;
   },
+  async resetPassword(payload: any): Promise<any> {
+    const response = await axiosInstance.post(`/auth/change-password`, payload);
+    return response.data;
+  },
 
   async getUserManagement(params: Ipage): Promise<any> {
     const response = await axiosInstance.get(`admin/user/`, {
@@ -142,6 +151,15 @@ const UserService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching user management filter:", error);
+      throw error;
+    }
+  },
+  async getUserCase(params: IPage): Promise<any> {
+    try {
+      const response = await axiosInstance.get("/admin/user/user-case");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user case filter:", error);
       throw error;
     }
   },

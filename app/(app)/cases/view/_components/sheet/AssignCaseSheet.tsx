@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { getAdminDivision } from "@/lib/actions/division";
-import { getUserManagementFilter } from "@/lib/actions/user-management";
 import { useAppSelector } from "@/hooks/redux";
 import { LocationAdmin } from "@/components/location-admin";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -32,6 +31,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { getUserCase } from "@/lib/actions/user-management";
 
 
 
@@ -47,18 +47,25 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     const dispatch = useDispatch();
     const { data: user } = useAppSelector((state) => state.profile);
 
+    // const { data: userData, isLoading: userLoading } = useQuery({
+    //     queryKey: ["presidingM", currentPage],
+    //     queryFn: async () => getUserManagementFilter({
+    //         page: currentPage,
+    //         size: DEFAULT_PAGE_SIZE,
+    //         role: "PRESIDING_MAGISTRATE",
+    //         query: searchTerm,
+    //     }),
+    //     staleTime: 100000,
+    // });
     const { data: userData, isLoading: userLoading } = useQuery({
         queryKey: ["presidingM", currentPage],
-        queryFn: async () => getUserManagementFilter({
-            page: currentPage,
-            size: DEFAULT_PAGE_SIZE,
-            role: "PRESIDING_MAGISTRATE",
-            query: searchTerm,
-        }),
+        queryFn: async () => getUserCase(),
         staleTime: 100000,
     });
-    const filteredUsers = userData?.data?.filter((user: any) =>
-        (searchTerm ? (user.first_name + " " + user.last_name).toLowerCase().includes(searchTerm.toLowerCase()) : true) &&
+    console.log("Processing => " + JSON.stringify(userData));
+
+    const filteredUsers = userData?.filter((user: any) =>
+        (searchTerm ? (user.name).toLowerCase().includes(searchTerm.toLowerCase()) : true) &&
         (selectedCourtSubDivision ? user.court_division === selectedCourtSubDivision : true)
     );
     const handleAssignment = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
@@ -141,11 +148,11 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                                 <div className="flex gap-2">
                                                     <Avatar>
                                                         <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2">
-                                                            {getInitials(user.first_name + " " + user.last_name)}
+                                                            {getInitials(user.name)}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     <div className="grid">
-                                                        <p className="text-stone-600 text-sm">{user.first_name} {user.last_name}</p>
+                                                        <p className="text-stone-600 text-sm">{user.name}</p>
                                                         <p className="font-bold text-xs">{user.email ?? "Email@gmail.com"}</p>
                                                         <p className="text-xs">{user.court_division ?? "-"}</p>
                                                     </div>
@@ -164,7 +171,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                                             <div className="text-center text-primary space-y-2">
                                                                 <p className="font-bold text-xl">Case Assignment</p>
                                                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
-                                                                    You are about to assign to magistrate <b>{user.first_name} {user.last_name}</b>.
+                                                                    You are about to assign to magistrate <b>{user.name}</b>.
                                                                 </p>
                                                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
                                                                     Are you sure you want to proceed?

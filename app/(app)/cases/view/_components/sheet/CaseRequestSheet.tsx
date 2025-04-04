@@ -54,7 +54,7 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
             console.log(response);
             if (response.success) {
                 toast.success("Case Request successful");
-                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id", id] });
+                queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
                 setIsOpen2(false);
                 setReason(""); // Reset reason after successful submission
             } else {
@@ -93,8 +93,8 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
                                 </AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="text-stone-600 text-sm">{data?.claimant?.name ?? "N/A"}</p>
-                                <p className="font-bold text-xs">{data?.claimant?.email_address ?? "N/A"}</p>
+                                <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name ?? "N/A"} {data?.assigned_by?.last_name ?? "N/A"}</p>
+                                <p className="font-bold text-xs">{data?.assigned_by?.email ?? "N/A"}</p>
                             </div>
                         </div>
                     </div>
