@@ -53,7 +53,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["get_single_case_by_id"],
+    queryKey: ["get_single_case_by_id", { id: params.id }],
     queryFn: async () => {
       if (
         [
@@ -75,7 +75,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   console.log("single case details", data);
   console.log("Assigned to ", data?.assigned_to);
   console.log("user ID ", user?.id);
-  
+
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -86,9 +86,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   };
 
   if (isLoading) {
-    return (
-        <CaseDocumentListSkeleton />
-    );
+    return <CaseDocumentListSkeleton />;
   }
   return (
     <div className="bg-zinc-100 h-full overflow-auto">

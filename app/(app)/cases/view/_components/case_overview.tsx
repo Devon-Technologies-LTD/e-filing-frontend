@@ -123,10 +123,10 @@ export function CaseOverview({ data }: IProps) {
             setIsEdit={setIsEdit}
             onSubmit={handleSubmit}
             loading={formPending}
-            name={data?.defendant?.name ?? ""}
-            email={data?.defendant?.email_address ?? ""}
-            address={data?.defendant?.address ?? ""}
-            phone={data?.defendant?.phone_number ?? ""}
+            name={data?.defendant?.name ?? "N/A"}
+            email={data?.defendant?.email_address ?? "N/A"}
+            address={data?.defendant?.address ?? "N/A"}
+            phone={data?.defendant?.phone_number ?? "N/A"}
           />
           {/* Magistrate Court Information */}
           <MagistrateCourtInfo

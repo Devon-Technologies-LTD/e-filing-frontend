@@ -156,7 +156,7 @@ export default function FilteredCases() {
     isLoading: draftsLoading,
     refetch,
   } = useQuery({
-    queryKey: ["get_cases", tab, selectedCase, currentPage],
+    queryKey: ["get_cases", { user: user?.id, tab, selectedCase, currentPage }],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,

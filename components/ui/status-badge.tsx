@@ -9,7 +9,6 @@ import {
 import React from "react";
 import { CaseStatus } from "@/constants";
 
-
 const VARIANT_STYLES: Record<CaseStatus, string> = {
   draft: "bg-amber-100 text-amber-900 border-amber-300",
   pending: "bg-amber-100 text-amber-900 border-amber-300",
@@ -20,7 +19,7 @@ const VARIANT_STYLES: Record<CaseStatus, string> = {
   "under review": "bg-rose-100 text-rose-900 border-rose-300",
   denied: "bg-rose-100 text-rose-900 border-rose-300",
   assigned: "bg-lime-100 text-lime-900 border-lime-300",
-  "IsHearing": "bg-lime-100 text-lime-900 border-lime-300",
+  IsHearing: "bg-lime-100 text-lime-900 border-lime-300",
   "action required": "bg-red-100 text-red-900 border-red-300",
 };
 
@@ -53,7 +52,7 @@ export function StatusBadge({
         className
       )}
     >
-      {children || status.toLowerCase() || "N/A"}
+      {children || (status || "")?.toLowerCase() || "N/A"}
     </Badge>
   );
 

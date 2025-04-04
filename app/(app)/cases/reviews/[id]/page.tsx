@@ -137,19 +137,27 @@ function ExhibitsSection({ documents }: { documents: IDocumentFileType[] }) {
       </div>
       <div className="w-full">
         <div className="space-y-6">
-          {documents
-            ?.filter((doc) => doc?.case_type_name?.toLowerCase() === "exhibits")
-            .map((doc, index) => (
+            {documents?.filter(
+            (doc) => doc?.case_type_name?.toLowerCase() === "exhibits"
+            )?.length === 0 ? (
+            <p className="text-center font-semibold">
+              No exhibit submitted
+            </p>
+            ) : (
+            documents
+              ?.filter((doc) => doc?.case_type_name?.toLowerCase() === "exhibits")
+              .map((doc, index) => (
               <div key={index} className="grid grid-cols-5 items-center">
                 <div className="col-span-3">
-                  <DocumentItem doc={doc} />
+                <DocumentItem doc={doc} />
                 </div>
                 <div></div>
                 <div className="col-span-1 font-semibold text-right">
-                  ₦ {doc.amount}
+                ₦ {doc.amount}
                 </div>
               </div>
-            ))}
+              ))
+            )}
         </div>
       </div>
     </div>

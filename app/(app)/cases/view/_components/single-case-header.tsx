@@ -120,7 +120,7 @@ export function SingleCaseHeader({
                 <>
                   {userRole === ROLES.ASSIGNING_MAGISTRATE && (
                     <>
-                      {data?.case_request_status?.toUpperCase() ===
+                      {(data?.case_request_status||"")?.toUpperCase() ===
                       "CASE REQUEST SUBMITTED" ? (
                         <CaseRequestStatusSheet
                           id={id}
@@ -130,7 +130,7 @@ export function SingleCaseHeader({
                             </Button>
                           }
                         />
-                      ) : data?.status?.toUpperCase() === "TO BE ASSIGNED" ? (
+                      ) : (data?.status||"")?.toUpperCase() === "TO BE ASSIGNED" ? (
                         <SubmittedRequestSheet
                           id={id}
                           trigger={
@@ -171,7 +171,7 @@ export function SingleCaseHeader({
                   {userRole === ROLES.DIRECTOR_MAGISTRATE && (
                     <>
                       {/* Request This Case */}
-                      {(data?.status || "").toUpperCase() ===
+                      {(data?.status || "")?.toUpperCase() ===
                         "UNDER REVIEW" && (
                         <CaseRequestSheet
                           id={id}
@@ -230,8 +230,8 @@ export function SingleCaseHeader({
             <CaseActionDropdown data={data} user={user} id={id} />
             {[ROLES.LAWYER, ROLES.USER].includes(user?.role as ROLES) && (
               <div className="flex gap-2">
-                <img src={data?.seal_path} className="h-10 w-10"/>
-                <img src={data?.qrcode_path} className="h-10 w-10"/>
+                <img src={data?.seal_path} className="h-10 w-10" />
+                <img src={data?.qrcode_path} className="h-10 w-10" />
                 {/* <QrCode className="h-10 w-10 text-gray-400" /> */}
                 <Button
                   onClick={handleRefileProcesses}
