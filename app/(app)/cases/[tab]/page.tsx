@@ -56,9 +56,11 @@ export default function FilteredCases() {
     ? format(selectedRange.to, "yyyy-MM-dd")
     : "";
   const handleApplyFilter = () => {
-    refetch(); // Manually trigger query refresh
-    setIsOpen(false); // Close popover
+    refetch();
+    setIsOpen(false);
   };
+  const [searchTerm, setSearchTerm] = useState<string>(""); // ✅ Correctly typed state
+
 
   const caseFilter = useMemo(
     () => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2],
@@ -76,6 +78,8 @@ export default function FilteredCases() {
     request_reassignment: false,
     is_active: false,
     exclude_status: [CaseStatus.Draft],
+    case_name: searchTerm,
+
   };
 
   switch (user?.role) {
@@ -156,7 +160,7 @@ export default function FilteredCases() {
     isLoading: draftsLoading,
     refetch,
   } = useQuery({
-    queryKey: ["get_cases", tab, selectedCase, currentPage],
+    queryKey: ["get_cases", tab, selectedCase, currentPage, searchTerm, formattedStartDate, formattedEndDate],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,
@@ -183,6 +187,10 @@ export default function FilteredCases() {
     router.push(path);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // ✅ Updates state correctly
+  };
+
   return (
     <div className="">
       <div className="bg-white overflow-auto space-y-6 max-h-[calc(100vh-220px)]">
@@ -196,6 +204,8 @@ export default function FilteredCases() {
               autoComplete="off"
               placeholder="e.g CV/WZ2/001e/Year"
               className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
+              value={searchTerm} // ✅ Now correctly bound
+              onChange={handleSearchChange} // ✅ Updates search term
             />
           </div>
 

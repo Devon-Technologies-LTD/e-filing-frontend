@@ -32,6 +32,7 @@ export default function RequestSheet({ trigger, id }: any) {
         },
         enabled: !!id,
     });
+
     const getInitials = (name: string | undefined) => {
         if (!name) return "CN";
         const initials = name
@@ -73,6 +74,9 @@ export default function RequestSheet({ trigger, id }: any) {
         }
     };
 
+    // console.log("Prisising  =>" + data);
+    // console.log("Processing => " + JSON.stringify(data));
+
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
@@ -95,8 +99,8 @@ export default function RequestSheet({ trigger, id }: any) {
                                     <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
                                 </Avatar>
                                 <div className="">
-                                    <p className="text-stone-600 text-sm">{data?.claimant?.name}</p>
-                                    <p className="font-bold">{data?.claimant?.email_address}</p>
+                                    <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name} {data?.assigned_by?.last_name}</p>
+                                    <p className="font-bold">{data?.assigned_by?.email}</p>
                                 </div>
                             </div>
                         </div>

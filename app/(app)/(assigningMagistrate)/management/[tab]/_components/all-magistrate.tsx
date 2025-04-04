@@ -64,6 +64,7 @@ export default function AllMagistrates() {
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
         invited_by: user?.id,
+        court_type: selectedCourt === "all" ? "" : selectedCourt,
       });
     },
     staleTime: 100000,

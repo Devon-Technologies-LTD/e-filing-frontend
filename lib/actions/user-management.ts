@@ -1,7 +1,9 @@
 
 "use server";
+import { axiosInstance } from "../_api/axios-config";
+import axios from "axios";
+import { NEXT_BASE_URL } from "../_constants";
 import UserService from "../_services/user-service";
-
 type ErrorResponse = {
     response?: { status: number; data: { message: string; data?: { error?: string }; error: string } };
     request?: unknown;
@@ -78,11 +80,13 @@ const fetchData2 = async (serviceMethod: Function, params?: any) => {
 
 export const getUserManagement = (params: Ipage) => fetchData(UserService.getUserManagement, params);
 export const getUserManagementFilter = (params: Ipage) => fetchData(UserService.getUserManagementFilter, params);
+export const getUserCase = () => fetchData2(UserService.getUserCase);
 export const getAllUser = () => fetchData(UserService.getAllUser);
 export const getPendingUser = (params: Ipage) => fetchData(UserService.getPendingUsers, params);
 export const getOversight = (params: Ipage) => fetchData(UserService.magistrateOversight, params);
 export const getPerformance = (params: Ipage) => fetchData(UserService.getPerformance, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
+export const getCaseMetric2 = () => fetchData(UserService.caseMetric2);
 export const getCaseBreakDown = (id: string) => fetchData2(UserService.getCaseBreakDown, id);
 export const getMagisterateBreakDown = (id: string) => fetchData2(UserService.getMagisterateBreakDown, id);
 export const getFinanceBreakDown = (id: string) => fetchData2(UserService.getFinanceBreakDown, id);
@@ -113,3 +117,36 @@ const handleFormAction = async (serviceMethod: Function, formData: FormData) => 
 
 export const InviteUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);
 export const ActiveUserAction = (_prevState: unknown, formData: FormData) => handleFormAction(UserService.addUserManagement, formData);
+
+
+
+
+// export const  = (params: any) => fetchData(
+
+//     UserService.resetPassword, params
+// );
+
+
+export async function resetPassword(
+    prevState: { success: boolean | null; message: string; errors?: any },
+    formData: FormData
+  ) {
+    const data = Object.fromEntries(formData.entries());
+  
+    try {
+      console.log(data);
+      await axiosInstance.post("/auth/change-password", data);
+  
+      return { success: true, message: "Password changed successfully", errors: {} };
+    } catch (err: any) {
+      if (err.response) {
+        return {
+          success: false,
+          message: err.response.data?.message || "An error occurred",
+          errors: err.response.data?.errors || {},
+        };
+      }
+      return { success: false, message: "Network error. Please try again.", errors: {} };
+    }
+  }
+  

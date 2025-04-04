@@ -7,7 +7,7 @@ import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
 // import { caseMetric, presidingmetric,  centralMetric } from "@/lib/dummy-data";
 import UpcomingHearing from "../upcoming-hearing";
-import { getCaseDistribution, getCaseMetric } from "@/lib/actions/user-management";
+import { getCaseDistribution, getCaseMetric, getCaseMetric2 } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
 import OverViewSkeleton from "../../overview-skeleton";
 import CaseStatusChart from "./case-status-chart";
@@ -72,11 +72,17 @@ export default function CaseMetrics() {
     },
     staleTime: 100000,
   });
+  const { data: caseMetricData, isLoading: loading, error: isError } = useQuery({
+    queryKey: ["caseMetricData"],
+    queryFn: async () => {
+      return await getCaseMetric2();
+    },
+    staleTime: 100000,
+  });
 
   if (isLoading) {
     return <OverViewSkeleton />;
   }
-
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -115,7 +121,7 @@ export default function CaseMetrics() {
               type="case"
               metricKey={key}
               value={`Case Filing ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-              metric={data?.concludedCases ?? { total: 0, difference: 0 }}
+              metric={caseMetricData?.[`${key}`] ?? { total: 0, difference: 0 }}
               rightModal={rightModal}
             />
           ))}

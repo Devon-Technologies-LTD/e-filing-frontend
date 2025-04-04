@@ -176,7 +176,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
                       ))}
                     </SelectContent>
                   </Select>
-
                   <LocationAdmin
                     placeholder="Select A Filing Location"
                     value={selectedCourtDivision}

@@ -9,6 +9,7 @@ import { Icons } from "@/components/svg/icons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface FormValues {
   first_name: string;
@@ -31,6 +32,8 @@ interface Props {
 
 const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, setIsOpen2, isOpen, setIsOpen }) => {
   // const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const handleInvite = async () => {
@@ -43,11 +46,13 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, setIsOpen2, isOpe
       });
       toast.success("User invited successfully!");
       console.log("User invited successfully:", data);
+      queryClient.invalidateQueries({ queryKey: ["userManagement"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+      queryClient.invalidateQueries({ queryKey: ["central-registeral"] });
       setIsOpen(false);
       setIsOpen2(false);
     } catch (error: any) {
       console.error("Error inviting user:", error);
-
       if (error.response?.data?.errors) {
         const errors = Object.entries(error.response.data.errors).map(
           ([field, message]) => `${field}: ${message}`

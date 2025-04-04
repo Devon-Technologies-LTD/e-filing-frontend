@@ -101,7 +101,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             onTabChange={handleTabChange}
             activeTab={activeTab}
           />
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger className=" ">
               <Tooltip>
                 <TooltipTrigger>
@@ -135,7 +135,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
                 contact support{" "}
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
       <section className="py-4">
