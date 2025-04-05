@@ -78,6 +78,7 @@ export default function FilteredCases() {
     is_active: false,
     exclude_status: getExcludedStatus(tab),
     case_name: searchTerm,
+    review_status: ""
   };
   // [CaseStatus.Draft, CaseStatus.JudgementDelivered, CaseStatus.Denied, CaseStatus.StruckOut]
 
@@ -105,11 +106,11 @@ export default function FilteredCases() {
       break;
     case ROLES.CENTRAL_REGISTRAR:
       if (tab === "under-review") {
-        status = { ...status, assignee_id: "", is_hearing: false };
+        status = { ...status, status: [], "review_status": "under review", exclude_status: [], assignee_id: "" };
       } else if (tab === "approved-review") {
-        status = { ...status, status: [], is_active: true, assignee_id: "" };
+        status = { ...status, status: [], "review_status": "approve", exclude_status: [], assignee_id: "" };
       } else {
-        status = { ...status, assignee_id: "" };
+        status = { ...status, status: [], "review_status": "denied", exclude_status: [], assignee_id: "" };
       }
       break;
     case ROLES.PRESIDING_MAGISTRATE:

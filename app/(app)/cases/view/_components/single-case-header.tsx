@@ -105,6 +105,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
           return (
             <AssignCaseSheet
               id={id}
+              title={data.case_name}
               status={isOwnCase ? "RE-ASSIGN" : data?.status}
               trigger={
                 <Button
