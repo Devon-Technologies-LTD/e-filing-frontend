@@ -86,11 +86,10 @@ export default function FilteredCases() {
     case ROLES.DIRECTOR_MAGISTRATE:
       if (tab === "submitted") {
         status = {
-          ...status,
-          request_reassignment: true,
-          status: [],
-          assignee_id: "",
+          ...status, request_reassignment: true, status: [], assignee_id: "",
         };
+      } else if (tab === "assigned") {
+        status = { ...status, status: [], is_active: true };
       } else {
         status = { ...status, assignee_id: "" };
       }

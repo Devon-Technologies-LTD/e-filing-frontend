@@ -93,7 +93,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
           />
         );
       } else
-        if (data?.status?.toUpperCase() === "TO BE ASSIGNED") {
+        if (data?.reassignment_status?.toUpperCase() === "REASSIGNMENT REQUEST SUBMITTED") {
           return (
             <SubmittedRequestSheet
               id={id}
@@ -149,7 +149,6 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     if (userRole === ROLES.PRESIDING_MAGISTRATE && data?.assigned_to === user?.id) {
       const hasReassignmentStatus = data?.reassignment_status?.trim();
       const isToBeAssigned = data?.status === "TO BE ASSIGNED";
-
       if (!hasReassignmentStatus && !isToBeAssigned) {
         return (
           <RequestSheet
