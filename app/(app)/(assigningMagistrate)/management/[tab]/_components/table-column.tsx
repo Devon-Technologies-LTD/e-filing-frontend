@@ -5,20 +5,8 @@ import { ROLES } from "@/types/auth";
 import { ColumnDef } from "@tanstack/react-table";
 import UserManagementDataTableAction from "./data-table-action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { IUsersColumn } from "@/types/files/general";
 
-export interface IUsersColumn {
-  id: string;
-  name: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: ROLES;
-  status: string;
-  court_division: string;
-  sub_division?: string;
-  court_type: string;
-  created_at?: Date | undefined;
-}
 
 export const createUserColumns = (
   userRole: ROLES,

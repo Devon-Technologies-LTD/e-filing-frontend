@@ -6,7 +6,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { CaseTypes, COURT_TYPE } from "@/types/files/case-type";
 import React, { useMemo, useState } from "react";
-import { createUserColumns, IUsersColumn } from "./table-column";
+import { createUserColumns, } from "./table-column";
 import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
