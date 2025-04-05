@@ -46,7 +46,7 @@ export const mainColumns: ColumnDef<ICase>[] = [
     cell: ({ row }) => {
       const status = row.original.status;
       const statusColors: Record<string, string> = {
-        Active: "bg-green-50 text-green-700",
+      Active: "bg-green-50 text-green-700",
         Pending: "bg-blue-50 text-blue-600",
         Inactive: "bg-red-100 text-red-800",
       };

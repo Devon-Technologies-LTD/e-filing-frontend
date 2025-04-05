@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  MainColumns,
+  createUserColumns,
   UnassignedColumns,
   UnderReviewColumns,
 } from "@/app/(app)/cases/[tab]/_components/table-columns";
@@ -175,7 +175,7 @@ export default function FilteredCases() {
       case "denied-review":
         return UnderReviewColumns;
       default:
-        return MainColumns;
+        return createUserColumns(user?.role!, "all")
     }
   }, [tab]);
 
