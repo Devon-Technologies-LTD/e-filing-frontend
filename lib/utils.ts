@@ -344,7 +344,7 @@ export const getExcludedStatus = (tab: TCaseFilterType) => {
       return [CaseStatus.Draft, CaseStatus.Denied, CaseStatus.JudgementDelivered, CaseStatus.StruckOut];
     default:
       return [
-        CaseStatus.Draft, CaseStatus.Denied
+        CaseStatus.Draft
       ];
   }
 };

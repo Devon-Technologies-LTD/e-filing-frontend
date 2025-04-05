@@ -108,7 +108,7 @@ export default function FilteredCases() {
       if (tab === "under-review") {
         status = { ...status, status: [], "review_status": "under review", exclude_status: [], assignee_id: "" };
       } else if (tab === "approved-review") {
-        status = { ...status, status: [], "review_status": "approve", exclude_status: [], assignee_id: "" };
+        status = { ...status, status: [], "review_status": "approved", exclude_status: [], assignee_id: "" };
       } else {
         status = { ...status, status: [], "review_status": "denied", exclude_status: [], assignee_id: "" };
       }
