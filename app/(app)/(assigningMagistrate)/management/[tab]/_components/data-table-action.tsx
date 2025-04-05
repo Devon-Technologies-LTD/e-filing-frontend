@@ -1,5 +1,4 @@
 import React from "react";
-import { IUsersColumn } from "./table-column";
 import { Row } from "@tanstack/react-table";
 import {
   DropdownMenu,
@@ -15,7 +14,7 @@ import DeleteUser from "./delete-user";
 import DeactivateUser from "./deactivate-user";
 
 interface props {
-  row: Row<IUsersColumn>;
+  row: Row<any>;
 }
 export default function UserManagementDataTableAction({ row }: props) {
   return (
