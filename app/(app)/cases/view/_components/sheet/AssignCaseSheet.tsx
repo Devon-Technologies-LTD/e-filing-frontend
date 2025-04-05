@@ -36,7 +36,8 @@ import { getInitials } from "@/constants";
 
 
 
-const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id: string, status: string }) => {
+
+const AssignCaseSheet = ({ trigger, id, status , title }: { trigger: React.ReactNode; id: string, status: string ,title:string }) => {
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -48,16 +49,6 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
     const dispatch = useDispatch();
     const { data: user } = useAppSelector((state) => state.profile);
 
-    // const { data: userData, isLoading: userLoading } = useQuery({
-    //     queryKey: ["presidingM", currentPage],
-    //     queryFn: async () => getUserManagementFilter({
-    //         page: currentPage,
-    //         size: DEFAULT_PAGE_SIZE,
-    //         role: "PRESIDING_MAGISTRATE",
-    //         query: searchTerm,
-    //     }),
-    //     staleTime: 100000,
-    // });
     const { data: userData, isLoading: userLoading } = useQuery({
         queryKey: ["presidingM", currentPage],
         queryFn: async () => getUserCase(),
@@ -164,7 +155,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                                                             <div className="text-center text-primary space-y-2">
                                                                 <p className="font-bold text-xl">Case Assignment</p>
                                                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
-                                                                    You are about to assign to magistrate <b>{user.name}</b>.
+                                                                    You are about to assign case {title} to magistrate <b>{user.name}</b>.
                                                                 </p>
                                                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
                                                                     Are you sure you want to proceed?
@@ -210,7 +201,7 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
                             <div className="text-center text-primary space-y-2">
                                 <p className="font-bold text-xl">Case Assignment</p>
                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
-                                    You are about to assign case {id} to magistrate <b>{user?.first_name} {user?.last_name}</b>.
+                                    You are about to assign case {title} to magistrate <b>{user?.first_name} {user?.last_name}</b>.
                                 </p>
                                 <p className="text-black font-semibold text-sm max-w-sm mx-auto">
                                     Are you sure you want to proceed?

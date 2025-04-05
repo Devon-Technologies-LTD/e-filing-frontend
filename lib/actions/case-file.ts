@@ -113,7 +113,6 @@ export async function changeReassignmentStatus(id: string, status: string) {
 export async function changeCaseRequestStatus(id: string, status: string) {
   try {
     const data = await CaseFileService.changeCaseRequestStatus(id, status);
-    console.log("approve case => " + data);
     return { ...data };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
