@@ -20,7 +20,6 @@ type ErrorResponse = {
 
 export async function getCaseFiles(payload: IDraftFilter, page: number, size: number) {
     try {
-        console.log(payload);
         const data = await CaseFileService.getCaseFilesAdmin(payload, page, size);
         return { ...data, success: true };
     } catch (err: unknown) {

@@ -39,7 +39,7 @@ export default function UserManagementDataTableAction({ row }: props) {
             row={row.original}
             trigger={
               <p className="px-2 py-1.5 w-full ">
-                {row.original.status === USER_STATUS.ACTIVE
+                {row.original.status === "ACTIVE"
                   ? "DE-ACTIVATE USER"
                   : "ACTIVATE USER"}
               </p>

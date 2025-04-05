@@ -39,7 +39,20 @@ export default function UpcomingHearing() {
         return () => clearInterval(interval);
     }, []);
 
-    if (loading) return <p>Loading hearings...</p>;
+    if (loading) return <>
+        <div className="space-y-1 p-4 flex justify-between items-center">
+            <div className="h-6 w-1/3 bg-gray-300 rounded" />{" "}
+            <div className="max-w-lg space-y-2">
+                <div className="h-6 w-3/4 bg-gray-300 rounded" /> {/* Title */}
+                <div className="flex items-center justify-between">
+                    <div className="h-4 w-1/3 bg-gray-300 rounded" />{" "}
+                </div>
+            </div>
+            <div className="flex items-center space-x-2">
+                <div className="h-4 w-16 bg-gray-300 rounded" /> {/* "Filed on" */}
+                <div className="h-5 w-32 bg-gray-300 rounded" /> {/* Date */}
+            </div>
+        </div></>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
     if (hearings.length === 0) return <p>No upcoming hearings.</p>;
 
@@ -50,8 +63,8 @@ export default function UpcomingHearing() {
             </div>
             <div className="space-y-6 container">
                 {hearings.map((hearing) => (
-                    <div 
-                        key={hearing.id} 
+                    <div
+                        key={hearing.id}
                         className="flex my-4 py-4 hover:border-b-app-primary hover:bg-gray-300 cursor-pointer border-b-2 flex-row justify-between items-center"
                     >
                         <div className="flex space-x-2 w-2/3 items-center">

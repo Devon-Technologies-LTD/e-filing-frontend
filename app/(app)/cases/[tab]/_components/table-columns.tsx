@@ -218,9 +218,9 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Status",
     cell: ({ row }) => (
       <StatusBadge
-        tooltip={row.original?.status?.toLowerCase()}
+        tooltip={row.original?.review_status?.toLowerCase()}
         tooltipProps={{ delayDuration: 200 }}
-        status={row.original?.status?.toLowerCase() as any}
+        status={row.original?.review_status?.toLowerCase() as any}
       />
     ),
   },

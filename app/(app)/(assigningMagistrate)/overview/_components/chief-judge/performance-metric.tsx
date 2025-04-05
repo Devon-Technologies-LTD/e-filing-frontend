@@ -2,16 +2,40 @@ import React from "react";
 import { YearSelector } from "@/components/year-selector";
 import { AllCasesFilter, AllFiledCasesFilter } from "@/components/filters/all-cases";
 import Histogram from "../Histogram";
+import { ROLES } from "@/types/auth";
+
 interface PerformanceMetricChartProps {
-  caseData: { division_name: string; case_count: number }[];
+  caseData: Record<string, { difference: number; total: number }>;
   heading: string;
+  user: { role: ROLES | string | undefined };
 }
-export default function PerformanceMetricChart({ caseData = [], heading }: PerformanceMetricChartProps) {
+
+export default function PerformanceMetricChart({ caseData, heading, user }: PerformanceMetricChartProps) {
   // Ensure caseData is always an array and remove entries with empty division names
   const validCaseData = Array.isArray(caseData) ? caseData.filter((item) => item.division_name?.trim() !== "") : [];
-  // Map division names as labels and case counts as data
-  const labels = validCaseData.map((item) => item.division_name.trim());
-  const data = validCaseData.map((item) => item.case_count);
+  const crVisibleKeys = ["totalCases", "activeCases", "closedCases", "reassignedCases"];
+
+  // Label mapping for display
+  const labelMap: Record<string, string> = {
+    totalCases: "Total Cases Reviewed",
+    pendingCases: "Pending Review",
+    approved: "Approved Cases",
+    denied: "Denied Cases",
+    activeCases: "Active Cases",
+    concludedCases: "Concluded Cases",
+    reassignedCases: "Reassigned Cases",
+  };
+
+      // Decide which keys to use
+      const visibleKeys =  crVisibleKeys;
+
+
+  // Map keys to display labels and fetch corresponding data
+  const labels = visibleKeys.map((key) => labelMap[key] || key);
+  const data = visibleKeys.map((key) => caseData[key]?.total ?? 0);
+
+  console.log("Visible Labels:", labels);
+  console.log("Data:", data);
 
   return (
     <div className="space-y-4">

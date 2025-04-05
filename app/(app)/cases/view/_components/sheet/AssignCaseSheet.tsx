@@ -32,6 +32,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { getUserCase } from "@/lib/actions/user-management";
+import { getInitials } from "@/constants";
 
 
 
@@ -96,14 +97,6 @@ const AssignCaseSheet = ({ trigger, id, status }: { trigger: React.ReactNode; id
         setSelectedCourtSubDivision("");
     };
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase();
-    };
 
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>

@@ -46,10 +46,10 @@ export default function DeactivateUser({
 
       const response = await axios.post("/api/user-action", {
         userId: row.id,
-        action: row.status === USER_STATUS.ACTIVE ? "deactivate" : "activate",
+        action: row.status === "ACTIVE" ? "deactivate" : "activate",
       });
 
-      toast.success(`User ${row.status === USER_STATUS.ACTIVE ? "deactivated" : "activated"} successfully!`);
+      toast.success(`User ${row.status === "ACTIVE" ? "deactivated" : "activated"} successfully!`);
       console.log("Response:", response.data);
 
       // ✅ Refresh the table after success
@@ -80,21 +80,21 @@ export default function DeactivateUser({
       <div className="space-y-8">
         <div className="flex flex-col items-center gap-1 pt-2">
           <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
-            {row.status === USER_STATUS.ACTIVE ? <Icons.infocircle /> : <Icons.infocheck />}
+            {row.status === "ACTIVE" ? <Icons.infocircle /> : <Icons.infocheck />}
           </div>
           <div className="text-center text-primary space-y-2">
             <p className="font-bold text-xl">
-              {row.status === USER_STATUS.ACTIVE ? "Deactivate" : "Activate"} User
+              {row.status === "ACTIVE" ? "Deactivate" : "Activate"} User
             </p>
             <p className="text-black font-semibold text-sm text-center max-w-sm mx-auto">
-              {row.status === USER_STATUS.ACTIVE
+              {row.status === "ACTIVE"
                 ? "This will temporarily revoke their access to the platform. You can reactivate their account later if needed. To confirm, type DEACTIVATE in the field below."
                 : "Are you sure you want to activate this account? This will restore their access to the platform immediately."}
             </p>
           </div>
         </div>
 
-        {row.status === USER_STATUS.ACTIVE && (
+        {row.status === "ACTIVE" && (
           <Input
             type="text"
             variant="ghost"
@@ -118,9 +118,9 @@ export default function DeactivateUser({
           <Button
             className="text-sm bg-primary font-bold h-12 disabled:bg-neutral-200 disabled:text-zinc-500"
             onClick={handleDelete}
-            disabled={loading || (row.status === USER_STATUS.ACTIVE && isButtonDisabled)}
+            disabled={loading || (row.status === "ACTIVE" && isButtonDisabled)}
           >
-            {loading ? "Processing..." : row.status === USER_STATUS.ACTIVE ? "Deactivate" : "Activate"}
+            {loading ? "Processing..." : row.status === "ACTIVE" ? "Deactivate" : "Activate"}
           </Button>
 
           <AlertDialogCancel className="font-extrabold text-red-500 text-xs uppercase"

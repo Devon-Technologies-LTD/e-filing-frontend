@@ -3,19 +3,11 @@
 import React, { ReactNode, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
-import { Loader2 } from "lucide-react";
-import { ErrorResponse } from "@/types/auth";
-import { requestReAssigment } from "@/lib/actions/case-actions";
+import { getInitials } from "@/constants";
 
-interface ScheduleSheetProps {
-    trigger: React.ReactNode;
-    id: string;
-}
+
 
 export default function ReviewRequestSheet({ trigger, id }: any) {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,14 +21,6 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
         },
         enabled: !!id,
     });
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        const initials = name
-            .split(" ")
-            .map((n) => n[0])
-            .join("");
-        return initials.toUpperCase();
-    };
 
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
@@ -46,9 +30,7 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                     <div className="space-y-6 w-full">
                         <div>
                             <p className="font-bold text-xl">Re-assignment Status</p>
-                            <div className="font-semibold text-sm">
-                                stay updated on the status of your submitted request
-                            </div>
+                            <div className="font-semibold text-sm">stay updated on the status of your submitted request</div>
                         </div>
                         <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
                             <div className="grid">
@@ -60,8 +42,8 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                                     <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
                                 </Avatar>
                                 <div className="">
-                                    <p className="text-stone-600 text-sm">{data?.claimant?.name}</p>
-                                    <p className="font-bold">{data?.claimant?.email_address}</p>
+                                    <p className="text-stone-600 text-sm">{data?.assigned_by.first_name} {data?.assigned_by.last_name} </p>
+                                    <p className="font-bold text-xs">{data?.assigned_by.email}</p>
                                 </div>
                             </div>
                         </div>
@@ -78,16 +60,7 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                             <p>-</p>
                         </div>
 
-                        {/* <form onSubmit={handleSubmit} className="space-y-2">
-                            <div className="space-y-2">
-                                <p className="font-bold text-base">Reason for Re-assignment *</p>
-                                <Textarea placeholder="Type here." required name="reason" className="bg-neutral-100 border-b-2 h-52 border-gray-300" onChange={(e) => setReason(e.target.value)} />
-                            </div>
-                            <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
-                                SUBMIT REQUEST
-                            </Button>
-                        </form> */}
+                     
                     </div>
                 </div>
             </SheetContent>

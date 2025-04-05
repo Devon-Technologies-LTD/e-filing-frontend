@@ -2,31 +2,46 @@ import React from "react";
 import { YearSelector } from "@/components/year-selector";
 import { AllCasesFilter, AllFiledCasesFilter } from "@/components/filters/all-cases";
 import Histogram from "../Histogram";
-
-interface CaseMetric {
-    histogram: {
-        labels: string[];
-        data: number[];
-        label: string;
-        histogramTitle: string;
-    };
-}
+import { ROLES } from "@/types/auth";
 
 interface CaseStatusChartProps {
-    caseData: { division_name: string; case_count: number }[];
+    caseData: Record<string, { difference: number; total: number }>;
     heading: string;
+    user: { role: ROLES | string | undefined };
 }
-export default function CaseStatusChart({ caseData = [], heading }: CaseStatusChartProps) {
-    // Ensure caseData is always an array and remove entries with empty division names
-    const validCaseData = Array.isArray(caseData) ? caseData.filter((item) => item.division_name?.trim() !== "") : [];
 
-    // Map division names as labels and case counts as data
-    const labels = validCaseData.map((item) => item.division_name.trim());
-    const data = validCaseData.map((item) => item.case_count);
+export default function CaseStatusChart({ caseData, heading, user }: CaseStatusChartProps) {
+    // Define keys to include for each role
+    const pmVisibleKeys = ["totalCases", "activeCases", "concludedCases", "reassignedCases"];
+    const crVisibleKeys = ["totalCases", "pendingCases", "approved", "denied"];
 
-    // Ensure Histogram receives valid data
-    console.log("Histogram Labels:", labels);
-    console.log("Histogram Data:", data);
+    // Label mapping for display
+    const labelMap: Record<string, string> = {
+        totalCases: "Total Cases Reviewed",
+        pendingCases: "Pending Review",
+        approved: "Approved Cases",
+        denied: "Denied Cases",
+        activeCases: "Active Cases",
+        concludedCases: "Concluded Cases",
+        reassignedCases: "Reassigned Cases",
+    };
+
+    const isREgis = [ROLES.CENTRAL_REGISTRAR].includes(user?.role as ROLES);
+    const isPresidingMagistrate = user?.role === ROLES.PRESIDING_MAGISTRATE;
+
+    // Decide which keys to use
+    const visibleKeys = isREgis
+        ? crVisibleKeys
+        : isPresidingMagistrate
+            ? pmVisibleKeys
+            : [];
+
+    // Map keys to display labels and fetch corresponding data
+    const labels = visibleKeys.map((key) => labelMap[key] || key);
+    const data = visibleKeys.map((key) => caseData[key]?.total ?? 0);
+
+    console.log("Visible Labels:", labels);
+    console.log("Data:", data);
 
     return (
         <div className="space-y-4">
@@ -37,9 +52,9 @@ export default function CaseStatusChart({ caseData = [], heading }: CaseStatusCh
             </div>
             <section className="container py-4">
                 <Histogram
-                    labels={labels} // Pass cleaned division names
-                    data={data} // Pass case counts
-                    label="Case Count"
+                    labels={labels}
+                    data={data}
+                    label="Total"
                     histogramTitle="REVIEW STATUS"
                 />
             </section>

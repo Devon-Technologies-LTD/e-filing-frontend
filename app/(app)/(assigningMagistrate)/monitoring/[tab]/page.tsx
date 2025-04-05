@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/admin-file";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
-import { getStatusByTab2 } from "@/lib/utils";
+import { getExcludedStatus, getStatusByTab2 } from "@/lib/utils";
 import { CaseTypes } from "@/types/files/case-type";
 import Pagination from "@/components/ui/pagination";
 import { MonitoringContext } from "@/context/MonitoringContext";
@@ -25,7 +25,7 @@ export default function FilteredCases() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { totalCase, setTotalCase } = useContext(MonitoringContext);
 
-  const [searchTerm, setSearchTerm] = useState<string>(""); 
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { data: user } = useAppSelector((state) => state.profile);
 
@@ -36,6 +36,8 @@ export default function FilteredCases() {
     request_reassignment: false,
     is_active: false,
     case_name: searchTerm,
+    exclude_status: getExcludedStatus(tab),
+
   };
 
   const roleBasedStatus: Partial<typeof baseStatus> = (() => {

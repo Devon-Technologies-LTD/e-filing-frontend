@@ -19,7 +19,7 @@ interface CaseData {
 
 export default function CaseMetrics() {
   const { data: user } = useAppSelector((state) => state.profile);
-  const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
+  const isPresiding = user?.role && [ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(user.role);
   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
@@ -91,12 +91,13 @@ export default function CaseMetrics() {
   if (!data) {
     return <div>No data available</div>;
   }
+  console.log("data caseMetricData => " + JSON.stringify(caseMetricData),);
 
   return (
     <>
       <div className="bg-white py-6 sm:py-8">
         <div className="w-full container  px-4 sm:px-8 grid gap-6 grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
-          {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(user?.role as ROLES) && (
+          {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               {["total", "active", "unassigned"].map((key) => (
                 <MetricCard
@@ -104,6 +105,20 @@ export default function CaseMetrics() {
                   type="case"
                   metricKey={key}
                   value={key === "total" ? "Total Cases Filed" : key === "active" ? "Active Cases" : "Unassigned Cases"}
+                  metric={data?.[`${key}Cases`] ?? { total: 0, difference: 0 }}
+                  rightModal={rightModal}
+                />
+              ))}
+            </>
+          )}
+          {isPresiding && (
+            <>
+              {["total", "active", "concluded"].map((key) => (
+                <MetricCard
+                  key={key}
+                  type="case"
+                  metricKey={key}
+                  value={key === "total" ? "Total Cases Filed" : key === "active" ? "Active Cases" : "Concluded Cases"}
                   metric={data?.[`${key}Cases`] ?? { total: 0, difference: 0 }}
                   rightModal={rightModal}
                 />
@@ -141,12 +156,16 @@ export default function CaseMetrics() {
             caseData={caseMetricsData}
           />
         )}
+        
         {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
-          <PerformanceMetricChart heading="PERFORMANCE METRIC" caseData={setPerformance} />
+          <PerformanceMetricChart user={{ role: user?.role as ROLES }} heading="PERFORMANCE METRIC" caseData={data} />
         )}
 
-        {[ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user?.role as ROLES) && (
-          <CaseStatusChart heading="REVIEW STATUS" caseData={caseStatusData} />
+        {(isPresiding && !isLoading) && (
+          <CaseStatusChart user={{ role: user?.role as ROLES }} heading="REVIEW STATUS" caseData={data} />
+        )}
+        {(centeral && !loading) && (
+          <CaseStatusChart user={{ role: user?.role as ROLES }} heading="REVIEW STATUS" caseData={caseMetricData} />
         )}
 
       </div>

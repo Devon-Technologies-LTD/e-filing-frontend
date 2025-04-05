@@ -34,6 +34,7 @@ export const ApproveCase = ({ record }: ConfirmationModalProps) => {
         toast.success("Case Successfullly Approved");
         setIsOpen(false);
         queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+        queryClient.invalidateQueries({ queryKey: ["get_cases"] });
         router.back();
       } else {
         toast.error(

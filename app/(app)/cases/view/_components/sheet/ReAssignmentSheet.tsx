@@ -10,6 +10,7 @@ import { Icons } from "@/components/svg/icons";
 import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { useQuery } from "@tanstack/react-query";
 import { reassignmentHistory } from "@/lib/actions/case-actions";
+import { getInitials } from "@/constants";
 
 interface ReAssignmentSheetProps {
   trigger: React.ReactNode;
@@ -25,15 +26,6 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
     },
     enabled: !!id,
   });
-
-  const getInitials = (name: string | undefined) => {
-    if (!name) return "CN";
-    const initials = name
-      .split(" ")
-      .map((n) => n[0])
-      .join("");
-    return initials.toUpperCase();
-  };
 
   const { data: history, isLoading: isLoadingHistory } = useQuery({
     queryKey: ["get_case_reassignment_history", id],
@@ -83,8 +75,8 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
               <div className="space-y-6">
                 <div className="gap-2 border-b-[1px] space-y-2 border-app-primary py-4">
                   <div className="flex justify-start">
-                    <div className="text-sm">
-                      <p className="font-bold">-</p>
+                    <div className="text-sm flex">
+                      <p className="font-semibold">-</p>
                       <p className="font-semibold">-</p>
                     </div>
                   </div>
@@ -106,8 +98,6 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                           day: "2-digit",
                         })}
                       </p>
-
-
                       {/* Status and Request Reason */}
                       <div className="flex justify-start">
                         {item.status === "PENDING" ? (

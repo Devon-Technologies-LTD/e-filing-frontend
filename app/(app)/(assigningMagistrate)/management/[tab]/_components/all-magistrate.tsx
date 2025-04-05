@@ -55,9 +55,8 @@ export default function AllMagistrates() {
     [user?.role]
   );
   const [searchTerm, setSearchTerm] = useState("");
-
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["userManagement", currentPage, selectedCourt, searchTerm], // ✅ Now React Query tracks changes
+    queryKey: ["userManagement", currentPage, selectedCourt, searchTerm],
     queryFn: async () => {
       return await getUserManagementFilter({
         page: currentPage,
@@ -101,6 +100,7 @@ export default function AllMagistrates() {
           />
         </div>
       </div>
+      
       {/* <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]"> */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
@@ -116,7 +116,6 @@ export default function AllMagistrates() {
         />
       </div>
       <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
-      {/* </div> */}
 
       {data?.data?.length > 0 && (
         <div className="fixed bottom-0 container left-0 right-0 py-2">
