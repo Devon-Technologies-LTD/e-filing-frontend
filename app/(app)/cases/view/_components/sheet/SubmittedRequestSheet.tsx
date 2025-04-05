@@ -71,7 +71,7 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
         }
     };
 
-    
+
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
             <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
@@ -92,12 +92,12 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
                             <div className="flex gap-2">
                                 <Avatar>
                                     <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2">
-                                        {getInitials(data?.claimant?.name)}
+                                        {getInitials(data?.assigned_to_data?.first_name)}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="text-stone-600 text-sm">{data?.claimant?.name}</p>
-                                    <p className="font-bold">{data?.claimant?.email_address}</p>
+                                    <p className="text-stone-600 text-sm">{data?.assigned_to_data?.name}</p>
+                                    <p className="font-bold">{data?.assigned_to_data?.email_address}</p>
                                 </div>
                             </div>
                         </div>

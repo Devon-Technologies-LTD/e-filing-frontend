@@ -41,25 +41,38 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
   const renderStatusBadges = useMemo(() => {
     const badges = [<StatusBadge key="case-type" status={data?.case_type_name} />];
+    const reassignmentStatus = data?.reassignment_status || "";
+    const caseRequestStatus = data?.case_request_status || "";
 
     if (userRole !== ROLES.PRESIDING_MAGISTRATE) {
-      let status = "";
-      if (userRole === ROLES.DIRECTOR_MAGISTRATE && data?.case_request_status !== "") {
-        status = data.case_request_status;
-      } else if (data?.status === "TO BE ASSIGNED" && data?.case_request_status !== "") {
-        status = data?.case_request_status;
-      } else if (data?.reassignment_status !== "") {
-        status = data.reassignment_status;
+      if ((userRole === ROLES.USER) || (userRole === ROLES.LAWYER)) {
+        if (data?.review_status === "denied") {
+          badges.push(<StatusBadge key="status" status="Denied" />);
+        } else {
+          badges.push(<StatusBadge key="status" status={data.status} />);
+        }
       } else {
-        status = data.status;
+        const lowerCaseStatus = data?.status.toLowerCase();
+        if (!reassignmentStatus && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
+          badges.push(<StatusBadge key="reassignment" status={reassignmentStatus} />);
+        } else if (!caseRequestStatus && userRole === ROLES.DIRECTOR_MAGISTRATE) {
+          badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
+        } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
+          badges.push(
+            <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
+          );
+        } else {
+          badges.push(<StatusBadge key="status" status={data?.status} />);
+        }
       }
-      badges.push(<StatusBadge key="status" status={status} />);
     } else {
-      const { reassignment_status, status } = data || {};
+      const { reassignment_status, status, case_request_status } = data || {};
       const lowerCaseStatus = (status || "").toLowerCase();
-
+      console.log("case_request_status" + case_request_status);
       if (reassignment_status) {
         badges.push(<StatusBadge key="reassignment" status={reassignment_status} />);
+      } else if (case_request_status) {
+        badges.push(<StatusBadge key="reassignment" status={data?.case_request_status} />);
       } else if (lowerCaseStatus === "to be assigned" && reassignment_status) {
         badges.push(<StatusBadge key="reassignment-lower" status={reassignment_status.toLowerCase()} />);
       } else {
@@ -75,7 +88,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
   }, [data, userRole]);
 
   const renderActionButtons = useMemo(() => {
-    if (data?.status === "JUDGEMENT DELIVERED" || data?.status === "STRUCK OUT" || data?.status?.toUpperCase() === "DENIED" ) {
+    if (data?.status === "JUDGEMENT DELIVERED" || data?.status === "STRUCK OUT" || data?.status?.toUpperCase() === "DENIED") {
       return null;
     }
     if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
@@ -90,34 +103,35 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
             trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
           />
         );
-      } else
-        if (data?.reassignment_status?.toUpperCase() === "REASSIGNMENT REQUEST SUBMITTED") {
-          return (
-            <SubmittedRequestSheet
-              id={id}
-              trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
-            />
-          );
-        } else {
-          const isOwnCase = data?.assigned_to === user?.id;
-          const isAssigned = data?.status === "ASSIGNED";
-          return (
-            <AssignCaseSheet
-              id={id}
-              title={data.case_name}
-              status={isOwnCase ? "RE-ASSIGN" : data?.status}
-              trigger={
-                <Button
-                  variant="outline"
-                  className="text-xs"
-                  disabled={isOwnCase || isAssigned}
-                >
-                  {isOwnCase ? "RE-ASSIGN CASE" : "ASSIGN CASE"}
-                </Button>
-              }
-            />
-          );
-        }
+      } else if (data?.reassignment_status?.toUpperCase() === "REASSIGNMENT REQUEST SUBMITTED") {
+        return (
+          <SubmittedRequestSheet
+            id={id}
+            trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>}
+          />
+        );
+      } else if (data?.hearing_status != "") {
+        return (<></>);
+      } else {
+        const isOwnCase = data?.assigned_to === user?.id;
+        const isAssigned = data?.status === "ASSIGNED";
+        return (
+          <AssignCaseSheet
+            id={id}
+            title={data.case_name}
+            status={isOwnCase ? "RE-ASSIGN" : data?.status}
+            trigger={
+              <Button
+                variant="outline"
+                className="text-xs"
+                disabled={isOwnCase || isAssigned}
+              >
+                {isOwnCase ? "RE-ASSIGN CASE" : "ASSIGN CASE"}
+              </Button>
+            }
+          />
+        );
+      }
     }
 
     if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
@@ -147,7 +161,8 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     if (userRole === ROLES.PRESIDING_MAGISTRATE && data?.assigned_to === user?.id) {
       const hasReassignmentStatus = data?.reassignment_status?.trim();
       const isToBeAssigned = data?.status === "TO BE ASSIGNED";
-      if (!hasReassignmentStatus && !isToBeAssigned) {
+      const isHearing = data?.hearing_status;
+      if (!hasReassignmentStatus && !isToBeAssigned && !isHearing) {
         return (
           <RequestSheet
             id={id}
@@ -174,7 +189,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
     return (
       <div className="flex gap-2">
-          <ImageModalSection data={data} />
+        <ImageModalSection data={data} />
         {/* {data?.seal_path && <img src={data.seal_path} className="h-10 w-10" alt="Seal" />} */}
         {/* {data?.qrcode_path && <img src={data.qrcode_path} className="h-10 w-10" alt="QR Code" />} */}
         <Button
