@@ -53,9 +53,9 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         }
       } else {
         const lowerCaseStatus = data?.status.toLowerCase();
-        if (!reassignmentStatus && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
+        if (reassignmentStatus != "" && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
           badges.push(<StatusBadge key="reassignment" status={reassignmentStatus} />);
-        } else if (!caseRequestStatus && userRole === ROLES.DIRECTOR_MAGISTRATE) {
+        } else if (caseRequestStatus != "" && userRole === ROLES.DIRECTOR_MAGISTRATE) {
           badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
         } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
           badges.push(
