@@ -76,11 +76,17 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     cell: ({ row }) => {
       const status = row.original.status?.toLowerCase() || ""; // Safe fallback
       const caseRequest = row.original.case_request_status || ""; // Safe fallback
+      const reassignmentStatus = row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={(caseRequest === "CASE REQUEST SUBMITTED") ? caseRequest : (status === "to be assigned") ? row.original.reassignment_status : status}
+          status={
+            (caseRequest === "CASE REQUEST SUBMITTED") ? 
+            caseRequest : 
+            (reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED") ? reassignmentStatus 
+            : (status === "to be assigned") ? row.original.reassignment_status : status
+          }
         />
       );
     },
@@ -137,11 +143,17 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     cell: ({ row }) => {
       const status = row.original.status?.toLowerCase() || ""; // Safe fallback
       const caseRequest = row.original.case_request_status || ""; // Safe fallback
+      const reassignmentStatus = row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
-          status={(caseRequest === "CASE REQUEST SUBMITTED") ? caseRequest : (status === "to be assigned") ? row.original.reassignment_status : status}
+          status={
+            (caseRequest === "CASE REQUEST SUBMITTED") ? 
+            caseRequest : 
+            (reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED") ? reassignmentStatus 
+            : (status === "to be assigned") ? row.original.reassignment_status : status
+          }
         />
       );
     },
