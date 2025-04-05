@@ -96,22 +96,38 @@ export const createUserColumns = (
   columns.push({
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <StatusBadge
-        tooltip=""
-        tooltipProps={{ delayDuration: 200 }}
-        status={
-          (((userRole === ROLES.USER || userRole === ROLES.LAWYER ) && row.original.review_status == "denied")
-            ? "Denied"
-            : row.original?.status
-          )?.toLowerCase() as any
-        }
-      />
-    ),
+    cell: ({ row }) => {
+      const status = row.original.status?.toLowerCase() || "";
+      const caseRequest = row.original.case_request_status || "";
+      const reassignmentStatus = row.original.reassignment_status?.toUpperCase() || "";
+
+      let computedStatus = status;
+
+      if ((userRole === ROLES.USER || userRole === ROLES.LAWYER) && row.original.review_status === "denied") {
+        computedStatus = "denied";
+      } else if (caseRequest === "CASE REQUEST SUBMITTED") {
+        computedStatus = caseRequest;
+      } else if (reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED") {
+        computedStatus = reassignmentStatus;
+      } else if (status === "to be assigned") {
+        computedStatus = row.original.reassignment_status;
+      }
+
+      return (
+        <StatusBadge
+          tooltip=""
+          tooltipProps={{ delayDuration: 200 }}
+          status={computedStatus?.toLowerCase() as any}
+        />
+      );
+    },
   });
+
 
   return columns;
 };
+
+
 
 export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {

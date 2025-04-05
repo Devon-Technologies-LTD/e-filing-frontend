@@ -80,11 +80,9 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     }
     if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
       if (
-
         data?.case_request_status?.toUpperCase() === "CASE REQUEST SUBMITTED" &&
         data?.case_request_status !== "DENIED" &&
         data?.case_request_status !== "Approved"
-
       ) {
         return (
           <CaseRequestStatusSheet
@@ -160,7 +158,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         return (
           <ReviewRequestSheet
             id={id}
-            trigger={<Button variant="outline" className="text-xs">VIEW REVIEW REQUEST</Button>}
+            trigger={<Button variant="outline" className="text-xs">VIEW REQUEST</Button>}
           />
         );
       }

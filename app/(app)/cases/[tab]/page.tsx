@@ -153,7 +153,6 @@ export default function FilteredCases() {
     default:
       status = { ...status, assignee_id: "" };
   }
-
   const {
     data,
     isLoading: draftsLoading,
