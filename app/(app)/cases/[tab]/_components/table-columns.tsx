@@ -93,6 +93,25 @@ export const createUserColumns = (
   ];
 
   // Add Status column conditionally
+  // columns.push({
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   cell: ({ row }) => (
+  //     <StatusBadge
+  //       tooltip=""
+  //       tooltipProps={{ delayDuration: 200 }}
+  //       status={
+  //         (((userRole === ROLES.USER || userRole === ROLES.LAWYER ) && row.original.review_status == "denied")
+  //           ? "Denied"
+  //           : row.original?.status
+  //         )?.toLowerCase() as any
+  //       }
+  //     />
+  //   ),
+  // });
+
+
+  // Add Status column conditionally
   columns.push({
     accessorKey: "status",
     header: "Status",
@@ -100,17 +119,24 @@ export const createUserColumns = (
       const status = row.original.status?.toLowerCase() || "";
       const caseRequest = row.original.case_request_status || "";
       const reassignmentStatus = row.original.reassignment_status?.toUpperCase() || "";
+      const reviewStatus = row.original.review_status;
 
       let computedStatus = status;
 
-      if ((userRole === ROLES.USER || userRole === ROLES.LAWYER) && row.original.review_status === "denied") {
+      // If user is USER or LAWYER and review is denied, override status
+      if ((userRole === ROLES.USER || userRole === ROLES.LAWYER) && reviewStatus === "denied") {
         computedStatus = "denied";
-      } else if (caseRequest === "CASE REQUEST SUBMITTED") {
-        computedStatus = caseRequest;
-      } else if (reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED") {
-        computedStatus = reassignmentStatus;
-      } else if (status === "to be assigned") {
-        computedStatus = row.original.reassignment_status;
+      }
+
+      // For other roles, override based on specific flags
+      if (userRole !== ROLES.USER && userRole !== ROLES.LAWYER) {
+        if (caseRequest === "CASE REQUEST SUBMITTED") {
+          computedStatus = caseRequest;
+        } else if (reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED") {
+          computedStatus = reassignmentStatus;
+        } else if (status === "to be assigned") {
+          computedStatus = row.original.reassignment_status;
+        }
       }
 
       return (
@@ -126,8 +152,6 @@ export const createUserColumns = (
 
   return columns;
 };
-
-
 
 export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
