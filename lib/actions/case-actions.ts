@@ -70,7 +70,7 @@ export async function getSingleCaseHistory(id: string) {
 export async function reassignmentHistory(id: string) {
     try {
         const data = await CaseActionService.reassignmentHistory(id);
-        console.log(data);
+        console.log("REassignment histrory =>" + data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;

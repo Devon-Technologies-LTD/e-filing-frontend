@@ -14,7 +14,7 @@ import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCaseFiles } from "@/lib/actions/case-file";
 import { CaseStatus, DEFAULT_PAGE_SIZE } from "@/constants";
-import { getStatusByTab, getStatusByTab2 } from "@/lib/utils";
+import { getExcludedStatus, getStatusByTab, getStatusByTab2 } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { Search } from "lucide-react";
@@ -59,8 +59,7 @@ export default function FilteredCases() {
     refetch();
     setIsOpen(false);
   };
-  const [searchTerm, setSearchTerm] = useState<string>(""); // ✅ Correctly typed state
-
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const caseFilter = useMemo(
     () => [{ value: "all", label: "ALL CASE TYPE" }, ...CASE_TYPES2],
@@ -77,10 +76,10 @@ export default function FilteredCases() {
     is_hearing: false,
     request_reassignment: false,
     is_active: false,
-    exclude_status: [CaseStatus.Draft],
+    exclude_status: getExcludedStatus(tab),
     case_name: searchTerm,
-
   };
+  // [CaseStatus.Draft, CaseStatus.JudgementDelivered, CaseStatus.Denied, CaseStatus.StruckOut]
 
   switch (user?.role) {
     case ROLES.DIRECTOR_MAGISTRATE:
@@ -160,7 +159,7 @@ export default function FilteredCases() {
     isLoading: draftsLoading,
     refetch,
   } = useQuery({
-    queryKey: ["get_cases", { user: user?.id, tab, selectedCase, currentPage }],
+    queryKey: ["get_cases", { user: user?.id, tab, selectedCase, currentPage, formattedStartDate, formattedEndDate, searchTerm }],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
     staleTime: 50000,
     refetchInterval: 10000,

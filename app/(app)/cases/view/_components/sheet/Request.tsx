@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { ErrorResponse } from "@/types/auth";
 import { requestReAssigment } from "@/lib/actions/case-actions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInitials } from "@/constants";
 
 
 interface ScheduleSheetProps {
@@ -33,14 +34,6 @@ export default function RequestSheet({ trigger, id }: any) {
         enabled: !!id,
     });
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        const initials = name
-            .split(" ")
-            .map((n) => n[0])
-            .join("");
-        return initials.toUpperCase();
-    };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();

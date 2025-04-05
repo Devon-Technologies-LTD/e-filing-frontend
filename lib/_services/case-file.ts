@@ -94,6 +94,7 @@ export interface IChangeStatus {
 }
 
 export interface CaseDetailsResponse {
+  review_status: string;
   id: string;
   user_id: string;
   title: string;
@@ -111,6 +112,7 @@ export interface CaseDetailsResponse {
   assignee_name: string;
   reassignment_status: string;
   case_request_status: string;
+  CaseDetailsResponse: string;
 }
 
 const CaseFileService = {

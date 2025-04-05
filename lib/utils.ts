@@ -159,12 +159,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-      .getHours()
-      .toString()
-      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-      .getSeconds()
-      .toString()
-      .padStart(2, "0")}`,
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+          .getSeconds()
+          .toString()
+          .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -329,6 +329,22 @@ export const getStatusByTab2 = (tab: TCaseFilterType) => {
         CaseStatus.StruckOut,
         CaseStatus.ToBeAssigned,
         CaseStatus.UnderReview,
+      ];
+  }
+};
+export const getExcludedStatus = (tab: TCaseFilterType) => {
+  switch (tab) {
+    case "denied-review":
+      return [CaseStatus.Draft];
+    case "recent":
+      return [CaseStatus.Draft];
+    case "approved-review":
+      return [CaseStatus.Draft, CaseStatus.Denied, CaseStatus.JudgementDelivered, CaseStatus.StruckOut];
+    case "active":
+      return [CaseStatus.Draft, CaseStatus.Denied, CaseStatus.JudgementDelivered, CaseStatus.StruckOut];
+    default:
+      return [
+        CaseStatus.Draft, CaseStatus.Denied
       ];
   }
 };
