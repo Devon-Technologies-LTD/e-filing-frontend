@@ -101,7 +101,7 @@ export const createUserColumns = (
         tooltip=""
         tooltipProps={{ delayDuration: 200 }}
         status={
-          (((userRole === ROLES.USER || userRole === ROLES.LAWYER ) && row.original.review_status == "Denied")
+          (((userRole === ROLES.USER || userRole === ROLES.LAWYER ) && row.original.review_status == "denied")
             ? "Denied"
             : row.original?.status
           )?.toLowerCase() as any

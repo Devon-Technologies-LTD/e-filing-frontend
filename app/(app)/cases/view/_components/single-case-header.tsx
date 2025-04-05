@@ -21,6 +21,7 @@ import CaseRequestSheet from "./sheet/CaseRequestSheet";
 import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
 import SubmittedRequestSheet from "./sheet/SubmittedRequestSheet";
 import CaseRequestStatusSheet from "./sheet/caseRequestStatus";
+import ImageModalSection from "./ImageModalSection";
 
 export function SingleCaseHeader({ data, params }: { params: { id: string }; data: any }) {
   const id = useMemo(() => decodeURIComponent(params.id), [params.id]);
@@ -176,8 +177,9 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
     return (
       <div className="flex gap-2">
-        {data?.seal_path && <img src={data.seal_path} className="h-10 w-10" alt="Seal" />}
-        {data?.qrcode_path && <img src={data.qrcode_path} className="h-10 w-10" alt="QR Code" />}
+          <ImageModalSection data={data} />
+        {/* {data?.seal_path && <img src={data.seal_path} className="h-10 w-10" alt="Seal" />} */}
+        {/* {data?.qrcode_path && <img src={data.qrcode_path} className="h-10 w-10" alt="QR Code" />} */}
         <Button
           onClick={handleRefileProcesses}
           className="bg-primary"
