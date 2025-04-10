@@ -11,6 +11,8 @@ import { getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { useQuery } from "@tanstack/react-query";
 import { reassignmentHistory } from "@/lib/actions/case-actions";
 import { getInitials } from "@/constants";
+import { ROLES } from "@/types/auth";
+import { useAppSelector } from "@/hooks/redux";
 
 interface ReAssignmentSheetProps {
   trigger: React.ReactNode;
@@ -33,6 +35,9 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
     enabled: !!id,
   });
 
+  const { data: user } = useAppSelector((state) => state.profile);
+
+
 
   return (
     <Sheet>
@@ -52,15 +57,27 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                 <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
                 <p className="text-app-primary font-extrabold">{data?.division_name}</p>
               </div>
-              <div className="flex gap-2">
-                <Avatar>
-                  <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
-                </Avatar>
-                <div className="">
-                  <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name} {data?.assigned_by?.last_name}</p>
-                  <p className="font-bold">{data?.assigned_by?.email}</p>
+              {(user?.role === ROLES.ASSIGNING_MAGISTRATE) ?
+                <div className="flex gap-2">
+                  <Avatar>
+                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
+                  </Avatar>
+                  <div className="">
+                    <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
+                    <p className="text-sm font-semibold">{data?.assigned_to_data?.email}</p>
+                  </div>
                 </div>
-              </div>
+                :
+                <div className="flex gap-2">
+                  <Avatar>
+                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
+                  </Avatar>
+                  <div className="">
+                    <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name} {data?.assigned_by?.last_name}</p>
+                    <p className="text-sm font-semibold">{data?.assigned_by?.email}</p>
+                  </div>
+                </div>
+              }
             </div>
 
             <div className="border-b-2 pb-3">

@@ -23,7 +23,7 @@ export default function FilteredCases() {
   const tab = params.tab as TCaseFilterType;
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const { totalCase, setTotalCase } = useContext(MonitoringContext);
+  const { totalCase, setTotalCase, caseName, setCaseName } = useContext(MonitoringContext);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -78,7 +78,8 @@ export default function FilteredCases() {
       console.log("data.total_rows => " + data.total_rows);
       setTotalCase(data.total_rows);
     }
-  }, [data?.total_rows, setTotalCase]);
+    setCaseName(tab)
+  }, [data?.total_rows, setTotalCase, setCaseName, tab]);
 
   return (
     <div className="space-y-12">

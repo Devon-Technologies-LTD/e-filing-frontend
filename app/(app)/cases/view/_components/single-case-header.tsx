@@ -55,15 +55,17 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         const lowerCaseStatus = data?.status.toLowerCase();
         if (reassignmentStatus != "" && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
           badges.push(<StatusBadge key="reassignment" status={reassignmentStatus} />);
-        } else if (caseRequestStatus != "" && userRole === ROLES.DIRECTOR_MAGISTRATE) {
-          badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
-        } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
-          badges.push(
-            <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
-          );
-        } else {
-          badges.push(<StatusBadge key="status" status={data?.status} />);
-        }
+        } else
+          if (caseRequestStatus != "" && userRole === ROLES.DIRECTOR_MAGISTRATE) {
+            badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
+          } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
+            badges.push(
+              <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
+            );
+          }
+          else {
+            badges.push(<StatusBadge key="status" status={data?.status} />);
+          }
       }
     } else {
       const { reassignment_status, status, case_request_status } = data || {};
@@ -75,11 +77,15 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         badges.push(<StatusBadge key="reassignment" status={data?.case_request_status} />);
       } else if (lowerCaseStatus === "to be assigned" && reassignment_status) {
         badges.push(<StatusBadge key="reassignment-lower" status={reassignment_status.toLowerCase()} />);
-      } else {
+      }
+      else {
         badges.push(<StatusBadge key="status" status={status} />);
       }
     }
 
+    if (data?.review_status && (data?.assignment_status == "ASSIGNED") && (data?.reassignment_status != "ASSIGNED") && (data?.reassignment_status != "APPROVED") && (data?.case_request_status != "APPROVED")) {
+      badges.push(<StatusBadge key="status" status={data?.review_status} />);
+    }
     if (data?.is_emergency) {
       badges.push(<StatusBadge key="emergency" status="action required" />);
     }

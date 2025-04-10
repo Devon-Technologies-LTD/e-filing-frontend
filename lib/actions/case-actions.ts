@@ -61,6 +61,7 @@ export async function deliverJudgement(payload: any, id: string) {
 export async function getSingleCaseHistory(id: string) {
     try {
         const data = await CaseActionService.getSingleCaseHistory(id);
+        console.log("getSingleCaseHistory =>" + data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;

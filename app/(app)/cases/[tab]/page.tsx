@@ -201,7 +201,7 @@ export default function FilteredCases() {
               variant="ghost"
               autoComplete="off"
               placeholder="e.g CV/WZ2/001e/Year"
-              className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
+              className="pl-9 h-12"
               value={searchTerm} // ✅ Now correctly bound
               onChange={handleSearchChange} // ✅ Updates search term
             />

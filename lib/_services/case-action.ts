@@ -38,6 +38,7 @@ const CaseActionService = {
     },
     async getSingleCaseHistory(id: string): Promise<any> {
         const response = await axiosInstance.get<any>(`/admin/casefile/case-hearings?id=${id}`);
+        console.log("response => " + response);
         return response.data;
     },
     async reassignmentHistory(id: string): Promise<any> {
