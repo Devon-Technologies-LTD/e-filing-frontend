@@ -157,9 +157,9 @@ export default function CaseMetrics() {
           />
         )}
         
-        {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
+        {/* {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
           <PerformanceMetricChart user={{ role: user?.role as ROLES }} heading="PERFORMANCE METRIC" caseData={data} />
-        )}
+        )} */}
 
         {(isPresiding && !isLoading) && (
           <CaseStatusChart user={{ role: user?.role as ROLES }} heading="REVIEW STATUS" caseData={data} />
