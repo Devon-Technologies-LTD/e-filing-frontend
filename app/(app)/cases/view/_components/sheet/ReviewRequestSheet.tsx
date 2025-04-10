@@ -1,11 +1,12 @@
 
 
-import React, { ReactNode, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useQuery } from "@tanstack/react-query";
-import { getAdminCaseFilesById } from "@/lib/actions/case-file";
+import { getAdminCaseFilesById, getReassignmentHistory } from "@/lib/actions/case-file";
 import { getInitials } from "@/constants";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 
 
@@ -13,6 +14,9 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
+    const [date, setDate] = useState<string>("");
+    const [loading, setLoading] = useState(true);
+
 
     const { data, isLoading } = useQuery({
         queryKey: ["get_single_case_by_id"],
@@ -21,6 +25,27 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
         },
         enabled: !!id,
     });
+
+    // Fetch reassignment history only when sheet is open
+    useEffect(() => {
+        if (!isOpen2) return;
+        const fetchHistory = async () => {
+            try {
+                console.log("Fetching reassignment history for case ID:", id);
+                const history = await getReassignmentHistory(id);
+                console.log(history);
+                setReason(history?.request_reason || "No reason provided");
+                setDate(history?.created_at || "-");
+            } catch (error) {
+                console.error("Failed to fetch reassignment history:", error);
+                setReason("Failed to load reason");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHistory();
+    }, [id, isOpen2]);
 
     return (
         <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
@@ -53,14 +78,18 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                             <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
                             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
                         </div>
-
-
-                        <p className="text-stone-600 text-sm font-bold mb-2">Reason for denial</p>
-                        <div className="border-b-2 bg-zinc-300 pb-3">
-                            <p>-</p>
-                        </div>
-
-                     
+                        {data?.reassignment_status.toUpperCase() == "DENIED" ? (
+                            <>
+                                <p className="text-stone-600 text-sm font-bold mb-2">Reason for denial</p>
+                                <div className="border-b-2 bg-zinc-300 pb-3">
+                                    <p className="p-2 text-sm font-semibold">{reason}</p>
+                                </div>
+                            </>
+                        ) :
+                            <>
+                                {data?.reassignment_status && <StatusBadge status={data.reassignment_status}>{data.reassignment_status}</StatusBadge>}
+                            </>
+                        }
                     </div>
                 </div>
             </SheetContent>

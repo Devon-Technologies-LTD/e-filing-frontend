@@ -31,15 +31,12 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
         enabled: !!id,
     });
 
- 
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!data?.id) {
             toast.error("Error: Case data is not available.");
             return;
         }
-
         setIsSubmitting(true);
         try {
             const formData = { reason };

@@ -21,7 +21,6 @@ interface ScheduleSheetProps {
 
 export default function RequestSheet({ trigger, id }: any) {
     const queryClient = useQueryClient();
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
@@ -33,7 +32,6 @@ export default function RequestSheet({ trigger, id }: any) {
         },
         enabled: !!id,
     });
-
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();

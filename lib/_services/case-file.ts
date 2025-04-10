@@ -172,7 +172,7 @@ const CaseFileService = {
   },
   async caseRequestHistory(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(
-      `admin/case-request-history/${id}`
+      `admin/casefile/case-request-history/${id}`
     );
     return response.data;
   },
