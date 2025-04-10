@@ -114,6 +114,7 @@ export function ReviewActions({ data }: Iprops) {
             Reason for denial
           </Button>
         </div>
+
       )}
 
       {data.status?.toLowerCase() === CaseStatus.Denied && (

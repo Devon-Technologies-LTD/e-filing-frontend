@@ -30,6 +30,8 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
     enabled: !!id,
   });
 
+  console.log("history => =>" + JSON.stringify(history));
+
   return (
     <Sheet>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
@@ -76,7 +78,7 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
               </ScrollArea>
             )}
 
-         
+
           </div>
         </div>
       </SheetContent>

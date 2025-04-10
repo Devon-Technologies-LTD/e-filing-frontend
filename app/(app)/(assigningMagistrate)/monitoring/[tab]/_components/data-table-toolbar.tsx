@@ -36,13 +36,13 @@ export function CasesDataTableToolbar({
   return (
     <div className="flex items-center justify-between">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4  text-neutral" />
         <Input
           type="search"
           variant="ghost"
           autoComplete="off"
           placeholder="e.g CV/WZ2/001e/Year, "
-          className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
+          className="pl-9 h-12"
           value={searchTerm} // ✅ Now correctly bound
           onChange={handleSearchChange} // ✅ Updates search term
         />

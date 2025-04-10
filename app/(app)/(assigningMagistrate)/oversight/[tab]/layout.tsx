@@ -78,7 +78,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
                 {activeTab === "all" ? (
                   <>
                     <p className="text-2xl font-bold">{totalMagistrates}</p>
-                    <p className="text-sm font-bold">Total Magistrates across all divisions</p>
+                    <p className="text-sm font-bold">Total Magistrates</p>
                   </>
                 ) : (
                   <MModal />
