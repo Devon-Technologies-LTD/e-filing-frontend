@@ -36,8 +36,9 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
   });
 
   const { data: user } = useAppSelector((state) => state.profile);
-
-
+  if (history) {
+    { console.log("history + history =>" + JSON.stringify(history)) }
+  }
 
   return (
     <Sheet>
@@ -81,32 +82,34 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
               }
             </div>
 
-            <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
-              <div className="grid">
-                <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
-                <p className="text-app-primary font-extrabold">{data?.division_name}</p>
-              </div>
-              {(user?.role === ROLES.CHIEF_JUDGE) && (
-                <>
-                  <div className="flex gap-2">
-                    <Avatar>
-                      <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
-                    </Avatar>
-                    <div className="">
-                      <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
-                      <p className="text-sm font-semibold">{data?.assigned_to_data?.email}</p>
-                    </div>
+            {(user?.role === ROLES.CHIEF_JUDGE) && (
+              <>
+                <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
+                  <div className="grid">
+                    <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
+                    <p className="text-app-primary font-extrabold">{data?.division_name}</p>
                   </div>
-                </>
-              )}
+                  <>
+                    <div className="flex gap-2">
+                      <Avatar>
+                        <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
+                      </Avatar>
+                      <div className="">
+                        <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
+                        <p className="text-sm font-semibold">{data?.assigned_to_data?.email}</p>
+                      </div>
+                    </div>
+                  </>
 
-            </div>
+                </div>
 
-            <div className="border-b-2 pb-3">
-              <p className="text-stone-600 text-sm font-bold mb-2">Case Suit Number</p>
-              <p className="text-app-primary font-bold text-sm">{data?.case_suit_number}</p>
-              <p className="text-app-primary font-bold text-sm">{data?.case_type_name}</p>
-            </div>
+                <div className="border-b-2 pb-3">
+                  <p className="text-stone-600 text-sm font-bold mb-2">Case Suit Number</p>
+                  <p className="text-app-primary font-bold text-sm">{data?.case_suit_number}</p>
+                  <p className="text-app-primary font-bold text-sm">{data?.case_type_name}</p>
+                </div>
+              </>
+            )}
 
             {isLoadingHistory ? (
               <p>Loading...</p>
@@ -125,10 +128,8 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
               <ScrollArea className="h-[600px] w-full p-4">
                 <div className="space-y-6">
                   {history.data.map((item: any, index: number) => (
-                    <div
-                      key={index}
-                      className="gap-2 border-b-[1px] space-y-2 border-app-primary py-4"
-                    >
+
+                    <div key={index} className="gap-2 border-b-[1px] space-y-2 border-app-primary py-4" >
                       {/* Timestamp */}
                       <p className="text-xs font-bold text-stone-600">
                         {new Date(item.created_at).toLocaleDateString("en-US", {
@@ -163,3 +164,15 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
 }
 
 
+
+
+
+// history => => {
+//   "total_rows": 1, "total_pages": 1, "size": 10, "page": 1,
+//     "data": [
+//       { "id": "3ca97be4-bd16-4323-93d7-2e1e400ced1d", "casefile_id": "28072875-aed7-4526-b65c-6d5b4cdc0f63",
+// "hearing_date": "2025-04-23", "hearing_time": "16:01:00", "other_details": "hbhbhh", "status": "PENDING",
+// "created_at": "2025-04-09T12:57:49.675545Z", "updated_at": "2025-04-09T12:57:49.675545Z" }
+//     ],
+//       "success": true
+// }

@@ -39,7 +39,6 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                console.log("Fetching reassignment history for case ID:", id);
                 const history = await caseRequestHistory(id);
                 console.log("opened => " + JSON.stringify(history));
                 setReason(history?.request_reason || "No reason provided");
