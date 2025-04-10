@@ -34,10 +34,10 @@ export default function UpcomingHearing() {
                 setLoading(false);
             }
         };
-        fetchHearings();
-        const interval = setInterval(fetchHearings, 10000);
-        return () => clearInterval(interval);
-    }, []);
+
+        fetchHearings(); // Load only once on component mount
+
+    }, []); // No interval, only runs once on mount
 
     if (loading) return <>
         <div className="space-y-1 p-4 flex justify-between items-center">
