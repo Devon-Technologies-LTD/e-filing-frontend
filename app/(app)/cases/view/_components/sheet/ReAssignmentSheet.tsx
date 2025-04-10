@@ -57,6 +57,7 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                 <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
                 <p className="text-app-primary font-extrabold">{data?.division_name}</p>
               </div>
+
               {(user?.role === ROLES.ASSIGNING_MAGISTRATE) ?
                 <div className="flex gap-2">
                   <Avatar>
@@ -78,6 +79,27 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                   </div>
                 </div>
               }
+            </div>
+
+            <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
+              <div className="grid">
+                <p className="text-stone-600 text-sm">Case Assigning Magistrate</p>
+                <p className="text-app-primary font-extrabold">{data?.division_name}</p>
+              </div>
+              {(user?.role === ROLES.CHIEF_JUDGE) && (
+                <>
+                  <div className="flex gap-2">
+                    <Avatar>
+                      <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
+                    </Avatar>
+                    <div className="">
+                      <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
+                      <p className="text-sm font-semibold">{data?.assigned_to_data?.email}</p>
+                    </div>
+                  </div>
+                </>
+              )}
+
             </div>
 
             <div className="border-b-2 pb-3">

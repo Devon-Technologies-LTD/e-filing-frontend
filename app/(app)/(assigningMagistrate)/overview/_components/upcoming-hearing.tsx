@@ -56,6 +56,7 @@ export default function UpcomingHearing() {
     if (error) return <p className="text-red-500">Error: {error}</p>;
     if (hearings.length === 0) return <p>No upcoming hearings.</p>;
 
+    console.log("hearings  => hearings " + JSON.stringify( hearings));
     return (
         <div className="mb-36">
             <div className="flex items-center justify-between bg-white border-b-2 py-3">

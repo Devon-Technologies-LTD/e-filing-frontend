@@ -54,20 +54,31 @@ export default function AllMagistrates() {
     () => createUserColumns(user?.role!, "all"),
     [user?.role]
   );
+
+
+
   const [searchTerm, setSearchTerm] = useState("");
+
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: ["userManagement", currentPage, selectedCourt, searchTerm],
     queryFn: async () => {
-      return await getUserManagementFilter({
+      const filters = {
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
-        invited_by: user?.id,
         court_type: selectedCourt === "all" ? "" : selectedCourt,
-      });
+        ...(user?.role !== ROLES.CHIEF_JUDGE && { invited_by: user?.id }),
+      };
+
+      if (user?.role !== ROLES.CHIEF_JUDGE) {
+        filters.invited_by = user?.id;
+      }
+
+      return await getUserManagementFilter(filters);
     },
     staleTime: 100000,
   });
+
 
   return (
     <div className="bg-white py-2 space-y-6">
@@ -100,7 +111,7 @@ export default function AllMagistrates() {
           />
         </div>
       </div>
-      
+
       {/* <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]"> */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
