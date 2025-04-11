@@ -79,7 +79,7 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
             <div>
               <p className="font-bold text-xl">Deliver Judgment</p>
               <div className="font-semibold text-sm">
-                Upload your judgment file to finalize the case. Parties involved will be notified upon submission. Ensure all details are accurate, as this action cannot be undone.
+                Upload your judgment file to finalize the case. Parties involved will be notified upon submission. Ensure all details are accurate, as this action cannot be undone. 
               </div>
             </div>
             <div className="grid border-b-2 pb-3">
@@ -88,12 +88,12 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
               <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
             </div>
             <div className="space-y-2">
-              <p className="font-bold text-base">Upload Files (PDF)</p>
+              <p className="font-bold text-base">Upload Files (PDF) *</p>
               <UploadPdf onFileSelect={setFile} /> {/* Pass file selection function */}
             </div>
 
             <Label htmlFor="reason" className=" flex justify-between items-center text-base font-bold ">
-              Give reasons here
+              Give reasons here *
             </Label>
             <Textarea
               id="reason"

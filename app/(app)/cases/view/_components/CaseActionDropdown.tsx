@@ -38,7 +38,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                     <div className="p-2 grid text-left space-y-2">
                         {data?.assigned_to == user?.id
                             && ((userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE || userRole === ROLES.DIRECTOR_MAGISTRATE)
-                                && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED"))
+                                && (data?.status !== "TO BE ASSIGNED" && data?.status !== "JUDGEMENT DELIVERED" && data.status !== "STRUCK OUT"))
                             && (
                                 <>
                                     <ScheduleSheet id={id}
@@ -52,7 +52,7 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                                 </>
                             )}
 
-                        {(data?.assigned_to == user?.id && data?.hearing_status != "") && (
+                        {(data?.assigned_to == user?.id && data?.hearing_status !== "" && data.status !== "STRUCK OUT" && data.status !== "JUDGEMENT DELIVERED") && (
                             <>
                                 <DeliverJugdementSheet id={id}
                                     trigger={
