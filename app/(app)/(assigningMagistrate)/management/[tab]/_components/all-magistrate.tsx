@@ -67,12 +67,8 @@ export default function AllMagistrates() {
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
         court_type: selectedCourt === "all" ? "" : selectedCourt,
-        ...(user?.role !== ROLES.CHIEF_JUDGE && { invited_by: user?.id }),
+        invited_by: user?.id,
       };
-
-      if (user?.role !== ROLES.CHIEF_JUDGE) {
-        filters.invited_by = user?.id;
-      }
 
       return await getUserManagementFilter(filters);
     },

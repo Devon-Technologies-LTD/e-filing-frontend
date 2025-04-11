@@ -36,6 +36,21 @@ export const ALL_DISTRICT: CaseOption[] = [
   { value: "zone2", label: "WUSE ZONE 2" },
 ];
 
+
+export const MAGISTERATE_TYPE: CaseOption[] = [
+  { value: "DIRECTOR_MAGISTRATE", label: "DIRECTOR MAGISTRATE" },
+  { value: "ASSIGNING_MAGISTRATE", label: "ASSIGNING MAGISTRATE" },
+  { value: "PRESIDING_MAGISTRATE", label: "PRESIDING MAGISTRATE" },
+];
+export const MAGISTERATE_TYPE2: CaseOption[] = [
+  { value: "ASSIGNING_MAGISTRATE", label: "ASSIGNING MAGISTRATE" },
+  { value: "PRESIDING_MAGISTRATE", label: "PRESIDING MAGISTRATE" },
+];
+export const MAGISTERATE_STATUS: CaseOption[] = [
+  { value: "ACTIVE", label: "ACTIVE MAGISTRATE" },
+  { value: "INACTIVE", label: "INACTIVE MAGISTRATE" },
+];
+
 // Define the worth options for family cases
 export const WORTH_OPTIONS: CaseOption[] = [
   {
@@ -69,6 +84,7 @@ export const CASE_OPTIONS: Record<CaseTypes, CaseOption[]> = {
 
 // Define the valid case types
 export type CaseTypes = "criminal" | "civil" | "family";
+export type MagistrateTypes = "diirector" | "assigning" | "presiding";
 
 export const CASES_FILED: CaseOption[] = [
   { value: "active", label: "ACTIVE CASES" },
