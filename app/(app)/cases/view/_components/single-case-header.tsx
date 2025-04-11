@@ -142,7 +142,8 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     }
 
     if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
-      const isUnderReview = (data?.status || "").toUpperCase() === "UNDER REVIEW";
+
+      const isUnderReview = (data?.status || "").toUpperCase() === "UNDER REVIEW" || data.status.toLowerCase() === "approved";
       const hasSubmittedRequest = data?.case_request_status === "CASE REQUEST SUBMITTED";
       const isRequestDeniedOrApproved = data?.case_request_status === "DENIED" || data?.case_request_status === "Approved";
       const isOwnCase = data?.assigned_to === user?.id;
