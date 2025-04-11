@@ -40,9 +40,7 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
         setIsSubmitting(true);
         try {
             const formData = { reason };
-            
             const response = await caseRequest(formData, data.id);
-            
             if (response.success) {
                 toast.success("Case Request successful");
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
