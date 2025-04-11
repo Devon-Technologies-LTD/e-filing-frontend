@@ -5,6 +5,7 @@ import {
 } from "@/lib/_definitions";
 import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
 import { resetPassword } from "../actions/login";
+import { getNotification } from "../actions/admin-file";
 
 
 export interface IDraftFilter {
@@ -36,8 +37,19 @@ export interface Ipage {
   casetype?: string,
   user_id?: string,
   year?: string,
+
 }
 
+export interface INotificationFilter {
+  id?: string | null;
+  user_id?: string | null;
+  title?: string | null;
+  description?: string | null;
+  case_id?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
 
 interface IPage {
   page: number;
@@ -176,6 +188,19 @@ const UserService = {
   ,
   async addUserManagement(payload: any) {
     const response = await axiosInstance.post(`admin/user`, payload);
+    return response.data;
+  },
+
+  async getNotification(): Promise<any> {
+    const response = await axiosInstance.get<INotificationFilter>(
+      `notification/`
+    );
+    return response.data;
+  },
+  async updateNotification(id: string): Promise<any> {
+    const response = await axiosInstance.patch<INotificationFilter>(
+      `notification/${id}`
+    );
     return response.data;
   },
 

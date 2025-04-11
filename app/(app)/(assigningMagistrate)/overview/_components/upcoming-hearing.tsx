@@ -6,6 +6,7 @@ interface Hearing {
     id: string;
     casefile_id: string;
     hearing_date: string;
+    description: string;
     hearing_time: string;
     other_details: string;
     status: string;
@@ -24,6 +25,7 @@ export default function UpcomingHearing() {
             try {
                 const response = await getHearing();
                 if (response.success) {
+                    console.log("response.data => => " + JSON.stringify(response.data));
                     setHearings(response.data || []);
                 } else {
                     throw new Error(response.message || "Failed to fetch hearings");
@@ -61,23 +63,26 @@ export default function UpcomingHearing() {
                 <p className="font-semibold container">UPCOMING HEARING</p>
             </div>
             <div className="space-y-6 container">
+
                 {hearings.map((hearing) => (
-                    <div
-                        key={hearing.id}
-                        className="flex my-4 py-4 hover:border-b-app-primary hover:bg-gray-300 cursor-pointer border-b-2 flex-row justify-between items-center"
-                    >
-                        <div className="flex space-x-2 w-2/3 items-center">
-                            <Icons.calender className="size-10 flex-shrink-0" />
-                            <span className="text-sm">
-                                Your hearing (Case ID: {hearing.casefile_id}) is on {hearing.hearing_date} at {hearing.hearing_time}. {hearing.other_details && `Details: ${hearing.other_details}`}
-                            </span>
+                    hearing.other_details && (
+                        <div
+                            key={hearing.id}
+                            className="flex my-4 py-4 hover:border-b-app-primary hover:bg-gray-300 cursor-pointer border-b-2 flex-row justify-between items-center"
+                        >
+                            <div className="flex space-x-2 w-2/3 items-center">
+                                <Icons.calender className="size-10 flex-shrink-0" />
+                                <span className="text-sm">
+                                    {hearing.description} <br /> {hearing.other_details && `Details: ${hearing.other_details}`}
+                                </span>
+                            </div>
+                            <div className="flex row-auto flex-row text-sm text-app-primary space-x-2 w-auto">
+                                <span>{hearing.hearing_time}</span>
+                                <span>{hearing.hearing_date}</span>
+                            </div>
                         </div>
-                        <div className="flex row-auto flex-row text-sm text-app-primary space-x-2 w-auto">
-                            <span>{hearing.hearing_time}</span>
-                            <span>{hearing.hearing_date}</span>
-                        </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

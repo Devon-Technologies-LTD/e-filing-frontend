@@ -5,20 +5,9 @@ import { SingleCaseHeader } from "../_components/single-case-header";
 import { CaseOverview } from "../_components/case_overview";
 import { CaseUpdates } from "../_components/case-updates";
 import ReusableTabs from "@/components/ui/reusable-tabs";
-import { Icons } from "@/components/svg/icons";
 import { DocumentUpdates } from "../_components/document_updates";
 import { CaseDocumentList } from "../_components/case_documents";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { useQuery } from "@tanstack/react-query";
 import {
   getAdminCaseFilesById,

@@ -4,7 +4,6 @@ import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
 import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
-import { caseMetric, presidingmetric, hearings, centralMetric } from "@/lib/dummy-data";
 import UpcomingHearing from "../upcoming-hearing";
 import { getCaseDistribution, getCaseMetric, magistrateMetric } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
@@ -21,7 +20,6 @@ export default function MagistrateCases() {
   const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
-  const caseMetrics = isPresiding ? presidingmetric : (centeral) ? centralMetric : caseMetric;
   const [caseMetricsData, setCaseMetricsData] = React.useState<CaseData[]>([
     { division_name: "No Data", case_count: 0 },
   ]);

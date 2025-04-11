@@ -5,29 +5,37 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import { useFormState } from "react-dom";
 import { resetPassword } from "@/lib/actions/user-management";
 import { useAppSelector } from "@/hooks/redux";
+import { CLIENT_ERROR_STATUS, SUCCESS_STATUS } from "@/lib/_constants";
+import useEffectAfterMount from "@/hooks/useEffectAfterMount";
+import { toast } from "sonner";
+
 
 export default function AccountSecurity() {
-  // ✅ Ensure the initial state uses `false` instead of `null` for `success`
-  const [state, dispatch] = useFormState(resetPassword, { success: false, message: "", errors: {} });
-
-  const [loading, setLoading] = useState(false);
+  const [state, dispatch] = useFormState(resetPassword, { success: false, status: 400, message: "", errors: {} });
   const { data: user } = useAppSelector((state) => state.profile);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    await dispatch(formData); // ✅ Dispatch correctly
-    setLoading(false);
-  };
+  useEffectAfterMount(() => {
+    if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
+      toast.error(state?.message, {
+        description: typeof state?.errors === "string"
+          ? state.errors
+          : state?.errors
+            ? Object.values(state.errors).flat().join(", ")
+            : "An Error Occured",
+      });
+    }
+    if (state && SUCCESS_STATUS.includes(state?.status)) {
+      toast.success(state?.message);
+    }
+  }, [state]);
 
   return (
     <div className="mx-auto p-6">
       <h2 className="text-lg font-bold mb-6">Account and Security</h2>
 
       <div className="space-y-12">
-        <form onSubmit={handleSubmit} autoComplete="off">
+        {/* <form onSubmit={handleSubmit} autoComplete="off"> */}
+        <form action={dispatch} autoComplete="off">
+
           <div className="space-y-6">
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-neutral-800">Change Password</h3>
@@ -42,7 +50,6 @@ export default function AccountSecurity() {
             )}
             <SubmitButton
               value="UPDATE"
-              loading={loading}
               pendingValue="Processing..."
               className="bg-app-primary w-28 hover:bg-app-secondary/90 text-white h-11 rounded mt-2"
             />

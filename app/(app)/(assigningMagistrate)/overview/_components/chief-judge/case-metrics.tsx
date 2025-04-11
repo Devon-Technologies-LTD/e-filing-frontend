@@ -5,7 +5,6 @@ import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
 import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
-// import { caseMetric, presidingmetric,  centralMetric } from "@/lib/dummy-data";
 import UpcomingHearing from "../upcoming-hearing";
 import { getCaseDistribution, getCaseMetric, getCaseMetric2 } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
