@@ -32,6 +32,7 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
         const fetchHistory = async () => {
             try {
                 const history = await getReassignmentHistory(id);
+                console.log("history => history=> " + JSON.stringify(history));
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {
@@ -62,11 +63,11 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                             </div>
                             <div className="flex gap-2">
                                 <Avatar>
-                                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
+                                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.first_name)}</AvatarFallback>
                                 </Avatar>
                                 <div className="">
-                                    <p className="text-stone-600 text-sm">{data?.assigned_by.first_name} {data?.assigned_by.last_name} </p>
-                                    <p className="font-bold text-xs">{data?.assigned_by.email}</p>
+                                    <p className="text-stone-600 text-sm">{data?.assigned_to_data.first_name} {data?.assigned_to_data.last_name} </p>
+                                    <p className="font-bold text-xs">{data?.assigned_to_data.email}</p>
                                 </div>
                             </div>
                         </div>
@@ -76,18 +77,10 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                             <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
                             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
                         </div>
-                        {data?.reassignment_status.toUpperCase() == "DENIED" ? (
-                            <>
-                                <p className="text-stone-600 text-sm font-bold mb-2">Reason for denial</p>
-                                <div className="border-b-2 bg-zinc-300 pb-3">
-                                    <p className="p-2 text-sm font-semibold">{reason}</p>
-                                </div>
-                            </>
-                        ) :
-                            <>
-                                {data?.reassignment_status && <StatusBadge status={data.reassignment_status}>{data.reassignment_status}</StatusBadge>}
-                            </>
-                        }
+                        <p className="text-stone-600 text-sm font-bold">Reason</p>
+                        <div className="border-b-2 bg-zinc-300 pb-3">
+                            <p className="p-2 text-sm font-semibold">{reason}</p>
+                        </div>
                     </div>
                 </div>
             </SheetContent>

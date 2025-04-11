@@ -94,8 +94,8 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="text-stone-600 text-sm">{data?.assigned_to_data?.name}</p>
-                                    <p className="font-bold">{data?.assigned_to_data?.email_address}</p>
+                                    <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
+                                    <p className="font-bold">{data?.assigned_to_data?.email}</p>
                                 </div>
                             </div>
                         </div>

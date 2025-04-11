@@ -45,7 +45,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     const caseRequestStatus = data?.case_request_status || "";
 
     // secound appended case status
-    if (data?.review_status && (data?.status === "ASSIGNED") && (userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE) && (data.reassignment_status === "")) {
+    if (data?.review_status && (userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE)) {
       badges.push(<StatusBadge key="status" status={data?.review_status} />);
     }
 
@@ -60,17 +60,15 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         const lowerCaseStatus = data?.status.toLowerCase();
         if (reassignmentStatus != "" && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
           badges.push(<StatusBadge key="reassignment" status={reassignmentStatus} />);
-        } else
-          if (caseRequestStatus != "" && userRole === ROLES.DIRECTOR_MAGISTRATE) {
-            badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
-          } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
-            badges.push(
-              <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
-            );
-          }
-          else {
-            badges.push(<StatusBadge key="status" status={data?.status} />);
-          }
+        } else if (caseRequestStatus === "CASE REQUEST SUBMITTED") {
+          badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
+        } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
+          badges.push(
+            <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
+          );
+        } else {
+          badges.push(<StatusBadge key="status" status={data?.status} />);
+        }
       }
     } else {
       const { reassignment_status, status, case_request_status } = data || {};
@@ -82,8 +80,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         badges.push(<StatusBadge key="reassignment" status={data?.case_request_status} />);
       } else if (lowerCaseStatus === "to be assigned" && reassignment_status) {
         badges.push(<StatusBadge key="reassignment-lower" status={reassignment_status.toLowerCase()} />);
-      }
-      else {
+      } else {
         badges.push(<StatusBadge key="status" status={status} />);
       }
     }
