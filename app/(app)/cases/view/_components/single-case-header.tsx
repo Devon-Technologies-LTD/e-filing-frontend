@@ -44,6 +44,11 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     const reassignmentStatus = data?.reassignment_status || "";
     const caseRequestStatus = data?.case_request_status || "";
 
+    // secound appended case status
+    if (data?.review_status && (data?.status === "ASSIGNED") && (userRole === ROLES.ASSIGNING_MAGISTRATE) && (data.reassignment_status === "")) {
+      badges.push(<StatusBadge key="status" status={data?.review_status} />);
+    }
+
     if (userRole !== ROLES.PRESIDING_MAGISTRATE) {
       if ((userRole === ROLES.USER) || (userRole === ROLES.LAWYER)) {
         if (data?.review_status === "denied") {
@@ -82,12 +87,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         badges.push(<StatusBadge key="status" status={status} />);
       }
     }
-    if (data?.review_status && (data?.assignment_status === "ASSIGNED") &&
-      (data?.reassignment_status !== "ASSIGNED") &&
-      (data?.reassignment_status.toLowerCase() !== "approved") &&
-      (data?.case_request_status !== "APPROVED")) {
-      badges.push(<StatusBadge key="status" status={data?.review_status} />);
-    }
+
     if (data?.is_emergency) {
       badges.push(<StatusBadge key="emergency" status="action required" />);
     }

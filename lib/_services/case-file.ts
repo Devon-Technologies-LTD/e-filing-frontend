@@ -196,10 +196,12 @@ const CaseFileService = {
   },
   async getAdminCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`admin/CaseFile/${id}`);
+    console.log("single case details =>" + response.data);
     return response.data;
   },
   async deleteCaseFiles(id: string): Promise<any> {
     const response = await axiosInstance.delete<string>(`casefile/${id}`);
+    console.log("single case details =>" + response.data);
     return response.data;
   },
   async changeCaseStatus(id: string, body: IChangeStatus): Promise<any> {
