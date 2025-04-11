@@ -23,7 +23,7 @@ export default function AccountSecurity() {
             : "An Error Occured",
       });
     }
-    if (state && SUCCESS_STATUS.includes(state?.status)) {
+    if (state && state?.success && SUCCESS_STATUS.includes(state?.status)) {
       toast.success(state?.message);
     }
   }, [state]);
@@ -33,9 +33,7 @@ export default function AccountSecurity() {
       <h2 className="text-lg font-bold mb-6">Account and Security</h2>
 
       <div className="space-y-12">
-        {/* <form onSubmit={handleSubmit} autoComplete="off"> */}
         <form action={dispatch} autoComplete="off">
-
           <div className="space-y-6">
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-neutral-800">Change Password</h3>

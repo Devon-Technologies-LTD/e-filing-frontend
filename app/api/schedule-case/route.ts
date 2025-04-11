@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         console.log(url);
         // Sending request to external API
         const response = await axiosInstance.post(url, data);
-        console.log("API Response:", response.data);
+        
 
 
 

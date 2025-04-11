@@ -95,7 +95,6 @@ export async function getReassignmentHistory(id: string) {
 export async function caseRequestHistory(id: string) {
   try {
     const data = await CaseFileService.caseRequestHistory(id);
-    console.log("data data data=> data " + data)
     return { ...data.data[0] };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

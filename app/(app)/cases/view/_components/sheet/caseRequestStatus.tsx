@@ -40,7 +40,6 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
         const fetchHistory = async () => {
             try {
                 const history = await caseRequestHistory(id);
-                console.log("opened => " + JSON.stringify(history));
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {
@@ -56,11 +55,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
     const changeCaseStatus = async (status: string) => {
         setIsSubmitting(true);
         try {
-            console.log(id, status);
             const data = await changeCaseRequestStatus(id, status);
-            console.log(data);
-
-            console.log(data);
             if (data) {
                 toast.success(`Case Request ${status} successful`);
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
@@ -86,9 +81,9 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
         setIsSubmitting(true);
         try {
             const formData = { reason };
-            console.log(formData);
+            
             const response = await caseRequest(formData, data.id);
-            console.log(response);
+            
             if (response.success) {
                 toast.success("Case Request successful");
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });

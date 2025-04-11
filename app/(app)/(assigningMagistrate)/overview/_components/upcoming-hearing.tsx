@@ -25,7 +25,6 @@ export default function UpcomingHearing() {
             try {
                 const response = await getHearing();
                 if (response.success) {
-                    console.log("response.data => => " + JSON.stringify(response.data));
                     setHearings(response.data || []);
                 } else {
                     throw new Error(response.message || "Failed to fetch hearings");

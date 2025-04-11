@@ -75,7 +75,6 @@ export default function FilteredCases() {
 
   useEffect(() => {
     if (data?.total_rows !== undefined) {
-      console.log("data.total_rows => " + data.total_rows);
       setTotalCase(data.total_rows);
     }
     setCaseName(tab)

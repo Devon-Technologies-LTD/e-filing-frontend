@@ -42,7 +42,6 @@ export default function getNotifications() {
         setLoading(false);
       }
     };
-
     fetchNotification(); // Load only once on component mount
   }, []);
 

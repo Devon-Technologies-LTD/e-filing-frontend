@@ -14,8 +14,6 @@ interface AcceptInviteResponse {
 export async function POST(req: NextRequest) {
     try {
         const { email, otp } = await req.json();
-        console.log("Received Data:", { email, otp });
-
         if (!email || !otp) {
             return new NextResponse(
                 JSON.stringify({
@@ -38,7 +36,6 @@ export async function POST(req: NextRequest) {
         console.error("Error Occurred:", err);
         if (err.response) {
             const { status, data } = err.response;
-            console.log("Server responded with error:", data);
             return new NextResponse(
                 JSON.stringify({
                     status,

@@ -92,8 +92,6 @@ export default function FinanceDistributionBarChart({
 //   const data = validCaseData.map((item) => item.amount);
 
 //   // Ensure Histogram receives valid data
-//   console.log("Histogram Labels:", labels);
-//   console.log("Histogram Data:", data);
 
 //   return (
 //     <div className="space-y-4">

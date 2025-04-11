@@ -42,7 +42,6 @@ export default function DeactivateUser({
     setErrorMessages([]);
 
     try {
-      console.log(row.id);
 
       const response = await axios.post("/api/user-action", {
         userId: row.id,
@@ -50,8 +49,6 @@ export default function DeactivateUser({
       });
 
       toast.success(`User ${row.status === "ACTIVE" ? "deactivated" : "activated"} successfully!`);
-      console.log("Response:", response.data);
-
       // ✅ Refresh the table after success
       queryClient.invalidateQueries({ queryKey: ["userManagement"] });
 

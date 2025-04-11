@@ -48,9 +48,9 @@ export default function DeliverJugdementSheet({ trigger, id }: DeliverJugdement)
       formData.append("file", file); // Append file to FormData
       formData.append("reason", reason);
       formData.append("status", "JUDGEMENT DELIVERED");
-      console.log("Submitting FormData:", formData);
+      
       const response = await deliverJudgement(formData, data.id);
-      console.log(response);
+      
       if (response.success) {
         toast.success("Judgement Delivered successful");
         queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });

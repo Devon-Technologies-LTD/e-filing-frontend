@@ -46,7 +46,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
         console.log(otpz)
         formData.append("otp", otpz);
         formData.append("email", email);
-        console.log(formData);
+        
         dispatch(formData);
     };
 
