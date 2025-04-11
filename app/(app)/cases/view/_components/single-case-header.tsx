@@ -22,6 +22,7 @@ import ReviewRequestSheet from "./sheet/ReviewRequestSheet";
 import SubmittedRequestSheet from "./sheet/SubmittedRequestSheet";
 import CaseRequestStatusSheet from "./sheet/caseRequestStatus";
 import ImageModalSection from "./ImageModalSection";
+import CaseRequestViewStatus from "./sheet/CaseRequestViewStatus";
 
 export function SingleCaseHeader({ data, params }: { params: { id: string }; data: any }) {
   const id = useMemo(() => decodeURIComponent(params.id), [params.id]);
@@ -139,7 +140,6 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     }
 
     if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
-
       const isUnderReview = (data?.status || "").toUpperCase() === "UNDER REVIEW" || data.status.toLowerCase() === "approved";
       const hasSubmittedRequest = data?.case_request_status === "CASE REQUEST SUBMITTED";
       const isRequestDeniedOrApproved = data?.case_request_status === "DENIED" || data?.case_request_status === "Approved";
@@ -160,6 +160,11 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
             trigger={<Button variant="outline" className="text-xs">REQUEST RE-ASSIGNMENT</Button>}
           />
         );
+      } else if (isOwnCase) {
+        return <CaseRequestViewStatus
+          id={id}
+          trigger={<Button variant="outline" className="text-xs">VIEW REQUEST</Button>}
+        />
       }
     }
 

@@ -5,8 +5,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { caseRequestHistory, changeCaseRequestStatus, getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ErrorResponse, ROLES } from "@/types/auth";
 import { toast } from "sonner";
@@ -139,7 +137,6 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                             </div>
                         }
                     </div>
-
 
 
                     <div className="border-b-2 pb-3">
