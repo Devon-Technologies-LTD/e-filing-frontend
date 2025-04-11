@@ -29,9 +29,6 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
     queryFn: async () => await getSingleCaseHistory(id),
     enabled: !!id,
   });
-
-  console.log("history => =>" + JSON.stringify(history));
-
   return (
     <Sheet>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>

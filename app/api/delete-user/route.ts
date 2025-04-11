@@ -5,10 +5,6 @@ import { axiosInstance } from "@/lib/_api/axios-config";
 export async function POST(req: NextRequest) {
     try {
         const d = await req.json();
-        console.log("Received Data:", d);
-
-
-
         if (!d.userId) {
             return new NextResponse(
                 JSON.stringify({
@@ -19,17 +15,12 @@ export async function POST(req: NextRequest) {
                 { status: 400 }
             );
         }
-
-        console.log("Deleting User ID:", d.userId);
         const response = await axiosInstance.delete(`/admin/user/${d.userId}`, {
             data: {
                 email: d.email,
                 is_soft_delete: true
             }
         } as any);
-        
-        console.log("API Response:", response.data);
-
         return new NextResponse(JSON.stringify(response.data), {
             status: response.status,
             headers: { "Content-Type": "application/json" },
@@ -40,8 +31,6 @@ export async function POST(req: NextRequest) {
 
         if (err.response) {
             const { status, data } = err.response;
-            console.log("Server responded with error:", data);
-
             return new NextResponse(
                 JSON.stringify({
                     status,

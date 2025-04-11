@@ -95,3 +95,11 @@ export async function updateNotification(id: string) {
         return handleError(err);
     }
 }
+export async function getVerification() {
+    try {
+        const data = await UserService.getVerification();
+        return { data: data, success: true, message: "success" };
+    } catch (err) {
+        return handleError(err);
+    }
+}

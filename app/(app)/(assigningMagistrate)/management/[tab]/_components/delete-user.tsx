@@ -41,7 +41,6 @@ function DeleteUser({ userId, email, trigger }: Props) {
       }
       const response = await axios.post(`/api/delete-user`, data);
       toast.success("User deleted successfully!");
-      console.log("Delete response:", response.data);
       setIsOpen(false); // ✅ Close only on success
     } catch (error: any) {
       console.error("Error deleting user:", error);

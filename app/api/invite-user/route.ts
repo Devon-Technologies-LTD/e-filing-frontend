@@ -19,25 +19,16 @@ type ErrorResponse = {
 export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
-        console.log("Received Data:", data);
-
         // Sending request to external API
         const response = await axiosInstance.post(`/admin/user`, data);
-        console.log("API Response:", response.data);
-
         return new NextResponse(JSON.stringify(response.data), {
             status: response.status,
             headers: { "Content-Type": "application/json" },
         });
     } catch (err) {
         const error = err as ErrorResponse;
-        console.log("Error Occurred:", error);
-
         if (error?.response) {
             const { status, data } = error.response;
-
-            console.log("Server responded with error:", data);
-
             return new NextResponse(
                 JSON.stringify({
                     status,

@@ -49,9 +49,9 @@ export default function StruckSheet({ trigger, id }: StruckSheetProps) {
       formData.append("file", file);
       formData.append("reason", reason);
       formData.append("status", "STRUCK OUT");
-      console.log("Submitting FormData:", formData);
+      
       const response = await deliverJudgement(formData, data.id);
-      console.log(response);
+      
       if (response.success) {
         toast.success("casefile struck out successful");
         queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });

@@ -40,9 +40,6 @@ export default function CaseStatusChart({ caseData, heading, user }: CaseStatusC
     const labels = visibleKeys.map((key) => labelMap[key] || key);
     const data = visibleKeys.map((key) => caseData[key]?.total ?? 0);
 
-    console.log("Visible Labels:", labels);
-    console.log("Data:", data);
-
     return (
         <div className="space-y-4">
             <div className="bg-white border-b border-zinc-200 py-6">

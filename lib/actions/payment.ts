@@ -4,7 +4,6 @@ import PaymentService from "../_services/payment-service";
 import { handleApiError } from "../utils";
 
 export async function generateRRR(caseFileId: string, amount?: any) {
-  console.log("enteringggg generate");
   try {
     const data = await PaymentService.generateRRR(caseFileId, amount);
     return { data: data, success: true };

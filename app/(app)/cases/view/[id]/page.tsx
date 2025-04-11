@@ -61,10 +61,6 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     enabled: !!params.id,
   });
 
-  console.log("single case details", data);
-  console.log("Assigned to ", data?.assigned_to);
-  console.log("user ID ", user?.id);
-
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());

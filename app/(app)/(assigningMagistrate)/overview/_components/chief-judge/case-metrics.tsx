@@ -90,7 +90,6 @@ export default function CaseMetrics() {
   if (!data) {
     return <div>No data available</div>;
   }
-  console.log("data caseMetricData => " + JSON.stringify(caseMetricData),);
 
   return (
     <>

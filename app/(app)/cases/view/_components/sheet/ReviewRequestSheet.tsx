@@ -31,9 +31,7 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
         if (!isOpen2) return;
         const fetchHistory = async () => {
             try {
-                console.log("Fetching reassignment history for case ID:", id);
                 const history = await getReassignmentHistory(id);
-                console.log(history);
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {

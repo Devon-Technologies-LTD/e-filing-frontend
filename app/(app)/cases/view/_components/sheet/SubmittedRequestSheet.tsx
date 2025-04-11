@@ -35,9 +35,7 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
         if (!isOpen2) return;
         const fetchHistory = async () => {
             try {
-                console.log("Fetching reassignment history for case ID:", id);
                 const history = await getReassignmentHistory(id);
-                console.log(history);
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {
@@ -55,7 +53,7 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
         setIsSubmitting(true);
         try {
             const data = await changeReassignmentStatus(id, status);
-            console.log(data);
+            
             if (data) {
                 toast.success(`Case Reassignment ${status} successful`);
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });

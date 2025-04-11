@@ -62,8 +62,6 @@ const handleError = (err: unknown) => {
 
 const fetchData = async (serviceMethod: Function, params?: any) => {
     try {
-        console.log(params);
-
         const data = await serviceMethod(params);
         return { ...data, success: true };
     } catch (err) {
@@ -105,10 +103,8 @@ export const breakdown = (type: string, id: string) => {
 
 const handleFormAction = async (serviceMethod: Function, formData: FormData) => {
     const formDataObject = Object.fromEntries(formData.entries());
-    console.log("Received Form Data:", formDataObject);
     try {
         const data = await serviceMethod(formDataObject);
-        console.log("Response from server:", data);
         return { data, success: true, status: 200 };
     } catch (err) {
         return handleError(err);
@@ -133,7 +129,7 @@ export async function resetPassword(
 ) {
     const data = Object.fromEntries(formData.entries());
     try {
-        console.log(data);
+        
         await axiosInstance.post("/auth/change-password", data);
         return { status: 200, success: true, message: "Password changed successfully", errors: {} };
     } catch (err: any) {

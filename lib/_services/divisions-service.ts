@@ -21,9 +21,9 @@ const DivisionsService = {
     return response.data;
   },
   async getAdminSubDivision(id: string): Promise<any[]> {
-    console.log(id);
+    
     const response = await axiosInstance.get<any[]>(`/admin/division/sub-division/${id}`,);
-    console.log(response);
+    
     return response.data;
   },
 };

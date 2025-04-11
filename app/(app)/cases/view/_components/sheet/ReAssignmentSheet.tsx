@@ -36,10 +36,6 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
   });
 
   const { data: user } = useAppSelector((state) => state.profile);
-  if (history) {
-    { console.log("history + history =>" + JSON.stringify(history)) }
-  }
-
   return (
     <Sheet>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>

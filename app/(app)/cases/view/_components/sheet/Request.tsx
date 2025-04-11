@@ -41,9 +41,9 @@ export default function RequestSheet({ trigger, id }: any) {
                 casefile_id: data.id,
                 reason: reason,
             };
-            console.log(formData);
+            
             const response = await requestReAssigment(formData, data.id);
-            console.log(response);
+            
             if (response.success) {
                 // toast.success(response.message);
                 toast.success("Re-assignment confirmed successfully.");
