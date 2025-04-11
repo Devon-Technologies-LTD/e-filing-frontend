@@ -60,19 +60,15 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         const lowerCaseStatus = data?.status.toLowerCase();
         if (reassignmentStatus != "" && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
           badges.push(<StatusBadge key="reassignment" status={reassignmentStatus} />);
-        } else if (caseRequestStatus != "" && userRole === ROLES.DIRECTOR_MAGISTRATE) {
-            badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
-          } else if (data?.case_request_status === "CASE REQUEST SUBMITTED" && (userRole === ROLES.ASSIGNING_MAGISTRATE)) {
-            badges.push(
-              <StatusBadge key="reassignment-lower" status={data?.case_request_status.toLowerCase()} />
-            );
-          } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
-            badges.push(
-              <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
-            );
-          } else {
-            badges.push(<StatusBadge key="status" status={data?.status} />);
-          }
+        } else if (caseRequestStatus === "CASE REQUEST SUBMITTED") {
+          badges.push(<StatusBadge key="case-request" status={caseRequestStatus} />);
+        } else if (lowerCaseStatus === "to be assigned" && reassignmentStatus) {
+          badges.push(
+            <StatusBadge key="reassignment-lower" status={reassignmentStatus.toLowerCase()} />
+          );
+        } else {
+          badges.push(<StatusBadge key="status" status={data?.status} />);
+        }
       }
     } else {
       const { reassignment_status, status, case_request_status } = data || {};
