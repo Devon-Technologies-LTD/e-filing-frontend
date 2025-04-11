@@ -45,7 +45,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     const caseRequestStatus = data?.case_request_status || "";
 
     // secound appended case status
-    if (data?.review_status && (data?.status === "ASSIGNED") && (userRole === ROLES.ASSIGNING_MAGISTRATE) && (data.reassignment_status === "")) {
+    if (data?.review_status && (data?.status === "ASSIGNED") && (userRole === ROLES.ASSIGNING_MAGISTRATE || userRole === ROLES.PRESIDING_MAGISTRATE) && (data.reassignment_status === "")) {
       badges.push(<StatusBadge key="status" status={data?.review_status} />);
     }
 
