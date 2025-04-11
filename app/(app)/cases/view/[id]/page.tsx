@@ -25,6 +25,7 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
+import { JSONParser } from "formidable/parsers";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -73,6 +74,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   if (isLoading) {
     return <CaseDocumentListSkeleton />;
   }
+  console.log("single case details => " + JSON.stringify(data));
   return (
     <div className="bg-zinc-100 h-full overflow-auto">
       <SingleCaseHeader data={data} params={params} />

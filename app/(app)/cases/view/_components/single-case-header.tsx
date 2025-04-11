@@ -82,12 +82,11 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         badges.push(<StatusBadge key="status" status={status} />);
       }
     }
-    if (data?.review_status && (data?.assignment_status === "ASSIGNED") &&
-      (data?.reassignment_status !== "ASSIGNED") &&
-      (data?.reassignment_status.toLowerCase() !== "approved") &&
-      (data?.case_request_status !== "APPROVED")) {
+    // secound appended case status
+    if (data?.review_status && (data?.status === "ASSIGNED") && (userRole === ROLES.ASSIGNING_MAGISTRATE) && (data.reassignment_status === "") ) {
       badges.push(<StatusBadge key="status" status={data?.review_status} />);
     }
+
     if (data?.is_emergency) {
       badges.push(<StatusBadge key="emergency" status="action required" />);
     }
