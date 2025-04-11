@@ -5,7 +5,6 @@ import {  TCaseFilterType } from "@/types/case";
 import { useParams } from "next/navigation";
 import { CasesDataTableToolbar } from "./_components/data-table-toolbar";
 import { mainColumns } from "./_components/table-columns";
-import { mockCases } from "@/lib/dummy-data";
 
 
 export default function FilteredCases() {
@@ -19,7 +18,7 @@ export default function FilteredCases() {
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
-      <DataTable columns={columns} loading={false} data={mockCases} />
+      {/* <DataTable columns={columns} loading={false} data={mockCases} /> */}
     </div>
   );
 }

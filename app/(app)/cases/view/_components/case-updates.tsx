@@ -21,6 +21,27 @@ interface INotification {
   created_at: string;
 }
 export function CaseUpdates({ id }: { id: string }) {
+
+  // useEffect(() => {
+  //   const fetchNotification = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await getNotification();
+  //       if (response.success) {
+  //         setNotification(response.data || []);
+  //       } else {
+  //         throw new Error(response.message || "Failed to fetch Notification");
+  //       }
+  //     } catch (err) {
+  //       setError(err instanceof Error ? err.message : "An error occurred");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchNotification(); // Load only once on component mount
+  // }, []);
+
   const tabs: { id: any; label: string }[] = [
     { id: "recent", label: "Recent Activities" },
     { id: "history", label: "Case History" },

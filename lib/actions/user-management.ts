@@ -130,23 +130,21 @@ export const ActiveUserAction = (_prevState: unknown, formData: FormData) => han
 export async function resetPassword(
     prevState: { success: boolean | null; message: string; errors?: any },
     formData: FormData
-  ) {
+) {
     const data = Object.fromEntries(formData.entries());
-  
     try {
-      console.log(data);
-      await axiosInstance.post("/auth/change-password", data);
-  
-      return { success: true, message: "Password changed successfully", errors: {} };
+        console.log(data);
+        await axiosInstance.post("/auth/change-password", data);
+        return { status: 200, success: true, message: "Password changed successfully", errors: {} };
     } catch (err: any) {
-      if (err.response) {
-        return {
-          success: false,
-          message: err.response.data?.message || "An error occurred",
-          errors: err.response.data?.errors || {},
-        };
-      }
-      return { success: false, message: "Network error. Please try again.", errors: {} };
+        if (err.response) {
+            return {
+                success: false,
+                status: 400,
+                message: err.response.data?.message || "An error occurred",
+                errors: err.response.data?.errors || {},
+            };
+        }
+        return { success: false, status: 400, message: "Network error. Please try again.", errors: {} };
     }
-  }
-  
+}
