@@ -24,6 +24,7 @@ export interface Ipage {
     invited_by?: string,
     query?: string,
     status?: string,
+    courtype?: string,
     casetype?: string,
     sub_division?: string,
     user_id?: string,

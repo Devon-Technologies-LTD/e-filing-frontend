@@ -34,6 +34,7 @@ export interface Ipage {
   usertype?: string,
   status?: string,
   sub_division?: string,
+  courtype?: string,
   casetype?: string,
   user_id?: string,
   year?: string,
@@ -83,8 +84,9 @@ const UserService = {
           limit: params.size ?? 10,
           division_id: params.division_id,
           search: params.search,
+          status: params.status,
           usertype: params.usertype,
-          casetype: params.casetype,
+          courtype: params.courtype,
         },
       },
     );
