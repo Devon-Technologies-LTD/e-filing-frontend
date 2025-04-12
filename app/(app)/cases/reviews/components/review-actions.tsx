@@ -16,6 +16,7 @@ import { useState } from "react";
 interface IDataProps {
   id: string;
   status: CaseStatus;
+  review_status: CaseStatus;
   case_suit_number: string;
 }
 
@@ -81,6 +82,7 @@ const DeniedReasonsModal = ({
 export function ReviewActions({ data }: Iprops) {
   const router = useRouter();
   const [isReasonsModalOpen, setIsReasonsModalOpen] = useState(true);
+  console.log(JSON.stringify(data));
   return (
     <CardFooter className="flex h-20 container py-0 justify-between">
       <div className="w-1/2">
@@ -95,12 +97,12 @@ export function ReviewActions({ data }: Iprops) {
         </Button>
       </div>
 
-      {/* {data?.status?.toLowerCase() === CaseStatus.UnderReview && ( */}
-      <div className="w-1/2 flex gap-3 justify-end ">
-        <DenyCase record={data.id} />
-        <ApproveCase record={data.id} />
-      </div>
-      {/* )} */}
+      {data?.review_status?.toLowerCase() === CaseStatus.UnderReview && (
+        <div className="w-1/2 flex gap-3 justify-end ">
+          <DenyCase record={data.id} />
+          <ApproveCase record={data.id} />
+        </div>
+      )}
       {data?.status?.toLowerCase() === CaseStatus.Denied && (
         <div className="w-1/2 flex gap-3 justify-end ">
           <Button
