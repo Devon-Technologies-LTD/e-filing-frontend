@@ -66,20 +66,26 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       const normalizedReassignmentStatus = reassignmentStatus?.toLowerCase();
       const normalizedCaseRequestStatus = caseRequestStatus?.toLowerCase();
 
-      if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
-        const reassignedStatus =
-          normalizedReassignmentStatus === "approved" ? "UNASSIGNED" : normalizedReassignmentStatus === "denied" ? "ASSIGNED" : reassignmentStatus;
-        badges.push(
-          <StatusBadge key="reassignment" status={reassignedStatus} />
-        );
-      } else if (caseRequestStatus === "approved") {
-        badges.push(
-          <StatusBadge key="case-request" status="ASSIGNED" />
-        );
-      } else if (generalStatus && !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())) {
+      if (["JUDGEMENT DELIVERED", "STRUCK OUT"].includes(data?.status?.toUpperCase())) {
         badges.push(
           <StatusBadge key="fallback-status" status={data.status} />
         );
+      } else {
+        if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
+          const reassignedStatus =
+            normalizedReassignmentStatus === "approved" ? "UNASSIGNED" : normalizedReassignmentStatus === "denied" ? "ASSIGNED" : reassignmentStatus;
+          badges.push(
+            <StatusBadge key="reassignment" status={reassignedStatus} />
+          );
+        } else if (caseRequestStatus === "approved") {
+          badges.push(
+            <StatusBadge key="case-request" status="ASSIGNED" />
+          );
+        } else if (generalStatus && !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())) {
+          badges.push(
+            <StatusBadge key="fallback-status" status={data.status} />
+          );
+        }
       }
     }
 
@@ -182,7 +188,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       </div>
     );
   }, [data, handleRefileProcesses, userRole]);
-
+  console.log(JSON.stringify(data));
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
