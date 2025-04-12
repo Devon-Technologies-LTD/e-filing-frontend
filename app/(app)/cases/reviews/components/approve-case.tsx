@@ -55,10 +55,7 @@ export const ApproveCase = ({ record }: ConfirmationModalProps) => {
       contentClassName="max-w-sm"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      trigger={
-        <Button size={"lg"} className="font-bold flex-end text-sm h-11">Approve Case</Button>
-      }
-    >
+      trigger={<Button size={"lg"} className="font-bold flex-end text-sm h-11">Approve Case</Button>}>
       <div className="space-y-8">
         <div className="flex flex-col items-center gap-1 pt-2">
           <div className="h-12 w-12 bg-secondary-foreground flex items-center justify-center">
