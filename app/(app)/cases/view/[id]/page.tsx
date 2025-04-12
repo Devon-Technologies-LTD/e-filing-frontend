@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAdminCaseFilesById,
   getCaseFilesById,
+  getCostAssesment,
 } from "@/lib/actions/case-file";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
@@ -61,7 +62,11 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     },
     enabled: !!params.id,
   });
-
+  const { data: costBreakdown, isLoading: breakdownLoading } = useQuery({
+    queryKey: ["cost_breakdown", params.id],
+    queryFn: () => getCostAssesment(params.id),
+    enabled: !!params.id,
+  });
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -71,10 +76,9 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     navigate.push(`${params?.id}/refile-documents`);
   };
 
-  if (isLoading) {
+  if (isLoading || breakdownLoading) {
     return <CaseDocumentListSkeleton />;
   }
-  console.log("single case details => " + JSON.stringify(data));
   return (
     <div className="bg-zinc-100 h-full overflow-auto">
       <SingleCaseHeader data={data} params={params} />
@@ -127,7 +131,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
         {activeTab === "overview" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
-              <CaseOverview data={data} />
+              <CaseOverview costBreakdown={costBreakdown?.data} data={data} />
             </div>{" "}
             <div className="col-span-5 bg-white p-2">
               <CaseUpdates id={data.id} />

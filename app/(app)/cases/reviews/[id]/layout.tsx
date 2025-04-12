@@ -2,7 +2,10 @@
 import React from "react";
 import { SideNav } from "../components/side-nav";
 import { useQuery } from "@tanstack/react-query";
-import { getAdminCaseFilesById } from "@/lib/actions/case-file";
+import {
+  getAdminCaseFilesById,
+  getCostAssesment,
+} from "@/lib/actions/case-file";
 import CaseDocumentListSkeleton from "../../view/_components/view-document-skeleton";
 import { ReviewActions } from "../components/review-actions";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -22,8 +25,13 @@ export default function layout({
     queryFn: () => getAdminCaseFilesById(params.id),
     enabled: !!params.id,
   });
+  const { data: costBreakdown, isLoading: breakdownLoading } = useQuery({
+    queryKey: ["cost_breakdown", params.id],
+    queryFn: () => getCostAssesment(params.id),
+    enabled: !!params.id,
+  });
 
-  if (isLoading) {
+  if (isLoading || breakdownLoading) {
     return <CaseDocumentListSkeleton />;
   }
   return (
@@ -60,7 +68,7 @@ export default function layout({
         <div className="md:grid md:grid-cols-[minmax(220px,_4fr)_minmax(0,_8fr)] md:gap-6 lg:grid-cols-[minmax(240px,_4fr)_minmax(0,_8fr)] lg:gap-10 container flex-1 min-h-0">
           <aside className="fixed top-14 z-30 hidden w-full shrink-0 md:sticky md:block">
             <div className="no-scrollbar h-full overflow-auto pr-4">
-              <SideNav data={data} />
+              <SideNav data={data} costBreakdown={costBreakdown?.data} />
             </div>
           </aside>
           <main className="overflow-auto">{children}</main>

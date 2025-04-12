@@ -1,24 +1,12 @@
-import {
-  CaseTypeData,
-  CriminalCaseSubType,
-  CriminalDocumentTitles,
-  DEFAULT_CHARGES_PERCENTAGE,
-  DEFAULT_EXHIBIT_FEE,
-  DEFAULT_SEAL_FEE,
-} from "@/constants";
 import { IDataProps } from "./side-nav";
-import { useMemo } from "react";
-import { getTitleByRecoveryAmount } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { getDocumentFees } from "@/lib/actions/public";
 
 interface CostBreakdownProps {
-  data: IDataProps;
+  data: any;
+  costBreakdown: any[];
 }
 
-export function CostBreakdown({ data }: CostBreakdownProps) {
-  const { documents, case_type_name, sub_case_type_name } = data;
-  const recovery_amount = data?.casetype?.recovery_amount ?? "";
+export function CostBreakdown({ data, costBreakdown }: CostBreakdownProps) {
+  const { case_type_name } = data;
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -28,144 +16,38 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       .format(amount)
       .replace("NGN", "₦ ");
   };
-  const { data: fees, isLoading } = useQuery({
-    queryKey: ["get_document_fees"],
-    queryFn: async () => {
-      return await getDocumentFees();
-    },
-  });
-  const amountData = [
-    ...(fees?.document_fees ?? []),
-    ...(fees?.sub_document_fees ?? []),
-  ];
-  const getFeeByTitle = (title: any) => {
-    const item = Array.isArray(amountData)
-      ? amountData.find(
-          (item) => item.title?.toLowerCase() === title?.toLowerCase()
-        )
-      : null;
-    return item ? Number(item.fee) : 0;
-  };
-  const documentGroups = useMemo(
-    () => ({
-      case_docs:
-        documents?.filter(
-          (doc) =>
-            doc.case_type_name.toLowerCase() === case_type_name.toLowerCase() &&
-            doc.sub_title.toLowerCase() === sub_case_type_name.toLowerCase()
-        ) || [],
-      other_documents:
-        documents?.filter(
-          (doc) =>
-            doc.case_type_name.toLowerCase() === case_type_name.toLowerCase() &&
-            doc.sub_title.toLowerCase() === "other documents"
-        ) || [],
-      exhibits:
-        documents?.filter(
-          (doc) => doc.case_type_name.toLowerCase() === "exhibits"
-        ) || [],
-    }),
-    [documents, case_type_name, sub_case_type_name]
+  const documentsGroup = Array.isArray(costBreakdown)
+    ? costBreakdown?.filter(
+        (item) =>
+          item.case_type.toLowerCase() !== "seal charge" &&
+          item.case_type.toLowerCase() !== "service charge" &&
+          item.title.toLowerCase() !== "exhibits"
+      )
+    : [];
+
+  const exhibits = Array.isArray(costBreakdown)
+    ? costBreakdown?.filter((item) => item.title.toLowerCase() === "exhibits")
+    : [];
+  const service = Array.isArray(costBreakdown)
+    ? costBreakdown?.filter(
+        (item) => item.case_type.toLowerCase() === "service charge"
+      )
+    : [];
+  const seals = Array.isArray(costBreakdown)
+    ? costBreakdown?.filter(
+        (item) => item.case_type.toLowerCase() === "seal charge"
+      )
+    : [];
+
+  const serviceCharge = service.reduce((sum, item) => sum + item.amount, 0);
+  const sealFee = seals.reduce((sum, item) => sum + item.amount, 0);
+  const exhibitFee = exhibits.reduce((sum, item) => sum + item.amount, 0);
+  const documentFee = documentsGroup.reduce(
+    (sum, item) => sum + item.amount,
+    0
   );
 
-  const costItems = useMemo(
-    () => ({
-      case_docs: documentGroups.case_docs.map((doc) => ({
-        category: doc.case_type_name,
-        name: doc.title,
-        amount: doc.amount,
-      })),
-      other_documents: documentGroups.other_documents.map((doc) => ({
-        category: doc.case_type_name,
-        name: doc.title,
-        amount: doc.amount,
-      })),
-      exhibits: documentGroups.exhibits.map((doc) => ({
-        category: doc.case_type_name,
-        name: doc.title,
-        amount: DEFAULT_EXHIBIT_FEE,
-      })),
-    }),
-    [documentGroups, data]
-  );
-
-  // const displayedItems = useMemo(() => {
-  //   let items =
-  //     case_type_name === CaseTypeData.CRIMINAL_CASE
-  //       ? costCriminalItems
-  //       : case_type_name === CaseTypeData.CIVIL_CASE
-  //       ? costCivilItems
-  //       : [];
-
-  //   if (case_type_name === CaseTypeData.CIVIL_CASE && recovery_amount) {
-  //     const recoveryTitle = getTitleByRecoveryAmount({
-  //       recoveryAmount: recovery_amount as any,
-  //       type: sub_case_type_name as CivilCaseSubType,
-  //     });
-  //     items = [
-  //       ...items,
-  //       {
-  //         name: recoveryTitle,
-  //         category: CaseTypeData.CIVIL_CASE,
-  //         amount: getFeeByTitle(recoveryTitle),
-  //       },
-  //     ];
-  //   }
-  //   return items;
-  // }, [case_type_name, recovery_amount, sub_case_type_name]);
-
-  const displayedItems = useMemo(() => {
-    let items = [
-      ...(costItems.case_docs || []),
-      ...(costItems.other_documents || []),
-    ];
-
-    if (case_type_name === CaseTypeData.CIVIL_CASE && recovery_amount) {
-      const recoveryTitle = getTitleByRecoveryAmount({
-        recoveryAmount: recovery_amount as any,
-        type: sub_case_type_name as any,
-      });
-      items = [
-        ...items,
-        {
-          name: recoveryTitle,
-          category: CaseTypeData.CIVIL_CASE,
-          amount: getFeeByTitle(recoveryTitle),
-        },
-      ];
-    }
-    if (
-      case_type_name === CaseTypeData.CRIMINAL_CASE &&
-      sub_case_type_name === CriminalCaseSubType.DIRECT_COMPLAIN
-    ) {
-      items = [
-        ...items,
-        {
-          name: CriminalCaseSubType.DIRECT_COMPLAIN.toLowerCase(),
-          category: CaseTypeData.CRIMINAL_CASE,
-          amount: getFeeByTitle(CriminalDocumentTitles.DIRECT_COMPLAIN),
-        },
-      ];
-    }
-    return items;
-  }, [case_type_name, costItems, recovery_amount, sub_case_type_name]);
-
-  const subtotal = useMemo(() => {
-    return [
-      ...displayedItems,
-      ...costItems.exhibits,
-      { amount: DEFAULT_SEAL_FEE },
-    ]?.reduce((acc, curr) => acc + (curr.amount || 0), 0);
-  }, [displayedItems, costItems]);
-
-  const additionalCharges = useMemo(() => {
-    return subtotal * (DEFAULT_CHARGES_PERCENTAGE / 100);
-  }, [subtotal]);
-
-  const totalAmount = useMemo(() => {
-    return subtotal + additionalCharges;
-  }, [subtotal, additionalCharges]);
-
+  const totalAmount = serviceCharge + sealFee + exhibitFee + documentFee;
   return (
     <div className="w-full max-w-2xl">
       <div className="flex flex-row items-center justify-between space-y-0 pb-7">
@@ -178,26 +60,26 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
       </div>
       <div className="space-y-3">
         <div className="text-sm font-semibold">{case_type_name}</div>
-        {displayedItems.map((item, index) => (
+        {documentsGroup?.map((item, index) => (
           <div
             key={index}
             className="flex gap-1 justify-between items-start text-sm"
           >
-            <span className="text-sm font-medium capitalize">{item.name}</span>
+            <span className="text-sm font-medium capitalize">{item.title}</span>
             <span className="text-base font-medium">
               {formatAmount(item.amount!)}
             </span>
           </div>
         ))}
-        {costItems.exhibits.length > 0 && (
+        {exhibits.length > 0 && (
           <div className="space-y-1">
             <p className="text-primary text-xs font-semibold">Exhibits</p>
-            {costItems.exhibits.map((item, index) => (
+            {exhibits.map((item, index) => (
               <div
                 key={index}
                 className="flex gap-1 justify-between items-center text-sm"
               >
-                <span className="text-xs">{item.name}</span>
+                <span className="text-xs">{item.title}</span>
                 <span className="text-base font-medium">
                   {formatAmount(item.amount)}
                 </span>
@@ -208,16 +90,14 @@ export function CostBreakdown({ data }: CostBreakdownProps) {
 
         <div className="flex justify-between items-center text-sm text-[#641E16] font-medium">
           <span className="font-extrabold text-xs">Seal Generation</span>
-          <span className="text-base font-medium">
-            {formatAmount(DEFAULT_SEAL_FEE)}
-          </span>
+          <span className="text-base font-medium">{formatAmount(sealFee)}</span>
         </div>
         <div className="flex justify-between items-center text-sm">
           <p className="text-primary text-xs font-semibold">
             Additional Charges (10%)
           </p>
           <span className="text-base font-medium">
-            {formatAmount(additionalCharges)}
+            {formatAmount(serviceCharge)}
           </span>
         </div>
 
