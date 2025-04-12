@@ -24,7 +24,13 @@ import CaseRequestStatusSheet from "./sheet/caseRequestStatus";
 import ImageModalSection from "./ImageModalSection";
 import CaseRequestViewStatus from "./sheet/CaseRequestViewStatus";
 
-export function SingleCaseHeader({ data, params }: { params: { id: string }; data: any }) {
+export function SingleCaseHeader({
+  data,
+  params,
+}: {
+  params: { id: string };
+  data: any;
+}) {
   const id = useMemo(() => decodeURIComponent(params.id), [params.id]);
   const { data: user } = useAppSelector((state) => state.profile);
   const userRole = user?.role;
@@ -50,8 +56,11 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     const isEmergency = data?.is_emergency;
     const userRole = user?.role;
 
-    if (reviewStatus &&
-      [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(userRole!)
+    if (
+      reviewStatus &&
+      [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(
+        userRole!
+      )
     ) {
       badges.push(<StatusBadge key="review-status" status={reviewStatus} />);
     }
@@ -73,24 +82,34 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
           <StatusBadge key="fallback-status" status={data.status } />
         );
       } else {
-        if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
+        if (
+          reassignmentStatus &&
+          normalizedReassignmentStatus !== "under review" &&
+          !generalStatus.toLowerCase().includes("hearing")
+        ) {
           const reassignedStatus =
-            normalizedReassignmentStatus === "approved" ? "UNASSIGNED" : normalizedReassignmentStatus === "denied" ? "ASSIGNED" : reassignmentStatus;
+            normalizedReassignmentStatus === "approved"
+              ? "UNASSIGNED"
+              : normalizedReassignmentStatus === "denied"
+              ? "ASSIGNED"
+              : reassignmentStatus;
           badges.push(
             <StatusBadge key="reassignment" status={reassignedStatus} />
           );
         } else if (caseRequestStatus === "approved") {
-          badges.push(
-            <StatusBadge key="case-request" status="ASSIGNED" />
-          );
-        } else if (generalStatus && !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())) {
+          badges.push(<StatusBadge key="case-request" status="ASSIGNED" />);
+        } else if (
+          generalStatus &&
+          !["approved", "under review", "denied"].includes(
+            generalStatus.toLowerCase()
+          )
+        ) {
           badges.push(
             <StatusBadge key="fallback-status" status={data.status} />
           );
         }
       }
     }
-
 
     if (isEmergency) {
       badges.push(<StatusBadge key="emergency" status="action required" />);
@@ -111,13 +130,32 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
     if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
       if (
-        requestStatus?.toUpperCase() === "CASE REQUEST SUBMITTED" && !["DENIED", "APPROVED"].includes(requestStatus)
+        requestStatus?.toUpperCase() === "CASE REQUEST SUBMITTED" &&
+        !["DENIED", "APPROVED"].includes(requestStatus)
       ) {
-        return <CaseRequestStatusSheet id={id} trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>} />;
+        return (
+          <CaseRequestStatusSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                REVIEW REQUEST
+              </Button>
+            }
+          />
+        );
       }
 
       if (reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED") {
-        return <SubmittedRequestSheet id={id} trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>} />;
+        return (
+          <SubmittedRequestSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                REVIEW REQUEST
+              </Button>
+            }
+          />
+        );
       }
 
       if (!data?.hearing_status) {
@@ -149,15 +187,42 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       const isToBeAssigned = status === "TO BE ASSIGNED";
 
       if (isUnderReview && !requestStatus && !isDeniedOrApproved) {
-        return <CaseRequestSheet id={id} trigger={<Button variant="outline" className="text-xs">REQUEST THIS CASE</Button>} />;
+        return (
+          <CaseRequestSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                REQUEST THIS CASE
+              </Button>
+            }
+          />
+        );
       }
 
       if (!requestStatus && isOwnCase && !isToBeAssigned) {
-        return <RequestSheet id={id} trigger={<Button variant="outline" className="text-xs">REQUEST RE-ASSIGNMENT</Button>} />;
+        return (
+          <RequestSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                REQUEST RE-ASSIGNMENT
+              </Button>
+            }
+          />
+        );
       }
 
       if (isOwnCase) {
-        return <CaseRequestViewStatus id={id} trigger={<Button variant="outline" className="text-xs">VIEW REQUEST</Button>} />;
+        return (
+          <CaseRequestViewStatus
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                VIEW REQUEST
+              </Button>
+            }
+          />
+        );
       }
     }
 
@@ -167,11 +232,29 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       const isHearing = !!data?.hearing_status;
 
       if (!hasReassignment && !isToBeAssigned && !isHearing) {
-        return <RequestSheet id={id} trigger={<Button variant="outline" className="text-xs">REQUEST RE-ASSIGNMENT</Button>} />;
+        return (
+          <RequestSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                REQUEST RE-ASSIGNMENT
+              </Button>
+            }
+          />
+        );
       }
 
       if (hasReassignment) {
-        return <ReviewRequestSheet id={id} trigger={<Button variant="outline" className="text-xs">VIEW REQUEST</Button>} />;
+        return (
+          <ReviewRequestSheet
+            id={id}
+            trigger={
+              <Button variant="outline" className="text-xs">
+                VIEW REQUEST
+              </Button>
+            }
+          />
+        );
       }
     }
 
@@ -196,14 +279,18 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       <div className="container space-y-3">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-zinc-500">
-          <Link href="/cases" className="font-semibold">YOUR CASES</Link>
+          <Link href="/cases" className="font-semibold">
+            YOUR CASES
+          </Link>
           <span className="font-bold">/ {data?.case_suit_number}</span>
         </div>
 
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-medium text-primary">{data?.case_suit_number}</h1>
+            <h1 className="text-2xl font-medium text-primary">
+              {data?.case_suit_number}
+            </h1>
             <div className="flex items-center gap-3">{renderStatusBadges}</div>
           </div>
 
@@ -217,7 +304,6 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
     </div>
   );
 }
-
 
 // "use client";
 // import React, { useCallback, useMemo } from "react";
