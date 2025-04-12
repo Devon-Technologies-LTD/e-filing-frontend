@@ -104,7 +104,7 @@ export async function caseRequestHistory(id: string) {
 export async function changeReassignmentStatus(id: string, status: string) {
   try {
     const data = await CaseFileService.changeReassignmentStatus(id, status);
-    return { ...data.data[0] };
+    return { ...data };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);
@@ -113,7 +113,6 @@ export async function changeReassignmentStatus(id: string, status: string) {
 export async function changeCaseRequestStatus(id: string, status: string) {
   try {
     const data = await CaseFileService.changeCaseRequestStatus(id, status);
-    console.log("approve case => " + data);
     return { ...data };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

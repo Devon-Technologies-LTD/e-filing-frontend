@@ -89,7 +89,6 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
     : allTimeSlots;
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Reset time to midnight
-
   return (
     <Sheet open={isOpen2} onOpenChange={setIsOpen2}>
       <SheetTrigger>{trigger}</SheetTrigger>

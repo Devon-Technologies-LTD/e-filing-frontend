@@ -40,12 +40,10 @@ const ConfirmInvite: React.FC<Props> = ({ trigger, formValues, setIsOpen2, isOpe
     setLoading(true);
     setErrorMessages([]);
     try {
-      console.log(formValues);
       const { data } = await axios.post("/api/invite-user", formValues, {
         headers: { "Content-Type": "application/json" },
       });
       toast.success("User invited successfully!");
-      console.log("User invited successfully:", data);
       queryClient.invalidateQueries({ queryKey: ["userManagement"] });
       queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
       queryClient.invalidateQueries({ queryKey: ["central-registeral"] });

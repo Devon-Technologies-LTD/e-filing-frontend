@@ -86,7 +86,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const [selectedCourtSubDivision, setSelectedCourtSubDivision] = useState<string>("");
 
   useEffect(() => {
-    console.log(user);
     setSelectedCourtDivision(user?.court_division_id ?? "");
     setSelectedDistrict(user?.court_type ?? "");
   }, []);
@@ -135,7 +134,6 @@ export default function InviteUser({ trigger, tab }: InviteUserProps) {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form is valid, opening confirmation modal...");
       setShowConfirmInvite(true);
     } else {
       console.log("Form has errors, modal will not open.");

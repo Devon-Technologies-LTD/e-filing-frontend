@@ -35,7 +35,7 @@ export const DivisionAdmin = ({
         staleTime: 50000,
     });
 
-    console.log(data);
+    
 
     const [selectedSubDivision, setSelectedSubDivision] = useState<string | null>(value ?? null);
 

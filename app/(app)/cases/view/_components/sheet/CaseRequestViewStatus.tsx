@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useQuery } from "@tanstack/react-query";
-import { getAdminCaseFilesById, getReassignmentHistory } from "@/lib/actions/case-file";
+import { caseRequestHistory, getAdminCaseFilesById, getReassignmentHistory } from "@/lib/actions/case-file";
 import { getInitials } from "@/constants";
 import { StatusBadge } from "@/components/ui/status-badge";
 
 
 
-export default function ReviewRequestSheet({ trigger, id }: any) {
+export default function CaseRequestViewStatus({ trigger, id }: any) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
@@ -26,13 +26,10 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
         enabled: !!id,
     });
 
-    // Fetch reassignment history only when sheet is open
     useEffect(() => {
-        if (!isOpen2) return;
         const fetchHistory = async () => {
             try {
-                const history = await getReassignmentHistory(id);
-                console.log("history => history=> " + JSON.stringify(history));
+                const history = await caseRequestHistory(id);
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
             } catch (error) {
@@ -42,7 +39,6 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                 setLoading(false);
             }
         };
-
         fetchHistory();
     }, [id, isOpen2]);
 
@@ -53,7 +49,7 @@ export default function ReviewRequestSheet({ trigger, id }: any) {
                 <div className="space-y-10 mx-auto">
                     <div className="space-y-6 w-full">
                         <div>
-                            <p className="font-bold text-xl">Re-assignment Status</p>
+                            <p className="font-bold text-xl">Case Request Status</p>
                             <div className="font-semibold text-sm">stay updated on the status of your submitted request</div>
                         </div>
                         <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">

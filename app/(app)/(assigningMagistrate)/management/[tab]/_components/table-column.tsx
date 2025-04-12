@@ -15,7 +15,7 @@ export interface IUsersColumn {
   role: ROLES;
   status: string;
   court_division: string;
-  sub_division?: string;
+  districts?: string;
   court_type: string;
   created_at?: Date | undefined;
 }
@@ -94,7 +94,7 @@ export const createUserColumns = (
 
   let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
 
-  if (userRole === ROLES.DIRECTOR_MAGISTRATE || userRole === ROLES.CHIEF_JUDGE) {
+  if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
     const directorColumns: ColumnDef<IUsersColumn>[] = [
       {
         header: "Division",
@@ -123,8 +123,8 @@ export const createUserColumns = (
   if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
     const assigningColumns: ColumnDef<IUsersColumn>[] = [
       {
-        accessorKey: "sub_division",
-        header: "Sub Division",
+        accessorKey: "court_division",
+        header: "Districts",
       },
     ];
 

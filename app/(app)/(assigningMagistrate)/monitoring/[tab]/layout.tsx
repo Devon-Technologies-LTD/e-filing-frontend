@@ -11,7 +11,7 @@ import { CaseTypes, COURT_TYPE, ALL_DISTRICT } from "@/types/files/case-type";
 import { LocationAdmin } from "@/components/location-admin";
 import { MonitoringContext } from "@/context/MonitoringContext";
 
-export default function LayoutPage({ children }: { children: React.ReactNode }) { 
+export default function LayoutPage({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const params = useParams();
   const activeTab = params?.tab as string;
@@ -21,6 +21,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
   };
   const [selectedCase, setSelectedCase] = useState<CaseTypes | "all">("all");
   const [totalCase, setTotalCase] = useState<number>(0);
+  const [caseName, setCaseName] = useState<string>("");
   const { caseType, caseTypeErrors } = useAppSelector((data) => data.caseFileForm);
 
   const defaultTabs: { id: TCaseFilterType; label: string }[] = [
@@ -72,7 +73,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <MonitoringContext.Provider value={{ totalCase, setTotalCase }}>
+    <MonitoringContext.Provider value={{ totalCase, setTotalCase, caseName, setCaseName }}>
       <div className="container mx-auto space-y-8 py-4">
         <header className="space-y-4">
           <div className="flex items-center justify-between gap-3">
@@ -88,7 +89,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
             <div className="text-primary text-end">
               <>
                 <p className="text-2xl font-bold">{totalCase}</p>
-                <p className="text-sm font-bold">Total Magistrates across all divisions</p>
+                <p className="text-sm font-bold uppercase ">{(caseName == "case") ? "ALL CASES" : `Total  ${caseName} cases`}</p>
               </>
             </div>
           </div>

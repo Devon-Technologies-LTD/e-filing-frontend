@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { ErrorResponse } from "@/types/auth";
 import { requestReAssigment } from "@/lib/actions/case-actions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInitials } from "@/constants";
 
 
 interface ScheduleSheetProps {
@@ -20,7 +21,6 @@ interface ScheduleSheetProps {
 
 export default function RequestSheet({ trigger, id }: any) {
     const queryClient = useQueryClient();
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [reason, setReason] = useState("");
     const [isOpen2, setIsOpen2] = useState(false);
@@ -33,15 +33,6 @@ export default function RequestSheet({ trigger, id }: any) {
         enabled: !!id,
     });
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        const initials = name
-            .split(" ")
-            .map((n) => n[0])
-            .join("");
-        return initials.toUpperCase();
-    };
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
@@ -50,9 +41,9 @@ export default function RequestSheet({ trigger, id }: any) {
                 casefile_id: data.id,
                 reason: reason,
             };
-            console.log(formData);
+            
             const response = await requestReAssigment(formData, data.id);
-            console.log(response);
+            
             if (response.success) {
                 // toast.success(response.message);
                 toast.success("Re-assignment confirmed successfully.");

@@ -5,14 +5,13 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { caseRequestHistory, changeCaseRequestStatus, getAdminCaseFilesById } from "@/lib/actions/case-file";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ErrorResponse } from "@/types/auth";
+import { ErrorResponse, ROLES } from "@/types/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { caseRequest } from "@/lib/actions/case-actions";
 import { getInitials } from "@/constants";
+import { useAppSelector } from "@/hooks/redux";
 // import { getInitials } from "@/constants";
 
 interface CaseRequestStatusSheetProps {
@@ -27,6 +26,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
     const [isOpen2, setIsOpen2] = useState(false);
     const [loading, setLoading] = useState(true);
     const [date, setDate] = useState<string>("");
+    const { data: user } = useAppSelector((state) => state.profile);
 
     const { data, isLoading } = useQuery({
         queryKey: ["get_single_case_by_id", id], // Ensure proper caching
@@ -34,12 +34,9 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
         enabled: !!id,
     });
 
-    // Fetch reassignment history only when sheet is open
     useEffect(() => {
-        if (!isOpen2) return;
         const fetchHistory = async () => {
             try {
-                console.log("Fetching reassignment history for case ID:", id);
                 const history = await caseRequestHistory(id);
                 setReason(history?.request_reason || "No reason provided");
                 setDate(history?.created_at || "-");
@@ -56,11 +53,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
     const changeCaseStatus = async (status: string) => {
         setIsSubmitting(true);
         try {
-            console.log(id, status);
             const data = await changeCaseRequestStatus(id, status);
-            console.log(data);
-
-            console.log(data);
             if (data) {
                 toast.success(`Case Request ${status} successful`);
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
@@ -86,9 +79,9 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
         setIsSubmitting(true);
         try {
             const formData = { reason };
-            console.log(formData);
+            
             const response = await caseRequest(formData, data.id);
-            console.log(response);
+            
             if (response.success) {
                 toast.success("Case Request successful");
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
@@ -122,18 +115,29 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                             <p className="text-stone-600 text-sm">Requested From</p>
                             <p className="text-app-primary font-extrabold">{data?.division_name ?? "N/A"}</p>
                         </div>
-                        <div className="flex gap-2">
-                            <Avatar>
-                                <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2">
-                                    {getInitials(data?.claimant?.name)}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <p className="text-stone-600 text-sm">{data?.claimant?.name ?? "N/A"}</p>
-                                <p className="font-bold text-xs">{data?.claimant?.email_address ?? "N/A"}</p>
+                        {(user?.role === ROLES.ASSIGNING_MAGISTRATE) ?
+                            <div className="flex gap-2">
+                                <Avatar>
+                                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
+                                </Avatar>
+                                <div className="">
+                                    <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
+                                    <p className="text-sm font-semibold">{data?.assigned_to_data?.email}</p>
+                                </div>
                             </div>
-                        </div>
+                            :
+                            <div className="flex gap-2">
+                                <Avatar>
+                                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
+                                </Avatar>
+                                <div className="">
+                                    <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name} {data?.assigned_by?.last_name}</p>
+                                    <p className="text-sm font-semibold">{data?.assigned_by?.email}</p>
+                                </div>
+                            </div>
+                        }
                     </div>
+
 
                     <div className="border-b-2 pb-3">
                         <p className="text-stone-600 text-sm font-bold mb-2">Request for Resignment Case Suit Number</p>

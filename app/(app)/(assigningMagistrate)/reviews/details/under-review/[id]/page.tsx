@@ -5,7 +5,7 @@ import { Icons } from "@/components/svg/icons";
 
 export default function UnderReview({ params }: { params: { id: string } }) {
   const { id } = params;
-  console.log(id);
+  
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",

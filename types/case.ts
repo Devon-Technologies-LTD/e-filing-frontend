@@ -49,3 +49,12 @@ export interface IMetric {
   description: string;
   districts: { name: string; cases: number }[];
 }
+
+export interface Notifications {
+  id: string;
+  title: string;
+  description: string;
+  case_id?: string;
+  status: string;
+  created_at: string;
+}

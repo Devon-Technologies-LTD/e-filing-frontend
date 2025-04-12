@@ -10,7 +10,6 @@ import { createUserColumns, IUsersColumn } from "./table-column";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
 import { getPendingUser } from "@/lib/actions/user-management";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 
 

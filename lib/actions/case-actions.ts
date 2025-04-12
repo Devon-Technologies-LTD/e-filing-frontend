@@ -20,7 +20,7 @@ type ErrorResponse = {
 export async function createCaseFile(payload: any, id: string) {
     try {
         const data = await CaseActionService.scheduleHearing(payload, id);
-        console.log(data);
+        
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -30,7 +30,7 @@ export async function createCaseFile(payload: any, id: string) {
 export async function requestReAssigment(payload: any, id: string) {
     try {
         const data = await CaseActionService.requestReAssigment(payload, id);
-        console.log(data);
+        
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -40,7 +40,7 @@ export async function requestReAssigment(payload: any, id: string) {
 export async function caseRequest(payload: any, id: string) {
     try {
         const data = await CaseActionService.caseRequest(payload, id);
-        console.log(data);
+        
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -51,7 +51,7 @@ export async function deliverJudgement(payload: any, id: string) {
     try {
         console.log("This is a payload == >" + payload);
         const data = await CaseActionService.deliverJudgement(payload, id);
-        console.log(data);
+        
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -61,6 +61,7 @@ export async function deliverJudgement(payload: any, id: string) {
 export async function getSingleCaseHistory(id: string) {
     try {
         const data = await CaseActionService.getSingleCaseHistory(id);
+        console.log("getSingleCaseHistory =>" + data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -70,7 +71,6 @@ export async function getSingleCaseHistory(id: string) {
 export async function reassignmentHistory(id: string) {
     try {
         const data = await CaseActionService.reassignmentHistory(id);
-        console.log(data);
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;
@@ -80,7 +80,7 @@ export async function reassignmentHistory(id: string) {
 export async function CaseAssignment(payload: any, id: string) {
     try {
         const data = await CaseActionService.CaseAssignment(payload, id);
-        console.log(data);
+        
         return { ...data, success: true };
     } catch (err: unknown) {
         const error = err as ErrorResponse;

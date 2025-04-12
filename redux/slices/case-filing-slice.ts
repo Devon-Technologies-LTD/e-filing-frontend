@@ -166,7 +166,6 @@ const formSlice = createSlice({
       state.documents = action.payload;
     },
     updateDocument: (state, action: PayloadAction<IDocumentFileType>) => {
-      console.log("action payload", action.payload);
       if (!state.documents) {
         state.documents = [];
       }
@@ -176,10 +175,8 @@ const formSlice = createSlice({
           d.sub_title.toLowerCase() === action.payload.sub_title.toLowerCase()
       );
       if (index !== -1) {
-        console.log("should replace");
         state.documents[index] = action.payload;
       } else {
-        console.log("should update");
         state.documents?.push(action.payload);
       }
     },

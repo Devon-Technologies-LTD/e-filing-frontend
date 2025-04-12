@@ -94,6 +94,7 @@ export interface IChangeStatus {
 }
 
 export interface CaseDetailsResponse {
+  review_status: string;
   id: string;
   user_id: string;
   title: string;
@@ -111,6 +112,7 @@ export interface CaseDetailsResponse {
   assignee_name: string;
   reassignment_status: string;
   case_request_status: string;
+  CaseDetailsResponse: string;
 }
 
 const CaseFileService = {
@@ -170,7 +172,7 @@ const CaseFileService = {
   },
   async caseRequestHistory(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(
-      `admin/case-request-history/${id}`
+      `admin/casefile/case-request-history/${id}`
     );
     return response.data;
   },
@@ -194,10 +196,12 @@ const CaseFileService = {
   },
   async getAdminCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`admin/CaseFile/${id}`);
+    console.log("single case details =>" + response.data);
     return response.data;
   },
   async deleteCaseFiles(id: string): Promise<any> {
     const response = await axiosInstance.delete<string>(`casefile/${id}`);
+    console.log("single case details =>" + response.data);
     return response.data;
   },
   async changeCaseStatus(id: string, body: IChangeStatus): Promise<any> {

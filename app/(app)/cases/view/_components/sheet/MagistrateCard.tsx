@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AlertDialogCancel, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { Icons } from "@/components/svg/icons";
 import { CaseAssignment } from "@/lib/actions/case-actions";
+import { getInitials } from "@/constants";
 
 const MagistrateCard = ({ user, caseId, activeModalUserId, setActiveModalUserId }: any) => {
     const [loading, setLoading] = useState(false);
@@ -36,14 +37,7 @@ const MagistrateCard = ({ user, caseId, activeModalUserId, setActiveModalUserId 
         setActiveModalUserId(null);
     };
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase();
-    };
+
 
     return (
         <ConfirmCaseAssignment isOpen={activeModalUserId === user.ID} setIsOpen={handleCloseModal}>

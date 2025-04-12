@@ -29,7 +29,6 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
     queryFn: async () => await getSingleCaseHistory(id),
     enabled: !!id,
   });
-
   return (
     <Sheet>
       <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
@@ -76,7 +75,7 @@ export default function HearingSheet({ trigger, id }: HearingSheetProps) {
               </ScrollArea>
             )}
 
-         
+
           </div>
         </div>
       </SheetContent>

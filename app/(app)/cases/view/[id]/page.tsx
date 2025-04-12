@@ -5,20 +5,9 @@ import { SingleCaseHeader } from "../_components/single-case-header";
 import { CaseOverview } from "../_components/case_overview";
 import { CaseUpdates } from "../_components/case-updates";
 import ReusableTabs from "@/components/ui/reusable-tabs";
-import { Icons } from "@/components/svg/icons";
 import { DocumentUpdates } from "../_components/document_updates";
 import { CaseDocumentList } from "../_components/case_documents";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { useQuery } from "@tanstack/react-query";
 import {
   getAdminCaseFilesById,
@@ -36,6 +25,7 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
+import { JSONParser } from "formidable/parsers";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -72,10 +62,6 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     enabled: !!params.id,
   });
 
-  console.log("single case details", data);
-  console.log("Assigned to ", data?.assigned_to);
-  console.log("user ID ", user?.id);
-
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -88,6 +74,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   if (isLoading) {
     return <CaseDocumentListSkeleton />;
   }
+  console.log("single case details => " + JSON.stringify(data));
   return (
     <div className="bg-zinc-100 h-full overflow-auto">
       <SingleCaseHeader data={data} params={params} />

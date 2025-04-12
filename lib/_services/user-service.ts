@@ -5,6 +5,7 @@ import {
 } from "@/lib/_definitions";
 import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
 import { resetPassword } from "../actions/login";
+import { getNotification } from "../actions/admin-file";
 
 
 export interface IDraftFilter {
@@ -33,11 +34,23 @@ export interface Ipage {
   usertype?: string,
   status?: string,
   sub_division?: string,
+  courtype?: string,
   casetype?: string,
   user_id?: string,
   year?: string,
+
 }
 
+export interface INotificationFilter {
+  id?: string | null;
+  user_id?: string | null;
+  title?: string | null;
+  description?: string | null;
+  case_id?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
 
 interface IPage {
   page: number;
@@ -60,7 +73,7 @@ interface IPage {
 const UserService = {
   async getAllUser(): Promise<any> {
     const response = await axiosInstance.get(`admin/user`);
-    console.log(response.data);
+
     return response.data;
   },
   async magistrateOversight(params: Ipage): Promise<any> {
@@ -71,8 +84,9 @@ const UserService = {
           limit: params.size ?? 10,
           division_id: params.division_id,
           search: params.search,
+          status: params.status,
           usertype: params.usertype,
-          casetype: params.casetype,
+          courtype: params.courtype,
         },
       },
     );
@@ -147,7 +161,7 @@ const UserService = {
   async getUserManagementFilter(params: IPage): Promise<any> {
     try {
       const response = await axiosInstance.post("/admin/user/user-filter", params);
-      console.log(response.data);
+
       return response.data;
     } catch (error) {
       console.error("Error fetching user management filter:", error);
@@ -179,6 +193,26 @@ const UserService = {
     return response.data;
   },
 
+  async getNotification(): Promise<any> {
+    const response = await axiosInstance.get<INotificationFilter>(
+      `notification/`
+    );
+    return response.data;
+  },
+
+  async updateNotification(id: string): Promise<any> {
+    const response = await axiosInstance.patch<INotificationFilter>(
+      `notification/${id}`
+    );
+    return response.data;
+  },
+
+  async getVerification(): Promise<any> {
+    const response = await axiosInstance.get<INotificationFilter>(
+      `verification/`
+    );
+    return response.data;
+  },
 }
 
 export default UserService

@@ -25,6 +25,7 @@ interface ConfirmationModalProps {
 export const ApproveCase = ({ record }: ConfirmationModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
+  const queryClient2 = useQueryClient();
   const router = useRouter();
   const changeStatusMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: IChangeStatus }) =>
@@ -33,12 +34,13 @@ export const ApproveCase = ({ record }: ConfirmationModalProps) => {
       if (data?.success) {
         toast.success("Case Successfullly Approved");
         setIsOpen(false);
-        queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
+        queryClient.invalidateQueries({ queryKey: ["get_cases"] });
+        queryClient2.invalidateQueries({ queryKey: ["get_single_case_by_id"] });
         router.back();
       } else {
         toast.error(
           `${data?.message}: ${data.errors ? data.errors.error : ""}` ||
-            "An error occurred while saving the form."
+          "An error occurred while saving the form."
         );
         setIsOpen(false);
       }
@@ -54,9 +56,7 @@ export const ApproveCase = ({ record }: ConfirmationModalProps) => {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       trigger={
-        <Button size={"lg"} className="font-bold flex-end text-sm h-11">
-          Approve Case
-        </Button>
+        <Button size={"lg"} className="font-bold flex-end text-sm h-11">Approve Case</Button>
       }
     >
       <div className="space-y-8">

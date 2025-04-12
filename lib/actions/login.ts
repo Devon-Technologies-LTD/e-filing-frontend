@@ -43,7 +43,6 @@ export async function LoginAction(_prevState: unknown, formData: FormData) {
       },
       token: data.token,
     };
-    console.log(sessionData);
     role = sessionData.user.role;
     await createSession(sessionData);
   } catch (err: unknown) {
@@ -134,8 +133,6 @@ export async function ForgotPasswordAction(
 ) {
   const data = Object.fromEntries(formData);
   const result = EMailFormSchema.safeParse(data);
-  console.log(result);
-
   if (!result.success) {
     return {
       status: 400,
@@ -148,9 +145,6 @@ export async function ForgotPasswordAction(
   try {
     // Simulate API call (uncomment when ready)
   const resultz =  await authService.forgotPassword(result.data);
-  console.log(resultz);
-  
-    // Store email in cookie/session
     cookies().set("otpEmail", result.data.email);
   } catch (err: any) {
     if (err?.response) {
@@ -294,9 +288,6 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       };
     }
     const token = cookies().get("TempToken")?.value;
-    console.log("This token  " + token);
-
-    // API call
     await authService.resetPassword({
       new_password: result.data.newPassword,
       confirm_password: result.data.confirmPassword,

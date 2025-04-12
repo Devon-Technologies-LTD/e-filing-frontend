@@ -38,8 +38,6 @@ export async function updateDocumentAction(formData: FormData) {
 export async function deleteDocumentAction(payload: DeleteDocumentPayload) {
   try {
     const data = await DocumentService.deleteDocument(payload);
-
-    console.log("deleteeee", data);
     return { data: data, success: true };
   } catch (err: unknown) {
     console.log("err thrown", err);

@@ -84,7 +84,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
             },
             token: responseData.token,
         };
-        console.log(updatedSessionData);
         role = updatedSessionData.user.role;
         await createSession(updatedSessionData);
     } catch (err: unknown) {
@@ -183,8 +182,6 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
 export async function invitationAction(_prevState: unknown, formData: FormData) {
     // Extract form data
     const data = Object.fromEntries(formData.entries());
-    console.log("Received data:", data);
-
     const image = formData.get("image") as File | null;
     if (!image) {
         return {
@@ -229,7 +226,6 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
     let id = cookies().get("TempID")?.value;
 
     if (!token) {
-        console.log("Authenticating with OTP:", { email: data.email, otp: data.otp });
         const response = await authService.acceptInvite({
             otp: data.otp as string,
             email: data.email as string,
@@ -251,9 +247,6 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
 
     try {
         const url = `${NEXT_BASE_URL}/admin/user/${id}`;
-        console.log(url);
-        console.log("token => " + token);
-
         // Send formData directly
         const signupResponse = await fetch(url, {
             method: "PATCH",

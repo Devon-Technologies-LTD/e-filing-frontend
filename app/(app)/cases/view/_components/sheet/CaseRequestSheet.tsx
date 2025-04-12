@@ -12,6 +12,7 @@ import { ErrorResponse } from "@/types/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { caseRequest } from "@/lib/actions/case-actions";
+import { getInitials } from "@/constants";
 
 interface CaseRequestSheetProps {
     trigger: React.ReactNode;
@@ -30,28 +31,16 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
         enabled: !!id,
     });
 
-    const getInitials = (name: string | undefined) => {
-        if (!name) return "CN";
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase();
-    };
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!data?.id) {
             toast.error("Error: Case data is not available.");
             return;
         }
-
         setIsSubmitting(true);
         try {
             const formData = { reason };
-            console.log(formData);
             const response = await caseRequest(formData, data.id);
-            console.log(response);
             if (response.success) {
                 toast.success("Case Request successful");
                 queryClient.invalidateQueries({ queryKey: ["get_single_case_by_id"] });

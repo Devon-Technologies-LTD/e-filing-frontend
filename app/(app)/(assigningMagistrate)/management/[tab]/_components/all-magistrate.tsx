@@ -6,7 +6,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { CaseTypes, COURT_TYPE } from "@/types/files/case-type";
 import React, { useMemo, useState } from "react";
-import { createUserColumns, IUsersColumn } from "./table-column";
+import { createUserColumns, } from "./table-column";
 import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
@@ -54,21 +54,27 @@ export default function AllMagistrates() {
     () => createUserColumns(user?.role!, "all"),
     [user?.role]
   );
+
+
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["userManagement", currentPage, selectedCourt, searchTerm], // ✅ Now React Query tracks changes
+    queryKey: ["userManagement", currentPage, selectedCourt, searchTerm],
     queryFn: async () => {
-      return await getUserManagementFilter({
+      const filters = {
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
-        invited_by: user?.id,
         court_type: selectedCourt === "all" ? "" : selectedCourt,
-      });
+        invited_by: user?.id,
+      };
+
+      return await getUserManagementFilter(filters);
     },
     staleTime: 100000,
   });
+
 
   return (
     <div className="bg-white py-2 space-y-6">
@@ -101,6 +107,7 @@ export default function AllMagistrates() {
           />
         </div>
       </div>
+
       {/* <div className="bg-white overflow-auto p-4 space-y-6 max-h-[calc(100vh-220px)]"> */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
@@ -116,7 +123,6 @@ export default function AllMagistrates() {
         />
       </div>
       <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
-      {/* </div> */}
 
       {data?.data?.length > 0 && (
         <div className="fixed bottom-0 container left-0 right-0 py-2">

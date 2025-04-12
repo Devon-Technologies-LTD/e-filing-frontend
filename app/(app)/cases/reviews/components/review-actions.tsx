@@ -95,12 +95,12 @@ export function ReviewActions({ data }: Iprops) {
         </Button>
       </div>
 
-      {data?.status?.toLowerCase() === CaseStatus.UnderReview && (
-        <div className="w-1/2 flex gap-3 justify-end ">
-          <DenyCase record={data.id} />
-          <ApproveCase record={data.id} />
-        </div>
-      )}
+      {/* {data?.status?.toLowerCase() === CaseStatus.UnderReview && ( */}
+      <div className="w-1/2 flex gap-3 justify-end ">
+        <DenyCase record={data.id} />
+        <ApproveCase record={data.id} />
+      </div>
+      {/* )} */}
       {data?.status?.toLowerCase() === CaseStatus.Denied && (
         <div className="w-1/2 flex gap-3 justify-end ">
           <Button
@@ -114,6 +114,7 @@ export function ReviewActions({ data }: Iprops) {
             Reason for denial
           </Button>
         </div>
+
       )}
 
       {data.status?.toLowerCase() === CaseStatus.Denied && (

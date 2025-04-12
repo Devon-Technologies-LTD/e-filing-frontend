@@ -1,10 +1,26 @@
 import { ICaseTypes } from "@/redux/slices/case-filing-slice";
 import { LockIcon, InfoIcon } from "lucide-react";
+import { ROLES } from "../auth";
 
 export type Location = {
   value: string;
   label: string;
 };
+
+
+export interface IUsersColumn {
+  id: string;
+  name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: ROLES;
+  status: string;
+  court_division: string;
+  sub_division?: string;
+  court_type: string;
+  created_at?: Date | undefined;
+}
 
 export interface FormField {
   id: string;

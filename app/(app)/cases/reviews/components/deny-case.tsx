@@ -66,7 +66,7 @@ const ReasonsModal = ({
               className=" flex justify-between items-center text-base font-bold">
               Give reasons here
               {!isReasonValid && (
-                <p className="text-red-600 text-sm">Reason is required.</p>
+                <p className="text-red-600 text-sm">Reason is required. *</p>
               )}
             </Label>
             <Textarea

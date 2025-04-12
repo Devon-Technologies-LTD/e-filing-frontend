@@ -45,7 +45,6 @@ export function StatBreakdown({
       if (!metricKey) return [];
       try {
         const response = await breakdown(type ?? "", metricKey ?? "");
-        console.log("Fetched case breakdown:", response);
         return response || [];
       } catch (err) {
         console.error("Error fetching case breakdown:", err);
@@ -56,9 +55,6 @@ export function StatBreakdown({
     enabled: !!metricKey,
   });
 
-
-  // Debugging - check if `data` is updating
-  console.log("Raw Data Before Mapping:", data);
 
   const bgColors: Record<string, string> = {
     default: "bg-gray-100",
