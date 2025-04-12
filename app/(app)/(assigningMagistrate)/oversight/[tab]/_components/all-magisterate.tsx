@@ -68,7 +68,7 @@ export default function MagistratesTable() {
       await getOversight({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
-        division_id: courtDivision,
+        division_id: courtDivision === "all" ? "" : courtDivision,
         search: searchQuery,
         status: status === "all" ? "" : status,
         courtype: selectedCourt === "all" ? "" : selectedCourt,

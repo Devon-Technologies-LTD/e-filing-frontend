@@ -35,6 +35,8 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
     enabled: !!id,
   });
 
+  console.log(JSON.stringify(data));
+
   const { data: user } = useAppSelector((state) => state.profile);
   return (
     <Sheet>
@@ -58,7 +60,7 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
               {(user?.role === ROLES.ASSIGNING_MAGISTRATE) ?
                 <div className="flex gap-2">
                   <Avatar>
-                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.name)}</AvatarFallback>
+                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.assigned_to_data?.first_name ?? "CN")}</AvatarFallback>
                   </Avatar>
                   <div className="">
                     <p className="text-stone-600 text-sm">{data?.assigned_to_data?.first_name} {data?.assigned_to_data?.last_name}</p>
@@ -68,7 +70,7 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                 :
                 <div className="flex gap-2">
                   <Avatar>
-                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2  ">  {getInitials(data?.claimant?.name)}</AvatarFallback>
+                    <AvatarFallback className="text-app-primary bg-[#FDF5EC] border-app-primary border-2">  {getInitials(data?.assigned_by?.first_name ?? "CN")}</AvatarFallback>
                   </Avatar>
                   <div className="">
                     <p className="text-stone-600 text-sm">{data?.assigned_by?.first_name} {data?.assigned_by?.last_name}</p>

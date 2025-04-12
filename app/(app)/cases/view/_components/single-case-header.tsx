@@ -42,10 +42,11 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
   const renderStatusBadges = useMemo(() => {
     const badges = [<StatusBadge key="case-type" status={data?.case_type_name} />];
+
     const reviewStatus = data?.review_status;
-    const reassignmentStatus = data?.reassignment_status?.toLowerCase();
-    const caseRequestStatus = data?.case_request_status?.toLowerCase();
-    const generalStatus = data?.status?.toLowerCase();
+    const reassignmentStatus = (data?.reassignment_status || "")?.toLowerCase();
+    const caseRequestStatus = (data?.case_request_status || "")?.toLowerCase();
+    const generalStatus = (data?.status || "")?.toLowerCase();
     const isEmergency = data?.is_emergency;
     const userRole = user?.role;
 
@@ -63,12 +64,13 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
         />
       );
     } else {
+
       const normalizedReassignmentStatus = reassignmentStatus?.toLowerCase();
       const normalizedCaseRequestStatus = caseRequestStatus?.toLowerCase();
-
+      (data?.status || "")?.toLowerCase()
       if (["JUDGEMENT DELIVERED", "STRUCK OUT"].includes(data?.status?.toUpperCase())) {
         badges.push(
-          <StatusBadge key="fallback-status" status={data.status} />
+          <StatusBadge key="fallback-status" status={data.status } />
         );
       } else {
         if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {

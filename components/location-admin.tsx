@@ -42,11 +42,25 @@ export const LocationAdmin = ({
     const [selectedSubDivision, setSelectedSubDivision] = useState<string | null>(null);
 
     // Handle Division Selection
+    // const handleDivisionChange = (newValue: string) => {
+    //     setSelectedTitle(newValue);
+    //     setSelectedSubDivision(null); // Reset sub-division when main division changes
+    //     onChange(newValue); // Pass division value to parent
+    // };
+
     const handleDivisionChange = (newValue: string) => {
+        if (newValue === "all") {
+            setSelectedTitle("all");
+            setSelectedSubDivision(null);
+            onChange("all");
+            return;
+        }
+
         setSelectedTitle(newValue);
-        setSelectedSubDivision(null); // Reset sub-division when main division changes
-        onChange(newValue); // Pass division value to parent
+        setSelectedSubDivision(null);
+        onChange(newValue);
     };
+
 
     return (
         <div className="w-full space-y-4">
@@ -56,9 +70,16 @@ export const LocationAdmin = ({
                     <SelectValue className="text-neutral-700 text-xs mx-4 " placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-zinc-900">
+                    <SelectItem
+                        variant="underlined"
+                        value="all"
+                        className="py-2"
+                    >
+                        All
+                    </SelectItem>
                     {data?.data?.length > 0 ? (
                         <>
-                            {data?.data?.map((location: any) => (
+                            {data?.data.map((location: any) => (
                                 <SelectItem
                                     variant="underlined"
                                     key={location.ID}
@@ -71,6 +92,7 @@ export const LocationAdmin = ({
                         </>
                     ) : null}
                 </SelectContent>
+
             </Select>
 
         </div>
