@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 const CaseActions: React.FC<{ handlePreviousStep: () => void }> = ({ handlePreviousStep }) => {
     const [isDenyDialogOpen, setIsDenyDialogOpen] = useState(false);
     const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
-
     return (
         <>
             <CardFooter className="flex h-20 py-0 justify-between">

@@ -71,7 +71,6 @@ export default function getNotifications() {
 
   if (error) return <><Icons.bell className="h-6 w-4 text-muted-foreground" /></>;
   // if (notifications.length === 0) return <p>No Notification yet.</p>;
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

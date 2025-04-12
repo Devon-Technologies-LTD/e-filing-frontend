@@ -1,4 +1,4 @@
- {
+{
     "id": "32e5a115-24c2-428d-84dc-7b6753079fe0",
     "case_suit_number": "CR/ABJ/0054e/2025",
     "user_id": "3604069d-3a4a-44a0-ab95-bbdbcb8449c5",
@@ -8,7 +8,7 @@
     "case_type_name": "CRIMINAL CASE",
     "sub_case_type_name": "FIRST INFORMATION REPORT (FIR)",
     "division_name": "Abaji ",
-    "sub_division_name": "",
+    "sub_division_name": "The whole area covered by the Abaji Area Council",
     "claimant": {
         "name": "test",
         "phone_number": "09037016221",
@@ -23,15 +23,15 @@
         "address": "",
         "whats_app": ""
     },
-    "status": "UNDER REVIEW",
+    "status": "ASSIGNED",
     "hearing_status": "",
     "judgement_status": "",
     "judgement_date": "0001-01-01T00:00:00Z",
     "judgment_file_path": "",
-    "assignment_status": "",
+    "assignment_status": "ASSIGNED",
     "review_status": "UNDER REVIEW",
     "amount": 3000,
-    "reassignment_status": "",
+    "reassignment_status": "REASSIGNMENT REQUEST SUBMITTED",
     "case_request_status": "",
     "division": {
         "id": "200f11d3-0d0b-4802-8a76-05117c39cae6",
@@ -41,7 +41,7 @@
         ],
         "status": "read",
         "created_at": "2025-02-25T13:52:40.779576Z",
-        "updated_at": "2025-04-12T10:37:28.424796Z"
+        "updated_at": "2025-04-12T13:48:08.924394Z"
     },
     "casetype": {
         "id": "d827cade-8e9c-4842-9533-ba919f47557d",
@@ -85,7 +85,8 @@
     "is_emergency": false,
     "seal_path": "https://api.sealgen.devontech.io/public/seal/no_624656442075471.png",
     "qrcode_path": "https://api.sealgen.devontech.io/public/qrcodes/no_624656442075471_qrcode.png",
-    "assigned_to": "00000000-0000-0000-0000-000000000000",
+    "assigned_to": "ccb1ff71-c9c6-4887-8906-02dd5badc4d0",
+    "assignee_name": "Abaji MAg",
     "documents": [
         {
             "id": "6dd5f842-2774-4fac-af2b-894dbef379af",
@@ -234,23 +235,23 @@
         "updated_at": "2025-04-11T04:17:35.263406Z"
     },
     "assigned_to_data": {
-        "id": "00000000-0000-0000-0000-000000000000",
-        "court_division_id": "00000000-0000-0000-0000-000000000000",
-        "court_division": "",
-        "sub_division": "",
-        "court_type": "",
-        "name": "",
-        "first_name": "",
-        "last_name": "",
-        "email": "",
+        "id": "ccb1ff71-c9c6-4887-8906-02dd5badc4d0",
+        "court_division_id": "200f11d3-0d0b-4802-8a76-05117c39cae6",
+        "court_division": "Abaji ",
+        "sub_division": "The whole area covered by the Abaji Area Council",
+        "court_type": "Magistrate Court",
+        "name": "Abaji MAg",
+        "first_name": "MAg",
+        "last_name": "Abaji",
+        "email": "abajipresidingmag@yopmail.com",
         "phone": "",
-        "gender": "",
-        "role": "",
-        "status": "",
-        "created_at": "0001-01-01T00:00:00Z",
-        "updated_at": "0001-01-01T00:00:00Z"
+        "gender": "male",
+        "role": "PRESIDING MAGISTRATE",
+        "status": "ACTIVE",
+        "created_at": "2025-04-04T16:43:44.937486Z",
+        "updated_at": "2025-04-04T16:45:16.840592Z"
     },
     "created_at": "2025-04-11T22:40:01.914222Z",
-    "updated_at": "2025-04-11T22:41:57.121994Z",
+    "updated_at": "2025-04-12T13:21:05.52177Z",
     "success": true
 }

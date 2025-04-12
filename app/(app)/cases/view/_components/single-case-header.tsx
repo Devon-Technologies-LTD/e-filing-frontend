@@ -68,14 +68,13 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
       if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
         const reassignedStatus =
-          normalizedReassignmentStatus === "approved" ? "ASSIGNED" : normalizedReassignmentStatus === "denied" ? "UNASSIGNED" : reassignmentStatus;
+          normalizedReassignmentStatus === "approved" ? "UNASSIGNED" : normalizedReassignmentStatus === "denied" ? "ASSIGNED" : reassignmentStatus;
         badges.push(
           <StatusBadge key="reassignment" status={reassignedStatus} />
         );
-      } else if (caseRequestStatus && normalizedCaseRequestStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
-        const requestStatus = normalizedCaseRequestStatus === "approved" ? "ASSIGNED" : normalizedCaseRequestStatus === "denied" ? "UNASSIGNED" : caseRequestStatus;
+      } else if (caseRequestStatus === "approved") {
         badges.push(
-          <StatusBadge key="case-request" status={requestStatus} />
+          <StatusBadge key="case-request" status="ASSIGNED" />
         );
       } else if (generalStatus && !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())) {
         badges.push(
@@ -104,8 +103,7 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
 
     if (userRole === ROLES.ASSIGNING_MAGISTRATE) {
       if (
-        requestStatus?.toUpperCase() === "CASE REQUEST SUBMITTED" &&
-        !["DENIED", "APPROVED"].includes(requestStatus)
+        requestStatus?.toUpperCase() === "CASE REQUEST SUBMITTED" && !["DENIED", "APPROVED"].includes(requestStatus)
       ) {
         return <CaseRequestStatusSheet id={id} trigger={<Button variant="outline" className="text-xs">REVIEW REQUEST</Button>} />;
       }
