@@ -103,9 +103,7 @@ export default function SubmittedRequestSheet({ trigger, id }: SubmittedRequestS
                             <p className="text-stone-600 text-sm font-bold mb-2">Case Suit Number</p>
                             <span className="text-app-primary font-bold text-sm">{data?.case_suit_number}</span>
                             <span className="text-app-primary font-bold text-sm">{data?.case_type_name}</span>
-                            <div className="pt-3 font-semibold text-sm text-right text-app-primary">
-                                View Case Details
-                            </div>
+                      
                         </div>
 
                         <p className="text-stone-600 text-sm font-bold mb-2">Reason for Re-assignment Request</p>

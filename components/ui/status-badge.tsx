@@ -21,6 +21,7 @@ const VARIANT_STYLES: Record<CaseStatus, string> = {
   assigned: "bg-lime-100 text-lime-900 border-lime-300",
   IsHearing: "bg-lime-100 text-lime-900 border-lime-300",
   "action required": "bg-red-100 text-red-900 border-red-300",
+  "UNASSIGNED": "bg-red-100 text-red-900 border-red-300",
 };
 
 interface StatusBadgeProps {
@@ -38,20 +39,12 @@ export function StatusBadge({
   tooltip,
   tooltipProps,
 }: StatusBadgeProps) {
-  const variantClass =
-    status in VARIANT_STYLES
-      ? VARIANT_STYLES[status as CaseStatus]
-      : "bg-gray-100 text-green-900 border-green-300";
+  const variantClass = status in VARIANT_STYLES ? VARIANT_STYLES[status as CaseStatus] : "bg-gray-100 text-green-900 border-green-300";
 
   const badgeElement = (
     <Badge
       variant="outline"
-      className={cn(
-        "whitespace-nowrap font-semibold uppercase py-1 px-2 border text-xs rounded-full",
-        variantClass,
-        className
-      )}
-    >
+      className={cn("whitespace-nowrap font-semibold uppercase py-1 px-2 border text-xs rounded-full",variantClass, className )}>
       {children || (status || "")?.toLowerCase() || "N/A"}
     </Badge>
   );
