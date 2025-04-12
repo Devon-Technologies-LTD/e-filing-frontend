@@ -58,10 +58,10 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
             <AvatarFallback className="bg-secondary-foreground text-black">
               {row.original.assignee_name
                 ? row.original.assignee_name
-                  .split(" ")
-                  .map((word) => word.charAt(0))
-                  .join("")
-                  .toUpperCase()
+                    .split(" ")
+                    .map((word) => word.charAt(0))
+                    .join("")
+                    .toUpperCase()
                 : ""}{" "}
             </AvatarFallback>
           </Avatar>
@@ -74,18 +74,22 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.original.status?.toLowerCase() || ""; // Safe fallback
+      const status = (row.original.status || "")?.toLowerCase() || ""; // Safe fallback
       const caseRequest = row.original.case_request_status || ""; // Safe fallback
-      const reassignmentStatus = row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
+      const reassignmentStatus =
+        row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
           status={
-            (caseRequest === "CASE REQUEST SUBMITTED") ? 
-            caseRequest : 
-            (reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED") ? reassignmentStatus 
-            : (status === "to be assigned") ? row.original.reassignment_status : status
+            caseRequest === "CASE REQUEST SUBMITTED"
+              ? caseRequest
+              : reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED"
+              ? reassignmentStatus
+              : status === "to be assigned"
+              ? row.original.reassignment_status
+              : status
           }
         />
       );
@@ -141,22 +145,25 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.original.status?.toLowerCase() || ""; // Safe fallback
+      const status = (row.original.status || "")?.toLowerCase() || ""; // Safe fallback
       const caseRequest = row.original.case_request_status || ""; // Safe fallback
-      const reassignmentStatus = row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
+      const reassignmentStatus =
+        row.original.reassignment_status.toUpperCase() || ""; // Safe fallback
       return (
         <StatusBadge
           tooltip=""
           tooltipProps={{ delayDuration: 200 }}
           status={
-            (caseRequest === "CASE REQUEST SUBMITTED") ? 
-            caseRequest : 
-            (reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED") ? reassignmentStatus 
-            : (status === "to be assigned") ? row.original.reassignment_status : status
+            caseRequest === "CASE REQUEST SUBMITTED"
+              ? caseRequest
+              : reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED"
+              ? reassignmentStatus
+              : status === "to be assigned"
+              ? row.original.reassignment_status
+              : status
           }
         />
       );
     },
   },
-
 ];

@@ -1,6 +1,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { dateFormatter } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { IUsersColumn } from "@/types/files/general";
@@ -36,7 +40,10 @@ export const createUserColumns = (
         return (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="truncate max-w-[200px] cursor-pointer" title={title}>
+              <div
+                className="truncate max-w-[200px] cursor-pointer"
+                title={title}
+              >
                 {title}
               </div>
             </TooltipTrigger>
@@ -110,21 +117,24 @@ export const createUserColumns = (
   //   ),
   // });
 
-
   // Add Status column conditionally
   columns.push({
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.original.status?.toLowerCase() || "";
+      const status = (row.original.status || "")?.toLowerCase() || "";
       const caseRequest = row.original.case_request_status || "";
-      const reassignmentStatus = row.original.reassignment_status?.toUpperCase() || "";
+      const reassignmentStatus =
+        row.original.reassignment_status?.toUpperCase() || "";
       const reviewStatus = row.original.review_status;
 
       let computedStatus = status;
 
       // If user is USER or LAWYER and review is denied, override status
-      if ((userRole === ROLES.USER || userRole === ROLES.LAWYER) && reviewStatus === "denied") {
+      if (
+        (userRole === ROLES.USER || userRole === ROLES.LAWYER) &&
+        reviewStatus === "denied"
+      ) {
         computedStatus = "denied";
       }
 
@@ -148,7 +158,6 @@ export const createUserColumns = (
       );
     },
   });
-
 
   return columns;
 };
@@ -197,7 +206,7 @@ export const UnassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
       <StatusBadge
         tooltip=""
         tooltipProps={{ delayDuration: 200 }}
-        status={row.original?.status?.toLowerCase() as any}
+        status={(row.original?.status || "")?.toLowerCase() as any}
       />
     ),
   },
@@ -271,9 +280,9 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Status",
     cell: ({ row }) => (
       <StatusBadge
-        tooltip={row.original?.review_status?.toLowerCase()}
+        tooltip={(row.original?.review_status || "")?.toLowerCase()}
         tooltipProps={{ delayDuration: 200 }}
-        status={row.original?.review_status?.toLowerCase() as any}
+        status={(row.original?.review_status || "")?.toLowerCase() as any}
       />
     ),
   },

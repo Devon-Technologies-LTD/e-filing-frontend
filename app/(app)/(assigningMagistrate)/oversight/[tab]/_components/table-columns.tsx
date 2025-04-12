@@ -84,7 +84,9 @@ export const createUserColumns = (
       header: "Status",
       accessorKey: "Status",
       cell: ({ row }) => {
-        const status = row.original.Status ? row.original.Status.toLowerCase() : "N/A";
+        const status = row.original.Status
+          ? (row.original.Status || "").toLowerCase()
+          : "N/A";
         const statusColors: Record<string, string> = {
           pending: "text-yellow-600 bg-yellow-100",
           active: "text-green-600 bg-green-100",
@@ -95,7 +97,9 @@ export const createUserColumns = (
             tooltip=""
             tooltipProps={{ delayDuration: 200 }}
             status={status as any}
-            className={`px-2 py-1 rounded-md ${statusColors[status] || "text-gray-600 bg-gray-100"}`}
+            className={`px-2 py-1 rounded-md ${
+              statusColors[status] || "text-gray-600 bg-gray-100"
+            }`}
           >
             {status}
           </StatusBadge>
