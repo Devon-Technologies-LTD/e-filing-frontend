@@ -39,7 +39,9 @@ export function SideNav({ data, costBreakdown }: Iprops) {
       <div className="mx-auto overflow-auto scrollbar-hide h-[calc(100vh-220px)] space-y-8">
         <div className="sticky top-0 bg-white z-10 space-y-2">
           <div className="text-3xl font-medium leading-8 text-primary">
-            {data?.status ? getTitle(data?.status?.toLowerCase() as any) : ""}
+            {data?.status
+              ? getTitle((data?.status || "")?.toLowerCase() as any)
+              : ""}
           </div>
         </div>
         <div className="space-y-3 ">

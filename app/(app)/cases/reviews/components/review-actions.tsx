@@ -97,13 +97,14 @@ export function ReviewActions({ data }: Iprops) {
         </Button>
       </div>
 
-      {data?.review_status?.toLowerCase() === CaseStatus.UnderReview && (
+      {(data?.review_status || "")?.toLowerCase() ===
+        CaseStatus.UnderReview && (
         <div className="w-1/2 flex gap-3 justify-end ">
           <DenyCase record={data.id} />
           <ApproveCase record={data.id} />
         </div>
       )}
-      {data?.status?.toLowerCase() === CaseStatus.Denied && (
+      {(data?.status || "")?.toLowerCase() === CaseStatus.Denied && (
         <div className="w-1/2 flex gap-3 justify-end ">
           <Button
             size={"lg"}
@@ -116,10 +117,9 @@ export function ReviewActions({ data }: Iprops) {
             Reason for denial
           </Button>
         </div>
-
       )}
 
-      {data.status?.toLowerCase() === CaseStatus.Denied && (
+      {(data.status || "")?.toLowerCase() === CaseStatus.Denied && (
         <DeniedReasonsModal
           isOpen={isReasonsModalOpen}
           setIsOpen={setIsReasonsModalOpen}
