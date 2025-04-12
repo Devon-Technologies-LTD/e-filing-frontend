@@ -22,14 +22,15 @@ export enum CaseStatus {
   Assigned = "assigned",
   Hearing = "IsHearing",
   ActionRequired = "action required",
+  UNASSIGNED = "UNASSIGNED",
 }
 
 export const getInitials = (name: string | undefined) => {
   if (!name) return "CN";
   const initials = name
-      .split(" ")
-      .map((n) => n[0])
-      .join("");
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
   return initials.toUpperCase();
 };
 

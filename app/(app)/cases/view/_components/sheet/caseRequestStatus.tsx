@@ -143,9 +143,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                         <p className="text-stone-600 text-sm font-bold mb-2">Request for Resignment Case Suit Number</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_suit_number ?? "N/A"}</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_type_name ?? "N/A"}</p>
-                        <div className="pt-3 font-semibold text-sm text-right text-app-primary">
-                            View Case Details
-                        </div>
+                      
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-2">
