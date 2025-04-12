@@ -66,30 +66,18 @@ export function SingleCaseHeader({ data, params }: { params: { id: string }; dat
       const normalizedReassignmentStatus = reassignmentStatus?.toLowerCase();
       const normalizedCaseRequestStatus = caseRequestStatus?.toLowerCase();
 
-      if (reassignmentStatus && normalizedReassignmentStatus !== "under review") {
+      if (reassignmentStatus && normalizedReassignmentStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
         const reassignedStatus =
-          normalizedReassignmentStatus === "approved"
-            ? "ASSIGNED"
-            : normalizedReassignmentStatus === "denied"
-              ? "UNASSIGNED"
-              : reassignmentStatus;
+          normalizedReassignmentStatus === "approved" ? "ASSIGNED" : normalizedReassignmentStatus === "denied" ? "UNASSIGNED" : reassignmentStatus;
         badges.push(
           <StatusBadge key="reassignment" status={reassignedStatus} />
         );
-      } else if (caseRequestStatus && normalizedCaseRequestStatus !== "under review") {
-        const requestStatus =
-          normalizedCaseRequestStatus === "approved"
-            ? "ASSIGNED"
-            : normalizedCaseRequestStatus === "denied"
-              ? "UNASSIGNED"
-              : caseRequestStatus;
+      } else if (caseRequestStatus && normalizedCaseRequestStatus !== "under review" && !generalStatus.toLowerCase().includes("hearing")) {
+        const requestStatus = normalizedCaseRequestStatus === "approved" ? "ASSIGNED" : normalizedCaseRequestStatus === "denied" ? "UNASSIGNED" : caseRequestStatus;
         badges.push(
           <StatusBadge key="case-request" status={requestStatus} />
         );
-      } else if (
-        generalStatus &&
-        !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())
-      ) {
+      } else if (generalStatus && !["approved", "under review", "denied"].includes(generalStatus.toLowerCase())) {
         badges.push(
           <StatusBadge key="fallback-status" status={data.status} />
         );
