@@ -254,7 +254,7 @@ const CaseFileService = {
   },
   async costAssesment(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(
-      `admin/casefile/cost-assessment/${id}`
+      `casefile/cost-assessment/${id}`
     );
     console.log("cost assessment response", response.data);
     return response.data;
