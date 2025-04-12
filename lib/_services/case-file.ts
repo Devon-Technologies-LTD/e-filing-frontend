@@ -252,6 +252,13 @@ const CaseFileService = {
     console.log("case filter response", response.data);
     return response.data;
   },
+  async costAssesment(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `admin/casefile/cost-assessment/${id}`
+    );
+    console.log("cost assessment response", response.data);
+    return response.data;
+  },
   async patchCaseType({
     payload,
     caseTypeId,
@@ -259,7 +266,6 @@ const CaseFileService = {
     payload: ICreateCaseFileData;
     caseTypeId: string;
   }): Promise<any> {
-
     const response = await axiosInstance.patch<ICreateCaseFileData>(
       `casetype/${caseTypeId}`,
       payload

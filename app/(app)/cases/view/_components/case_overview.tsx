@@ -18,6 +18,8 @@ import {
 import CostAssessment from "@/components/case-filing/cost-assessment";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { CostBreakdown } from "../../reviews/components/cost-breakdown";
+import { getCostAssesment } from "@/lib/actions/case-file";
 
 interface CaseOverviewProps {
   id: string;
@@ -39,9 +41,10 @@ interface CaseOverviewProps {
 
 interface IProps {
   data: CaseOverviewProps;
+  costBreakdown: any[];
 }
 
-export function CaseOverview({ data }: IProps) {
+export function CaseOverview({ data, costBreakdown }: IProps) {
   const [isEdit, setIsEdit] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -139,13 +142,7 @@ export function CaseOverview({ data }: IProps) {
             type={data?.casetype?.case_type_name || "----"}
             worth={data?.casetype?.recovery_amount || "----"}
           />
-          <CostAssessment
-            sub_case_type={data?.casetype?.sub_case_type_name || ""}
-            variant="view"
-            documents={data?.documents || []}
-            case_type={data?.casetype?.case_type_name || ""}
-            recovery_amount={data?.casetype?.recovery_amount || ""}
-          />
+          <CostBreakdown data={data} costBreakdown={costBreakdown} />
         </div>
       </ScrollArea>
     </div>

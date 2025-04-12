@@ -138,6 +138,15 @@ export async function changeCaseStatus(id: string, payload: IChangeStatus) {
     return handleApiError(error);
   }
 }
+export async function getCostAssesment(id: string) {
+  try {
+    const data = await CaseFileService.costAssesment(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function updateCaseFile({
   payload,
   caseFileId,

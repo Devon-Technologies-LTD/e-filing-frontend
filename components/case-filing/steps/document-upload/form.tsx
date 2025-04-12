@@ -62,7 +62,6 @@ export default function DocumentUploadForm() {
 
   const handleSuccess = (data: any) => {
     if (selectedDocType) {
-      toast.success("Upload successful");
       setSelectedDocType("");
     }
   };

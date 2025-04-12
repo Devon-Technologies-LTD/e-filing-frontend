@@ -17,8 +17,9 @@ export interface IDataProps {
 
 interface Iprops {
   data: IDataProps;
+  costBreakdown: any[];
 }
-export function SideNav({ data }: Iprops) {
+export function SideNav({ data, costBreakdown }: Iprops) {
   function getTitle(status: CaseStatus) {
     switch (status) {
       case CaseStatus.UnderReview:
@@ -67,7 +68,7 @@ export function SideNav({ data }: Iprops) {
           </div>{" "}
         </div>
         <div className="space-y-3 ">
-          <CostBreakdown data={data} />
+          <CostBreakdown data={data} costBreakdown={costBreakdown} />
         </div>
       </div>
     </div>
