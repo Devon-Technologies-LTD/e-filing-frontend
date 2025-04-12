@@ -40,7 +40,6 @@ export default function FamilyCaseForm() {
 
   const handleSuccess = () => {
     if (selectedDocType) {
-      toast.success("Upload successful");
       setSelectedDocType("");
     }
   };
