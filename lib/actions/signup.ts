@@ -93,9 +93,9 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
 }
 
 export async function SignupAction(_prevState: unknown, formData: FormData) {
+
     const data = Object.fromEntries(formData.entries());
     const image = formData.get("image") as File | null;
-
     if (!image) {
         return {
             status: 400,
@@ -103,6 +103,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
             message: "Image file is required",
         };
     }
+
     const allowedMimeTypes = [
         "image/jpeg",
         "image/png",
@@ -129,7 +130,6 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
             message: "File size exceeds the 5MB limit.",
         };
     }
-
 
     const result = SignupFormSchema.safeParse({ ...data });
     if (!result.success) {

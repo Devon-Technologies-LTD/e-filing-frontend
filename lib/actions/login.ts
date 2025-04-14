@@ -288,16 +288,18 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
       };
     }
     const token = cookies().get("TempToken")?.value;
+    console.log("my temp toke" + token);
+
     await authService.resetPassword({
       new_password: result.data.newPassword,
       confirm_password: result.data.confirmPassword,
       email: email,
     });
-    cookies().delete("otpEmail");
-    cookies().delete("TempToken");
+    // cookies().delete("otpEmail");
+    // cookies().delete("TempToken");
     return {
       status: 200,
-      message: "Password has been successfully, Please Login.",
+      message: "Password has been successfuly changed, Please Login.",
       success: true,
     };
   } catch (err: any) {
