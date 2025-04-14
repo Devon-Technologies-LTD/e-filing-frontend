@@ -49,12 +49,8 @@ const IndividualComponent = () => {
                 <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10" autoComplete="off">
                     <input type="hidden" name="role" value="USER" />
                     <input type="hidden" name="gender" value="male" />
-                    <div
-                        className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
-                        style={{
-                            height: "calc(100vh - 300px)",
-                        }}
-                    >
+                    <div className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
+                        style={{ height: "calc(100vh - 300px)" }}>
                         <div>
                             <p className="font-bold text-sm text-neutral-500">
                                 Fields marked with an asterisk (*) are required.

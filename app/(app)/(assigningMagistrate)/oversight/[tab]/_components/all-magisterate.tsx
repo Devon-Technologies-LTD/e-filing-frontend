@@ -112,7 +112,6 @@ export default function MagistratesTable() {
               onChange={handleSelectedMagisterate}
             />
           )}
-
           {user?.role === ROLES.DIRECTOR_MAGISTRATE && (
             <>
               <FilterDropdown

@@ -46,11 +46,8 @@ const DeniedReasonsModal = ({
             <p className="text-sm font-semibold">Denied on:</p>
           </section>
           <section className="space-y-1">
-            <Label
-              htmlFor="denial-reason"
-              className=" flex justify-between items-center text-base font-bold "
-            >
-              Reason{" "}
+            <Label htmlFor="denial-reason" className=" flex justify-between items-center text-base font-bold ">
+              Reason
             </Label>
             <Textarea
               disabled

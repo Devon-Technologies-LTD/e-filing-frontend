@@ -35,7 +35,7 @@ const ResetPaswordComponent = () => {
                 <p className="text-xs text-red-500 h-2 text-center">
                     {state && state?.message}
                 </p>
-                <SubmitButton value="LOG IN" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
+                <SubmitButton value="SUBMIT" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
                 <TransformingLineLink href="moreInfo" text="DONT HAVE ACCESS TO ACCOUNT?" />
             </form>
         </>
