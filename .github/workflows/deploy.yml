@@ -64,6 +64,7 @@ jobs:
             # Pull latest code from the repo
             rm package-lock.json yarn.lock
             git pull origin staging || exit
+            rm -rf .next node_modules
             tar -xzf next_and_node_modules.tar.gz
             rm next_and_node_modules.tar.gz
             docker compose up --build -d
