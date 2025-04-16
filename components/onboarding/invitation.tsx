@@ -84,7 +84,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
                                 type="text"
                                 label="National Identity Number (NIN)"
                                 name="nin"
-                                placeholder="e.g. 09876543212345"
+                                placeholder="09876543211"
                                 required
                                 error={errors.nin?.[0]}
                             />
@@ -100,7 +100,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
                             type="text"
                             label="SUPREME COURT NUMBER (SCN)"
                             name="scn"
-                            placeholder="e.g BA234RT75W"
+                            placeholder="SCN123456"
                             required
                             error={errors.scn?.[0]}
                         />
@@ -109,7 +109,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
                             type="text"
                             label="PHONE NUMBER"
                             name="phone_number"
-                            placeholder="e.g +2347030338024"
+                            placeholder="07030338024"
                             required
                             error={errors.phone_number?.[0]}
                         />
@@ -136,8 +136,3 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
 };
 
 export { InvitationComponent };
-
-
-// court_divison: string;
-// court_division_id: string;
-// sub_division: string;
