@@ -10,15 +10,10 @@ import { LocationSelect } from "@/components/location-select";
 import { RichTextEditor } from "@/components/rich-text-editor";
 export const DirectCriminalComplaintForm = () => {
   const {
-    caseType: {
-      direct_complain,
-      claimant_name,
-      defendant_name,
-      court_division,
-    },
+    caseType: { direct_complain, court_division, claimant, defendant },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
-  
+
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(
       ContentState?.createFromText(direct_complain ?? " ")
@@ -57,18 +52,15 @@ export const DirectCriminalComplaintForm = () => {
           type="text"
           label="CLAIMANT"
           disabled
-          value={claimant_name}
+          value={
+            claimant.length > 1
+              ? `${claimant[0].last_name} and ${claimant.length - 1} ORS`
+              : claimant[0].last_name ?? ""
+          }
           tooltipText="Enter the name of the claimant"
           tooltipIcon={InfoIcon}
           placeholder="eg. John Doe"
           error={caseTypeErrors?.claimant_name ?? ""}
-          onChange={({ target }) => {
-            dispatch(
-              updateCaseTypeName({
-                claimant_name: target.value,
-              })
-            );
-          }}
         />
         <p className="text-base font-bold">AND</p>
         <InputField
@@ -77,18 +69,15 @@ export const DirectCriminalComplaintForm = () => {
           type="text"
           disabled
           label="DEFENDANT"
-          value={defendant_name}
+          value={
+            defendant.length > 1
+              ? `${defendant[0].last_name} and ${defendant.length - 1} ORS`
+              : defendant[0].last_name ?? ""
+          }
           tooltipText="Enter the name of the defendant"
           tooltipIcon={InfoIcon}
           error={caseTypeErrors?.defendant_name ?? ""}
           placeholder="eg. John Doe"
-          onChange={({ target }) => {
-            dispatch(
-              updateCaseTypeName({
-                defendant_name: target.value,
-              })
-            );
-          }}
         />
         <div className="text-base font-bold">
           <p>THE REGISTRAR</p>

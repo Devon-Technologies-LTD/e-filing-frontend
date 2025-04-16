@@ -28,8 +28,8 @@ interface CaseOverviewProps {
   sub_case_type_name: string;
   title: string;
   created_at: string;
-  claimant: Claimant;
-  defendant: Claimant;
+  claimant: Claimant[];
+  defendant: Claimant[];
   division_name: string;
   casetype: Partial<ICaseTypes> & {
     id: string;
@@ -45,6 +45,7 @@ interface IProps {
 }
 
 export function CaseOverview({ data, costBreakdown }: IProps) {
+  console.log("dataaa", data);
   const [isEdit, setIsEdit] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -67,19 +68,41 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
         sub_case_type: data?.sub_case_type_name,
         case_file_id: data?.id,
         case_type_id: data?.casetype?.id,
-        defendant_address: formData.address,
-        defendant_email_address: formData.email,
-        defendant_name: formData.name,
-        defendant_phone_number: formData.phone,
-        claimant_address: data?.claimant.address,
-        claimant_email_address: data?.claimant.email_address,
-        claimant_phone_number: data?.claimant.phone_number,
-        claimant_name: data?.claimant.name,
-        claimant_whats_app: data?.claimant.whats_app,
+        // defendant_address: formData.address,
+        // defendant_email_address: formData.email,
+        // defendant_name: formData.name,
+        // defendant_phone_number: formData.phone,
         ...data,
+        claimant: data?.casetype.claimant,
+        defendant: [
+          {
+            address: formData?.address,
+            email_address: formData?.email,
+            first_name: formData?.firstname,
+            last_name: formData?.lastname,
+            // :formData?.lastname,
+          },
+        ],
       },
     });
   };
+  const defendant = data?.defendant?.[0];
+  const claimant = data?.defendant?.[0];
+  const defName =
+    `${defendant?.last_name || ""} ${defendant?.middle_name || ""} ${
+      defendant?.first_name || ""
+    }`.trim() || "N/A";
+  const claimName =
+    `${defendant?.last_name || ""} ${defendant?.middle_name || ""} ${
+      defendant?.first_name || ""
+    }`.trim() || "N/A";
+
+  const defEmail = defendant?.email_address || "N/A";
+  const claimEmail = claimant?.email_address || "N/A";
+  const defAddress = defendant?.address || "N/A";
+  const claimAddress = claimant?.address || "N/A";
+  const defPhone = defendant?.phone_number || "N/A";
+  const claimPhone = claimant?.phone_number || "N/A";
   return (
     <div className="space-y-6">
       {/* Case Header */}
@@ -115,10 +138,10 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
         {/* Claimant Information */}
         <div className="space-y-6">
           <ClaimantInfo
-            name={data?.claimant?.name ?? ""}
-            email={data?.claimant?.email_address ?? ""}
-            address={data?.claimant?.address ?? ""}
-            phone={data?.claimant?.phone_number ?? ""}
+            name={claimEmail}
+            email={claimEmail}
+            address={claimAddress}
+            phone={claimPhone}
           />
           <ClaimantInfo
             type="defendant"
@@ -126,10 +149,10 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
             setIsEdit={setIsEdit}
             onSubmit={handleSubmit}
             loading={formPending}
-            name={data?.defendant?.name ?? "N/A"}
-            email={data?.defendant?.email_address ?? "N/A"}
-            address={data?.defendant?.address ?? "N/A"}
-            phone={data?.defendant?.phone_number ?? "N/A"}
+            name={defName}
+            email={defEmail}
+            address={defAddress}
+            phone={defPhone}
           />
           {/* Magistrate Court Information */}
           <MagistrateCourtInfo
