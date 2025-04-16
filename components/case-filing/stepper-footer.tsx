@@ -71,6 +71,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
 
   const handleNextStep = async () => {
     if (current_step === 1) {
+      //  dispatch(updateStep(step + 1));
       await validate(() =>
         saveForm({
           case_file_id: caseType.case_file_id,
@@ -89,15 +90,40 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         );
       }
       if (caseType.case_type === CaseTypeData.CIVIL_CASE) {
-        await validateCivilCase(() => dispatch(updateStep(current_step + 1)));
+        // await validateCivilCase(() => dispatch(updateStep(current_step + 1)));
+        await validateCivilCase(() =>
+          saveForm({
+            case_file_id: caseType.case_file_id,
+            data: {
+              ...caseType,
+            },
+            legal_counsels,
+          })
+        );
       }
       if (caseType.case_type === CaseTypeData.CRIMINAL_CASE) {
         await validateCriminalCase(() =>
-          dispatch(updateStep(current_step + 1))
+          // dispatch(updateStep(current_step + 1))
+          saveForm({
+            case_file_id: caseType.case_file_id,
+            data: {
+              ...caseType,
+            },
+            legal_counsels,
+          })
         );
       }
       if (caseType.case_type === CaseTypeData.FAMILY_CASE) {
-        await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
+        // await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
+        await validateFamilyCase(() =>
+          saveForm({
+            case_file_id: caseType.case_file_id,
+            data: {
+              ...caseType,
+            },
+            legal_counsels,
+          })
+        );
       }
     } else if (current_step === 5) {
       saveForm({
@@ -114,7 +140,14 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         router.push("/cases");
       }
     } else {
-      dispatch(updateStep(current_step + 1));
+      // dispatch(updateStep(current_step + 1));
+       saveForm({
+         case_file_id: caseType.case_file_id,
+         data: {
+           ...caseType,
+         },
+         legal_counsels,
+       });
     }
   };
   const handleSaveAndContinue = async () => {

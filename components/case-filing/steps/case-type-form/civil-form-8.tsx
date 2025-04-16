@@ -7,6 +7,7 @@ import {
   addCaseTypeError,
   ICaseTypes,
   updateCaseTypeName,
+  updateMultipleCaseTypeFields,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
@@ -27,19 +28,9 @@ export const CivilCaseForm8 = (documents: any) => {
       dated_this,
       cost_claimed,
       interest_claimed,
-      claimant_name,
-      defendant_name,
       court_division,
-      claimant_phone_number,
-      claimant_address,
-      claimant_email_address,
-      claimant_whats_app,
-      defendant_address,
-      defendant_email_address,
-      defendant_phone_number,
-      defendant_whats_app,
-      counsel_name,
-      recovery_amount,
+      claimant,
+      defendant,
     },
     caseTypeErrors,
   } = useAppSelector((data) => data.caseFileForm);
@@ -56,6 +47,7 @@ export const CivilCaseForm8 = (documents: any) => {
       })
     );
   };
+  const { data: user } = useAppSelector((state) => state.profile);
 
   return (
     <div className="space-y-1">
@@ -90,7 +82,12 @@ export const CivilCaseForm8 = (documents: any) => {
             type="text"
             disabled
             label="CLAIMANT"
-            value={claimant_name}
+            value={
+              claimant.length > 1
+                ? `${claimant[0].last_name} and ${claimant.length - 1} ORS`
+                : claimant[0].last_name ?? ""
+            }
+            className="capitalize"
             tooltipContent={
               <ToolTipCard
                 className="p-"
@@ -100,9 +97,6 @@ export const CivilCaseForm8 = (documents: any) => {
             }
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
-            onChange={({ target }) => {
-              handleChange("claimant_name", target.value);
-            }}
             error={caseTypeErrors?.claimant_name ?? ""}
           />
         </div>
@@ -114,7 +108,11 @@ export const CivilCaseForm8 = (documents: any) => {
             disabled
             type="text"
             label="DEFENDANT"
-            value={defendant_name}
+            value={
+              defendant.length > 1
+                ? `${defendant[0].last_name} and ${defendant.length - 1} ORS`
+                : defendant[0].last_name ?? ""
+            }
             tooltipContent={
               <ToolTipCard
                 title="WHO IS A DEFENDANT?"
@@ -123,9 +121,6 @@ export const CivilCaseForm8 = (documents: any) => {
             }
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
-            onChange={({ target }) => {
-              handleChange("defendant_name", target.value);
-            }}
             error={caseTypeErrors?.defendant_name ?? ""}
           />
         </div>
@@ -139,11 +134,12 @@ export const CivilCaseForm8 = (documents: any) => {
               id="defendant_name"
               name="defendant_name"
               disabled
-              value={defendant_name}
+              value={
+                defendant.length > 1
+                  ? `${defendant[0].last_name} and ${defendant.length - 1} ORS`
+                  : defendant[0].last_name ?? ""
+              }
               type="text"
-              onChange={({ target }) => {
-                handleChange("defendant_name", target.value);
-              }}
               error={caseTypeErrors?.defendant_name ?? ""}
               label="NAME OF DEFENDANT"
               placeholder="e.g John Doe"
@@ -151,11 +147,26 @@ export const CivilCaseForm8 = (documents: any) => {
             <InputField
               id="defendant_address"
               name="defendant_address"
-              value={defendant_address}
-              type="text"
               onChange={({ target }) => {
-                handleChange("defendant_address", target.value);
+                const updatedClaimants = defendant.map((defendant) => ({
+                  ...defendant,
+                  ["address"]: target.value,
+                }));
+
+                dispatch(
+                  updateMultipleCaseTypeFields({
+                    fields: { defendant: updatedClaimants },
+                  })
+                );
+                dispatch(
+                  addCaseTypeError({
+                    address: "",
+                    defendant_address: "",
+                  })
+                );
               }}
+              value={defendant[0].address}
+              type="text"
               error={caseTypeErrors?.defendant_address ?? ""}
               label="PHYSICAL ADDRESS OF DEFENDANT"
               placeholder="e.g 22 Jahun Close Asokoro Abuja"
@@ -246,11 +257,8 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="claimant_address"
                 disabled
                 required
-                value={claimant_address}
+                value={claimant[0].address}
                 type="text"
-                onChange={({ target }) => {
-                  handleChange("claimant_address", target.value);
-                }}
                 error={caseTypeErrors?.claimant_address ?? ""}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
@@ -260,10 +268,7 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="claimant_phone_number"
                 disabled
                 required
-                value={claimant_phone_number}
-                onChange={({ target }) => {
-                  handleChange("claimant_phone_number", target.value);
-                }}
+                value={claimant[0].phone_number}
                 error={caseTypeErrors?.claimant_phone_number ?? ""}
                 type="text"
                 label="PHONE NUMBERS"
@@ -275,10 +280,7 @@ export const CivilCaseForm8 = (documents: any) => {
                 disabled
                 type="email"
                 label="Email Address"
-                value={claimant_email_address}
-                onChange={({ target }) => {
-                  handleChange("claimant_email_address", target.value);
-                }}
+                value={claimant[0].email_address}
                 error={caseTypeErrors?.claimant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
@@ -286,10 +288,20 @@ export const CivilCaseForm8 = (documents: any) => {
                 id="claimant_whats_app"
                 name="claimant_whats_app"
                 type="text"
+                value={claimant[0].whatsapp}
                 label="Whatsapp Number"
-                value={claimant_whats_app}
                 onChange={({ target }) => {
-                  handleChange("claimant_whats_app", target.value);
+                  const updatedClaimants = claimant.map((claimant) => ({
+                    ...claimant,
+                    ["whatsapp"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { claimant: updatedClaimants },
+                    })
+                  );
+                  
                 }}
                 error={caseTypeErrors?.claimant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
@@ -302,10 +314,24 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="defendant_address"
                 required
                 showErrorInLabel
-                value={defendant_address}
+                value={defendant[0].address}
                 type="text"
                 onChange={({ target }) => {
-                  handleChange("defendant_address", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["address"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );dispatch(
+                    addCaseTypeError({
+                      address: "",
+                    })
+                  );
+
                 }}
                 error={caseTypeErrors?.defendant_address ?? ""}
                 label="PHYSICAL ADDRESS"
@@ -316,9 +342,23 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="defendant_phone_number"
                 required
                 showErrorInLabel
-                value={defendant_phone_number}
+                value={defendant[0].phone_number}
                 onChange={({ target }) => {
-                  handleChange("defendant_phone_number", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["phone_number"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
+                  dispatch(
+                    addCaseTypeError({
+                      defendant_phone_number: "",
+                    })
+                  );
                 }}
                 error={caseTypeErrors?.defendant_phone_number ?? ""}
                 type="text"
@@ -330,9 +370,18 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="defendant_email_address"
                 type="email"
                 label="Email Address"
-                value={defendant_email_address}
+                value={defendant[0].email_address}
                 onChange={({ target }) => {
-                  handleChange("defendant_email_address", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["email_address"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
                 }}
                 error={caseTypeErrors?.defendant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
@@ -342,9 +391,18 @@ export const CivilCaseForm8 = (documents: any) => {
                 name="defendant_whats_app"
                 type="text"
                 label="Whatsapp Number"
-                value={defendant_whats_app}
+                value={defendant[0].whatsapp}
                 onChange={({ target }) => {
-                  handleChange("defendant_whats_app", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["whatsapp"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
                 }}
                 error={caseTypeErrors?.defendant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
@@ -415,11 +473,12 @@ export const CivilCaseForm8 = (documents: any) => {
           required
           showErrorInLabel
           id="counsel_name"
+          disabled
           name="counsel_name"
           type="text"
           label="NAME"
           placeholder="e.g claimant/counsel name"
-          value={counsel_name}
+          value={`${user?.last_name} ${user?.first_name}`}
           onChange={({ target }) => {
             handleChange("counsel_name", target.value);
           }}
@@ -430,8 +489,16 @@ export const CivilCaseForm8 = (documents: any) => {
           {documents?.documents?.map((doc: any) => (
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
-                allowedUploadTypes={["application/pdf"]}
-                types={"PDF"}
+                allowedUploadTypes={
+                  doc?.title?.toLowerCase() === "e-signature"
+                    ? null
+                    : ["application/pdf"]
+                }
+                types={
+                  doc?.title?.toLowerCase() === "e-signature"
+                    ? undefined
+                    : "PDF"
+                }
                 required
                 subTitle={case_type}
                 title={doc.title}

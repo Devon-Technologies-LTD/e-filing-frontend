@@ -14,12 +14,18 @@ const DivisionsService = {
     const response = await axiosInstance.get<IDivision[]>(`/user/division`);
     return response.data;
   },
+  async getTitles(): Promise<any[]> {
+    const response = await axiosInstance.get<IDivision[]>(`public/honorific`);
+    return response.data;
+  },
   async getAdminDivision(): Promise<IDivision[]> {
     const response = await axiosInstance.get<IDivision[]>(`/all-division `);
     return response.data;
   },
   async getAdminSubDivision(id: string): Promise<any[]> {
-    const response = await axiosInstance.get<any[]>(`/admin/division/sub-division/${id}`,);
+    const response = await axiosInstance.get<any[]>(
+      `/admin/division/sub-division/${id}`
+    );
     return response.data;
   },
 };

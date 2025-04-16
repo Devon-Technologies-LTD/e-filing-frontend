@@ -106,7 +106,7 @@ const InputField: React.FC<InputFieldProps> = ({
         >
           <span className="flex items-center">
             {label}
-            {required && <span className="text-red-500 ml-1 text-lg">*</span>}
+            {required && <span className="text-red-500 ml-1 text-xs">*</span>}
           </span>
 
           {showErrorInLabel && error && (

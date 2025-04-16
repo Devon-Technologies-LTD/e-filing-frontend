@@ -54,9 +54,10 @@ export default function DocumentUploadComponent({
   required,
   errorMessage,
   canDelete = false,
-  types="PNG, PDF, JPEG, JPG",
-  allowedUploadTypes = defaultAllowedUploadTypes,
+  types = "PNG, PDF, JPEG, JPG",
+  allowedUploadTypes,
 }: Iprops) {
+  const allowedTypes = allowedUploadTypes || defaultAllowedUploadTypes;
   const {
     caseType: { case_file_id },
     documents,
@@ -126,10 +127,8 @@ export default function DocumentUploadComponent({
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!allowedUploadTypes.includes(file.type)) {
-      toast.error(
-        `Invalid file type. Only ${types} allowed for upload.`
-      );
+    if (!allowedTypes?.includes(file.type)) {
+      toast.error(`Invalid file type. Only ${types} allowed for upload.`);
       e.target.value = "";
       return;
     }

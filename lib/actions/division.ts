@@ -24,6 +24,16 @@ export async function getUserDivision() {
     return handleApiError(error);
   }
 }
+export async function getTitles() {
+  try {
+    const data = await DivisionsService.getTitles();
+
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function getAdminDivision() {
   try {
     const data = await DivisionsService.getAdminDivision();

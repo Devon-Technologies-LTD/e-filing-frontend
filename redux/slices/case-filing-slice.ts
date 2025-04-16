@@ -1,3 +1,4 @@
+import { Claimant } from "@/components/case-filing/hooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IDocumentFileType {
@@ -20,18 +21,10 @@ export interface IDocumentFileType {
 export interface ICaseTypes {
   case_file_id: string;
   reference?: string;
+  claimant: Partial<Claimant>[];
+  defendant: Partial<Claimant>[];
   court_division: string;
-  claimant_address: string;
-  claimant_phone_number: string;
-  claimant_name: string;
-  claimant_email_address: string;
   sub_division: string;
-  claimant_whats_app: string;
-  defendant_name: string;
-  defendant_address: string;
-  defendant_whats_app: string;
-  defendant_email_address: string;
-  defendant_phone_number: string;
   title: string;
   case_type_id?: string;
   case_type: string;
@@ -72,7 +65,7 @@ interface FormState {
   caseType: ICaseTypes;
   totalAmount: number;
   documents: IDocumentFileType[];
-  caseTypeErrors: Partial<Record<keyof ICaseTypes, string>>;
+  caseTypeErrors: any;
 }
 
 const initialState: FormState = {
@@ -81,20 +74,22 @@ const initialState: FormState = {
   caseTypeErrors: {},
   paymentType: "remita",
   caseType: {
+    claimant: [
+      {
+        last_name: "",
+        middle_name: "",
+        first_name: "",
+
+        honorific: "",
+      },
+    ],
+    defendant: [
+      { last_name: "", first_name: "", middle_name: "", honorific: "" },
+    ],
     court_division: "",
     sub_division: "",
     reference: "",
     counsel_name: "",
-    claimant_address: "",
-    claimant_name: "",
-    claimant_whats_app: "",
-    claimant_email_address: "",
-    claimant_phone_number: "",
-    defendant_name: "",
-    defendant_address: "",
-    defendant_whats_app: "",
-    defendant_email_address: "",
-    defendant_phone_number: "",
     title: "",
     case_file_id: "",
     case_type: "",
@@ -139,10 +134,7 @@ const formSlice = createSlice({
     ) => {
       Object.assign(state.caseType, action.payload.fields);
     },
-    addCaseTypeError: (
-      state,
-      action: PayloadAction<Partial<Record<keyof ICaseTypes, string>>>
-    ) => {
+    addCaseTypeError: (state, action: PayloadAction<any>) => {
       const tempErrors = action.payload;
       state.caseTypeErrors = { ...state.caseTypeErrors, ...tempErrors };
     },

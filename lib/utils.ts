@@ -159,12 +159,12 @@ export function dateFormatter(dateString: string | Date) {
     )
       .toString()
       .padStart(2, "0")}/${date.getFullYear()} ${date
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
-          .getSeconds()
-          .toString()
-          .padStart(2, "0")}`,
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     relativeTime: (() => {
       const now = new Date();
       const diff = now.getTime() - date.getTime();
@@ -198,18 +198,36 @@ export function dateFormatter(dateString: string | Date) {
 export const getCaseTypeFields = (data: any) => ({
   // current_step: +data.steps,
   case_file_id: data?.id ?? "",
-  claimant_address: data?.claimant?.address ?? "",
-  claimant_email_address: data?.claimant?.email_address ?? "",
-  claimant_name: data?.claimant?.name ?? "",
-  claimant_phone_number: data?.claimant?.phone_number ?? "",
-  claimant_whats_app: data?.casetype?.claimant?.whats_app ?? "",
+  claimant: data?.claimant ?? [
+    {
+      last_name: "",
+      middle_name: "",
+      first_name: "",
+
+      honorific: "",
+    },
+  ],
+  // claimant_address: data?.claimant?.address ?? "",
+  // claimant_email_address: data?.claimant?.email_address ?? "",
+  // claimant_name: data?.claimant?.name ?? "",
+  // claimant_phone_number: data?.claimant?.phone_number ?? "",
+  // claimant_whats_app: data?.casetype?.claimant?.whats_app ?? "",
   court_division: data?.court_division_id ?? "",
-  defendant_address: data?.casetype?.defendant?.address ?? "",
-  defendant_email_address: data?.casetype?.defendant?.email_address ?? "",
-  defendant_name:
-    (data?.casetype?.defendant?.name || data?.defendant?.name) ?? "",
-  defendant_phone_number: data?.casetype?.defendant?.phone_number ?? "",
-  defendant_whats_app: data?.casetype?.defendant?.whats_app ?? "",
+  defendant: data?.defendant ?? [
+    {
+      last_name: "",
+      middle_name: "",
+      first_name: "",
+
+      honorific: "",
+    },
+  ],
+  // defendant_address: data?.casetype?.defendant?.address ?? "",
+  // defendant_email_address: data?.casetype?.defendant?.email_address ?? "",
+  // defendant_name:
+  //   (data?.casetype?.defendant?.name || data?.defendant?.name) ?? "",
+  // defendant_phone_number: data?.casetype?.defendant?.phone_number ?? "",
+  // defendant_whats_app: data?.casetype?.defendant?.whats_app ?? "",
   title: data?.title ?? "",
   case_type: data?.casetype?.case_type_name ?? "",
   case_type_id: data?.casetype?.id ?? "",
@@ -228,8 +246,7 @@ export const getCaseTypeFields = (data: any) => ({
   summon_court_description:
     data?.casetype?.summon_details?.court_description ?? "",
   summon_date: data?.casetype?.summon_details?.data ?? "",
-  summon_state_location:
-    data?.casetype?.summon_details?.state_location ?? "",
+  summon_state_location: data?.casetype?.summon_details?.state_location ?? "",
   summon_time: data?.casetype?.summon_details?.time ?? "",
   value_worth: data?.casetype?.value_worth ?? "",
   counsel_name: data?.casetype?.legal_counsels[0]?.name ?? "",
@@ -339,13 +356,21 @@ export const getExcludedStatus = (tab: TCaseFilterType) => {
     case "recent":
       return [CaseStatus.Draft];
     case "approved-review":
-      return [CaseStatus.Draft, CaseStatus.Denied, CaseStatus.JudgementDelivered, CaseStatus.StruckOut];
-    case "active":
-      return [CaseStatus.Draft, CaseStatus.Denied, CaseStatus.JudgementDelivered, CaseStatus.StruckOut];
-    default:
       return [
-        CaseStatus.Draft
+        CaseStatus.Draft,
+        CaseStatus.Denied,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.StruckOut,
       ];
+    case "active":
+      return [
+        CaseStatus.Draft,
+        CaseStatus.Denied,
+        CaseStatus.JudgementDelivered,
+        CaseStatus.StruckOut,
+      ];
+    default:
+      return [CaseStatus.Draft];
   }
 };
 

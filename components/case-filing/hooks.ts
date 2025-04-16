@@ -30,11 +30,15 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 export interface Claimant {
-  name: string;
   phone_number: string;
   email_address: string;
   address: string;
   whats_app?: string;
+  first_name: string;
+  honorific: string;
+  last_name: string;
+  middle_name: string;
+  whatsapp?: string;
 }
 
 interface SaveFormParams {
@@ -58,7 +62,7 @@ export function useCreateCaseFile(
 ) {
   return useMutation({
     mutationFn: async (data) => {
-      return await createCaseFile(data);
+      return await createCaseFile(data as any);
     },
     ...options,
   });
@@ -134,22 +138,22 @@ export const useSaveForm = ({
       const saveStep1 = async () => {
         const payload = {
           // steps: String(step),
-          claimant: {
-            name: data.claimant_name,
-            phone_number: data.claimant_phone_number,
-            email_address: data.claimant_email_address,
-            address: data.claimant_address,
-            whats_app: data.claimant_whats_app,
-          },
+          claimant: data.claimant,
           court_division_id: data.court_division,
-          defendant: {
-            name: data.defendant_name,
-            phone_number: data.defendant_phone_number,
-            email_address: data.defendant_email_address,
-            address: data.defendant_address,
-            whats_app: data.defendant_whats_app,
-          },
-          title: data.title,
+          defendant: data.defendant,
+          title: `${
+            (data as any).claimant.length > 1
+              ? `${(data as any).claimant[0].last_name} and ${
+                  (data as any).claimant.length - 1
+                } ORS`
+              : (data as any).claimant[0].last_name ?? ""
+          } vs ${
+            (data as any).defendant.length > 1
+              ? `${(data as any).defendant[0].last_name} and ${
+                  (data as any).defendant.length - 1
+                } ORS`
+              : (data as any).defendant[0].last_name ?? ""
+          }`,
           description: "",
         };
         if (case_file_id) {
@@ -165,21 +169,9 @@ export const useSaveForm = ({
           id: data?.case_type_id,
           case_type_name: data.case_type,
           casefile_id: data.case_file_id,
-          claimant: {
-            address: data.claimant_name,
-            email_address: data.claimant_email_address,
-            name: data.claimant_name,
-            phone_number: data.claimant_phone_number,
-            whats_app: data.claimant_whats_app,
-          },
+          claimant: data.claimant,
           cost_claimed: data.cost_claimed,
-          defendant: {
-            address: data.defendant_address,
-            email_address: data.defendant_email_address,
-            name: data.defendant_name,
-            phone_number: data.defendant_phone_number,
-            whats_app: data.defendant_whats_app,
-          },
+          defendant: data.defendant,
           legal_counsels: [
             {
               name: data.counsel_name ?? "",

@@ -11,21 +11,15 @@ import {
   addCaseTypeError,
   ICaseTypes,
   updateCaseTypeName,
+  updateMultipleCaseTypeFields,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { TextwithToolTip, ToolTipCard } from "@/components/ui/tool-tip-card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
-import { CaseTypeData, CivilDocumentTitles } from "@/constants";
 import { LocationSelect } from "@/components/location-select";
 
 export const CivilCaseForm5 = (documents: any) => {
@@ -38,18 +32,9 @@ export const CivilCaseForm5 = (documents: any) => {
       case_type,
       sub_case_type,
       dated_this,
-      claimant_name,
-      defendant_name,
       court_division,
-      claimant_phone_number,
-      claimant_address,
-      claimant_email_address,
-      claimant_whats_app,
-      defendant_address,
-      defendant_email_address,
-      defendant_phone_number,
-      defendant_whats_app,
-      counsel_name,
+      claimant,
+      defendant,
     },
 
     caseTypeErrors,
@@ -59,6 +44,7 @@ export const CivilCaseForm5 = (documents: any) => {
       ContentState?.createFromText(property_description ?? "")
     )
   );
+  const { data: user } = useAppSelector((state) => state.profile);
   const [reliefSought, setReliefSought] = useState(() =>
     EditorState.createWithContent(
       ContentState?.createFromText(relief_sought ?? "")
@@ -156,7 +142,12 @@ export const CivilCaseForm5 = (documents: any) => {
             name="claimant"
             type="text"
             label="CLAIMANT"
-            value={claimant_name}
+            value={
+              claimant.length > 1
+                ? `${claimant[0].last_name} and ${claimant.length - 1} ORS`
+                : claimant[0].last_name ?? ""
+            }
+            className="capitalize"
             tooltipContent={
               <ToolTipCard
                 className="p-"
@@ -166,9 +157,6 @@ export const CivilCaseForm5 = (documents: any) => {
             }
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
-            onChange={({ target }) => {
-              handleChange("claimant_name", target.value);
-            }}
             error={caseTypeErrors?.claimant_name ?? ""}
           />
         </div>
@@ -180,7 +168,11 @@ export const CivilCaseForm5 = (documents: any) => {
             name="defendant"
             type="text"
             label="DEFENDANT(S)"
-            value={defendant_name}
+            value={
+              defendant.length > 1
+                ? `${defendant[0].last_name} and ${defendant.length - 1} ORS`
+                : defendant[0].last_name ?? ""
+            }
             tooltipContent={
               <ToolTipCard
                 title="WHO IS A DEFENDANT?"
@@ -189,9 +181,6 @@ export const CivilCaseForm5 = (documents: any) => {
             }
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
-            onChange={({ target }) => {
-              handleChange("defendant_name", target.value);
-            }}
             error={caseTypeErrors?.defendant_name ?? ""}
           />
         </div>
@@ -298,11 +287,8 @@ export const CivilCaseForm5 = (documents: any) => {
                 disabled
                 required
                 showErrorInLabel
-                value={claimant_address}
+                value={claimant[0].address}
                 type="text"
-                onChange={({ target }) => {
-                  handleChange("claimant_address", target.value);
-                }}
                 label="PHYSICAL ADDRESS"
                 placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
                 error={caseTypeErrors?.claimant_address ?? ""}
@@ -313,10 +299,7 @@ export const CivilCaseForm5 = (documents: any) => {
                 required
                 disabled
                 showErrorInLabel
-                value={claimant_phone_number}
-                onChange={({ target }) => {
-                  handleChange("claimant_phone_number", target.value);
-                }}
+                value={claimant[0].phone_number}
                 type="text"
                 label="PHONE NUMBERS"
                 placeholder="eg. 2347030338024"
@@ -328,22 +311,28 @@ export const CivilCaseForm5 = (documents: any) => {
                 disabled
                 type="email"
                 label="Email Address"
-                value={claimant_email_address}
-                onChange={({ target }) => {
-                  handleChange("claimant_email_address", target.value);
-                }}
+                value={claimant[0].email_address}
                 error={caseTypeErrors?.claimant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
               />
               <InputField
                 id="claimant_whats_app"
                 name="claimant_whats_app"
-                disabled
                 type="text"
                 label="Whatsapp Number"
-                value={claimant_whats_app}
+                value={claimant[0].whatsapp}
                 onChange={({ target }) => {
-                  handleChange("claimant_whats_app", target.value);
+                  const updatedClaimants = claimant.map((claimant) => ({
+                    ...claimant,
+                    ["whatsapp"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { claimant: updatedClaimants },
+                    })
+                  );
+                  // handleChange("defendant_email_address", target.value);
                 }}
                 error={caseTypeErrors?.claimant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
@@ -356,10 +345,26 @@ export const CivilCaseForm5 = (documents: any) => {
                 name="defendant_address"
                 required
                 showErrorInLabel
-                value={defendant_address}
+                value={defendant[0].address}
                 type="text"
                 onChange={({ target }) => {
-                  handleChange("defendant_address", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["address"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
+                  dispatch(
+                    addCaseTypeError({
+                      address: "",
+                      defendant_address: "",
+                    })
+                  );
+                  // handleChange("defendant_email_address", target.value);
                 }}
                 error={caseTypeErrors?.defendant_address ?? ""}
                 label="PHYSICAL ADDRESS"
@@ -370,9 +375,24 @@ export const CivilCaseForm5 = (documents: any) => {
                 name="defendant_phone_number"
                 required
                 showErrorInLabel
-                value={defendant_phone_number}
+                value={defendant[0].phone_number}
                 onChange={({ target }) => {
-                  handleChange("defendant_phone_number", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["phone_number"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
+                  dispatch(
+                    addCaseTypeError({
+                      defendant_phone_number: "",
+                    })
+                  );
+                  // handleChange("defendant_email_address", target.value);
                 }}
                 error={caseTypeErrors?.defendant_phone_number ?? ""}
                 type="text"
@@ -384,9 +404,19 @@ export const CivilCaseForm5 = (documents: any) => {
                 name="defendant_email_address"
                 type="email"
                 label="Email Address"
-                value={defendant_email_address}
+                value={defendant[0].email_address}
                 onChange={({ target }) => {
-                  handleChange("defendant_email_address", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["email_address"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
+                  // handleChange("defendant_email_address", target.value);
                 }}
                 error={caseTypeErrors?.defendant_email_address ?? ""}
                 placeholder="eg. johndoe@gmail.com"
@@ -396,9 +426,19 @@ export const CivilCaseForm5 = (documents: any) => {
                 name="defendant_whats_app"
                 type="text"
                 label="Whatsapp Number"
-                value={defendant_whats_app}
+                value={defendant[0].whatsapp}
                 onChange={({ target }) => {
-                  handleChange("defendant_whats_app", target.value);
+                  const updatedClaimants = defendant.map((defendant) => ({
+                    ...defendant,
+                    ["whatsapp"]: target.value,
+                  }));
+
+                  dispatch(
+                    updateMultipleCaseTypeFields({
+                      fields: { defendant: updatedClaimants },
+                    })
+                  );
+                  // handleChange("defendant_email_address", target.value);
                 }}
                 error={caseTypeErrors?.defendant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
@@ -467,11 +507,12 @@ export const CivilCaseForm5 = (documents: any) => {
           required
           id="counsel_name"
           name="counsel_name"
+          disabled
           showErrorInLabel
           type="text"
           label="NAME"
           placeholder="e.g claimant/counsel name"
-          value={counsel_name}
+          value={`${user?.last_name} ${user?.first_name}`}
           onChange={({ target }) => {
             handleChange("counsel_name", target.value);
           }}
@@ -482,8 +523,6 @@ export const CivilCaseForm5 = (documents: any) => {
           {documents?.documents?.map((doc: any) => (
             <div className="bg-white p-4 lg:w-1/2 w-full">
               <DocumentUploadComponent
-                allowedUploadTypes={["application/pdf"]}
-                types={"PDF"}
                 required
                 subTitle={case_type}
                 title={doc.title}

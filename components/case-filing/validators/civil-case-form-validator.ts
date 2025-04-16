@@ -39,7 +39,7 @@ const regexMatch = (
 ) => (value && regex.test(value) ? undefined : message);
 
 type ValidationRule = {
-  field: keyof Partial<ICaseTypes>;
+  field: any;
   check: (...args: any[]) => string | undefined;
   args?: any[];
   message: string;
@@ -58,34 +58,34 @@ export const civilCaseSchema = z
     sum_claimed: z.string().optional(),
     cost_claimed: z.string().optional(),
     interest_claimed: z.string().optional(),
-    claimant_name: z
-      .string()
-      .min(2, "Claimant name must be at least 2 characters")
-      .regex(
-        /^[A-Za-z-' ]+$/,
-        "Name can only contain letters, hyphens, apostrophes, and spaces"
-      ),
-    claimant_phone_number: z
-      .string()
-      .nonempty("Claimant phone number is required")
-      .regex(/^\d+$/, "Phone number must contain only numbers"),
-    counsel_name: z
-      .string()
-      .optional(),
+    // claimant_name: z
+    //   .string()
+    //   .min(2, "Claimant name must be at least 2 characters")
+    //   .regex(
+    //     /^[A-Za-z-' ]+$/,
+    //     "Name can only contain letters, hyphens, apostrophes, and spaces"
+    //   ),
+    // claimant_phone_number: z
+    //   .string()
+    //   .nonempty("Claimant phone number is required")
+    //   .regex(/^\d+$/, "Phone number must contain only numbers"),
+    // counsel_name: z
+    //   .string()
+    //   .optional(),
     claimant_whats_app: z.string().optional(),
     // .nonempty("Claimant phone number is required")
     // .regex(/^\d+$/, "Phone number must contain only numbers"),
-    claimant_email_address: z.string().optional(),
-    claimant_address: z
-      .string()
-      .min(2, "Claimant address must be at least 2 characters"),
-    defendant_name: z
-      .string()
-      .min(2, "Defendant name must be at least 2 characters")
-      .regex(
-        /^[A-Za-z-' ]+$/,
-        "Name can only contain letters, hyphens, apostrophes, and spaces"
-      ),
+    // claimant_email_address: z.string().optional(),
+    // claimant_address: z
+    //   .string()
+    //   .min(2, "Claimant address must be at least 2 characters"),
+    // defendant_name: z
+    //   .string()
+    //   .min(2, "Defendant name must be at least 2 characters")
+    //   .regex(
+    //     /^[A-Za-z-' ]+$/,
+    //     "Name can only contain letters, hyphens, apostrophes, and spaces"
+    //   ),
     defendant_phone_number: z.string().optional(),
     defendant_email_address: z.string().optional(),
     defendant_whats_app: z.string().optional(),
@@ -101,11 +101,11 @@ export const civilCaseSchema = z
           check: requiredField,
           message: "Court division is required",
         },
-        {
-          field: "counsel_name",
-          check: requiredField,
-          message: "Counsel Name is required",
-        },
+        // {
+        //   field: "counsel_name",
+        //   check: requiredField,
+        //   message: "Counsel Name is required",
+        // },
         {
           field: "recovery_amount",
           check: requiredField,
@@ -116,23 +116,23 @@ export const civilCaseSchema = z
           check: requiredField,
           message: "Address is required",
         },
-        {
-          field: "defendant_phone_number",
-          check: requiredField,
-          message: "Phone number is required",
-        },
+        // {
+        //   field: "defendant_phone_number",
+        //   check: requiredField,
+        //   message: "Phone number is required",
+        // },
         {
           field: "defendant_address",
           check: minLength,
           args: [2],
           message: "Address must be at least 2 characters",
         },
-        {
-          field: "defendant_phone_number",
-          check: regexMatch,
-          args: [/^\d+$/],
-          message: "Phone number must contain only numbers",
-        },
+        // {
+        //   field: "defendant_phone_number",
+        //   check: regexMatch,
+        //   args: [/^\d+$/],
+        //   message: "Phone number must contain only numbers",
+        // },
       ];
 
       validations.forEach(({ field, check, args = [], message }) => {
@@ -153,16 +153,16 @@ export const civilCaseSchema = z
           check: requiredField,
           message: "Recovery amount is required",
         },
-        {
-          field: "counsel_name",
-          check: requiredField,
-          message: "Counsel Name is required",
-        },
-        {
-          field: "court_division",
-          check: requiredField,
-          message: "Court division is required",
-        },
+        // {
+        //   field: "counsel_name",
+        //   check: requiredField,
+        //   message: "Counsel Name is required",
+        // },
+        // {
+        //   field: "court_division",
+        //   check: requiredField,
+        //   message: "Court division is required",
+        // },
         {
           field: "sum_claimed",
           check: requiredField,
@@ -173,11 +173,11 @@ export const civilCaseSchema = z
           check: requiredField,
           message: "Address is required",
         },
-        {
-          field: "defendant_phone_number",
-          check: requiredField,
-          message: "Phone number is required",
-        },
+        // {
+        //   field: "defendant_phone_number",
+        //   check: requiredField,
+        //   message: "Phone number is required",
+        // },
         {
           field: "dated_this",
           check: requiredField,
@@ -189,12 +189,12 @@ export const civilCaseSchema = z
           args: [2],
           message: "Address must be at least 2 characters",
         },
-        {
-          field: "defendant_phone_number",
-          check: regexMatch,
-          args: [/^\d+$/],
-          message: "Phone number must contain only numbers",
-        },
+        // {
+        //   field: "defendant_phone_number",
+        //   check: regexMatch,
+        //   args: [/^\d+$/],
+        //   message: "Phone number must contain only numbers",
+        // },
       ];
 
       validations.forEach(({ field, check, args = [], message }) => {
@@ -212,7 +212,13 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
 
   const validate = async (_callback?: () => void) => {
     const schema = civilCaseSchema;
-    const result = schema.safeParse(store);
+    console.log("first", store);
+    const result = schema.safeParse({
+      ...store,
+      defendant_address: store.defendant[0].address,
+      defendant_phone_number: store.defendant[0].phone_number,
+    });
+    console.log("result", result);
     const errors: Errors = {};
     // Validate the form fields
     if (!result.success) {

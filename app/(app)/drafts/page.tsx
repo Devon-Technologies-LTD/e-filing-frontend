@@ -81,6 +81,8 @@ export default function Page() {
 
   useEffect(() => {
     if (singleDraftData && selectedRow) {
+  console.log("singleDraftData", singleDraftData);
+
       const caseTypeFields = getCaseTypeFields(singleDraftData);
       dispatch(updateMultipleCaseTypeFields({ fields: caseTypeFields }));
       dispatch(updateLegalCounsels(singleDraftData?.casetype?.legal_counsels));

@@ -1,14 +1,15 @@
 import { CaseStatus, CaseTypeData } from "@/constants";
 import { axiosInstance } from "../_api/axios-config";
 import { changeCaseStatus } from "../actions/case-file";
+import { Claimant } from "@/components/case-filing/hooks";
 
 export interface ICreateCaseFileData {
   title?: string;
   // steps?: string;
   description?: string;
   court_division_id?: string;
-  claimant?: Partial<Claimant>;
-  defendant?: Partial<Claimant>;
+  claimant?: Partial<Claimant>[];
+  defendant?: Partial<Claimant>[];
 }
 export interface CaseTypeDetails {
   id?: string;
@@ -17,8 +18,8 @@ export interface CaseTypeDetails {
   case_type_name?: string;
   sub_case_type_name?: string;
   recovery_amount?: string;
-  claimant?: Partial<Claimant>;
-  defendant?: Partial<Claimant>;
+  claimant?: Partial<Claimant>[];
+  defendant?: Partial<Claimant>[];
   registrar?: string;
   direct_complain?: string;
   value_worth?: string;
@@ -51,13 +52,6 @@ export interface SummonDetails {
   date?: string | null;
 }
 
-interface Claimant {
-  name: string;
-  phone_number: string;
-  email_address: string;
-  address: string;
-  whats_app?: string;
-}
 
 export interface IDraftFilter {
   casetype?: string | null;
