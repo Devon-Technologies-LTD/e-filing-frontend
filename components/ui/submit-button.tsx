@@ -13,6 +13,7 @@ type TProps = {
   className?: string;
   children?: React.ReactNode;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 export type SubmitButtonType = {
@@ -22,7 +23,7 @@ export type SubmitButtonType = {
 const SubmitButton = forwardRef<SubmitButtonType, TProps>((props, ref) => {
   const { pending: formPending } = useFormStatus();
   const isPending = props.loading ?? formPending;
-
+  const disabled = props.disabled;
   useImperativeHandle(ref, () => ({
     isPending,
   }));
@@ -30,13 +31,16 @@ const SubmitButton = forwardRef<SubmitButtonType, TProps>((props, ref) => {
   return (
     <Button
       aria-disabled={isPending}
-      disabled={isPending}
+      disabled={isPending || disabled}
       form={props.submitform}
       type="submit"
-      className={cn("flex items-center justify-center gap-2", props.className)}
+      className={cn(
+        "flex items-center justify-center gap-2",
+        (isPending || disabled) && "opacity-50 cursor-not-allowed",
+        props.className
+      )}
     >
       {props.children}
-
       <span>
         {isPending ? (
           <span className="flex gap-2 items-center">
@@ -48,6 +52,7 @@ const SubmitButton = forwardRef<SubmitButtonType, TProps>((props, ref) => {
         )}
       </span>
     </Button>
+
   );
 });
 

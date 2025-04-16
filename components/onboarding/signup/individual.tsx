@@ -10,11 +10,12 @@ import DragDropUploader from "./DragDropUploaderNIN";
 import { SignupAction } from "@/lib/actions/signup";
 import { isFieldErrorObject } from "@/types/auth";
 import { OnboardingContext } from '@/context/OnboardingContext';
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 const IndividualComponent = () => {
     const [state, dispatch] = useFormState(SignupAction, undefined);
-    const { loading, setLoading } = useContext(OnboardingContext);
+    const { loading, setLoading, active, setActive } = useContext(OnboardingContext);
     const [email, setEmail] = useState("");
 
     const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
@@ -46,7 +47,7 @@ const IndividualComponent = () => {
     return (
         <>
             <div className="flex flex-col md:flex-row w-full h-full  md:space-y-0 md:space-x-6">
-                <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10" autoComplete="off">
+                <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-3/4 space-y-10" autoComplete="off">
                     <input type="hidden" name="role" value="USER" />
                     <input type="hidden" name="gender" value="male" />
                     <div className="w-full flex-1 space-y-6 overflow-y-auto scrollbar-hide px-4 md:px-0"
@@ -97,7 +98,7 @@ const IndividualComponent = () => {
                                     type="text"
                                     label="National Identity Number (NIN)"
                                     name="nin"
-                                    placeholder="e.g. 09876543212345"
+                                    placeholder="09876543211"
                                     required
                                     error={errors.nin?.[0]}
                                 />
@@ -113,13 +114,25 @@ const IndividualComponent = () => {
                                 type="text"
                                 label="PHONE NUMBER"
                                 name="phone_number"
-                                placeholder="e.g 07030338024"
+                                placeholder="07030338024"
                                 required
                                 error={errors.phone_number?.[0]}
                             />
                             <LoginPasswordField showStrength={true} label="PASSWORD" name="password" placeholder="********" />
                             <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="********" />
-
+                            <div className="items-top flex space-x-2">
+                                <Checkbox
+                                    id="terms1"
+                                    name="is_disclaimer"
+                                    checked={active}
+                                    onCheckedChange={(checked) => setActive(!!checked)}
+                                />
+                                <div className="grid gap-1.5 leading-none">
+                                    <p className="text-sm font-semibold text-muted-foreground">
+                                        I confirm that the information I have provided is true and accurate.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

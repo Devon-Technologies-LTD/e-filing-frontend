@@ -93,7 +93,6 @@ export async function OTPAction(_prevState: unknown, formData: FormData) {
 }
 
 export async function SignupAction(_prevState: unknown, formData: FormData) {
-
     const data = Object.fromEntries(formData.entries());
     const image = formData.get("image") as File | null;
     if (!image) {
