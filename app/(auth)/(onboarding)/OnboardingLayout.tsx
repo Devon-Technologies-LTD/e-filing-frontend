@@ -1,4 +1,3 @@
-
 'use client'
 import { FormProvider } from "@/context/file-case";
 import { LogoIcon } from "@/components/svg/logoIcon";
@@ -24,11 +23,15 @@ export default function CaseFilingLayout({
   close,
 }: OnboardingLayout) {
   const [loading, setLoading] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
+
   return (
-    <>
-      <OnboardingContext.Provider value={{ loading, setLoading }}>
-        <FormProvider>
-          <header className="bg-white shadow-sm px-2 py-6">
+    <OnboardingContext.Provider value={{ loading, setLoading, active, setActive }}>
+      <FormProvider>
+        <div className="flex h-dvh flex-col">
+          {/* Header */}
+
+          <header className="bg-white shadow-sm px-2 py-6 fixed top-0 left-0 right-0 z-50">
             <div className="flex items-center justify-between mx-8">
               <div className="flex items-center space-x-4">
                 <LogoIcon className="h-8 w-8" />
@@ -48,44 +51,51 @@ export default function CaseFilingLayout({
               </div>
             </div>
           </header>
-          <div className="h-full md:grid md:grid-cols-[minmax(220px,_4fr)_minmax(0,_8fr)] md:gap-6 lg:grid-cols-[minmax(240px,_4fr)_minmax(0,_8fr)] lg:gap-10 container">
-            <aside className="fixed top-14 z-30 hidden h-[calc(100vh-4.5rem)] w-full shrink-0 md:sticky md:block">
-              <div className="no-scrollbar h-full overflow-auto py-6 pr-4 lg:py-8">
-                <div className="max-h-screen bg-white border-r pr-12">
-                  <div className="mx-auto overflow-auto scrollbar-hide h-[calc(100vh-220px)] space-y-8">
-                    <div className="sticky top-0 bg-white z-10 space-y-2">
-                      {(currentStep > 0 &&
-                        <div className="text-xs font-semibold text-gray-600">
-                          STEP {currentStep} OF 3
-                        </div>
-                      )}
-                      <div className="text-3xl font-medium leading-8 text-primary">
-                        {heading}
+          <section className="flex h-screen pt-[5.5rem]">
+            {/* Aside */}
+            <aside className="fixed top-[5.5rem] left-0 z-40 hidden lg:block w-1/5 h-[calc(100vh-5.5rem)] bg-white border-r overflow-y-auto">
+              <div className="p-6 pr-4 lg:py-8">
+                <div className="mx-auto space-y-8">
+                  <div className="sticky top-0 bg-white z-10 space-y-2">
+                    {currentStep > 0 && (
+                      <div className="text-xs font-semibold text-gray-600">
+                        STEP {currentStep} OF 3
                       </div>
-                    </div>
-                    {(currentStep > 0 &&
-                      <>
-                        <div className="space-y-3">
-                          <OnboarindIndicator steps={[1, 2, 3]} currentStep={currentStep} />
-                        </div>
-                        <div className="font-medium leading-8 text-primary">
-                          {subheading}
-                        </div>
-                      </>
                     )}
-
+                    <div className="text-2xl md:text-3xl font-medium leading-8 text-primary">
+                      {heading}
+                    </div>
                   </div>
+                  {currentStep > 0 && (
+                    <>
+                      <div className="space-y-3">
+                        <OnboarindIndicator steps={[1, 2, 3]} currentStep={currentStep} />
+                      </div>
+                      <div className="font-medium leading-8 text-primary">
+                        {subheading}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </aside>
-            <main className="py-6 pb-32 overflow-auto">{children}</main>
-          </div>
-          <div className="sticky container bg-white shadow-lg border-t-2 px-2 bottom-0 w-full z-50">
+
+            {/* Main */}
+            <main className="flex-1 lg:ml-[20%] w-full h-[calc(100vh-5.5rem)] flex justify-center items-start">
+              <div className="w-full fixed max-w-4xl h-full overflow-y-auto scroll-smooth scrollbar-hide px-4 md:px-0">
+                {children}
+              </div>
+            </main>
+          </section>
+
+          {/* Footer */}
+          <div className="fixed bottom-0 left-0 w-full z-50 bg-white shadow-lg border-t px-4">
             <OnboaringFooter currentStep={currentStep} />
           </div>
-        </FormProvider>
-      </OnboardingContext.Provider>
 
-    </>
+        </div>
+      </FormProvider>
+    </OnboardingContext.Provider>
   );
 }
+

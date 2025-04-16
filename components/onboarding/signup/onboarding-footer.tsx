@@ -17,7 +17,7 @@ interface OnboardingLayout {
 
 export function OnboaringFooter({ currentStep }: OnboardingLayout) {
 
-    const { loading, setLoading } = useContext(OnboardingContext);
+    const { loading, setLoading, active, setActive } = useContext(OnboardingContext);
 
     const router = useRouter();
     const { goToPreviousStep } = useCaseFilingForm();
@@ -56,12 +56,12 @@ export function OnboaringFooter({ currentStep }: OnboardingLayout) {
 
             {currentStep === 2 && (
                 <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-                    <SubmitButton loading={loading} pendingValue="Processing..." submitform="lawyer-form" className="bg-app-primary font-bold text-white p-6" value="Create Account" />
+                    <SubmitButton loading={loading} disabled={!active}  pendingValue="Processing..." submitform="lawyer-form" className="bg-app-primary font-bold text-white p-6" value="Create Account" />
                 </div>
             )}
             {currentStep === 3 && (
                 <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-                    <SubmitButton loading={loading} pendingValue="Processing..." submitform="otp-form" className="bg-app-primary font-bold text-white p-6" value="Proceed" />
+                    <SubmitButton loading={loading} disabled={!active} pendingValue="Processing..." submitform="otp-form" className="bg-app-primary font-bold text-white p-6" value="Proceed" />
                 </div>
             )}
         </CardFooter>

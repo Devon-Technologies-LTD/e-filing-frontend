@@ -11,12 +11,13 @@ import { LoginPasswordField } from "@/components/passwordField";
 import DragDropUploaderNIN from "./DragDropUploaderNIN";
 import { isFieldErrorObject } from "@/types/auth";
 import { OnboardingContext } from '@/context/OnboardingContext';
+import { Checkbox } from "@/components/ui/checkbox";
 
 const LawyerComponent = () => {
+
   const [state, dispatch] = useFormState(SignupAction, undefined);
-  // const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState("");
-  const { loading, setLoading } = useContext(OnboardingContext);
+  const { loading, setLoading, active, setActive } = useContext(OnboardingContext);
   const errors = state?.errors && isFieldErrorObject(state.errors) ? state.errors : {};
   useEffectAfterMount(() => {
     if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -44,8 +45,13 @@ const LawyerComponent = () => {
     }
   }, [state]);
   return (
-    <div className="flex flex-col md:flex-row w-full h-full md:space-y-0 md:space-x-6">
-      <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-2/3 space-y-10" autoComplete="off">
+    // <div className="flex flex-col md:flex-row w-full md:space-y-0 md:space-x-6">
+    <div
+      className="w-full flex-1 space-y-6 overflow-y-auto scroll-smooth scrollbar-hide px-4 md:px-0"
+      style={{ height: "calc(100vh - 200px)", scrollBehavior: "smooth" }}
+    >
+
+      <form id="lawyer-form" onSubmit={handleSubmit} className="md:w-3/4 space-y-10" autoComplete="off">
         <input type="hidden" name="role" value="LAWYER" />
         <input type="hidden" name="gender" value="male" />
         <div
@@ -98,7 +104,7 @@ const LawyerComponent = () => {
                 type="text"
                 label="National Identity Number (NIN)"
                 name="nin"
-                placeholder="e.g. 09876543212345"
+                placeholder="09876543211"
                 required
                 error={errors.nin?.[0]}
               />
@@ -114,7 +120,7 @@ const LawyerComponent = () => {
               type="text"
               label="SUPREME COURT NUMBER (SCN)"
               name="scn"
-              placeholder="e.g BA234RT75W"
+              placeholder="SCN123456"
               required
               error={errors.scn?.[0]}
             />
@@ -123,12 +129,25 @@ const LawyerComponent = () => {
               type="text"
               label="PHONE NUMBER"
               name="phone_number"
-              placeholder="e.g +2347030338024"
+              placeholder="07030338024"
               required
               error={errors.phone_number?.[0]}
             />
             <LoginPasswordField error={errors.password?.[0]} showStrength={true} label="PASSWORD" name="password" placeholder="********" />
             <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="********" />
+            <div className="items-top flex space-x-2">
+              <Checkbox
+                id="terms1"
+                checked={active}
+                name = "is_disclaimer"
+                onCheckedChange={(checked) => setActive(!!checked)}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <p className="text-sm font-semibold text-muted-foreground">
+                  I confirm that the information I have provided is true and accurate.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </form>

@@ -110,7 +110,7 @@ export default function MagistrateCases() {
       </div >
       <div className="bg-white">
         {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
-          <MagistrateDistributionBarChart header="ZACTIVE MAGISTRATE HANDLING CASE ACROSS DIVISIONS (ABUJA)" caseData={caseMetricsData} />
+          <MagistrateDistributionBarChart header="ACTIVE MAGISTRATE HANDLING CASE ACROSS DIVISIONS (ABUJA)" caseData={caseMetricsData} />
         )}
         {[ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
           <MagistrateDistributionBarChart
