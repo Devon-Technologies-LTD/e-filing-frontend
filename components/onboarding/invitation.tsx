@@ -12,10 +12,11 @@ import { isFieldErrorObject } from "@/types/auth";
 import DragDropUploaderNIN from "./signup/DragDropUploaderNIN";
 import { useRouter } from "next/navigation";
 import { OnboardingContext } from '@/context/OnboardingContext';
+import { Checkbox } from "../ui/checkbox";
 
 
 const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) => {
-    const { loading, setLoading } = useContext(OnboardingContext);
+    const { loading, setLoading, active, setActive } = useContext(OnboardingContext);
     const router = useRouter();
     const [state, dispatch] = useFormState(invitationAction, undefined);
 
@@ -46,7 +47,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
         console.log(otpz)
         formData.append("otp", otpz);
         formData.append("email", email);
-        
+
         dispatch(formData);
     };
 
@@ -114,7 +115,19 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
                         />
                         <LoginPasswordField error={errors.password?.[0]} showStrength={true} label="PASSWORD" name="password" placeholder="Enter Password" />
                         <LoginPasswordField label="CONFIRM PASSWORD" name="confirm_password" placeholder="Confirm Password" />
-
+                        <div className="items-top flex space-x-2">
+                            <Checkbox
+                                id="terms1"
+                                name="is_disclaimer"
+                                checked={active}
+                                onCheckedChange={(checked) => setActive(!!checked)}
+                            />
+                            <div className="grid gap-1.5 leading-none">
+                                <p className="text-sm font-semibold text-muted-foreground">
+                                    I confirm that the information I have provided is true and accurate.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
