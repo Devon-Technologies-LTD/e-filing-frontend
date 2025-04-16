@@ -249,7 +249,6 @@ export const getCaseTypeFields = (data: any) => ({
   summon_state_location: data?.casetype?.summon_details?.state_location ?? "",
   summon_time: data?.casetype?.summon_details?.time ?? "",
   value_worth: data?.casetype?.value_worth ?? "",
-  counsel_name: data?.casetype?.legal_counsels[0]?.name ?? "",
 });
 
 export const formatErrors = (errors: any) => {

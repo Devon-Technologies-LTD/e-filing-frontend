@@ -87,14 +87,14 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
     });
   };
   const defendant = data?.defendant?.[0];
-  const claimant = data?.defendant?.[0];
+  const claimant = data?.claimant?.[0];
   const defName =
     `${defendant?.last_name || ""} ${defendant?.middle_name || ""} ${
       defendant?.first_name || ""
     }`.trim() || "N/A";
   const claimName =
-    `${defendant?.last_name || ""} ${defendant?.middle_name || ""} ${
-      defendant?.first_name || ""
+    `${claimant?.last_name || ""} ${claimant?.middle_name || ""} ${
+      claimant?.first_name || ""
     }`.trim() || "N/A";
 
   const defEmail = defendant?.email_address || "N/A";
@@ -138,7 +138,7 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
         {/* Claimant Information */}
         <div className="space-y-6">
           <ClaimantInfo
-            name={claimEmail}
+            name={claimName}
             email={claimEmail}
             address={claimAddress}
             phone={claimPhone}
