@@ -16,7 +16,7 @@ const assigningMTabs: { id: MCaseFilterType; label: string }[] = [
 const directorMTabs: { id: MCaseFilterType; label: string }[] = [
   { id: "case", label: "Case Metrics" },
   { id: "magistrate", label: "Magistrate Metrics" },
-  { id: "financial", label: "Financial Metrics" },
+  // { id: "financial", label: "Financial Metrics" },
 ];
 const chiefJudgeTabs = [
   { id: "case", label: "Case Metrics" },

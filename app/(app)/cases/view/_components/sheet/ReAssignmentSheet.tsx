@@ -19,7 +19,6 @@ interface ReAssignmentSheetProps {
   id: string,
 }
 
-
 export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProps) {
   const { data, isLoading } = useQuery({
     queryKey: ["get_single_case_by_id"],
@@ -160,17 +159,3 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
     </Sheet>
   );
 }
-
-
-
-
-
-// history => => {
-//   "total_rows": 1, "total_pages": 1, "size": 10, "page": 1,
-//     "data": [
-//       { "id": "3ca97be4-bd16-4323-93d7-2e1e400ced1d", "casefile_id": "28072875-aed7-4526-b65c-6d5b4cdc0f63",
-// "hearing_date": "2025-04-23", "hearing_time": "16:01:00", "other_details": "hbhbhh", "status": "PENDING",
-// "created_at": "2025-04-09T12:57:49.675545Z", "updated_at": "2025-04-09T12:57:49.675545Z" }
-//     ],
-//       "success": true
-// }
