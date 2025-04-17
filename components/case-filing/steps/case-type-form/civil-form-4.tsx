@@ -98,7 +98,6 @@ export const CivilCaseForm4 = (documents: any) => {
             }
             tooltipIcon={InfoIcon}
             placeholder="eg. John Doe"
-           
             error={caseTypeErrors?.claimant_name ?? ""}
           />
         </div>
@@ -220,7 +219,6 @@ export const CivilCaseForm4 = (documents: any) => {
                 id="claimant_phone_number"
                 name="claimant_phone_number"
                 disabled
-                required
                 value={claimant[0].phone_number}
                 error={caseTypeErrors?.claimant_phone_number ?? ""}
                 type="text"
@@ -295,7 +293,6 @@ export const CivilCaseForm4 = (documents: any) => {
                 id="defendant_phone_number"
                 name="defendant_phone_number"
                 showErrorInLabel
-                required
                 value={defendant[0].phone_number}
                 onChange={({ target }) => {
                   const updatedClaimants = defendant.map((defendant) => ({
@@ -383,44 +380,12 @@ export const CivilCaseForm4 = (documents: any) => {
               variant={"outline"}
               className={cn(
                 "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                !dated_this && "text-muted-foreground"
+                "text-muted-foreground"
               )}
             >
               <CalendarIcon />
-              {dated_this ? (
-                format(dated_this, "PPP")
-              ) : (
-                <span>Pick a date</span>
-              )}{" "}
+              {format(new Date(), "PPP")}
             </Button>
-            {/* <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                    !dated_this && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {dated_this ? (
-                    format(dated_this, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}{" "}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dated_this}
-                  onSelect={(date) => {
-                    if (date) handleChange("dated_this", date);
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover> */}
           </div>
         </div>
 
@@ -449,7 +414,9 @@ export const CivilCaseForm4 = (documents: any) => {
                     : ["application/pdf"]
                 }
                 types={
-                  doc?.title?.toLowerCase() === "e-signature" ? undefined : "PDF"
+                  doc?.title?.toLowerCase() === "e-signature"
+                    ? undefined
+                    : "PDF"
                 }
                 required
                 subTitle={case_type}

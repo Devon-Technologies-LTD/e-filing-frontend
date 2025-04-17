@@ -100,6 +100,7 @@ const PartyField: React.FC<PartyFieldProps> = ({
                 name={`${partyType}[${index}].last_name`}
                 id={`${partyType}[${index}].last_name`}
                 label="Last Name"
+                
                 placeholder="Last Name"
                 value={item.last_name}
                 required={index === 0}
@@ -177,18 +178,20 @@ export default function CaseOverviewForm() {
 
   return (
     <div className="w-full space-y-8 ">
-      <LocationSelect
-        value={caseType.court_division}
-        onChange={(value) => {
-          dispatch(updateCaseTypeName({ ["court_division"]: value }));
-          dispatch(
-            addCaseTypeError({
-              court_division: "",
-            })
-          );
-        }}
-        error={caseTypeErrors?.court_division}
-      />
+      <div className="lg:w-1/2">
+        <LocationSelect
+          value={caseType.court_division}
+          onChange={(value) => {
+            dispatch(updateCaseTypeName({ ["court_division"]: value }));
+            dispatch(
+              addCaseTypeError({
+                court_division: "",
+              })
+            );
+          }}
+          error={caseTypeErrors?.court_division}
+        />
+      </div>
 
       <PartyField
         partyType="claimant"
@@ -216,54 +219,58 @@ export default function CaseOverviewForm() {
         }}
       />
 
-      <InputField
-        disabled
-        id={"case title"}
-        name={"case title"}
-        label={"Case Title"}
-        value={`${
-          caseType.claimant.length > 1
-            ? `${caseType.claimant[0].last_name} and ${
-                caseType.claimant.length - 1
-              } ORS`
-            : caseType.claimant[0].last_name ?? ""
-        } vs ${
-          caseType.defendant.length > 1
-            ? `${caseType.defendant[0].last_name} and ${
-                caseType.defendant.length - 1
-              } ORS`
-            : caseType.defendant[0].last_name ?? ""
-        }`}
-      />
-
-      {FORM_FIELDS.map((field) => (
+      <div className="lg:w-1/2">
         <InputField
-          key={field.id}
-          id={field.id}
-          name={field.name}
-          label={field.label}
-          tooltipIcon={field.tooltipIcon}
-          tooltipContent={
-            <ToolTipCard
-              title={field.tooltipTitle ?? ""}
-              description={field.tooltipText ?? ""}
-            />
-          }
-          placeholder={field.placeholder}
-          icon={undefined}
-          value={caseType.claimant[0]?.[field.name as keyof Claimant] || ""}
-          onChange={(e) => {
-            handleChange(field.name as any, e.target.value);
-            dispatch(
-              addCaseTypeError({
-                [field.id]: "",
-              })
-            );
-          }}
-          required={field.required}
-          error={caseTypeErrors[field.id] ?? ""}
+          disabled
+          id={"case title"}
+          name={"case title"}
+          label={"Case Title"}
+          value={`${
+            caseType.claimant.length > 1
+              ? `${caseType.claimant[0].last_name} and ${
+                  caseType.claimant.length - 1
+                } ORS`
+              : caseType.claimant[0].last_name ?? ""
+          } vs ${
+            caseType.defendant.length > 1
+              ? `${caseType.defendant[0].last_name} and ${
+                  caseType.defendant.length - 1
+                } ORS`
+              : caseType.defendant[0].last_name ?? ""
+          }`}
         />
-      ))}
+      </div>
+
+      <div className="lg:w-1/2 space-y-8 ">
+        {FORM_FIELDS.map((field) => (
+          <InputField
+            key={field.id}
+            id={field.id}
+            name={field.name}
+            label={field.label}
+            tooltipIcon={field.tooltipIcon}
+            tooltipContent={
+              <ToolTipCard
+                title={field.tooltipTitle ?? ""}
+                description={field.tooltipText ?? ""}
+              />
+            }
+            placeholder={field.placeholder}
+            icon={undefined}
+            value={caseType.claimant[0]?.[field.name as keyof Claimant] || ""}
+            onChange={(e) => {
+              handleChange(field.name as any, e.target.value);
+              dispatch(
+                addCaseTypeError({
+                  [field.id]: "",
+                })
+              );
+            }}
+            required={field.required}
+            error={caseTypeErrors[field.id] ?? ""}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -25,7 +25,6 @@ export const CivilCaseForm8 = (documents: any) => {
       case_type,
       sub_case_type,
       sum_claimed,
-      dated_this,
       cost_claimed,
       interest_claimed,
       court_division,
@@ -267,7 +266,6 @@ export const CivilCaseForm8 = (documents: any) => {
                 id="claimant_phone_number"
                 name="claimant_phone_number"
                 disabled
-                required
                 value={claimant[0].phone_number}
                 error={caseTypeErrors?.claimant_phone_number ?? ""}
                 type="text"
@@ -301,7 +299,6 @@ export const CivilCaseForm8 = (documents: any) => {
                       fields: { claimant: updatedClaimants },
                     })
                   );
-                  
                 }}
                 error={caseTypeErrors?.claimant_whats_app ?? ""}
                 placeholder="eg. 2347030338024"
@@ -326,12 +323,12 @@ export const CivilCaseForm8 = (documents: any) => {
                     updateMultipleCaseTypeFields({
                       fields: { defendant: updatedClaimants },
                     })
-                  );dispatch(
+                  );
+                  dispatch(
                     addCaseTypeError({
                       address: "",
                     })
                   );
-
                 }}
                 error={caseTypeErrors?.defendant_address ?? ""}
                 label="PHYSICAL ADDRESS"
@@ -340,7 +337,6 @@ export const CivilCaseForm8 = (documents: any) => {
               <InputField
                 id="defendant_phone_number"
                 name="defendant_phone_number"
-                required
                 showErrorInLabel
                 value={defendant[0].phone_number}
                 onChange={({ target }) => {
@@ -419,9 +415,7 @@ export const CivilCaseForm8 = (documents: any) => {
             <span className="flex ">
               DATED THIS <span className="text-red-500 ml-1">*</span>
             </span>
-            <span className="text-xs text-red-500 ">
-              {caseTypeErrors?.dated_this ?? ""}
-            </span>
+            
           </p>
           <div className="flex items-end justify-start text-center">
             <Button
@@ -429,44 +423,13 @@ export const CivilCaseForm8 = (documents: any) => {
               variant={"outline"}
               className={cn(
                 "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                !dated_this && "text-muted-foreground"
+                "text-muted-foreground"
               )}
             >
               <CalendarIcon />
-              {dated_this ? (
-                format(dated_this, "PPP")
-              ) : (
-                <span>Pick a date</span>
-              )}{" "}
+              {format(new Date(), "PPP")}{" "}
             </Button>
-            {/* <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                    !dated_this && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {dated_this ? (
-                    format(dated_this, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}{" "}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dated_this}
-                  onSelect={(date) => {
-                    if (date) handleChange("dated_this", date);
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover> */}
+      
           </div>
         </div>
         <InputField

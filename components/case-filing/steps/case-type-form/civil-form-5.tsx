@@ -31,7 +31,6 @@ export const CivilCaseForm5 = (documents: any) => {
       relief_sought,
       case_type,
       sub_case_type,
-      dated_this,
       court_division,
       claimant,
       defendant,
@@ -296,7 +295,6 @@ export const CivilCaseForm5 = (documents: any) => {
               <InputField
                 id="claimant_phone_number"
                 name="claimant_phone_number"
-                required
                 disabled
                 showErrorInLabel
                 value={claimant[0].phone_number}
@@ -373,7 +371,6 @@ export const CivilCaseForm5 = (documents: any) => {
               <InputField
                 id="defendant_phone_number"
                 name="defendant_phone_number"
-                required
                 showErrorInLabel
                 value={defendant[0].phone_number}
                 onChange={({ target }) => {
@@ -453,9 +450,6 @@ export const CivilCaseForm5 = (documents: any) => {
           </p>
           <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
             DATED THIS
-            <span className="text-xs text-red-500 ">
-              {caseTypeErrors?.dated_this ?? ""}
-            </span>
           </p>
           <div className="flex items-end justify-start text-center">
             <Button
@@ -463,44 +457,12 @@ export const CivilCaseForm5 = (documents: any) => {
               variant={"outline"}
               className={cn(
                 "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                !dated_this && "text-muted-foreground"
+                "text-muted-foreground"
               )}
             >
               <CalendarIcon />
-              {dated_this ? (
-                format(dated_this, "PPP")
-              ) : (
-                <span>Pick a date</span>
-              )}{" "}
+              {format(new Date(), "PPP")}{" "}
             </Button>
-            {/* <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                    !dated_this && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {dated_this ? (
-                    format(dated_this, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}{" "}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dated_this}
-                  onSelect={(date) => {
-                    if (date) handleChange("dated_this", date);
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover> */}
           </div>
         </div>
         <InputField

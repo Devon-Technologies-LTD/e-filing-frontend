@@ -2,7 +2,6 @@ import {
   CaseTypeData,
   CriminalCaseSubType,
   CriminalDocumentTitles,
-  DocumentTitlesEnum,
 } from "@/constants";
 import {
   addCaseTypeError,
@@ -19,23 +18,9 @@ type HookProps = {
 };
 
 export const criminalCaseSchema = z.object({
-  case_type: z.nativeEnum(CaseTypeData),
-  sub_case_type: z.nativeEnum(CriminalCaseSubType),
-  court_division: z.string().nonempty("Filing location is required"),
-  claimant_name: z
-    .string()
-    .min(2, "Claimant name must be at least 2 characters")
-    .regex(
-      /^[A-Za-z-' ]+$/,
-      "Name can only contain letters, hyphens, apostrophes, and spaces"
-    ),
-  defendant_name: z
-    .string()
-    .min(2, "Defendant name must be at least 2 characters")
-    .regex(
-      /^[A-Za-z-' ]+$/,
-      "Name can only contain letters, hyphens, apostrophes, and spaces"
-    ),
+  // case_type: z.nativeEnum(CaseTypeData),
+  // sub_case_type: z.nativeEnum(CriminalCaseSubType),
+  // court_division: z.string().nonempty("Filing location is required"),
   direct_complain: z
     .string()
     .optional(),

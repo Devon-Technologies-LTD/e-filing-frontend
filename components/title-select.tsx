@@ -30,8 +30,6 @@ export const TitlesSelect = ({
     staleTime: 50000,
   });
 
-  console.log("titles", data);
-
   return (
     <div className="w-full">
       <Label
@@ -43,7 +41,7 @@ export const TitlesSelect = ({
       >
         <span className="flex items-center">
           Title
-          {/* <span className="text-red-500 ml-1 text-xs">*</span> */}
+          <span className="text-red-500 ml-1 text-xs">*</span>
         </span>
 
         {/* {showErrorInLabel && error && (

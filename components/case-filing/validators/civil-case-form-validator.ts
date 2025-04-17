@@ -53,7 +53,7 @@ export const civilCaseSchema = z
     court_division: z.string().optional(),
     property_description: z.string().optional(),
     rental_value: z.string().optional(),
-    dated_this: z.any(),
+    dated_this: z.any().optional(),
     relief_sought: z.string().optional(),
     sum_claimed: z.string().optional(),
     cost_claimed: z.string().optional(),
@@ -178,11 +178,11 @@ export const civilCaseSchema = z
         //   check: requiredField,
         //   message: "Phone number is required",
         // },
-        {
-          field: "dated_this",
-          check: requiredField,
-          message: "Date is required",
-        },
+        // {
+        //   field: "dated_this",
+        //   check: requiredField,
+        //   message: "Date is required",
+        // },
         {
           field: "defendant_address",
           check: minLength,
@@ -212,13 +212,11 @@ const useCivilCaseFormValidator = ({ store, documents }: HookProps) => {
 
   const validate = async (_callback?: () => void) => {
     const schema = civilCaseSchema;
-    console.log("first", store);
     const result = schema.safeParse({
       ...store,
       defendant_address: store.defendant[0].address,
       defendant_phone_number: store.defendant[0].phone_number,
     });
-    console.log("result", result);
     const errors: Errors = {};
     // Validate the form fields
     if (!result.success) {
