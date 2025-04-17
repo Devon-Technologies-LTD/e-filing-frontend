@@ -77,7 +77,10 @@ const PartyField: React.FC<PartyFieldProps> = ({
       <div className="space-y-5">
         {list.map((item, index) => (
           <div key={index} className="space-y-3">
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
+             
+            </div> */}
+            <div key={index} className="grid grid-cols-5 items-end gap-4">
               <div className="w-auto">
                 <TitlesSelect
                   value={item.honorific!}
@@ -93,16 +96,6 @@ const PartyField: React.FC<PartyFieldProps> = ({
                   error={caseTypeErrors[`${partyType}_title`] ?? ""}
                 />
               </div>
-              {index > 0 && (
-                <button
-                  onClick={() => handleRemove(index)}
-                  className="text-red-500 text-sm"
-                >
-                  <Icons.bin />
-                </button>
-              )}
-            </div>
-            <div key={index} className="grid grid-cols-3  gap-4">
               <InputField
                 name={`${partyType}[${index}].last_name`}
                 id={`${partyType}[${index}].last_name`}
@@ -148,6 +141,14 @@ const PartyField: React.FC<PartyFieldProps> = ({
                 }
                 error={errors[index] ?? ""}
               />
+              {index > 0 && (
+                <button
+                  onClick={() => handleRemove(index)}
+                  className="w-auto text-red-500 text-sm"
+                >
+                  <Icons.bin />
+                </button>
+              )}
             </div>
           </div>
         ))}

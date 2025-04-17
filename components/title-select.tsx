@@ -7,6 +7,8 @@ import {
   SelectValue,
 } from "./ui/select";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { Label } from "./ui/label";
+import clsx from "clsx";
 
 export const TitlesSelect = ({
   value,
@@ -32,6 +34,23 @@ export const TitlesSelect = ({
 
   return (
     <div className="w-full">
+      <Label
+        // htmlFor={id}
+        className={clsx(
+          "flex items-center justify-between w-full text-xs font-bold",
+          error ? "text-red-500" : "text-neutral-600"
+        )}
+      >
+        <span className="flex items-center">
+          Title
+          {/* <span className="text-red-500 ml-1 text-xs">*</span> */}
+        </span>
+
+        {/* {showErrorInLabel && error && (
+          <p className="text-xs text-red-500 mt-1">{error}</p>
+        )} */}
+      </Label>
+
       <Select onValueChange={onChange} value={value}>
         <SelectTrigger
           loading={loading}
