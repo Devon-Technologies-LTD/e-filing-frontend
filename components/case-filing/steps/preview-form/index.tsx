@@ -61,6 +61,11 @@ export default function PreviewPage({ isRefiling }: { isRefiling?: boolean }) {
           <ExhibitFormFields />
         </section>
       </div>
+      <div className="mt-4 p-3 font-semibold bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 text-sm">
+        <p>
+          <strong>Disclaimer:</strong> Once payment is made, no corrections or modifications can be applied. Please ensure all details are correct before proceeding.
+        </p>
+      </div>
     </div>
   );
 }
