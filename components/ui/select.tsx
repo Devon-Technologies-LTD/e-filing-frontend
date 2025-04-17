@@ -58,6 +58,7 @@ export const selectItemVariants = {
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
+  
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
     variant?: keyof typeof selectTriggerVariants.variant;
     size?: keyof typeof selectTriggerVariants.size;

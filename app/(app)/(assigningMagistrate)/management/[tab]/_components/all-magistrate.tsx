@@ -86,7 +86,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+          {/* {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
                 triggerVariant="outline"
@@ -97,7 +97,7 @@ export default function AllMagistrates() {
                 onChange={handleCourtTypeChange}
               />
             </>
-          )}
+          )} */}
           <InviteUser
             trigger={
               <Button size={"medium"} className="h-11">

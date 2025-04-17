@@ -1,9 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import { getAdminDivision } from "@/lib/actions/division";
 import { useAppSelector } from "@/hooks/redux";
-import { LocationAdmin } from "@/components/location-admin";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,13 +9,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ConfirmCaseAssignment } from "../confirm_case_assignment";
 import { toast } from "sonner";
-// import { AlertDialogCancel, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { Icons } from "@/components/svg/icons";
 import { CaseAssignment } from "@/lib/actions/case-actions";
 import { DivisionAdmin } from "@/components/division-admin";
-import { ICaseTypes, updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
-import { DEFAULT_PAGE_SIZE } from "@/constants";
 
 import {
     AlertDialog,
@@ -37,7 +31,7 @@ import { getInitials } from "@/constants";
 
 
 
-const AssignCaseSheet = ({ trigger, id, status , title }: { trigger: React.ReactNode; id: string, status: string ,title:string }) => {
+const AssignCaseSheet = ({ trigger, id, status, title }: { trigger: React.ReactNode; id: string, status: string, title: string }) => {
     const queryClient = useQueryClient();
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -94,6 +88,8 @@ const AssignCaseSheet = ({ trigger, id, status , title }: { trigger: React.React
             <SheetTrigger disabled={status === "ASSIGNED"}
                 className={`bg-white  ${status === "ASSIGNED" ? " text-slate-300 border-slate-300" : " border-black"}`}>{trigger}</SheetTrigger>
             <SheetContent side="right" className="md:w-[505px] bg-white min-w-[505px]">
+               
+               
                 <div className="space-y-10 mx-auto">
                     <div className="space-y-6 w-full">
                         <p className="font-bold text-xl">Assign Case to a Presiding Magistrate</p>
