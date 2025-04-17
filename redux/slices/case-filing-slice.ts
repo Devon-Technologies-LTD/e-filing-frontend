@@ -79,7 +79,6 @@ const initialState: FormState = {
         last_name: "",
         middle_name: "",
         first_name: "",
-
         honorific: "",
       },
     ],

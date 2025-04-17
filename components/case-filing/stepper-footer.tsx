@@ -141,17 +141,17 @@ export function StepperNavigation({ isRefiling }: Iprops) {
       }
     } else {
       // dispatch(updateStep(current_step + 1));
-       saveForm({
-         case_file_id: caseType.case_file_id,
-         data: {
-           ...caseType,
-         },
-         legal_counsels,
-       });
+      saveForm({
+        case_file_id: caseType.case_file_id,
+        data: {
+          ...caseType,
+        },
+        legal_counsels,
+      });
     }
   };
   const handleSaveAndContinue = async () => {
-    if ((current_step === 1 && !caseType.title) || !caseType.court_division) {
+    if (!caseType.court_division) {
       toast.error("Case title and division is required before saving as draft");
     } else
       saveAsDraft({
@@ -314,7 +314,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
                 type="button"
                 disabled={false}
                 onClick={() => {
-                  setShowPaystackInfoModal(false)
+                  setShowPaystackInfoModal(false);
                   dispatch(updatePaymentType("paystack"));
                   initializePaymentFunction();
                 }}
