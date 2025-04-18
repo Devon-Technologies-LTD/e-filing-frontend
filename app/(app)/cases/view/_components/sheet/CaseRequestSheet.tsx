@@ -92,7 +92,6 @@ export default function CaseRequestSheet({ trigger, id }: CaseRequestSheetProps)
                         <p className="text-stone-600 text-sm font-bold mb-2">Request for Re-assignment Case Suit Number</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_suit_number ?? "N/A"}</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_type_name ?? "N/A"}</p>
-                        {data?.status && <StatusBadge status={data.status}>{data.status}</StatusBadge>}
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-2">

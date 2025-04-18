@@ -56,7 +56,6 @@ export default function AllMagistrates() {
   );
 
 
-
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading: draftsLoading } = useQuery({
