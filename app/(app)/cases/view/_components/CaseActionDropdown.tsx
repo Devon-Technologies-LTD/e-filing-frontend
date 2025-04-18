@@ -48,10 +48,8 @@ const CaseActionDropdown: React.FC<CaseActionDropdownProps> = ({ user, id, data 
                                             </DropdownMenuLabel>
                                         }
                                     />
-
                                 </>
                             )}
-
                         {(data?.assigned_to == user?.id && data?.hearing_status !== "" && data.status !== "STRUCK OUT" && data.status !== "JUDGEMENT DELIVERED") && (
                             <>
                                 <DeliverJugdementSheet id={id}

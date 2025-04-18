@@ -56,12 +56,7 @@ export function SingleCaseHeader({
     const isEmergency = data?.is_emergency;
     const userRole = user?.role;
 
-    if (
-      reviewStatus &&
-      [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(
-        userRole!
-      )
-    ) {
+    if (reviewStatus && [ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE].includes(userRole!)) {
       badges.push(<StatusBadge key="review-status" status={reviewStatus} />);
     }
 
@@ -79,7 +74,7 @@ export function SingleCaseHeader({
       (data?.status || "")?.toLowerCase()
       if (["JUDGEMENT DELIVERED", "STRUCK OUT"].includes(data?.status?.toUpperCase())) {
         badges.push(
-          <StatusBadge key="fallback-status" status={data.status } />
+          <StatusBadge key="fallback-status" status={data.status} />
         );
       } else {
         if (
@@ -91,8 +86,8 @@ export function SingleCaseHeader({
             normalizedReassignmentStatus === "approved"
               ? "UNASSIGNED"
               : normalizedReassignmentStatus === "denied"
-              ? "ASSIGNED"
-              : reassignmentStatus;
+                ? "ASSIGNED"
+                : reassignmentStatus;
           badges.push(
             <StatusBadge key="reassignment" status={reassignedStatus} />
           );
@@ -186,7 +181,7 @@ export function SingleCaseHeader({
       const isDeniedOrApproved = ["DENIED", "APPROVED"].includes(requestStatus);
       const isToBeAssigned = status === "TO BE ASSIGNED";
 
-      if (isUnderReview && !requestStatus && !isDeniedOrApproved) {
+      if (isUnderReview || isToBeAssigned && !isDeniedOrApproved) {
         return (
           <CaseRequestSheet
             id={id}

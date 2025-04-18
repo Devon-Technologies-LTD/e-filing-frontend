@@ -1,8 +1,6 @@
 
 "use server";
 import { axiosInstance } from "../_api/axios-config";
-import axios from "axios";
-import { NEXT_BASE_URL } from "../_constants";
 import UserService from "../_services/user-service";
 type ErrorResponse = {
     response?: { status: number; data: { message: string; data?: { error?: string }; error: string } };
