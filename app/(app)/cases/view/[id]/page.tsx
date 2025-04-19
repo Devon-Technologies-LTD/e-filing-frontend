@@ -26,7 +26,6 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
-import { JSONParser } from "formidable/parsers";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
