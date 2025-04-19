@@ -1,5 +1,5 @@
 "use client";
-import { CalendarIcon, InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import InputField from "@/components/ui/InputField";
 import "draft-js/dist/Draft.css";
 import { useAppSelector } from "@/hooks/redux";
@@ -7,16 +7,14 @@ import {
   addCaseTypeError,
   ICaseTypes,
   updateCaseTypeName,
-  updateMultipleCaseTypeFields,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import { ToolTipCard } from "@/components/ui/tool-tip-card";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import DocumentUploadComponent from "@/components/ui/document-upload";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import { LocationSelect } from "@/components/location-select";
+import CivilFormLitigants from "./civil-form-litigants";
+import CivilFormDatedThis from "./civil-form-dated-this";
 
 export const CivilCaseForm8 = (documents: any) => {
   const dispatch = useDispatch();
@@ -46,7 +44,6 @@ export const CivilCaseForm8 = (documents: any) => {
       })
     );
   };
-  const { data: user } = useAppSelector((state) => state.profile);
 
   return (
     <div className="space-y-1">
@@ -146,25 +143,10 @@ export const CivilCaseForm8 = (documents: any) => {
             <InputField
               id="defendant_address"
               name="defendant_address"
-              onChange={({ target }) => {
-                const updatedClaimants = defendant.map((defendant) => ({
-                  ...defendant,
-                  ["address"]: target.value,
-                }));
-
-                dispatch(
-                  updateMultipleCaseTypeFields({
-                    fields: { defendant: updatedClaimants },
-                  })
-                );
-                dispatch(
-                  addCaseTypeError({
-                    address: "",
-                    defendant_address: "",
-                  })
-                );
-              }}
-              value={defendant[0].address}
+              disabled
+              value={defendant
+                .map((d, i) => `${i + 1}: ${d.address}`)
+                .join(", ")}
               type="text"
               error={caseTypeErrors?.defendant_address ?? ""}
               label="PHYSICAL ADDRESS OF DEFENDANT"
@@ -243,210 +225,8 @@ export const CivilCaseForm8 = (documents: any) => {
           </div>
         </div>
 
-        <div className="space-y-5">
-          <p className="text-lg font-bold">
-            The Address for Service, Phone Numbers and email Addresses of the
-            Parties are:
-          </p>
-          <div className="flex ">
-            <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">COMPLAINT DETAILS</p>
-              <InputField
-                id="claimant_address"
-                name="claimant_address"
-                disabled
-                required
-                value={claimant[0].address}
-                type="text"
-                error={caseTypeErrors?.claimant_address ?? ""}
-                label="PHYSICAL ADDRESS"
-                placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
-              />
-              <InputField
-                id="claimant_phone_number"
-                name="claimant_phone_number"
-                disabled
-                value={claimant[0].phone_number}
-                error={caseTypeErrors?.claimant_phone_number ?? ""}
-                type="text"
-                label="PHONE NUMBERS"
-                placeholder="eg. 2347030338024"
-              />
-              <InputField
-                id="claimant_email_address"
-                name="claimant_email_address"
-                disabled
-                type="email"
-                label="Email Address"
-                value={claimant[0].email_address}
-                error={caseTypeErrors?.claimant_email_address ?? ""}
-                placeholder="eg. johndoe@gmail.com"
-              />
-              <InputField
-                id="claimant_whats_app"
-                name="claimant_whats_app"
-                type="text"
-                value={claimant[0].whatsapp}
-                label="Whatsapp Number"
-                onChange={({ target }) => {
-                  const updatedClaimants = claimant.map((claimant) => ({
-                    ...claimant,
-                    ["whatsapp"]: target.value,
-                  }));
-
-                  dispatch(
-                    updateMultipleCaseTypeFields({
-                      fields: { claimant: updatedClaimants },
-                    })
-                  );
-                }}
-                error={caseTypeErrors?.claimant_whats_app ?? ""}
-                placeholder="eg. 2347030338024"
-              />
-            </div>
-            <div className=" w-full text-neutral-600 space-y-6">
-              <p className="text-base font-bold">DEFENDANT DETAILS</p>
-              <InputField
-                id="defendant_address"
-                name="defendant_address"
-                required
-                showErrorInLabel
-                value={defendant[0].address}
-                type="text"
-                onChange={({ target }) => {
-                  const updatedClaimants = defendant.map((defendant) => ({
-                    ...defendant,
-                    ["address"]: target.value,
-                  }));
-
-                  dispatch(
-                    updateMultipleCaseTypeFields({
-                      fields: { defendant: updatedClaimants },
-                    })
-                  );
-                  dispatch(
-                    addCaseTypeError({
-                      address: "",
-                    })
-                  );
-                }}
-                error={caseTypeErrors?.defendant_address ?? ""}
-                label="PHYSICAL ADDRESS"
-                placeholder="e.g Block 33 Flat 3 Kubwa Abuja "
-              />
-              <InputField
-                id="defendant_phone_number"
-                name="defendant_phone_number"
-                showErrorInLabel
-                value={defendant[0].phone_number}
-                onChange={({ target }) => {
-                  const updatedClaimants = defendant.map((defendant) => ({
-                    ...defendant,
-                    ["phone_number"]: target.value,
-                  }));
-
-                  dispatch(
-                    updateMultipleCaseTypeFields({
-                      fields: { defendant: updatedClaimants },
-                    })
-                  );
-                  dispatch(
-                    addCaseTypeError({
-                      defendant_phone_number: "",
-                    })
-                  );
-                }}
-                error={caseTypeErrors?.defendant_phone_number ?? ""}
-                type="text"
-                label="PHONE NUMBERS"
-                placeholder="eg. 2347030338024"
-              />
-              <InputField
-                id="defendant_email_address"
-                name="defendant_email_address"
-                type="email"
-                label="Email Address"
-                value={defendant[0].email_address}
-                onChange={({ target }) => {
-                  const updatedClaimants = defendant.map((defendant) => ({
-                    ...defendant,
-                    ["email_address"]: target.value,
-                  }));
-
-                  dispatch(
-                    updateMultipleCaseTypeFields({
-                      fields: { defendant: updatedClaimants },
-                    })
-                  );
-                }}
-                error={caseTypeErrors?.defendant_email_address ?? ""}
-                placeholder="eg. johndoe@gmail.com"
-              />
-              <InputField
-                id="defendant_whats_app"
-                name="defendant_whats_app"
-                type="text"
-                label="Whatsapp Number"
-                value={defendant[0].whatsapp}
-                onChange={({ target }) => {
-                  const updatedClaimants = defendant.map((defendant) => ({
-                    ...defendant,
-                    ["whatsapp"]: target.value,
-                  }));
-
-                  dispatch(
-                    updateMultipleCaseTypeFields({
-                      fields: { defendant: updatedClaimants },
-                    })
-                  );
-                }}
-                error={caseTypeErrors?.defendant_whats_app ?? ""}
-                placeholder="eg. 2347030338024"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <p className="text-lg font-bold">
-            This plaint was taken out by claimant/counsel as the case may be
-          </p>
-          <p className=" flex items-center gap-3 text-base font-bold text-neutral-600">
-            <span className="flex ">
-              DATED THIS <span className="text-red-500 ml-1">*</span>
-            </span>
-            
-          </p>
-          <div className="flex items-end justify-start text-center">
-            <Button
-              disabled
-              variant={"outline"}
-              className={cn(
-                "w-[240px] justify-start text-left font-semibold border-2 uppercase border-primary text-xs text-neutral-600 h-11",
-                "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon />
-              {format(new Date(), "PPP")}{" "}
-            </Button>
-      
-          </div>
-        </div>
-        <InputField
-          required
-          showErrorInLabel
-          id="counsel_name"
-          disabled
-          name="counsel_name"
-          type="text"
-          label="NAME"
-          placeholder="e.g claimant/counsel name"
-          value={`${user?.last_name} ${user?.first_name}`}
-          onChange={({ target }) => {
-            handleChange("counsel_name", target.value);
-          }}
-          error={caseTypeErrors?.counsel_name ?? ""}
-        />
+        <CivilFormLitigants />
+        <CivilFormDatedThis />
 
         <div className="space-y-6">
           {documents?.documents?.map((doc: any) => (

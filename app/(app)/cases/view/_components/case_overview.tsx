@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ClaimantInfo } from "./claimant-info";
 import { MagistrateCourtInfo } from "./magistrate-court-info";
 import { CaseTypeInfo } from "./case-type-info";
-import { dateFormatter } from "@/lib/utils";
+import { dateFormatter, generateCaseTitle } from "@/lib/utils";
 import { Claimant, useSaveForm } from "@/components/case-filing/hooks";
 import {
   ICaseTypes,
@@ -45,7 +45,6 @@ interface IProps {
 }
 
 export function CaseOverview({ data, costBreakdown }: IProps) {
-  console.log("dataaa", data);
   const [isEdit, setIsEdit] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -62,47 +61,90 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
     },
   });
   const handleSubmit = (formData: any) => {
+    console.log("formData", formData);
     saveForm({
       data: {
         case_type: data?.case_type_name,
         sub_case_type: data?.sub_case_type_name,
         case_file_id: data?.id,
         case_type_id: data?.casetype?.id,
-        // defendant_address: formData.address,
-        // defendant_email_address: formData.email,
-        // defendant_name: formData.name,
-        // defendant_phone_number: formData.phone,
         ...data,
         claimant: data?.casetype.claimant,
-        defendant: [
-          {
-            address: formData?.address,
-            email_address: formData?.email,
-            first_name: formData?.firstname,
-            last_name: formData?.lastname,
-            // :formData?.lastname,
-          },
-        ],
+        defendant: formData,
+        title: generateCaseTitle(data.claimant, formData),
       },
     });
   };
-  const defendant = data?.defendant?.[0];
-  const claimant = data?.claimant?.[0];
-  const defName =
-    `${defendant?.last_name || ""} ${defendant?.middle_name || ""} ${
-      defendant?.first_name || ""
-    }`.trim() || "N/A";
-  const claimName =
-    `${claimant?.last_name || ""} ${claimant?.middle_name || ""} ${
-      claimant?.first_name || ""
-    }`.trim() || "N/A";
 
-  const defEmail = defendant?.email_address || "N/A";
-  const claimEmail = claimant?.email_address || "N/A";
-  const defAddress = defendant?.address || "N/A";
-  const claimAddress = claimant?.address || "N/A";
-  const defPhone = defendant?.phone_number || "N/A";
-  const claimPhone = claimant?.phone_number || "N/A";
+  const defendant = data?.defendant;
+  const claimant = data?.claimant;
+
+  // For defendant names
+  const defName = defendant
+    ? defendant
+        .map(
+          (d, index) =>
+            `${index + 1}: ${d?.last_name || ""} ${d?.middle_name || ""} ${
+              d?.first_name || ""
+            }`
+        )
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For claimant names
+  const claimName = claimant
+    ? claimant
+        .map(
+          (c, index) =>
+            `${index + 1}: ${c?.last_name || ""} ${c?.middle_name || ""} ${
+              c?.first_name || ""
+            }`
+        )
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For defendant emails
+  const defEmail = defendant
+    ? defendant
+        .map((d, index) => `${index + 1}: ${d?.email_address || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For claimant emails
+  const claimEmail = claimant
+    ? claimant
+        .map((c, index) => `${index + 1}: ${c?.email_address || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For defendant addresses
+  const defAddress = defendant
+    ? defendant
+        .map((d, index) => `${index + 1}: ${d?.address || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For claimant addresses
+  const claimAddress = claimant
+    ? claimant
+        .map((c, index) => `${index + 1}: ${c?.address || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For defendant phone numbers
+  const defPhone = defendant
+    ? defendant
+        .map((d, index) => `${index + 1}: ${d?.phone_number || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
+  // For claimant phone numbers
+  const claimPhone = claimant
+    ? claimant
+        .map((c, index) => `${index + 1}: ${c?.phone_number || "N/A"}`)
+        .join("\n") // Line break after each entry
+    : "N/A";
+
   return (
     <div className="space-y-6">
       {/* Case Header */}
@@ -153,6 +195,7 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
             email={defEmail}
             address={defAddress}
             phone={defPhone}
+            defendant={defendant}
           />
           {/* Magistrate Court Information */}
           <MagistrateCourtInfo

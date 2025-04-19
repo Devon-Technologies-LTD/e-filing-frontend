@@ -4,9 +4,14 @@ import { Icons } from "@/components/svg/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppSelector } from "@/hooks/redux";
+import { ROLES } from "@/types/auth";
+import { Claimant } from "@/components/case-filing/hooks";
 
 interface ClaimantInfoProps {
   name: string;
+  defendant?: Partial<Claimant>[];
+  claimant?: Partial<Claimant>[];
   email: string;
   address: string;
   phone: string;
@@ -14,12 +19,7 @@ interface ClaimantInfoProps {
   isEdit?: boolean;
   setIsEdit?: any;
   loading?: boolean;
-  onSubmit?: (data: {
-    name: string;
-    email: string;
-    address: string;
-    phone: string;
-  }) => void;
+  onSubmit?: (data: Partial<Claimant>[]) => void;
 }
 
 export function ClaimantInfo({
@@ -31,17 +31,25 @@ export function ClaimantInfo({
   phone,
   loading,
   type = "claimant",
+  defendant,
   onSubmit,
 }: ClaimantInfoProps) {
-  const [formData, setFormData] = useState({ name, email, address, phone });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const [formData, setFormData] = useState<Partial<Claimant>[] | undefined>(
+    defendant
+  );
+
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+   const { name, value } = e.target;
+   setFormData((prev) =>
+     prev?.map((item) => (item.id === id ? { ...item, [name]: value } : item))
+   );
+ };
+
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onSubmit) {
+    if (onSubmit && formData) {
       onSubmit(formData);
     }
   };
@@ -52,79 +60,100 @@ export function ClaimantInfo({
         <h2 className="text-base font-semibold">
           {type === "claimant" ? "Claimant" : "Defendant"} Information
         </h2>
-        {type === "defendant" && (
-          <Button
-            onClick={() => setIsEdit((prev: any) => !prev)}
-            variant={"ghost"}
-            className="text-sm font-semibold flex items-center gap-1"
-          >
-            {isEdit ? (
-              "Discard"
-            ) : (
-              <>
-                <Icons.Edit />
-                Edit Details
-              </>
+        {[ROLES.USER, ROLES.LAWYER].includes(user?.role as any) && (
+          <>
+            {type === "defendant" && (
+              <Button
+                onClick={() => setIsEdit((prev: any) => !prev)}
+                variant={"ghost"}
+                className="text-sm font-semibold flex items-center gap-1"
+              >
+                {isEdit ? (
+                  "Discard"
+                ) : (
+                  <>
+                    <Icons.Edit />
+                    Edit Details
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
+          </>
         )}
       </div>
       <div className="bg-white p-3">
         {isEdit ? (
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            <div>
-              <Label className="block text-sm font-semibold">Name</Label>
-              <Input
-                type="text"
-                variant="bordered"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="mt-1 block w-full font-medium rounded-md p-2"
-              />
-            </div>
-            <div>
-              <Label className="block text-sm font-semibold">
-                Email Address
-              </Label>
-              <Input
-                type="email"
-                variant="bordered"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full font-medium rounded-md p-2"
-              />
-            </div>
-            <div>
-              <Label className="block text-sm font-semibold">
-                Physical Address
-              </Label>
-              <Input
-                type="text"
-                variant="bordered"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="mt-1 block w-full font-medium rounded-md p-2"
-              />
-            </div>
-            <div>
-              <Label className="block text-sm font-semibold">
-                Phone Number
-              </Label>
-              <Input
-                type="text"
-                name="phone"
-                variant="bordered"
-                value={formData.phone}
-                onChange={handleChange}
-                className="mt-1 block w-full font-medium rounded-md p-2"
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-6 gap-6">
+            {formData?.map((item, index) => (
+              <div key={index} className="space-y-3">
+                <p className="font-semibold">Defendant {index + 1}</p>
+                <div
+                  key={index}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3"
+                >
+                  <div>
+                    <Label className="block text-sm font-semibold">
+                      Last Name
+                    </Label>
+                    <Input
+                      type="text"
+                      name="last_name"
+                      value={item.last_name || ""}
+                      onChange={(e) => handleChange(e, item.id!)}
+                      className="mt-1 block w-full font-medium rounded-md text-sm p-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-semibold">
+                      First Name
+                    </Label>
+                    <Input
+                      type="text"
+                      name="first_name"
+                      value={item.first_name || ""}
+                      onChange={(e) => handleChange(e, item.id!)}
+                      className="mt-1 block w-full font-medium text-sm rounded-md p-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-semibold">
+                      Email Address
+                    </Label>
+                    <Input
+                      type="email"
+                      name="email_address"
+                      value={item.email_address || ""}
+                      onChange={(e) => handleChange(e, item.id!)}
+                      className="mt-1 block w-full font-medium text-sm rounded-md p-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-semibold">
+                      Physical Address
+                    </Label>
+                    <Input
+                      type="text"
+                      name="address"
+                      value={item.address || ""}
+                      onChange={(e) => handleChange(e, item.id!)}
+                      className="mt-1 block w-full font-medium text-sm rounded-md p-2"
+                    />
+                  </div>
+                  <div>
+                    <Label className="block text-sm font-semibold">
+                      Phone Number
+                    </Label>
+                    <Input
+                      type="text"
+                      name="phone"
+                      value={item.phone_number || ""}
+                      onChange={(e) => handleChange(e, item.id!)}
+                      className="mt-1 block w-full font-medium text-sm rounded-md p-2"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="col-span-full mt-4">
               <Button
                 disabled={loading}

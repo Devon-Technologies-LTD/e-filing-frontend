@@ -17,7 +17,7 @@ export default function PreviewPage({ isRefiling }: { isRefiling?: boolean }) {
                 General Overview of the case you want to file
               </h2>
             </section>
-            <section className="w-1/2">
+            <section className="w-full">
               <CaseOverviewForm />
             </section>
           </div>

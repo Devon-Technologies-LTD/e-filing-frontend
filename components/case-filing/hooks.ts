@@ -8,14 +8,14 @@ import {
   updateCaseType,
 } from "@/lib/actions/case-file";
 import { generateRRR } from "@/lib/actions/payment";
-import { dateFormatter, formatErrors } from "@/lib/utils";
+import { dateFormatter, formatErrors, generateCaseTitle } from "@/lib/utils";
 import {
   clearCaseTypeError,
   clearForm,
   ICaseTypes,
   ILegalCounsels,
   updateCaseTypeName,
-  updatePaymentType,
+  updateMultipleCaseTypeFields,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
 import {
@@ -30,6 +30,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 export interface Claimant {
+  id: string;
   phone_number: string;
   email_address: string;
   address: string;
@@ -137,24 +138,13 @@ export const useSaveForm = ({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
       const saveStep1 = async () => {
         const payload = {
-          // steps: String(step),
           claimant: data.claimant,
           court_division_id: data.court_division,
           defendant: data.defendant,
-          title: `${
-            (data as any).claimant.length > 1
-              ? `${(data as any).claimant[0].last_name} and ${
-                  (data as any).claimant.length - 1
-                } ORS`
-              : (data as any).claimant[0].last_name ?? ""
-          } vs ${
-            (data as any).defendant.length > 1
-              ? `${(data as any).defendant[0].last_name} and ${
-                  (data as any).defendant.length - 1
-                } ORS`
-              : (data as any).defendant[0].last_name ?? ""
-          }`,
-          description: "",
+          title: generateCaseTitle(
+            (data as any).claimant,
+            (data as any).defendant
+          ),
         };
         if (case_file_id) {
           return updateCaseFile({ payload, caseFileId: case_file_id });
@@ -202,7 +192,8 @@ export const useSaveForm = ({
           status: isDraft && CaseStatus.Draft,
         };
         console.log("payloaddd", payload);
-        return data?.case_type_id
+        return data?.case_type_id &&
+          data.case_type_id !== "00000000-0000-0000-0000-000000000000"
           ? updateCaseType({ payload: payload, caseTypeId: data.case_type_id })
           : createCaseType(payload);
       };
@@ -230,7 +221,20 @@ export const useSaveForm = ({
         }
         if (!isDraft) {
           if (step === 1) {
-            dispatch(updateCaseTypeName({ case_file_id: data.id }));
+            console.log("first on submit", data);
+           const fieldsToUpdate: Record<string, any> = {
+             case_file_id: data.id,
+           };
+
+           if (Array.isArray(data.claimant)) {
+             fieldsToUpdate.claimant = data.claimant;
+           }
+
+           if (Array.isArray(data.defendant)) {
+             fieldsToUpdate.defendant = data.defendant;
+           }
+
+           dispatch(updateMultipleCaseTypeFields({ fields: fieldsToUpdate }));
           }
           if (step === 5) {
             if (paymentType === "paystack") {

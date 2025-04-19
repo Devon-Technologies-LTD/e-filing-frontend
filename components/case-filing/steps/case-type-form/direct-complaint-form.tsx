@@ -8,6 +8,7 @@ import { updateCaseTypeName } from "@/redux/slices/case-filing-slice";
 import { DownloadSampleButton } from "@/components/ui/download-sample-document.";
 import { LocationSelect } from "@/components/location-select";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { formatPart } from "@/lib/utils";
 export const DirectCriminalComplaintForm = () => {
   const {
     caseType: { direct_complain, court_division, claimant, defendant },
@@ -52,11 +53,7 @@ export const DirectCriminalComplaintForm = () => {
           type="text"
           label="CLAIMANT"
           disabled
-          value={
-            claimant.length > 1
-              ? `${claimant[0].last_name} and ${claimant.length - 1} ORS`
-              : claimant[0].last_name ?? ""
-          }
+          value={formatPart(claimant)}
           tooltipText="Enter the name of the claimant"
           tooltipIcon={InfoIcon}
           placeholder="eg. John Doe"
@@ -69,11 +66,7 @@ export const DirectCriminalComplaintForm = () => {
           type="text"
           disabled
           label="DEFENDANT"
-          value={
-            defendant.length > 1
-              ? `${defendant[0].last_name} and ${defendant.length - 1} ORS`
-              : defendant[0].last_name ?? ""
-          }
+          value={formatPart(defendant)}
           tooltipText="Enter the name of the defendant"
           tooltipIcon={InfoIcon}
           error={caseTypeErrors?.defendant_name ?? ""}
@@ -85,6 +78,7 @@ export const DirectCriminalComplaintForm = () => {
         </div>
         <div className="flex lg:w-1/2">
           <LocationSelect
+            disabled
             value={court_division}
             onChange={(value) => {
               dispatch(updateCaseTypeName({ court_division: value }));
