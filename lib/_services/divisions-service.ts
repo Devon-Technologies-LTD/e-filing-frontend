@@ -15,7 +15,7 @@ const DivisionsService = {
     return response.data;
   },
   async getTitles(): Promise<any[]> {
-    const response = await axiosInstance.get<IDivision[]>(`public/honorific`);
+    const response = await axiosInstance.get<string[]>(`public/honorific`);
     return response.data;
   },
   async getAdminDivision(): Promise<IDivision[]> {

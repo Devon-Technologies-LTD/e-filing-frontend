@@ -12,6 +12,7 @@ import {
   CivilDocumentTitles,
   SpecificSummonsValueWorth,
 } from "@/constants";
+import { Claimant } from "@/components/case-filing/hooks";
 
 // interface DecodedToken {
 //   exp: number;
@@ -457,3 +458,18 @@ export const getTitleByRecoveryAmount = ({
   }
   return "";
 };
+
+export const formatPart = (part?: Partial<Claimant>[]) => {
+  if (!Array.isArray(part) || part.length === 0) return "";
+
+  return part.length > 1
+    ? `${part[0]?.last_name ?? ""} and ${part.length - 1} ORS`
+    : part[0]?.last_name ?? "";
+};
+
+export function generateCaseTitle(
+  claimants: Partial<Claimant>[] = [],
+  defendants: Partial<Claimant>[] = []
+) {
+  return `${formatPart(claimants)} vs ${formatPart(defendants)}`;
+}

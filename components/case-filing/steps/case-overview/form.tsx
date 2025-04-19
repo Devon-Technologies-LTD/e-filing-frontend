@@ -16,20 +16,16 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/svg/icons";
 import { PlusCircle } from "lucide-react";
 import { TitlesSelect } from "@/components/title-select";
+import { generateCaseTitle } from "@/lib/utils";
 
 interface PartyFieldProps {
-  partyType: "claimant" | "defendant";
+  partType: "claimant" | "defendant";
   list: Partial<Claimant>[];
   onChange: (updatedList: Partial<Claimant>[]) => void;
   errors?: string[];
 }
 
-const PartyField: React.FC<PartyFieldProps> = ({
-  partyType,
-  list,
-  onChange,
-  errors = [],
-}) => {
+const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
   const handleFieldChange = (
     index: number,
     key: keyof Partial<Claimant>,
@@ -44,115 +40,193 @@ const PartyField: React.FC<PartyFieldProps> = ({
 
   const handleAdd = () => {
     onChange([
-      ...list,
-      { last_name: "", first_name: "", middle_name: "", honorific: "" },
+      ...(Array.isArray(list) ? list : []),
+      {
+        id: crypto.randomUUID(),
+        last_name: "",
+        first_name: "",
+        middle_name: "",
+        honorific: "",
+      },
     ]);
   };
 
-  const handleRemove = (index: number) => {
+  const handleRemove = (id: string) => {
     if (list.length === 1) return;
-    const updated = [...list];
-    updated.splice(index, 1);
+    const updated = list.filter((item) => item.id !== id);
     onChange(updated);
   };
 
   const dispatch = useDispatch();
   return (
     <div>
-      <h3 className="text-xs flex justify-between text-neutral-600 items-center font-semibold uppercase">
-        <span className="flex items-center">
-          {partyType}
-          <span className="text-red-500 ml-1 text-lg">*</span>
-        </span>
-        <Button
-          type="button"
-          variant={"link"}
-          onClick={handleAdd}
-          className="no-underline px-4 py-1 rounded"
-        >
-          <PlusCircle />
-          Add another {partyType}
-        </Button>
-      </h3>
-      <div className="space-y-5">
-        {list.map((item, index) => (
-          <div key={index} className="space-y-3">
-            {/* <div className="flex justify-between items-center">
-             
-            </div> */}
-            <div key={index} className="grid grid-cols-5 items-end gap-4">
-              <div className="w-auto">
-                <TitlesSelect
-                  value={item.honorific!}
-                  onChange={(value) => {
-                    handleFieldChange(index, "honorific", value);
-                    dispatch(
-                      addCaseTypeError({
-                        [`${partyType}_title`]: "",
-                      })
-                    );
-                  }}
-                  // error={errors[index]}
-                  error={caseTypeErrors[`${partyType}_title`] ?? ""}
-                />
+      <div className="space-y-6">
+        {Array.isArray(list) &&
+          list.length > 0 &&
+          list?.map((item, index) => (
+            <div key={item.id} className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="flex uppercase text-sm text-neutral-600 font-semibold items-center">
+                  {partType} {index + 1}
+                  <span className="text-red-500 ml-1 text-lg">*</span>
+                </span>
+                {index > 0 && (
+                  <button
+                    onClick={() => handleRemove(item.id!)}
+                    className="w-auto text-red-500 text-sm"
+                  >
+                    <Icons.bin />
+                  </button>
+                )}
               </div>
-              <InputField
-                name={`${partyType}[${index}].last_name`}
-                id={`${partyType}[${index}].last_name`}
-                label="Last Name"
-                
-                placeholder="Last Name"
-                value={item.last_name}
-                required={index === 0}
-                onChange={(e) => {
-                  handleFieldChange(index, "last_name", e.target.value);
-                  dispatch(
-                    addCaseTypeError({
-                      [`${partyType}_lastname`]: "",
-                    })
-                  );
-                }}
-                error={caseTypeErrors[`${partyType}_lastname`] ?? ""}
-              />
-              <InputField
-                name={`${partyType}[${index}].first_name`}
-                id={`${partyType}[${index}].first_name`}
-                label="First Name"
-                placeholder="First Name"
-                value={item.first_name}
-                required={index === 0}
-                onChange={(e) => {
-                  handleFieldChange(index, "first_name", e.target.value);
-                  dispatch(
-                    addCaseTypeError({
-                      [`${partyType}_firstname`]: "",
-                    })
-                  );
-                }}
-                error={caseTypeErrors[`${partyType}_firstname`] ?? ""}
-              />
-              <InputField
-                name={`${partyType}[${index}].middle_name`}
-                id={`${partyType}[${index}].middle_name`}
-                label="Middle Name"
-                placeholder="Middle Name"
-                value={item.middle_name}
-                onChange={(e) =>
-                  handleFieldChange(index, "middle_name", e.target.value)
-                }
-                error={errors[index] ?? ""}
-              />
-              {index > 0 && (
-                <button
-                  onClick={() => handleRemove(index)}
-                  className="w-auto text-red-500 text-sm"
-                >
-                  <Icons.bin />
-                </button>
-              )}
+              <div className="space-y-8">
+                <div key={index} className="grid grid-cols-4 items-end gap-4">
+                  <div className="w-auto">
+                    <TitlesSelect
+                      value={item.honorific!}
+                      onChange={(value) => {
+                        handleFieldChange(index, "honorific", value);
+                        dispatch(
+                          addCaseTypeError({
+                            [`${partType}.${index}.honorific`]: "",
+                          })
+                        );
+                      }}
+                      error={caseTypeErrors[`${partType}.${index}.honorific`]}
+                    />
+                  </div>
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].last_name`}
+                    id={`${partType}[${index}].last_name`}
+                    label="Last Name"
+                    placeholder="Last Name"
+                    className="text-sm"
+                    value={item.last_name}
+                    required={true}
+                    onChange={(e) => {
+                      handleFieldChange(index, "last_name", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.last_name`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.last_name`]}
+                  />
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].first_name`}
+                    id={`${partType}[${index}].first_name`}
+                    label="First Name"
+                    placeholder="First Name"
+                    className="text-sm"
+                    value={item.first_name}
+                    required={true}
+                    onChange={(e) => {
+                      handleFieldChange(index, "first_name", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.first_name`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.first_name`]}
+                  />
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].middle_name`}
+                    id={`${partType}[${index}].middle_name`}
+                    label="Middle Name"
+                    placeholder="Middle Name"
+                    className="text-sm"
+                    value={item.middle_name}
+                    onChange={(e) => {
+                      handleFieldChange(index, "middle_name", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.middle_name`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.middle_name`]}
+                  />
+                </div>
+
+                <div className=" grid grid-cols-3 items-end gap-4 ">
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].phone_number`}
+                    id={`${partType}[${index}].phone_number`}
+                    label="Phone Number"
+                    placeholder="Phone Number"
+                    required={partType === "claimant"}
+                    className="text-sm"
+                    value={item.phone_number}
+                    onChange={(e) => {
+                      handleFieldChange(index, "phone_number", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.phone_number`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.phone_number`]}
+                  />
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].email_address`}
+                    id={`${partType}[${index}].email_address`}
+                    label="Email Address"
+                    placeholder="Email Address"
+                    required={partType === "claimant"}
+                    className="text-sm"
+                    value={item.email_address}
+                    onChange={(e) => {
+                      handleFieldChange(index, "email_address", e.target.value);
+
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.email_address`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.email_address`]}
+                  />
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].address`}
+                    id={`${partType}[${index}].address`}
+                    label="Address"
+                    required={partType === "claimant"}
+                    placeholder="Address"
+                    className="text-sm"
+                    value={item.address}
+                    onChange={(e) => {
+                      handleFieldChange(index, "address", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.address`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.address`]}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant={"link"}
+            onClick={handleAdd}
+            className="no-underline px-4 py-1 rounded"
+          >
+            <PlusCircle />
+            Add another {partType}
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -163,18 +237,6 @@ export default function CaseOverviewForm() {
     (data) => data.caseFileForm
   );
   const dispatch = useDispatch();
-  const handleChange = (name: keyof ICaseTypes, value: string) => {
-    const updatedClaimants = caseType.claimant.map((claimant) => ({
-      ...claimant,
-      [name]: value,
-    }));
-
-    dispatch(
-      updateMultipleCaseTypeFields({
-        fields: { claimant: updatedClaimants },
-      })
-    );
-  };
 
   return (
     <div className="w-full space-y-8 ">
@@ -193,8 +255,8 @@ export default function CaseOverviewForm() {
         />
       </div>
 
-      <PartyField
-        partyType="claimant"
+      <PartField
+        partType="claimant"
         list={caseType.claimant}
         onChange={(updatedClaimants) => {
           dispatch(
@@ -206,8 +268,8 @@ export default function CaseOverviewForm() {
         }}
       />
 
-      <PartyField
-        partyType="defendant"
+      <PartField
+        partType="defendant"
         list={caseType.defendant}
         onChange={(updatedDefendants) => {
           dispatch(
@@ -222,54 +284,14 @@ export default function CaseOverviewForm() {
       <div className="lg:w-1/2">
         <InputField
           disabled
+          labelclassName="text-sm"
+          className="text-sm"
           id={"case title"}
           name={"case title"}
           label={"Case Title"}
-          value={`${
-            caseType.claimant.length > 1
-              ? `${caseType.claimant[0].last_name} and ${
-                  caseType.claimant.length - 1
-                } ORS`
-              : caseType.claimant[0].last_name ?? ""
-          } vs ${
-            caseType.defendant.length > 1
-              ? `${caseType.defendant[0].last_name} and ${
-                  caseType.defendant.length - 1
-                } ORS`
-              : caseType.defendant[0].last_name ?? ""
-          }`}
+          showErrorInLabel={false}
+          value={generateCaseTitle(caseType.claimant, caseType.defendant)}
         />
-      </div>
-
-      <div className="lg:w-1/2 space-y-8 ">
-        {FORM_FIELDS.map((field) => (
-          <InputField
-            key={field.id}
-            id={field.id}
-            name={field.name}
-            label={field.label}
-            tooltipIcon={field.tooltipIcon}
-            tooltipContent={
-              <ToolTipCard
-                title={field.tooltipTitle ?? ""}
-                description={field.tooltipText ?? ""}
-              />
-            }
-            placeholder={field.placeholder}
-            icon={undefined}
-            value={caseType.claimant[0]?.[field.name as keyof Claimant] || ""}
-            onChange={(e) => {
-              handleChange(field.name as any, e.target.value);
-              dispatch(
-                addCaseTypeError({
-                  [field.id]: "",
-                })
-              );
-            }}
-            required={field.required}
-            error={caseTypeErrors[field.id] ?? ""}
-          />
-        ))}
       </div>
     </div>
   );
