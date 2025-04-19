@@ -21,7 +21,10 @@ export const caseOverviewSchema = z.object({
           .string()
           .regex(/^[A-Za-z-' ]+$/, "invalid")
           .nonempty("Required"),
-        phone_number: z.string().regex(/^\d+$/, "invalid").nonempty("Required"),
+        phone_number: z
+          .string()
+          .regex(/^\+?\d+$/, "invalid")
+          .nonempty("Required"),
         email_address: z
           .string()
           .email("Invalid email address")
@@ -47,7 +50,7 @@ export const caseOverviewSchema = z.object({
           .optional(),
         email_address: z
           .string()
-            .optional(),
+          .optional(),
         address: z.string().optional(),
         honorific: z.string().nonempty("Required"),
       })
