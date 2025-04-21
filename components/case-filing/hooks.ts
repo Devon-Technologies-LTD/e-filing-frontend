@@ -34,7 +34,6 @@ export interface Claimant {
   phone_number: string;
   email_address: string;
   address: string;
-  whats_app?: string;
   first_name: string;
   honorific: string;
   last_name: string;
@@ -146,6 +145,8 @@ export const useSaveForm = ({
             (data as any).defendant
           ),
         };
+        console.log("case file payload", payload);
+
         if (case_file_id) {
           return updateCaseFile({ payload, caseFileId: case_file_id });
         } else {
@@ -159,9 +160,9 @@ export const useSaveForm = ({
           id: data?.case_type_id,
           case_type_name: data.case_type,
           casefile_id: data.case_file_id,
-          claimant: data.claimant,
+          // claimant: data.claimant,
           cost_claimed: data.cost_claimed,
-          defendant: data.defendant,
+          // defendant: data.defendant,
           legal_counsels: [
             {
               name: data.counsel_name ?? "",
@@ -222,19 +223,19 @@ export const useSaveForm = ({
         if (!isDraft) {
           if (step === 1) {
             console.log("first on submit", data);
-           const fieldsToUpdate: Record<string, any> = {
-             case_file_id: data.id,
-           };
+            const fieldsToUpdate: Record<string, any> = {
+              case_file_id: data.id,
+            };
 
-           if (Array.isArray(data.claimant)) {
-             fieldsToUpdate.claimant = data.claimant;
-           }
+            if (Array.isArray(data.claimant)) {
+              fieldsToUpdate.claimant = data.claimant;
+            }
 
-           if (Array.isArray(data.defendant)) {
-             fieldsToUpdate.defendant = data.defendant;
-           }
+            if (Array.isArray(data.defendant)) {
+              fieldsToUpdate.defendant = data.defendant;
+            }
 
-           dispatch(updateMultipleCaseTypeFields({ fields: fieldsToUpdate }));
+            dispatch(updateMultipleCaseTypeFields({ fields: fieldsToUpdate }));
           }
           if (step === 5) {
             if (paymentType === "paystack") {

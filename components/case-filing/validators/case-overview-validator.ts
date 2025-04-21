@@ -45,13 +45,9 @@ export const caseOverviewSchema = z.object({
           .string()
           .regex(/^[A-Za-z-' ]+$/, "invalid")
           .nonempty("Required"),
-        phone_number: z
-          .string()
-          .optional(),
-        email_address: z
-          .string()
-          .optional(),
-        address: z.string().optional(),
+        phone_number: z.string().optional(),
+        email_address: z.string().optional(),
+        address: z.string().nonempty("Required"),
         honorific: z.string().nonempty("Required"),
       })
     )

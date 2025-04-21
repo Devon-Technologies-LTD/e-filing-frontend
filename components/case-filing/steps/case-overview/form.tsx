@@ -1,15 +1,12 @@
 "use client";
-import { FORM_FIELDS } from "@/types/files/general";
 import InputField from "@/components/ui/InputField";
 import { useAppSelector } from "@/hooks/redux";
 import {
   addCaseTypeError,
-  ICaseTypes,
   updateCaseTypeName,
   updateMultipleCaseTypeFields,
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
-import { ToolTipCard } from "@/components/ui/tool-tip-card";
 import { LocationSelect } from "@/components/location-select";
 import { Claimant } from "../../hooks";
 import { Button } from "@/components/ui/button";
@@ -153,7 +150,7 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
                   />
                 </div>
 
-                <div className=" grid grid-cols-3 items-end gap-4 ">
+                <div className=" grid grid-cols-4 items-end gap-4 ">
                   <InputField
                     showErrorInLabel={true}
                     name={`${partType}[${index}].phone_number`}
@@ -172,6 +169,24 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
                       );
                     }}
                     error={caseTypeErrors[`${partType}.${index}.phone_number`]}
+                  />
+                  <InputField
+                    showErrorInLabel={true}
+                    name={`${partType}[${index}].whatsapp`}
+                    id={`${partType}[${index}].whatsapp`}
+                    label="Whatsapp Number"
+                    placeholder="Whatsapp Number"
+                    className="text-sm"
+                    value={item.whatsapp}
+                    onChange={(e) => {
+                      handleFieldChange(index, "whatsapp", e.target.value);
+                      dispatch(
+                        addCaseTypeError({
+                          [`${partType}.${index}.whatsapp`]: "",
+                        })
+                      );
+                    }}
+                    error={caseTypeErrors[`${partType}.${index}.whatsapp`]}
                   />
                   <InputField
                     showErrorInLabel={true}
@@ -198,7 +213,7 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
                     name={`${partType}[${index}].address`}
                     id={`${partType}[${index}].address`}
                     label="Address"
-                    required={partType === "claimant"}
+                    required={true}
                     placeholder="Address"
                     className="text-sm"
                     value={item.address}

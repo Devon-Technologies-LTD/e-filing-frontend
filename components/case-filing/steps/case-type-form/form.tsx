@@ -39,7 +39,6 @@ export default function CaseTypesForm() {
   const {
     caseType: { case_type, sub_case_type, recovery_amount },
     caseTypeErrors,
-    current_step,
   } = useAppSelector((value) => value.caseFileForm);
 
   const { data, isLoading: loading } = useQuery({
@@ -53,6 +52,8 @@ export default function CaseTypesForm() {
     enabled: !!case_type,
     staleTime: 50000,
   });
+
+  console.log("sub category", subcategory?.data?.result);
   const hasWorth = subcategory?.data?.worth;
   const { data: worth, isLoading: worthLoading } = useQuery({
     queryKey: ["get_worth", sub_case_type],

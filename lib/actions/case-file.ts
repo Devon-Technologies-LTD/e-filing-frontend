@@ -186,7 +186,7 @@ export async function updateCaseType({
   payload,
   caseTypeId,
 }: {
-  payload: ICreateCaseFileData;
+  payload: CaseTypeDetails;
   caseTypeId: string;
 }) {
   try {
