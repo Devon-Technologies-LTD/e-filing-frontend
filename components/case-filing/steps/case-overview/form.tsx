@@ -39,7 +39,7 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
     onChange([
       ...(Array.isArray(list) ? list : []),
       {
-        id: crypto.randomUUID(),
+        tempId: crypto.randomUUID(),
         last_name: "",
         first_name: "",
         middle_name: "",
@@ -50,7 +50,9 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
 
   const handleRemove = (id: string) => {
     if (list.length === 1) return;
-    const updated = list.filter((item) => item.id !== id);
+    const updated = list.filter(
+      (item) => (item.id || item.tempId) !== id
+    );
     onChange(updated);
   };
 
@@ -69,7 +71,7 @@ const PartField: React.FC<PartyFieldProps> = ({ partType, list, onChange }) => {
                 </span>
                 {index > 0 && (
                   <button
-                    onClick={() => handleRemove(item.id!)}
+                    onClick={() => handleRemove(item.id || item.tempId!)}
                     className="w-auto text-red-500 text-sm"
                   >
                     <Icons.bin />

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { Claimant } from "@/components/case-filing/hooks";
+import { PlusCircle } from "lucide-react";
 
 interface ClaimantInfoProps {
   name: string;
@@ -38,12 +39,33 @@ export function ClaimantInfo({
     defendant
   );
 
- const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-   const { name, value } = e.target;
-   setFormData((prev) =>
-     prev?.map((item) => (item.id === id ? { ...item, [name]: value } : item))
-   );
- };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const { name, value } = e.target;
+    setFormData((prev) =>
+      prev?.map((item) => (item.id === id ? { ...item, [name]: value } : item))
+    );
+  };
+  const handleAdd = () => {
+    setFormData((prev) => [
+      ...(Array.isArray(prev) ? prev : []),
+      {
+        tempId: crypto.randomUUID(), 
+        last_name: "",
+        first_name: "",
+        middle_name: "",
+        honorific: "",
+      },
+    ]);
+  };
+
+  const handleRemove = (identifier: string) => {
+    if (formData && formData.length <= 1) return; 
+    setFormData(
+      (prev) =>
+        prev?.filter((item) => (item.id || item.tempId) !== identifier) || []
+    );
+  };
+
 
   const { data: user } = useAppSelector((state) => state.profile);
 
@@ -86,7 +108,17 @@ export function ClaimantInfo({
           <form onSubmit={handleSubmit} className="space-y-6 gap-6">
             {formData?.map((item, index) => (
               <div key={index} className="space-y-3">
-                <p className="font-semibold">Defendant {index + 1}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Defendant {index + 1}</p>
+                  {index > 0 && (
+                    <button
+                      onClick={() => handleRemove(item.id || item.tempId!)}
+                      className="w-auto text-red-500 text-sm"
+                    >
+                      <Icons.bin />
+                    </button>
+                  )}
+                </div>
                 <div
                   key={index}
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3"
@@ -97,6 +129,7 @@ export function ClaimantInfo({
                     </Label>
                     <Input
                       type="text"
+                      required
                       name="last_name"
                       value={item.last_name || ""}
                       onChange={(e) => handleChange(e, item.id!)}
@@ -109,6 +142,7 @@ export function ClaimantInfo({
                     </Label>
                     <Input
                       type="text"
+                      required
                       name="first_name"
                       value={item.first_name || ""}
                       onChange={(e) => handleChange(e, item.id!)}
@@ -122,6 +156,7 @@ export function ClaimantInfo({
                     <Input
                       type="email"
                       name="email_address"
+                      required
                       value={item.email_address || ""}
                       onChange={(e) => handleChange(e, item.id!)}
                       className="mt-1 block w-full font-medium text-sm rounded-md p-2"
@@ -133,6 +168,7 @@ export function ClaimantInfo({
                     </Label>
                     <Input
                       type="text"
+                      required
                       name="address"
                       value={item.address || ""}
                       onChange={(e) => handleChange(e, item.id!)}
@@ -145,7 +181,7 @@ export function ClaimantInfo({
                     </Label>
                     <Input
                       type="text"
-                      name="phone"
+                      name="phone_number"
                       value={item.phone_number || ""}
                       onChange={(e) => handleChange(e, item.id!)}
                       className="mt-1 block w-full font-medium text-sm rounded-md p-2"
@@ -161,6 +197,15 @@ export function ClaimantInfo({
                 className="font-semibold"
               >
                 {loading ? "Submitting" : "Submit"}
+              </Button>
+              <Button
+                type="button"
+                variant={"link"}
+                onClick={handleAdd}
+                className="no-underline px-4 py-1 rounded"
+              >
+                <PlusCircle />
+                Add another Defendant
               </Button>
             </div>
           </form>

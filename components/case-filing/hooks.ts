@@ -31,6 +31,7 @@ import { toast } from "sonner";
 
 export interface Claimant {
   id: string;
+  tempId?: string;
   phone_number: string;
   email_address: string;
   address: string;
@@ -136,10 +137,16 @@ export const useSaveForm = ({
   const mutation = useMutation({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
       const saveStep1 = async () => {
+        const stripTempId = (list: Partial<Claimant>[] | undefined) => {
+          return list?.map((item) => {
+            const { tempId, ...rest } = item;
+            return rest;
+          });
+        };
         const payload = {
-          claimant: data.claimant,
+          claimant: stripTempId(data.claimant),
           court_division_id: data.court_division,
-          defendant: data.defendant,
+          defendant: stripTempId(data.defendant),
           title: generateCaseTitle(
             (data as any).claimant,
             (data as any).defendant
@@ -156,13 +163,10 @@ export const useSaveForm = ({
 
       const saveStep2 = async () => {
         const payload = {
-          // steps: String(step),
           id: data?.case_type_id,
           case_type_name: data.case_type,
           casefile_id: data.case_file_id,
-          // claimant: data.claimant,
           cost_claimed: data.cost_claimed,
-          // defendant: data.defendant,
           legal_counsels: [
             {
               name: data.counsel_name ?? "",

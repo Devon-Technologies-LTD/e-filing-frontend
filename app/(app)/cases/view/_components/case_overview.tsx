@@ -15,15 +15,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import CostAssessment from "@/components/case-filing/cost-assessment";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { CostBreakdown } from "../../reviews/components/cost-breakdown";
-import { getCostAssesment } from "@/lib/actions/case-file";
-
 interface CaseOverviewProps {
   id: string;
   caseNumber: string;
+  court_division: string;
   case_type_name: string;
   sub_case_type_name: string;
   title: string;
@@ -50,7 +48,7 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
   const {
     mutation: { mutate: saveForm, isPending: formPending },
   } = useSaveForm({
-    step: 2,
+    step: 1,
     isDraft: false,
     onSuccess: () => {
       setIsEdit(false);
@@ -61,18 +59,14 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
     },
   });
   const handleSubmit = (formData: any) => {
-    console.log("formData", formData);
     saveForm({
       data: {
-        case_type: data?.case_type_name,
-        sub_case_type: data?.sub_case_type_name,
-        case_file_id: data?.id,
-        case_type_id: data?.casetype?.id,
-        ...data,
-        claimant: data?.casetype.claimant,
+        claimant: data.claimant,
         defendant: formData,
+        court_division: data.court_division,
         title: generateCaseTitle(data.claimant, formData),
       },
+      case_file_id: data?.id,
     });
   };
 

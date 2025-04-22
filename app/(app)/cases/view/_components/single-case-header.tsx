@@ -268,7 +268,6 @@ export function SingleCaseHeader({
       </div>
     );
   }, [data, handleRefileProcesses, userRole]);
-  console.log(JSON.stringify(data));
   return (
     <div className="space-y-3 bg-white pt-4">
       <div className="container space-y-3">
