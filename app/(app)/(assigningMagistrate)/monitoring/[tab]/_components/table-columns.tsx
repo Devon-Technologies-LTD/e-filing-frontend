@@ -156,7 +156,7 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
           status={
             caseRequest === "CASE REQUEST SUBMITTED"
               ? caseRequest
-              : reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED" // maureen
+              : reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED" // maureen
               ? reassignmentStatus
               : status
           }
