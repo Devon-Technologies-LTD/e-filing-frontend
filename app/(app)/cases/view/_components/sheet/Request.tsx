@@ -71,7 +71,7 @@ export default function RequestSheet({ trigger, id }: any) {
             <SheetTrigger onClick={(e) => e.stopPropagation()}>{trigger}</SheetTrigger>
             <SheetContent side="right" className="bg-white md:w-[505px] min-w-[505px] h-full">
 
-                <ScrollArea className="h-full w-full p-6">
+                <ScrollArea className="h-full w-full p-2">
                     <div className="space-y-10 mx-auto">
                         <div className="space-y-6 w-full">
                             <div>

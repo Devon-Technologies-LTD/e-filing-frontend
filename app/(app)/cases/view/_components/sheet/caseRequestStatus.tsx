@@ -110,6 +110,7 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                             Requested on -
                         </p>
                     </div>
+                    
                     <div className="flex justify-between bg-neutral-300 px-4 py-6 border-b-2 border-neutral-400">
                         <div>
                             <p className="text-stone-600 text-sm">Requested From</p>
@@ -143,7 +144,6 @@ export default function CaseRequestStatusSheet({ trigger, id }: CaseRequestStatu
                         <p className="text-stone-600 text-sm font-bold mb-2">Request for Resignment Case Suit Number</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_suit_number ?? "N/A"}</p>
                         <p className="text-app-primary font-bold text-sm">{data?.case_type_name ?? "N/A"}</p>
-                      
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-2">
