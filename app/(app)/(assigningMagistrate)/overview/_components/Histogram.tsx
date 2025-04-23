@@ -1,94 +1,67 @@
 "use client";
 
-import { Bar } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    BarElement,
-    CategoryScale,
-    LinearScale,
-    Title,
-    Tooltip,
-    ChartOptions,
-    ChartData,
-    TooltipItem,
-} from "chart.js";
 import { FC } from "react";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    ResponsiveContainer,
+    Legend,
+} from "recharts";
 
-// Register ChartJS components
-ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip);
-
-// Define the types for the props
 interface HistogramProps {
     labels: string[];
     data: number[];
     label: string;
-    histogramTitle?: string; // Optional prop for the histogram title
+    histogramTitle?: string;
 }
 
+const CustomTooltip = ({
+    active,
+    payload,
+}: {
+    active?: boolean;
+    payload?: any;
+}) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white border px-2 py-1 rounded shadow text-sm">
+                <p>{`Value: ${payload[0].value}`}</p>
+            </div>
+        );
+    }
+    return null;
+};
+
 const Histogram: FC<HistogramProps> = ({ labels, data, label, histogramTitle }) => {
-    const chartData: ChartData<"bar"> = {
-        labels: labels,
-        datasets: [
-            {
-                label: label,
-                data: data,
-                backgroundColor: "#EB963F",
-                borderColor: "#EB963F",
-                borderWidth: 1,
-                borderRadius: 10, // Rounded corners for the bars
-            },
-        ],
-    };
-
-    // Explicitly type the options object
-    const options: ChartOptions<"bar"> = {
-        responsive: true,
-        maintainAspectRatio: false, // Allow custom height
-        scales: {
-            x: {
-                beginAtZero: true,
-                grid: {
-                    display: false, // Remove vertical grid lines
-                },
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    display: true, // Keep horizontal grid lines
-                },
-            },
-        },
-        plugins: {
-            legend: {
-                display: true, // Display the legend
-            },
-            title: {
-                display: !!histogramTitle, // Display title only if provided
-                text: histogramTitle, // Title text
-                position: "bottom", // Position the title at the bottom
-                font: {
-                    size: 14, // Adjust font size
-                },
-            },
-            tooltip: {
-                enabled: true,
-                callbacks: {
-                    label: (tooltipItem: TooltipItem<"bar">) => {
-                        const value = tooltipItem.raw as number;
-                        return `Value: ${value}`;
-                    },
-                },
-            },
-        },
-        hover: {
-            mode: "nearest",
-            // animationDuration: 300, // Smooth highlight effect
-        },
-    };
-
+    const chartData = labels.map((labelText, index) => ({
+        name: labelText,
+        value: data[index],
+    }));
     return (
-        <div style={{ height: "300px" }}> {/* Set a fixed height for the graph */}
-            <Bar data={chartData} options={options} />
+        <div className="h-[300px]">
+            {histogramTitle && (
+                <h3 className="text-center text-sm font-semibold mb-2">{histogramTitle}</h3>
+            )}
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip content={<CustomTooltip />}  cursor={false}   />
+                    <Legend />
+                    <Bar
+                        dataKey="value"
+                        name={label}
+                        barSize={60}
+                        fill="#EB963F"
+                        radius={[10, 10, 0, 0]} // Rounded top corners
+                    />
+                </BarChart>
+            </ResponsiveContainer>
         </div>
     );
 };

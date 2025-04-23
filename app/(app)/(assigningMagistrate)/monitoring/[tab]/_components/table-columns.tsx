@@ -58,10 +58,10 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
             <AvatarFallback className="bg-secondary-foreground text-black">
               {row.original.assignee_name
                 ? row.original.assignee_name
-                    .split(" ")
-                    .map((word) => word.charAt(0))
-                    .join("")
-                    .toUpperCase()
+                  .split(" ")
+                  .map((word) => word.charAt(0))
+                  .join("")
+                  .toUpperCase()
                 : ""}{" "}
             </AvatarFallback>
           </Avatar>
@@ -85,11 +85,18 @@ export const mainColumns: ColumnDef<CaseDetailsResponse>[] = [
           status={
             caseRequest === "CASE REQUEST SUBMITTED"
               ? caseRequest
-              : reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED"
-              ? reassignmentStatus
-              : status === "to be assigned"
-              ? row.original.reassignment_status
-              : status
+              : reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED" // maureen
+                ? reassignmentStatus
+                : status
+
+            // caseRequest === "CASE REQUEST SUBMITTED"
+            //   ? caseRequest
+            //   : reassignmentStatus == "REASSIGNMENT REQUEST SUBMITTED"
+            //   ? reassignmentStatus
+            //   : status === "to be assigned"
+            //   ? row.original.reassignment_status
+            //   : status
+            
           }
         />
       );
@@ -157,8 +164,8 @@ export const unassignedColumns: ColumnDef<CaseDetailsResponse>[] = [
             caseRequest === "CASE REQUEST SUBMITTED"
               ? caseRequest
               : reassignmentStatus === "REASSIGNMENT REQUEST SUBMITTED" // maureen
-              ? reassignmentStatus
-              : status
+                ? reassignmentStatus
+                : status
           }
         />
       );
