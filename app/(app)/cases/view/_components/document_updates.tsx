@@ -5,7 +5,7 @@ import ReusableTabs from "@/components/ui/reusable-tabs";
 import { useState } from "react";
 import { Icons } from "@/components/svg/icons";
 import { ActivityList } from "@/components/activity-list";
-import { documentHistory, notifications } from "@/lib/dummy-data";
+// import { documentHistory, notifications } from "@/lib/dummy-data";
 import CaseHistoryTimeline from "./case-history";
 
 export function DocumentUpdates() {
@@ -26,7 +26,6 @@ export function DocumentUpdates() {
         </h2>
         <p className="text-xs font-medium">3 Updates available</p>
       </div>
-
       <ReusableTabs
         tablistClassName="text-xs"
         tabs={tabs}
@@ -34,36 +33,36 @@ export function DocumentUpdates() {
         activeTab={activeTab}
       />
       {/* <ScrollArea className="h-[calc(100dvh-300px)] max-h-[calc(100dvh-300px)] overflow-y-auto rounded-md "> */}
-        <div className="py-4">
-          {activeTab === "recent" && (
+      <div className="py-4">
+        {/* {activeTab === "recent" && (
             <ActivityList notifications={documentHistory} />
-          )}
-          {activeTab === "history" && (
-            <CaseHistoryTimeline
-              steps={[
-                {
-                  title: "Case Filed Successfully",
-                  description:
-                    "Suit Number #12345 generated, QR Code and electronic seal issued.",
-                  status: "completed",
-                  time: "5/01/2025",
-                },
-                {
-                  title: "Awaiting to be assigned to a Magistrate",
-                  description:
-                    "No Magistrate has been assigned to this case yet",
-                  status: "pending",
-                  time: "5/01/2025",
-                },
-              ]}
-            />
-          )}
-          {activeTab === "hearings" && (
+          )} */}
+        {activeTab === "history" && (
+          <CaseHistoryTimeline
+            steps={[
+              {
+                title: "Case Filed Successfully",
+                description:
+                  "Suit Number #12345 generated, QR Code and electronic seal issued.",
+                status: "completed",
+                time: "5/01/2025",
+              },
+              {
+                title: "Awaiting to be assigned to a Magistrate",
+                description:
+                  "No Magistrate has been assigned to this case yet",
+                status: "pending",
+                time: "5/01/2025",
+              },
+            ]}
+          />
+        )}
+        {/* {activeTab === "hearings" && (
             <ActivityList
               notifications={notifications.filter((n) => n.icon === "hearings")}
             />
-          )}
-        </div>
+          )} */}
+      </div>
       {/* </ScrollArea> */}
     </div>
   );

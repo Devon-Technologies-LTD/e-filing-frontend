@@ -32,12 +32,12 @@ export const navigationLinks: NavItem[] = [
     roles: [ROLES.LAWYER, ROLES.USER],
     isActive: (pathname) => pathname?.startsWith("/docs/drafts"),
   },
-  {
-    title: "Track Cases", //adewale
-    href: "/track-cases",
-    roles: [ROLES.LAWYER, ROLES.USER],
-    isActive: (pathname) => pathname?.startsWith("/track"),
-  },
+  // {
+  //   title: "Track Cases", //adewale
+  //   href: "/track-cases",
+  //   roles: [ROLES.LAWYER, ROLES.USER],
+  //   isActive: (pathname) => pathname?.startsWith("/track"),
+  // },
   // {
   //   title: "Your Cases",
   //   href: "/your-cases/case",
