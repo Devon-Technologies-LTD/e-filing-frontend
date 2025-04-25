@@ -1,6 +1,6 @@
 import { IDraftsColumn } from "@/app/(app)/drafts/_components/table-columns";
 import { ICase, TManagement } from "../types/case";
-import { INotification } from "@/components/activity-list";
+// import { INotification } from "@/components/activity-list";
 import { IUsersColumn } from "@/app/(app)/(assigningMagistrate)/management/[tab]/_components/table-column";
 import { USER_STATUS } from "@/types/auth";
 
@@ -83,79 +83,79 @@ export const management: TManagement[] = [
 //     created_at: "",
 //   },
 // ];
-export const notifications: INotification[] = [
-  {
-    id: "1",
-    icon: "check",
-    message:
-      "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/WZ2/001e/Year",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "2",
-    icon: "scale",
-    message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/WZ2/001e/Year",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "3",
-    icon: "initials",
-    initials: "AA",
-    message: "Magistrate Adebayo Adekoya is now presiding over your case",
-    caseNumber: "CV/WZ2/001e/Year Stay tuned for updates!",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "4",
-    icon: "check",
-    message:
-      "has been submitted and filed successfully. You will be notified of any updates",
-    caseNumber: "CV/WZ2/001e/Year",
-    timestamp: "2 weeks ago",
-  },
-  {
-    id: "5",
-    icon: "scale",
-    message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/WZ2/001e/Year",
-    timestamp: "2 weeks ago",
-  },
-  {
-    id: "6",
-    icon: "hearings",
-    message: "A Magistrate court (Division A) has been assigned to your case",
-    caseNumber: "CV/WZ2/001e/Year",
-    timestamp: "2 weeks ago",
-  },
-];
-export const documentHistory: INotification[] = [
-  {
-    id: "1",
-    icon: "pdf",
-    message:
-      "A Documents titled “Cases” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
-    caseNumber: "",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "2",
-    icon: "shield",
-    message:
-      "Seal and QR code were generated for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
-    caseNumber: "",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "3",
-    icon: "pdf",
-    message:
-      "23 Documents uploaded for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
-    caseNumber: "",
-    timestamp: "2 hours ago",
-  },
-];
+// export const notifications: INotification[] = [
+//   {
+//     id: "1",
+//     icon: "check",
+//     message:
+//       "has been submitted and filed successfully. You will be notified of any updates",
+//     caseNumber: "CV/WZ2/001e/Year",
+//     timestamp: "2 hours ago",
+//   },
+//   {
+//     id: "2",
+//     icon: "scale",
+//     message: "A Magistrate court (Division A) has been assigned to your case",
+//     caseNumber: "CV/WZ2/001e/Year",
+//     timestamp: "2 hours ago",
+//   },
+//   {
+//     id: "3",
+//     icon: "initials",
+//     initials: "AA",
+//     message: "Magistrate Adebayo Adekoya is now presiding over your case",
+//     caseNumber: "CV/WZ2/001e/Year Stay tuned for updates!",
+//     timestamp: "2 hours ago",
+//   },
+//   {
+//     id: "4",
+//     icon: "check",
+//     message:
+//       "has been submitted and filed successfully. You will be notified of any updates",
+//     caseNumber: "CV/WZ2/001e/Year",
+//     timestamp: "2 weeks ago",
+//   },
+//   {
+//     id: "5",
+//     icon: "scale",
+//     message: "A Magistrate court (Division A) has been assigned to your case",
+//     caseNumber: "CV/WZ2/001e/Year",
+//     timestamp: "2 weeks ago",
+//   },
+//   {
+//     id: "6",
+//     icon: "hearings",
+//     message: "A Magistrate court (Division A) has been assigned to your case",
+//     caseNumber: "CV/WZ2/001e/Year",
+//     timestamp: "2 weeks ago",
+//   },
+// ];
+// export const documentHistory: INotification[] = [
+//   {
+//     id: "1",
+//     icon: "pdf",
+//     message:
+//       "A Documents titled “Cases” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//     caseNumber: "",
+//     timestamp: "2 hours ago",
+//   },
+//   {
+//     id: "2",
+//     icon: "shield",
+//     message:
+//       "Seal and QR code were generated for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//     caseNumber: "",
+//     timestamp: "2 hours ago",
+//   },
+//   {
+//     id: "3",
+//     icon: "pdf",
+//     message:
+//       "23 Documents uploaded for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//     caseNumber: "",
+//     timestamp: "2 hours ago",
+//   },
+// ];
 
 export const demoData = {
   caseNumber: "CV/WZ2/001e/Year",
