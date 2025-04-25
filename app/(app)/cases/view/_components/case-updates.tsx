@@ -2,10 +2,9 @@
 "use client";
 import type React from "react"; // Import React
 import ReusableTabs from "@/components/ui/reusable-tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icons } from "@/components/svg/icons";
 import { ActivityList } from "@/components/activity-list";
-import { notifications } from "@/lib/dummy-data";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CaseHistoryTimeline from "./case-history";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +12,8 @@ import { getCaseActivity } from "@/lib/actions/case-file";
 import { NotificationIcon } from "@/components/ui/notifications-icon";
 import { dateFormatter, formatDate } from "@/lib/utils";
 import NotificationSkeleton from "./activity-skeleton";
+import { getHearing, getNotification, updateNotification } from "@/lib/actions/admin-file";
+// import { Notifications } from "@/types/case";
 
 interface INotification {
   id: string;
@@ -20,27 +21,41 @@ interface INotification {
   title: string;
   created_at: string;
 }
+interface Hearing {
+  id: string;
+  casefile_id: string;
+  hearing_date: string;
+  description: string;
+  hearing_time: string;
+  other_details: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 export function CaseUpdates({ id }: { id: string }) {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [hearing, setHearing] = useState<Hearing[]>([]);
 
-  // useEffect(() => {
-  //   const fetchNotification = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await getNotification();
-  //       if (response.success) {
-  //         setNotification(response.data || []);
-  //       } else {
-  //         throw new Error(response.message || "Failed to fetch Notification");
-  //       }
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : "An error occurred");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchNotification = async () => {
+      setLoading(true);
+      try {
+        const response = await getHearing();
+        if (response.success) {
+          setHearing(response.data || []);
+        } else {
+          throw new Error(response.message || "Failed to fetch Notification");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchNotification(); // Load only once on component mount
-  // }, []);
+    fetchNotification(); // Load only once on component mount
+  }, []);
 
   const tabs: { id: any; label: string }[] = [
     { id: "recent", label: "Recent Activities" },
@@ -73,15 +88,17 @@ export function CaseUpdates({ id }: { id: string }) {
     status: "completed",
     time: dateFormatter(item?.created_at).fullDate,
   }));
+  
+  console.log("hearing =>" + JSON.stringify(hearing));
+
   return (
     <div className="bg-white space-y-4 w-full overflow-hidden p-4 px-2 rounded-lg shadow-sm">
       <div className="flex justify-between w-full items-center gap-4">
         <h2 className="flex items-center gap-3 font-semibold text-semibold">
           <Icons.recent /> CASE UPDATES
         </h2>
-        <p className="text-xs font-medium"> Updates available</p>
+        <p className="text-xs font-medium">Updates available</p>
       </div>
-
       <ReusableTabs
         tablistClassName="text-xs"
         tabs={tabs}
@@ -135,11 +152,7 @@ export function CaseUpdates({ id }: { id: string }) {
               {hearingLoading ? (
                 <NotificationSkeleton />
               ) : (
-                <ActivityList
-                  notifications={notifications.filter(
-                    (n) => n.icon === "hearings"
-                  )}
-                />
+                <ActivityList notifications={hearing} />
               )}
             </>
           )}

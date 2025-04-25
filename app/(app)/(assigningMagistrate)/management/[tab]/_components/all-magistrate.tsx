@@ -37,7 +37,7 @@ export default function AllMagistrates() {
       break;
     case ROLES.ASSIGNING_MAGISTRATE:
       headingText = "Presiding Magistrates";
-      descriptionText = "View and manage all presiding magistrates responsible for presiding over cases.  Monitor their activity, case request anf re-assignment request across different districts";
+      descriptionText = "View and manage all presiding magistrates responsible for presiding over cases.  Monitor their activity, case request and re-assignment request across different districts";
       buttonText = "INVITE PRESIDING MAGISTRATE";
       break;
     default:

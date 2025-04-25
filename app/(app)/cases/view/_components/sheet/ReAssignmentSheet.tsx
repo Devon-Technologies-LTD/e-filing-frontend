@@ -125,9 +125,7 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
               <ScrollArea className="h-[600px] w-full p-4">
                 <div className="space-y-6">
                   {history.data.map((item: any, index: number) => (
-
                     <div key={index} className="gap-2 border-b-[1px] space-y-2 border-app-primary py-4" >
-                      {/* Timestamp */}
                       <p className="text-xs font-bold text-stone-600">
                         {new Date(item.created_at).toLocaleDateString("en-US", {
                           year: "numeric",
@@ -135,7 +133,6 @@ export default function ReAssignmentSheet({ trigger, id }: ReAssignmentSheetProp
                           day: "2-digit",
                         })}
                       </p>
-                      {/* Status and Request Reason */}
                       <div className="flex justify-start">
                         {item.status === "PENDING" ? (
                           <Icons.Redcross className="size-8 h-6 w-6" />
