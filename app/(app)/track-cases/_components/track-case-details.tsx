@@ -5,8 +5,8 @@ import type React from "react"; // Import React
 import { StatusBadge } from "@/components/ui/status-badge";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { useState } from "react";
-import AllActivities from "./all-activities";
-import { Hearings } from "./hearings";
+// import AllActivities from "./all-activities";
+// import { Hearings } from "./hearings";
 import { useRouter } from "next/navigation";
 import { CaseStatus } from "@/constants";
 
@@ -55,8 +55,8 @@ export function TrackCaseDetails() {
         activeTab={activeTab}
       />
       <div className="py-4">
-        {activeTab === "activities" && <AllActivities />}
-        {activeTab === "hearings" && <Hearings />}
+        {/* {activeTab === "activities" && <AllActivities />} */}
+        {/* {activeTab === "hearings" && <Hearings />} */}
       </div>
     </div>
   );

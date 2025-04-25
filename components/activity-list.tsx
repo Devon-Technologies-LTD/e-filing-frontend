@@ -46,26 +46,10 @@ export function ActivityList({
       {notifications.map((notification) => (
         <div key={notification.id} className="border-b py-3">
           <div className="flex items-center gap-4">
-
-            {/* <NotificationIcon type="check" initials="initials" /> */}
-
-            {/* <div className="space-y-1 max-w-md">
-              {(!showCaseNumberForCheck) && (
-                <p className="text-sm font-extrabold">
-                  {notification.casefile_id}
-                </p>
-              )}
-            </div> */}
-
             <div className="flex space-x-2 w-2/3 items-center">
               <Icons.calender className="h-1- w-10 flex-shrink-0" />
               <span className="text-sm font-semibold">{notification.description}</span>
             </div>
-
-            {/* <div className="flex row-auto flex-row text-sm text-app-primary space-x-2 w-auto">
-              <span>{notification.hearingTime}</span>
-              <span>{notification.displayDate}</span>
-            </div> */}
           </div>
           <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
             {format(new Date(notification.created_at ?? ""), "MMM dd, yyyy")}

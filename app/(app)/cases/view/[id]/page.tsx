@@ -7,7 +7,6 @@ import { CaseUpdates } from "../_components/case-updates";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { DocumentUpdates } from "../_components/document_updates";
 import { CaseDocumentList } from "../_components/case_documents";
-
 import { useQuery } from "@tanstack/react-query";
 import {
   getAdminCaseFilesById,
@@ -131,12 +130,12 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
               <CaseOverview costBreakdown={costBreakdown?.data} data={data} />
-            </div>{" "}
+            </div>
             <div className="col-span-5 bg-white p-2">
               <CaseUpdates id={data.id} />
             </div>
           </div>
-        )}{" "}
+        )}
         {activeTab === "documents" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
@@ -157,6 +156,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             </div>
           </div>
         )}
+
       </section>
     </div>
   );
