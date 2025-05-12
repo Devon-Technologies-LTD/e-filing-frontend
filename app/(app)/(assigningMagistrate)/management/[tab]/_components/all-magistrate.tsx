@@ -54,9 +54,18 @@ export default function AllMagistrates() {
     () => createUserColumns(user?.role!, "all"),
     [user?.role]
   );
-
-
   const [searchTerm, setSearchTerm] = useState("");
+  let role;
+  if (user?.role === "CHIEF_JUDGE") {
+    role = "DIRECTOR_MAGISTRATE";
+  } else if (user?.role === "DIRECTOR_MAGISTRATE") {
+    role = "ASSIGNING_MAGISTRATE";
+  } else if (user?.role === "ASSIGNING_MAGISTRATE") {
+    role = "PRESIDING_MAGISTRATE";
+  } else {
+    role = "CENTRAL_REGISTRAR";
+  }
+
 
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: ["userManagement", currentPage, selectedCourt, searchTerm],
@@ -65,6 +74,7 @@ export default function AllMagistrates() {
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
         query: searchTerm,
+        role: role,
         court_type: selectedCourt === "all" ? "" : selectedCourt,
         invited_by: user?.id,
       };
@@ -85,7 +95,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          
+
           {/* {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
