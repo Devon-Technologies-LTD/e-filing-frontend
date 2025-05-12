@@ -123,8 +123,10 @@ export const ActiveUserAction = (_prevState: unknown, formData: FormData) => han
 
 
 export async function resetPassword(
-    prevState: { success: boolean | null; message: string; errors?: any },
-    formData: FormData
+    // prevState: { success: boolean | null; message: string; errors?: any },
+    _prevState: unknown,
+    formData: FormData,
+    
 ) {
     const data = Object.fromEntries(formData.entries());
     try {

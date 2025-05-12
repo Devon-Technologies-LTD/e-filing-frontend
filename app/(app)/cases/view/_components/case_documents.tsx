@@ -24,6 +24,8 @@ import { useDispatch } from "react-redux";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { toast } from "sonner";
+import { useAppSelector } from "@/hooks/redux";
+import { ROLES } from "@/types/auth";
 
 interface IProps {
   data: ICaseTypes & { id: string; documents: IDocumentFileType[] };
@@ -33,6 +35,9 @@ export function CaseDocumentList({ data }: IProps) {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const [isDownloading, setIsDownloading] = useState(false);
+  const { data: user } = useAppSelector((state) => state.profile);
+  const userRole = user?.role;
+
 
   const [searchQuery, setSearchQuery] = useState("");
   //grouped the documents by date
@@ -165,13 +170,15 @@ export function CaseDocumentList({ data }: IProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="space-y-1">
-            <DropdownMenuItem
-              onClick={handleRefileProcesses}
-              variant="outline"
-              className="uppercase text-xs"
-            >
-              Refile other process{" "}
-            </DropdownMenuItem>
+            {userRole !== ROLES.ASSIGNING_MAGISTRATE && (
+              <DropdownMenuItem
+                onClick={handleRefileProcesses}
+                variant="outline"
+                className="uppercase text-xs"
+              >
+                Refile other process
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onClick={() => {
                 handleDownloadAll();
@@ -179,10 +186,11 @@ export function CaseDocumentList({ data }: IProps) {
               variant="outline"
               className="uppercase text-xs"
             >
-              Download all documents{" "}
+              Download all documents
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
       </div>
 
       <div className="space-y-6">
@@ -218,8 +226,8 @@ export function CaseDocumentList({ data }: IProps) {
                         {doc.sub_title.toLowerCase() === "other documents"
                           ? doc.title
                           : doc.case_type_name === "EXHIBITS"
-                          ? `Exhibit - ${doc.title}`
-                          : doc.sub_title}
+                            ? `Exhibit - ${doc.title}`
+                            : doc.sub_title}
                       </span>
                     </div>
                     <Button

@@ -7,7 +7,7 @@ import { USER_STATUS } from "@/types/auth";
 export const mockCases: ICase[] = [
   {
     caseId: "CVfWuse/233456789/2024",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    title: "John Ibuku Johnson V. Jone Jonerite Doc...",
     type: "CRIMINAL CASE",
     filingDate: "12/02/2025",
     court: "Koru - Koru Site",
@@ -15,13 +15,13 @@ export const mockCases: ICase[] = [
     status: "IN PROGRESS",
     stage: "First Information Report",
     name: "CVfWuse/233456789/2024",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    email: "John Ibuku Johnson V. Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
     action: "Koru - Koru Site",
   },
   {
     caseId: "CVfWuse/233456789/2024",
-    title: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    title: "John Ibuku Johnson V. Jone Jonerite Doc...",
     type: "CRIMINAL CASE",
     filingDate: "12/02/2025",
     court: "Koru - Koru Site",
@@ -29,7 +29,7 @@ export const mockCases: ICase[] = [
     status: "IN PROGRESS",
     stage: "First Information Report",
     name: "CVfWuse/233456789/2024",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    email: "John Ibuku Johnson V. Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
     action: "Koru - Koru Site",
   },
@@ -37,21 +37,21 @@ export const mockCases: ICase[] = [
 export const management: TManagement[] = [
   {
     name: "Prince Muteh",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    email: "John Ibuku Johnson V. Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
     status: "Active",
     action: "['view profile', 'De-activate User', 'Delete user']",
   },
   {
     name: "Peter John",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    email: "John Ibuku Johnson V. Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
     status: "Inactive",
     action: "['view profile', 'De-activate User', 'Delete user']",
   },
   {
     name: "CVfWuse/233456789/2024",
-    email: "John Ibuku Johnson vs Jone Jonerite Doc...",
+    email: "John Ibuku Johnson V. Jone Jonerite Doc...",
     districts: "CRIMINAL CASE",
     status: "Pending",
     action: "['view profile', 'De-activate User', 'Delete user']",
@@ -135,7 +135,7 @@ export const management: TManagement[] = [
 //     id: "1",
 //     icon: "pdf",
 //     message:
-//       "A Documents titled “Cases” has been refiled  for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//       "A Documents titled “Cases” has been refiled  for the case 567458678 (Uche V. NEPA) . You will be notified of any updates",
 //     caseNumber: "",
 //     timestamp: "2 hours ago",
 //   },
@@ -143,7 +143,7 @@ export const management: TManagement[] = [
 //     id: "2",
 //     icon: "shield",
 //     message:
-//       "Seal and QR code were generated for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//       "Seal and QR code were generated for the case 567458678 (Uche V. NEPA) . You will be notified of any updates",
 //     caseNumber: "",
 //     timestamp: "2 hours ago",
 //   },
@@ -151,7 +151,7 @@ export const management: TManagement[] = [
 //     id: "3",
 //     icon: "pdf",
 //     message:
-//       "23 Documents uploaded for the case 567458678 (Uche vs NEPA) . You will be notified of any updates",
+//       "23 Documents uploaded for the case 567458678 (Uche V. NEPA) . You will be notified of any updates",
 //     caseNumber: "",
 //     timestamp: "2 hours ago",
 //   },
@@ -160,7 +160,7 @@ export const management: TManagement[] = [
 export const demoData = {
   caseNumber: "CV/WZ2/001e/Year",
   title:
-    "Johnathan Smith and Associates vs. The Federal Housing Development Corporation",
+    "Johnathan Smith and Associates V.. The Federal Housing Development Corporation",
   filedDate: "12/02/2024",
   claimant: {
     name: "John Doe",
@@ -604,7 +604,7 @@ export const hearings = [
   {
     caseNumber: "CV/WZ2/001e/Year",
     parties:
-      "Johnathan Smith and Associates vs. The Federal Housing Development Corporation of the State of New Lagos",
+      "Johnathan Smith and Associates V.. The Federal Housing Development Corporation of the State of New Lagos",
     description:
       "Breach of Contract Regarding Urban Development Project Phase 3, Filed on Behalf of Affected Stakeholders",
     hearingDate: "12th January, 2025",
@@ -614,7 +614,7 @@ export const hearings = [
   {
     caseNumber: "CV/WZ2/001e/Year",
     parties:
-      "Doe Legal Services vs. The City Planning Authority of Greater Abuja",
+      "Doe Legal Services V.. The City Planning Authority of Greater Abuja",
     description:
       "Dispute Over Land Use Regulations and Compensation Claims for Displaced Residents",
     hearingDate: "15th February, 2025",
@@ -623,7 +623,7 @@ export const hearings = [
   },
   {
     caseNumber: "CV/WZ2/001e/Year",
-    parties: "Green Energy Ltd. vs. National Power Grid Authority",
+    parties: "Green Energy Ltd. V.. National Power Grid Authority",
     description: "Contractual Violations in Renewable Energy Supply Agreements",
     hearingDate: "20th March, 2025",
     hearingTime: "11:45 AM",
