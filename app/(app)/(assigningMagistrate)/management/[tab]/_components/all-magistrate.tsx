@@ -85,6 +85,7 @@ export default function AllMagistrates() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          
           {/* {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
             <>
               <FilterDropdown
@@ -97,6 +98,7 @@ export default function AllMagistrates() {
               />
             </>
           )} */}
+
           <InviteUser
             trigger={
               <Button size={"medium"} className="h-11">

@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button } from "@/components/ui/button";
-import type React from "react"; // Import React
+import type React from "react"; 
 import { StatusBadge } from "@/components/ui/status-badge";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { useState } from "react";
-// import AllActivities from "./all-activities";
-// import { Hearings } from "./hearings";
 import { useRouter } from "next/navigation";
 import { CaseStatus } from "@/constants";
 
@@ -20,7 +18,6 @@ export function TrackCaseDetails() {
     setActiveTab(value);
   };
   const router = useRouter();
-
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex justify-between items-start mb-6">
@@ -36,7 +33,7 @@ export function TrackCaseDetails() {
               status={CaseStatus.UnderReview}
             />
           </div>
-          <p className="text-black font-medium text-sm">John Doe vs Jane Doe</p>
+          <p className="text-black font-medium text-sm">John Doe V. Jane Doe</p>
         </div>
         <Button
           onClick={() =>

@@ -67,6 +67,7 @@ export function SingleCaseHeader({
           status={reviewStatus === "denied" ? "Denied" : data?.status}
         />
       );
+      
     } else {
       const normalizedReassignmentStatus = reassignmentStatus?.toLowerCase();
       const normalizedCaseRequestStatus = caseRequestStatus?.toLowerCase();

@@ -471,5 +471,5 @@ export function generateCaseTitle(
   claimants: Partial<Claimant>[] = [],
   defendants: Partial<Claimant>[] = []
 ) {
-  return `${formatPart(claimants)} vs ${formatPart(defendants)}`;
+  return `${formatPart(claimants)} V. ${formatPart(defendants)}`;
 }

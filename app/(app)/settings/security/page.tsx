@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 
 export default function AccountSecurity() {
-  const [state, dispatch] = useFormState(resetPassword, { success: false, status: 400, message: "", errors: {} });
+  const [state, dispatch] = useFormState(resetPassword, undefined);
   const { data: user } = useAppSelector((state) => state.profile);
   useEffectAfterMount(() => {
     if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -43,8 +43,8 @@ export default function AccountSecurity() {
                 <LoginPasswordField showStrength={true} label="NEW PASSWORD" name="new_password" placeholder="Password" />
               </div>
             </div>
-            {state.success === false && (
-              <p className="text-red-500 text-sm">{state.message}</p>
+            {state?.success === false && (
+              <p className="text-red-500 text-sm">{state?.message}</p>
             )}
             <SubmitButton
               value="UPDATE"
