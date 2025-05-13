@@ -6,8 +6,8 @@ import CaseGenerationLoader from "@/components/loaders/case-generation-loader";
 
 interface TimelineStep {
   title: string;
-  description: string;
   time: string;
+  description: string;
   status: "completed" | "in-progress" | "pending";
 }
 

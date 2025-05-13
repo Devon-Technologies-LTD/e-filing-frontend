@@ -79,6 +79,7 @@ export function CaseDocumentList({ data }: IProps) {
       )}&name=${encodeURIComponent(fileName)}`;
       const response = await fetch(proxyUrl);
       if (!response.ok) throw new Error("Failed to download file");
+      console.log(proxyUrl)
 
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
