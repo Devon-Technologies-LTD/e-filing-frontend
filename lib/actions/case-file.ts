@@ -147,6 +147,33 @@ export async function getCostAssesment(id: string) {
     return handleApiError(error);
   }
 }
+export async function getDecision(id: string) {
+  try {
+    const data = await CaseFileService.decision(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getDocumentHistory(id: string) {
+  try {
+    const data = await CaseFileService.Documenthistory(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getDocumentActivity(id: string) {
+  try {
+    const data = await CaseFileService.DocumentActivity(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function updateCaseFile({
   payload,
   caseFileId,

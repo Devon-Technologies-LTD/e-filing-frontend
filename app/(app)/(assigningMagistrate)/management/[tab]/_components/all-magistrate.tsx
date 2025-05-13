@@ -66,7 +66,6 @@ export default function AllMagistrates() {
     role = "CENTRAL_REGISTRAR";
   }
 
-
   const { data, isLoading: draftsLoading } = useQuery({
     queryKey: ["userManagement", currentPage, selectedCourt, searchTerm],
     queryFn: async () => {

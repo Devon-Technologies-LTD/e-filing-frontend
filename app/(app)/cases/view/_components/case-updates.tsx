@@ -12,7 +12,7 @@ import { getCaseActivity } from "@/lib/actions/case-file";
 import { NotificationIcon } from "@/components/ui/notifications-icon";
 import { dateFormatter, formatDate } from "@/lib/utils";
 import NotificationSkeleton from "./activity-skeleton";
-import { getHearing, getNotification, updateNotification } from "@/lib/actions/admin-file";
+import { getHearing, getNotification, getSingleHearing, updateNotification } from "@/lib/actions/admin-file";
 // import { Notifications } from "@/types/case";
 
 interface INotification {
@@ -41,7 +41,7 @@ export function CaseUpdates({ id }: { id: string }) {
     const fetchNotification = async () => {
       setLoading(true);
       try {
-        const response = await getHearing();
+        const response = await getSingleHearing(id);
         if (response.success) {
           setHearing(response.data || []);
         } else {
@@ -54,7 +54,7 @@ export function CaseUpdates({ id }: { id: string }) {
       }
     };
 
-    fetchNotification(); // Load only once on component mount
+    fetchNotification();
   }, []);
 
   const tabs: { id: any; label: string }[] = [
@@ -88,7 +88,7 @@ export function CaseUpdates({ id }: { id: string }) {
     status: "completed",
     time: dateFormatter(item?.created_at).fullDate,
   }));
-  
+
   console.log("hearing =>" + JSON.stringify(hearing));
 
   return (

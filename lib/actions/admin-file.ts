@@ -77,6 +77,14 @@ export async function getHearing() {
         return handleError(err);
     }
 }
+export async function getSingleHearing(id: string) {
+    try {
+        const data = await CaseFileService.getSingleHearing(id);
+        return { ...data, success: true };
+    } catch (err) {
+        return handleError(err);
+    }
+}
 
 export async function getNotification() {
     try {

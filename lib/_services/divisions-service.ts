@@ -11,7 +11,7 @@ export interface IDivision {
 
 const DivisionsService = {
   async getUserDivision(): Promise<IDivision[]> {
-    const response = await axiosInstance.get<IDivision[]>(`/user/division`);
+    const response = await axiosInstance.get<IDivision[]>(`/division`);
     return response.data;
   },
   async getTitles(): Promise<any[]> {

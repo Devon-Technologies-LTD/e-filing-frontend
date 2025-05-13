@@ -51,7 +51,7 @@ export const LocationSelect = ({
                   value={location.ID}
                   className="py-2"
                 >
-                  {location.Title}
+                  {location.title}
                 </SelectItem>
               ))}
             </>

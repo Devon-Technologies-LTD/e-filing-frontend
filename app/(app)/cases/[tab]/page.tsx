@@ -141,7 +141,7 @@ export default function FilteredCases() {
       break;
     case ROLES.LAWYER:
       if (tab === "active") {
-        status = { ...status, is_active: true, status: [] };
+        status = { ...status, is_active: true, assignee_id: "", status: [] };
       } else if (tab === "recent") {
         status = { ...status, assignee_id: "", status: [] };
       } else {
@@ -158,7 +158,7 @@ export default function FilteredCases() {
   } = useQuery({
     queryKey: ["get_cases", { user: user?.id, tab, selectedCase, currentPage, formattedStartDate, formattedEndDate, searchTerm }],
     queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
-    staleTime: 50000,
+    staleTime: 30000,
     refetchInterval: 10000,
   });
 

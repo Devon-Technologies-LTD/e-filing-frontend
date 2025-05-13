@@ -12,6 +12,7 @@ import {
   getAdminCaseFilesById,
   getCaseFilesById,
   getCostAssesment,
+  getDecision,
 } from "@/lib/actions/case-file";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
@@ -25,6 +26,7 @@ import {
 } from "@/redux/slices/case-filing-slice";
 import { useDispatch } from "react-redux";
 import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
+import { CaseDecisionList } from "../_components/case_decision";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -65,6 +67,11 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     queryFn: () => getCostAssesment(params.id),
     enabled: !!params.id,
   });
+  const { data: decision, isLoading: decisionLoading } = useQuery({
+    queryKey: ["decision", params.id],
+    queryFn: () => getDecision(params.id),
+    enabled: !!params.id,
+  });
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -74,7 +81,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     navigate.push(`${params?.id}/refile-documents`);
   };
 
-  if (isLoading || breakdownLoading) {
+  if (isLoading || breakdownLoading || decisionLoading) {
     return <CaseDocumentListSkeleton />;
   }
   return (
@@ -142,17 +149,17 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               <CaseDocumentList data={data} />
             </div>{" "}
             <div className="col-span-5 bg-white p-2">
-              <DocumentUpdates />
+              <DocumentUpdates id={params.id} />
             </div>
           </div>
         )}
         {activeTab === "decisions" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
-              <CaseDocumentList data={data} />
+              <CaseDecisionList data={decision?.data.data} />
             </div>{" "}
             <div className="col-span-5 bg-white p-2">
-              <DocumentUpdates />
+              <DocumentUpdates id={params.id} />
             </div>
           </div>
         )}

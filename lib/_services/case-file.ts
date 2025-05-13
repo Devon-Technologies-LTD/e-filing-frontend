@@ -136,6 +136,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+  async getSingleHearing(id: string): Promise<any> {
+    const response = await axiosInstance.get<IHearingFilter>(
+      `admin/casefile/case-hearings?id=${id}`
+    );
+    return response.data;
+  },
 
   async getCaseActivity(id: string): Promise<any> {
     const response = await axiosInstance.get<IDraftFilter>(
@@ -253,6 +259,27 @@ const CaseFileService = {
     console.log("cost assessment response", response.data);
     return response.data;
   },
+  async decision(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `casefile/decision/${id}`
+    );
+    return response.data;
+  },
+
+  async Documenthistory(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `casefile/document-history/${id}`
+    );
+    return response.data;
+  },
+  async DocumentActivity(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `casefile/document-activity/${id}`
+    );
+    return response.data;
+  },
+
+
   async patchCaseType({
     payload,
     caseTypeId,

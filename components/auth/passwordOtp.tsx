@@ -12,12 +12,18 @@ import { toast } from "sonner";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import useEffectAfterMount from "@/hooks/useEffectAfterMount";
 import { CLIENT_ERROR_STATUS } from "@/lib/_constants";
+import CustomOtpInput from "../CustomOtpInput";
+
+
+
 
 export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
     const [state, dispatch] = useFormState(verifyOTP, undefined);
     const [timeLeft, setTimeLeft] = useState(60 * 5);
     const [otpState, dispatchOTP] = useFormState(reSendOtpAction, undefined);
     const [isResending, setIsResending] = useState(false);
+    const [otp, setOtp] = useState('');
+
 
     useEffectAfterMount(() => {
         if (state && CLIENT_ERROR_STATUS.includes(state?.status)) {
@@ -66,7 +72,7 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
                 </Link>
             }
         >
-            <div className="flex flex-col text-center justify-center items-center space-y-6 px-4 sm:px-6">
+            <div className="flex flex-col text-center justify-center items-center space-y-6">
                 <p className="text-app-primary text-2xl sm:text-3xl font-bold">
                     Check your email for a code
                 </p>
@@ -75,28 +81,14 @@ export default function PASSWORDOTPCOMPONENT({ email }: { email: string }) {
                     The code expires shortly, so please enter it soon.
                 </p>
                 <form action={dispatch} className="space-y-6">
-
-                    <InputOTP maxLength={6} name="otp" pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
-                        <InputOTPGroup className="gap-2">
-                            {[...Array(3)].map((_, i) => (
-                                <InputOTPSlot
-                                    key={i}
-                                    index={i}
-                                    className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[64px] w-[48px] sm:h-[114px] sm:w-[86px] rounded-md"
-                                />
-                            ))}
-                        </InputOTPGroup>
-                        <InputOTPSeparator className="text-neutral-400 mx-4 sm:mx-6" />
-                        <InputOTPGroup className="gap-2">
-                            {[...Array(3)].map((_, i) => (
-                                <InputOTPSlot
-                                    key={i + 3}
-                                    index={i + 3}
-                                    className="border-[1px] text-lg border-gray-300 bg-white size-20 h-[64px] w-[48px] sm:h-[114px] sm:w-[86px] rounded-md"
-                                />
-                            ))}
-                        </InputOTPGroup>
-                    </InputOTP>
+                    <input type="hidden" name="otp" value={otp} />
+                    <CustomOtpInput
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        shouldAutoFocus
+                    />
+            
                     <SubmitButton value="PROCEED" pendingValue="Processing..." className="w-full bg-app-primary hover:bg-app-secondary/90 text-white h-12 rounded mt-2" />
                 </form>
 
