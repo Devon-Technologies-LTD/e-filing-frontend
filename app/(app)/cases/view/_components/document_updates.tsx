@@ -55,6 +55,7 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
     ? documentHistory.data.data.map((item: any) => ({
       title: item?.title,
       status: "completed",
+
       time: isValidDate(item?.created_at)
         ? dateFormatter(item.created_at).fullDate
         : "Invalid date",
@@ -64,9 +65,7 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
     ? documentActivity.data.data.map((item: any) => ({
       description: item.title,
       status: "completed",
-      created_at: isValidDate(item?.created_at)
-        ? dateFormatter(item.created_at).fullDate
-        : "Invalid date",
+      created_at: item.created_at,
     })) : [];
 
   const isLoading = isActivityLoading || isHistoryLoading;

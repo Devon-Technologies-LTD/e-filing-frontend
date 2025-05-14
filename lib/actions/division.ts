@@ -38,7 +38,6 @@ export async function getAdminDivision() {
   try {
     const data = await DivisionsService.getAdminDivision();
     console.log(data);
-
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
