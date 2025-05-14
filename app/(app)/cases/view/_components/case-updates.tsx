@@ -138,6 +138,7 @@ export function CaseUpdates({ id }: { id: string }) {
               )}
             </>
           )}
+          
           {activeTab === "history" && (
             <>
               {activityLoading ? (
@@ -147,6 +148,7 @@ export function CaseUpdates({ id }: { id: string }) {
               )}
             </>
           )}
+
           {activeTab === "hearings" && (
             <>
               {hearingLoading ? (
@@ -156,6 +158,7 @@ export function CaseUpdates({ id }: { id: string }) {
               )}
             </>
           )}
+          
         </div>
       </ScrollArea>
     </div>

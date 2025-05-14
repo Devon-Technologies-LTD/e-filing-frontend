@@ -36,6 +36,12 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
     enabled: !!id,
   });
 
+  const isValidDate = (date: any) => {
+    const parsed = new Date(date);
+    return !isNaN(parsed.getTime());
+  };
+
+
   const {
     data: documentHistory,
     isLoading: isHistoryLoading,
@@ -49,16 +55,19 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
     ? documentHistory.data.data.map((item: any) => ({
       title: item?.title,
       status: "completed",
-      time: item?.created_at ? dateFormatter(item.created_at).fullDate : "Invalid date",
+      time: isValidDate(item?.created_at)
+        ? dateFormatter(item.created_at).fullDate
+        : "Invalid date",
     }))
     : [];
 
   const timelineStepsActivity = Array.isArray(documentActivity?.data.data)
     ? documentActivity.data.data.map((item: any) => ({
       description: item.title,
-      // description: item.description ?? "",
       status: "completed",
-      created_at: item?.created_at ? dateFormatter(item.created_at).fullDate : "Invalid date",
+      created_at: isValidDate(item?.created_at)
+        ? dateFormatter(item.created_at).fullDate
+        : "Invalid date",
     }))
     : [];
 
