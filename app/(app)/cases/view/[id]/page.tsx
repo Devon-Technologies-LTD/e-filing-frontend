@@ -38,6 +38,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     { id: "documents", label: "Documents" },
     { id: "decisions", label: "Decisions" },
   ];
+
   const [activeTab, setActiveTab] = useState("overview");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -72,6 +73,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     queryFn: () => getDecision(params.id),
     enabled: !!params.id,
   });
+
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
     dispatch(clearForm());
@@ -95,41 +97,6 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             onTabChange={handleTabChange}
             activeTab={activeTab}
           />
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger className=" ">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Icons.settings />
-                </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  className="text-zinc-700 bg-white border-0 font-medium text-xs"
-                >
-                  More Actions
-                </TooltipContent>
-              </Tooltip>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="space-y-1">
-              <DropdownMenuItem
-                onClick={() => {
-                  handleRefileProcesses();
-                }}
-                variant="outline"
-                className="uppercase text-xs"
-              >
-                Refile other process{" "}
-              </DropdownMenuItem>
-              <DropdownMenuItem variant="outline" className="uppercase text-xs">
-                Request Correction{" "}
-              </DropdownMenuItem>{" "}
-              <DropdownMenuItem variant="outline" className="uppercase text-xs">
-                Withdraw case
-              </DropdownMenuItem>{" "}
-              <DropdownMenuItem variant="outline" className="uppercase text-xs">
-                contact support{" "}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
         </div>
       </div>
       <section className="py-4">
@@ -143,21 +110,23 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             </div>
           </div>
         )}
+        
         {activeTab === "documents" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
               <CaseDocumentList data={data} />
-            </div>{" "}
+            </div>
             <div className="col-span-5 bg-white p-2">
               <DocumentUpdates id={params.id} />
             </div>
           </div>
         )}
+
         {activeTab === "decisions" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
               <CaseDecisionList data={decision?.data.data} />
-            </div>{" "}
+            </div>
             <div className="col-span-5 bg-white p-2">
               <DocumentUpdates id={params.id} />
             </div>

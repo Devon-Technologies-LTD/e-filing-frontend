@@ -26,8 +26,17 @@ export function CaseDecisionList({ data, message }: IProps) {
     console.log(data);
     const isJudgementDelivered = !!data?.decision;
     const fileName = data?.file_path?.split("/").pop() || "judgement.pdf";
-    const decisionDate = data?.decision_date
-        ? new Date(data.decision_date).toLocaleDateString()
+    // const decisionDate = data?.decision_date
+    //     ? new Date(data.decision_date).toLocaleDateString()
+    //     : "Unknown date";
+
+    const isValidDate = (date: string | undefined) => {
+        const parsed = new Date(date || "");
+        return !isNaN(parsed.getTime());
+    };
+
+    const decisionDate = isValidDate(data?.decision_date)
+        ? new Date(data!.decision_date!).toLocaleDateString()
         : "Unknown date";
 
     const matchesSearch = data?.decision
@@ -133,4 +142,5 @@ export function CaseDecisionList({ data, message }: IProps) {
             </div>
         </div>
     );
+
 }
