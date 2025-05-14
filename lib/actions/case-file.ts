@@ -168,6 +168,7 @@ export async function getDocumentHistory(id: string) {
 export async function getDocumentActivity(id: string) {
   try {
     const data = await CaseFileService.DocumentActivity(id);
+    console.log("DocumentActivity =>" + JSON.stringify(data));
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

@@ -19,7 +19,8 @@ const DivisionsService = {
     return response.data;
   },
   async getAdminDivision(): Promise<IDivision[]> {
-    const response = await axiosInstance.get<IDivision[]>(`admin/division `);
+    // const response = await axiosInstance.get<IDivision[]>(`/all-division`);
+    const response = await axiosInstance.get<IDivision[]>(`/admin/division/division-without-user`);
     return response.data;
   },
   async getAdminSubDivision(id: string): Promise<any[]> {

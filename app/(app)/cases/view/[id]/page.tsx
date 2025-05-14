@@ -117,7 +117,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               <CaseDocumentList data={data} />
             </div>
             <div className="col-span-5 bg-white p-2">
-              {/* <DocumentUpdates id={params.id} /> */}
+              <DocumentUpdates id={params.id} />
             </div>
           </div>
         )}
@@ -128,7 +128,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               <CaseDecisionList data={decision?.data.data} />
             </div>
             <div className="col-span-5 bg-white p-2">
-              {/* <DocumentUpdates id={params.id} /> */}
+              <DocumentUpdates id={params.id} />
             </div>
           </div>
         )}
