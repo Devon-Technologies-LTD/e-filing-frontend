@@ -58,8 +58,7 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
       time: isValidDate(item?.created_at)
         ? dateFormatter(item.created_at).fullDate
         : "Invalid date",
-    }))
-    : [];
+    })) : [];
 
   const timelineStepsActivity = Array.isArray(documentActivity?.data.data)
     ? documentActivity.data.data.map((item: any) => ({
@@ -68,8 +67,7 @@ export function DocumentUpdates({ id }: DocumentUpdatesProps) {
       created_at: isValidDate(item?.created_at)
         ? dateFormatter(item.created_at).fullDate
         : "Invalid date",
-    }))
-    : [];
+    })) : [];
 
   const isLoading = isActivityLoading || isHistoryLoading;
 
