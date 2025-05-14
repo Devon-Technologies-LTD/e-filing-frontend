@@ -74,20 +74,7 @@ export function CaseDecisionList({ data, message }: IProps) {
 
     return (
         <div className="max-w-5xl mx-auto p-4 space-y-6">
-            {/* Search bar */}
-            <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                    type="search"
-                    variant="ghost"
-                    autoComplete="off"
-                    data-form-type="other"
-                    placeholder="e.g search document name"
-                    className="pl-9 h-12 md:w-[100px] lg:w-[400px]"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-            </div>
+          
 
             <div className="space-y-6">
                 {isJudgementDelivered && matchesSearch ? (

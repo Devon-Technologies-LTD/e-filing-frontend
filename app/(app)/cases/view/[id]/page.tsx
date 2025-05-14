@@ -27,6 +27,7 @@ import {
 import { useDispatch } from "react-redux";
 import CaseDocumentListSkeleton from "../_components/view-document-skeleton";
 import { CaseDecisionList } from "../_components/case_decision";
+import { DecisionUpdate } from "../_components/decision-update";
 
 export default function SingleCasePage({ params }: { params: { id: string } }) {
   const { data: user } = useAppSelector((state) => state.profile);
@@ -128,7 +129,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
               <CaseDecisionList data={decision?.data.data} />
             </div>
             <div className="col-span-5 bg-white p-2">
-              <DocumentUpdates id={params.id} />
+              <DecisionUpdate id={params.id} />
             </div>
           </div>
         )}
