@@ -17,7 +17,7 @@ type ErrorResponse = {
 export async function getUserDivision() {
   try {
     const data = await DivisionsService.getUserDivision();
-    
+
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -37,7 +37,8 @@ export async function getTitles() {
 export async function getAdminDivision() {
   try {
     const data = await DivisionsService.getAdminDivision();
-    
+    console.log(data);
+
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
@@ -47,7 +48,7 @@ export async function getAdminDivision() {
 export async function getAdminSubDivision(id: string) {
   try {
     const data = await DivisionsService.getAdminSubDivision(id);
-    
+
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
