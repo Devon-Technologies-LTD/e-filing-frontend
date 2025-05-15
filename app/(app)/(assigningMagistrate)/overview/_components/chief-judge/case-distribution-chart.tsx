@@ -48,17 +48,39 @@ export default function CaseDistributionBarChart({
 
   return (
     <div className="space-y-4">
-      <div className="bg-white border-b border-zinc-200 py-6">
-        <div className="container flex items-center justify-between">
-          <p className="font-bold">{heading}</p>
-          <section className="flex gap-2">
+
+       <div className="bg-white border-b border-zinc-200 py-4 px-4 md:px-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <p className="text-lg font-bold">{heading}</p>
+          <section className="flex xs:flex-wrap gap-2">
             <YearSelector />
             <AllFiledCasesFilter />
             <AllCasesFilter />
           </section>
         </div>
       </div>
-      <section className="container py-4">
+
+      <section className="px-4 md:px-6 py-4">
+        <div className="w-full h-[300px] md:h-[500px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} cursor={false} />
+              <Legend />
+              <Bar
+                dataKey="count"
+                barSize={40}
+                fill="#EB963F"
+                minPointSize={10}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="text-sm text-center text-zinc-500 mt-3">{footer}</p>
+      </section>
+      {/* <section className="container py-4">
         <ResponsiveContainer width="100%" height={500}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -78,7 +100,7 @@ export default function CaseDistributionBarChart({
           </BarChart>
         </ResponsiveContainer>
         <p className="text-sm text-center text-zinc-500 mt-2">{footer}</p>
-      </section>
+      </section> */}
     </div>
   );
 }
