@@ -17,7 +17,7 @@ export default function CaseStatusChart({ caseData, heading, user }: CaseStatusC
 
     // Label mapping for display
     const labelMap: Record<string, string> = {
-        totalCases: "Total Cases Reviewed",
+        totalCases: "Total Cases",
         pendingCases: "Pending Review",
         approved: "Approved Cases",
         denied: "Denied Cases",

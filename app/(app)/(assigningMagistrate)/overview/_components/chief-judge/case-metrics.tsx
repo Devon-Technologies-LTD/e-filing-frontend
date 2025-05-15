@@ -127,7 +127,17 @@ export default function CaseMetrics() {
             <MetricCard type="case" metricKey="concluded" value="Concluded Cases" metric={data?.concludedCases ?? { total: 0, difference: 0 }} rightModal={rightModal} />
           )}
 
-          {centeral && ["underReview", "approved", "denied"].map((key) => (
+          {centeral && ["underReview"].map((key) => (
+            <MetricCard
+              key={key}
+              type="case"
+              metricKey={key}
+              value={`Total Cases`}
+              metric={caseMetricData?.[`${key}`] ?? { total: 0, difference: 0 }}
+              rightModal={rightModal}
+            />
+          ))}
+          {centeral && ["approved", "denied"].map((key) => (
             <MetricCard
               key={key}
               type="case"
@@ -153,7 +163,7 @@ export default function CaseMetrics() {
             caseData={caseMetricsData}
           />
         )}
-        
+
         {/* {[ROLES.DIRECTOR_MAGISTRATE, , ROLES.CHIEF_JUDGE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
           <PerformanceMetricChart user={{ role: user?.role as ROLES }} heading="PERFORMANCE METRIC" caseData={data} />
         )} */}

@@ -17,7 +17,7 @@ const SignUpLayout = ({ children, headerContent }: SignUpLayoutProps) => {
                         <div className="text-sm font-light text-gray-800">
                             <div className="text-xs text-muted">Abuja</div>
                             <div className="text-app-primary font-bold text-sm">
-                                E-filling Portal
+                                DocketMaster
                             </div>
                         </div>
                     </div>

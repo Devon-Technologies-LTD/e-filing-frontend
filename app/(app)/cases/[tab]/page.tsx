@@ -190,29 +190,29 @@ export default function FilteredCases() {
   return (
     <div className="">
       <div className="bg-white overflow-auto space-y-6 max-h-[calc(100vh-220px)]">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           {/* Search Input */}
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral" />
             <Input
               type="search"
               variant="ghost"
               autoComplete="off"
               placeholder="e.g CV/WZ2/001e/Year"
-              className="pl-9 h-12"
-              value={searchTerm} // ✅ Now correctly bound
-              onChange={handleSearchChange} // ✅ Updates search term
+              className="pl-9 h-12 w-full sm:w-80"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
           </div>
 
           {/* Filters */}
-          <section className="flex gap-3">
+          <section className="flex flex-col gap-3 sm:flex-row sm:items-center">
             {/* Date Range Picker */}
             <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="h-11 border-app-tertiary border-2"
+                  className="h-11 border-app-tertiary border-2 w-full sm:w-auto"
                 >
                   {formattedStartDate && formattedEndDate
                     ? `${formattedStartDate} - ${formattedEndDate}`
@@ -240,12 +240,10 @@ export default function FilteredCases() {
 
             {/* Case Type Filter */}
             <Select
-              onValueChange={(value) =>
-                setSelectedCase(value as "all" | CaseTypes)
-              }
+              onValueChange={(value) => setSelectedCase(value as "all" | CaseTypes)}
               value={selectedCase}
             >
-              <SelectTrigger className="h-11" variant="outline">
+              <SelectTrigger className="h-11 w-full sm:w-48" variant="outline">
                 <SelectValue placeholder="SELECT CASE TYPE" />
               </SelectTrigger>
               <SelectContent>
@@ -263,6 +261,7 @@ export default function FilteredCases() {
             </Select>
           </section>
         </div>
+
 
         {/* Data Table */}
         <DataTable

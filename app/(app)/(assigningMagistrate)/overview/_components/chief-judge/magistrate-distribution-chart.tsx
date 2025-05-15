@@ -41,10 +41,10 @@ export default function MagistrateDistributionBarChart({
 
   return (
     <div className="space-y-4">
-      <div className="bg-white border-b border-zinc-200 py-6">
-        <div className="container flex items-center justify-between">
-          <p className="font-bold">{header}</p>
-          <section className="flex gap-2">
+      <div className="bg-white border-b border-zinc-200 py-4 px-4 md:px-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <p className="text-lg font-bold">{header}</p>
+          <section className="flex xs:flex-wrap gap-2">
             <FilterDropdown
               triggerVariant="outline"
               itemVariant="outline"

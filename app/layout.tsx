@@ -20,12 +20,15 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    template: "E-Filing App",
-    default: "E-Filing App",
+    template: "DocketMaster",
+    default: "DocketMaster",
   },
   description: "Court Filing System",
+  icons: {
+    icon: "/favicon.png", // or "/favicon.ico"
+  },
 };
-// const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] });
+
 
 export default function RootLayout({
   children,
@@ -35,20 +38,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <Head>
-        <title>E-Filing Portal</title>
+        <title>DocketMaster</title>
         <meta
           name="description"
-          content="E-Filing Portal - Manage your records seamlessly."
+          content="DocketMaster - Manage your records seamlessly."
         />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-        />
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <body
-        className={`${inter.variable} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}
-      >
+      <body className={`${inter.variable} font-inter antialiased bg-background min-h-screen w-full flex flex-col`}>
         <AppProvider>
           <Suspense fallback={<SuspenseLoader />}>
             <Toaster richColors expand={true} position="top-center" />

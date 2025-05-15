@@ -3,6 +3,7 @@ import { LogoIcon } from "@/components/svg/logoIcon";
 import { ReactNode } from "react";
 import TermsAndPrivacy from "./auth/terms";
 import React from "react";
+import Link from "next/link";
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -17,13 +18,12 @@ const AuthLayout = ({ children, headerContent }: AuthLayoutProps) => {
                 <div className="px-4 py-6 md:px-8">
                     <div className="flex items-center justify-between max-w-7xl mx-auto">
                         <div className="flex items-center space-x-4">
-                            <LogoIcon className="h-6 w-6 md:h-8 md:w-8" />
+                            <Link href="/">
+                                <LogoIcon className="h-6 w-6 md:h-8 md:w-8" />
+                            </Link>
                             <div className="hidden sm:block w-[1px] h-10 bg-gray-200"></div>
-                            <div className="text-sm font-light text-gray-800">
+                            <div className="hidden text-sm sm:block font-light text-gray-800">
                                 <div className="text-xs text-muted">Abuja</div>
-                                <div className="text-app-primary font-bold text-sm">
-                                    E-filling Portal
-                                </div>
                             </div>
                         </div>
                         {headerContent && (
