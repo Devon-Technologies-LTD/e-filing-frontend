@@ -87,6 +87,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
   if (isLoading || breakdownLoading || decisionLoading) {
     return <CaseDocumentListSkeleton />;
   }
+  console.log("costBreakdown?.data =>" + costBreakdown?.data);
   return (
     <div className="bg-zinc-100 h-full overflow-auto">
       <SingleCaseHeader data={data} params={params} />
@@ -111,7 +112,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
             </div>
           </div>
         )}
-        
+
         {activeTab === "documents" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
