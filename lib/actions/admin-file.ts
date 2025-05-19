@@ -1,4 +1,5 @@
 "use server";
+import { ROLES } from "@/types/auth";
 import CaseFileService, {
     IDraftFilter,
 } from "../_services/case-file";
@@ -77,10 +78,15 @@ export async function getHearing() {
         return handleError(err);
     }
 }
-export async function getSingleHearing(id: string) {
+export async function getSingleHearing(id: string, role: ROLES) {
     try {
-        const data = await CaseFileService.getSingleHearing(id);
-        return { ...data, success: true };
+        if ([ROLES.LAWYER, ROLES.USER,].includes(role as ROLES)) {
+            const data = await CaseFileService.getSingleHearingUser(id);
+            return { ...data, success: true };
+        } else {
+            const data = await CaseFileService.getSingleHearing(id);
+            return { ...data, success: true };
+        }
     } catch (err) {
         return handleError(err);
     }

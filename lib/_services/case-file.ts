@@ -142,6 +142,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+  async getSingleHearingUser(id: string): Promise<any> {
+    const response = await axiosInstance.get<IHearingFilter>(
+      `/casefile/hearing-history?id=${id}`
+    );
+    return response.data;
+  },
 
   async getCaseActivity(id: string): Promise<any> {
     const response = await axiosInstance.get<IDraftFilter>(
