@@ -3,7 +3,7 @@ name: Deploy Next.js to Remote Server
 on:
   push:
     branches:
-      - staging  # Replace with your branch
+      - pre-prod  # Replace with your branch
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Build Next.js app
         run: |
-          echo "${{ secrets.STAGING_ENV_FILE }}" > .env
+          echo "${{ secrets.PREPROD_ENV_FILE }}" > .env
           yarn build
 
       - name: Compress .next directory
@@ -43,7 +43,7 @@ jobs:
           ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
           
           # Copy .next folder, public folder, and node_modules to the server
-          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/home/devonadmin/e-filing-frontend/"
+          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/home/devonadmin/pre-prod/e-filing-frontend/"
 
       # Step 6: SSH into the server, pull latest code, and run docker-compose
       - name: SSH into the server, pull latest code, and run Docker Compose
@@ -60,10 +60,10 @@ jobs:
           # SSH into the server, pull the latest code, and run docker-compose
           ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
             # Navigate to the project directory
-            cd /home/devonadmin/e-filing-frontend || exit
+            cd /home/devonadmin/pre-prod/e-filing-frontend || exit
             # Pull latest code from the repo
             rm package-lock.json yarn.lock
-            git pull origin staging || exit
+            git pull origin pre-prod || exit
             rm -rf .next node_modules
             tar -xzf next_and_node_modules.tar.gz
             rm next_and_node_modules.tar.gz
