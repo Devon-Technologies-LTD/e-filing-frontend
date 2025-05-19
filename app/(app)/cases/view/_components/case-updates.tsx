@@ -13,6 +13,8 @@ import { NotificationIcon } from "@/components/ui/notifications-icon";
 import { dateFormatter, formatDate } from "@/lib/utils";
 import NotificationSkeleton from "./activity-skeleton";
 import { getHearing, getNotification, getSingleHearing, updateNotification } from "@/lib/actions/admin-file";
+import { useAppSelector } from "@/hooks/redux";
+import { ROLES } from "@/types/auth";
 // import { Notifications } from "@/types/case";
 
 interface INotification {
@@ -33,29 +35,8 @@ interface Hearing {
   updated_at: string;
 }
 export function CaseUpdates({ id }: { id: string }) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [hearing, setHearing] = useState<Hearing[]>([]);
 
-  useEffect(() => {
-    const fetchNotification = async () => {
-      setLoading(true);
-      try {
-        const response = await getSingleHearing(id);
-        if (response.success) {
-          setHearing(response.data || []);
-        } else {
-          throw new Error(response.message || "Failed to fetch Notification");
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotification();
-  }, []);
+  const { data: user } = useAppSelector((state) => state.profile);
 
   const tabs: { id: any; label: string }[] = [
     { id: "recent", label: "Recent Activities" },
@@ -77,7 +58,7 @@ export function CaseUpdates({ id }: { id: string }) {
   const { data: hearingData, isLoading: hearingLoading } = useQuery({
     queryKey: ["get_case_hearing"],
     queryFn: async () => {
-      return await getCaseActivity(id);
+      return await getSingleHearing(id, user?.role as ROLES);
     },
     staleTime: 50000,
   });
@@ -89,7 +70,7 @@ export function CaseUpdates({ id }: { id: string }) {
     time: dateFormatter(item?.created_at).fullDate,
   }));
 
-  console.log("hearing =>" + JSON.stringify(hearing));
+  console.log("hearing =>" + JSON.stringify(hearingData?.data));
 
   return (
     <div className="bg-white space-y-4 w-full overflow-hidden p-4 px-2 rounded-lg shadow-sm">
@@ -138,7 +119,7 @@ export function CaseUpdates({ id }: { id: string }) {
               )}
             </>
           )}
-          
+
           {activeTab === "history" && (
             <>
               {activityLoading ? (
@@ -154,11 +135,11 @@ export function CaseUpdates({ id }: { id: string }) {
               {hearingLoading ? (
                 <NotificationSkeleton />
               ) : (
-                <ActivityList notifications={hearing} />
+                <ActivityList notifications={hearingData?.data} />
               )}
             </>
           )}
-          
+
         </div>
       </ScrollArea>
     </div>
