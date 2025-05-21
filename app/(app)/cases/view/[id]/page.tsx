@@ -105,7 +105,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
         {activeTab === "overview" && (
           <div className="container py-4 grid grid-cols-12 gap-5">
             <div className="col-span-7 bg-white p-2">
-              <CaseOverview costBreakdown={costBreakdown?.data} data={data} />
+              <CaseOverview costBreakdown={costBreakdown?.data} data={data} caseId={params.id} />
             </div>
             <div className="col-span-5 bg-white p-2">
               <CaseUpdates id={data.id} />

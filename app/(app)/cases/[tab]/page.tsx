@@ -2,6 +2,7 @@
 
 import {
   createUserColumns,
+  joinedColumns,
   UnassignedColumns,
   UnderReviewColumns,
 } from "@/app/(app)/cases/[tab]/_components/table-columns";
@@ -48,6 +49,7 @@ export default function FilteredCases() {
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const formattedStartDate = selectedRange?.from
+  
     ? format(selectedRange.from, "yyyy-MM-dd")
     : "";
   const formattedEndDate = selectedRange?.to
@@ -151,13 +153,9 @@ export default function FilteredCases() {
     default:
       status = { ...status, assignee_id: "" };
   }
-  const {
-    data,
-    isLoading: draftsLoading,
-    refetch,
-  } = useQuery({
+  const {data,isLoading: draftsLoading, refetch,} = useQuery({
     queryKey: ["get_cases", { user: user?.id, tab, selectedCase, currentPage, formattedStartDate, formattedEndDate, searchTerm }],
-    queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE),
+    queryFn: () => getCaseFiles(status, currentPage, DEFAULT_PAGE_SIZE, tab),
     staleTime: 30000,
     refetchInterval: 10000,
   });
@@ -170,6 +168,8 @@ export default function FilteredCases() {
       case "approved-review":
       case "denied-review":
         return UnderReviewColumns;
+      case "joined":
+        return joinedColumns;
       default:
         return createUserColumns(user?.role!, "all")
     }

@@ -117,6 +117,21 @@ const CaseFileService = {
     );
     return response.data;
   },
+  async addLawyers(payload: any, caseId: string, type: string): Promise<any> {
+    if (type == "claimant") {
+      const response = await axiosInstance.post<any>(
+        `casefile/${caseId}/add-claimant`,
+        payload
+      );
+      return response.data;
+    } else {
+      const response = await axiosInstance.post<any>(
+        `casefile/${caseId}/add-defendant`,
+        payload
+      );
+      return response.data;
+    }
+  },
 
   async getCaseFilesAdmin(
     payload: IDraftFilter,
@@ -166,6 +181,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+
+  async getJoinedFiles(page: number, size: number): Promise<any> {
+    const response = await axiosInstance.get<any>(`casefile/lawyer-cases?page=${page}&size=${size}`);
+    return response.data;
+  },
+
   async getCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`CaseFile/${id}`);
     return response.data;
@@ -228,7 +249,6 @@ const CaseFileService = {
       `casefile/${caseFileId}`,
       payload
     );
-
     return response.data;
   },
 
