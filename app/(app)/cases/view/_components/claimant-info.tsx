@@ -1,16 +1,29 @@
 import { useState } from "react";
 import LabelValuePair from "@/components/ui/label-value-pair";
 import { Icons } from "@/components/svg/icons";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
 import { Claimant } from "@/components/case-filing/hooks";
 import { PlusCircle } from "lucide-react";
 
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { TitlesSelect } from "@/components/title-select";
+import { AddPersonDialog } from "./AddPersonDialog";
+
 interface ClaimantInfoProps {
   name: string;
+  caseNumber: string;
   defendant?: Partial<Claimant>[];
   claimant?: Partial<Claimant>[];
   email: string;
@@ -24,6 +37,7 @@ interface ClaimantInfoProps {
 }
 
 export function ClaimantInfo({
+  caseNumber,
   name,
   email,
   address,
@@ -38,7 +52,6 @@ export function ClaimantInfo({
   const [formData, setFormData] = useState<Partial<Claimant>[] | undefined>(
     defendant
   );
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
     const { name, value } = e.target;
     setFormData((prev) =>
@@ -49,7 +62,7 @@ export function ClaimantInfo({
     setFormData((prev) => [
       ...(Array.isArray(prev) ? prev : []),
       {
-        tempId: crypto.randomUUID(), 
+        tempId: crypto.randomUUID(),
         last_name: "",
         first_name: "",
         middle_name: "",
@@ -59,7 +72,7 @@ export function ClaimantInfo({
   };
 
   const handleRemove = (identifier: string) => {
-    if (formData && formData.length <= 1) return; 
+    if (formData && formData.length <= 1) return;
     setFormData(
       (prev) =>
         prev?.filter((item) => (item.id || item.tempId) !== identifier) || []
@@ -82,7 +95,17 @@ export function ClaimantInfo({
         <h2 className="text-base font-semibold">
           {type === "claimant" ? "Claimant" : "Defendant"} Information
         </h2>
-        {[ROLES.USER, ROLES.LAWYER].includes(user?.role as any) && (
+        {/* {[ROLES.LAWYER].includes(user?.role as any) && ( */}
+          <>
+            {/* {type === "defendant" && ( */}
+
+            {/* )} */}
+
+            <AddPersonDialog type={type} isEdit={false} caseId={caseNumber} />
+
+          </>
+        {/* )} */}
+        {/* {[ROLES.USER, ROLES.LAWYER].includes(user?.role as any) && (
           <>
             {type === "defendant" && (
               <Button
@@ -101,7 +124,7 @@ export function ClaimantInfo({
               </Button>
             )}
           </>
-        )}
+        )} */}
       </div>
       <div className="bg-white p-3">
         {isEdit ? (
@@ -221,3 +244,5 @@ export function ClaimantInfo({
     </div>
   );
 }
+
+

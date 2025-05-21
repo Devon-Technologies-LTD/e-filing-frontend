@@ -181,6 +181,7 @@ export async function SignupAction(_prevState: unknown, formData: FormData) {
 export async function invitationAction(_prevState: unknown, formData: FormData) {
     // Extract form data
     const data = Object.fromEntries(formData.entries());
+    console.log(JSON.stringify(data));
     const image = formData.get("image") as File | null;
     if (!image) {
         return {
@@ -223,18 +224,22 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
 
     let token = cookies().get("TempToken")?.value;
     let id = cookies().get("TempID")?.value;
+    let role = cookies().get("TempRole")?.value;
 
     if (!token) {
         const response = await authService.acceptInvite({
             otp: data.otp as string,
             email: data.email as string,
         });
-        const responseData = response.data as { token: string; id: string };
+        const responseData = response.data as { token: string; id: string, role: string };
         cookies().set("TempToken", responseData.token);
         cookies().set("TempID", responseData.id);
+        cookies().set("TempRole", responseData.role);
         token = responseData.token;
         id = responseData.id;
+        role = responseData.role;
     }
+
 
     if (!id) {
         return {
@@ -245,7 +250,10 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
     }
 
     try {
-        const url = `${NEXT_BASE_URL}/admin/user/${id}`;
+        let url = `${NEXT_BASE_URL}/admin/user/${id}`;
+        if (role == "LAWYER") {
+            url = `${NEXT_BASE_URL}/user/${id}`;
+        }
         // Send formData directly
         const signupResponse = await fetch(url, {
             method: "PATCH",
@@ -254,6 +262,8 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                 "Authorization": `Bearer ${token}`,
             },
         });
+
+        console.log(signupResponse);
 
         if (!signupResponse.ok) {
             const errorData = await signupResponse.json();
@@ -264,17 +274,16 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
                     data: errorData,
                 },
             };
+        } else {
+            deleteSession();
+            cookies().delete("TempToken");
+            cookies().delete("TempID");
+            return {
+                message: "Account updated successfully. Please Login",
+                success: true,
+                status: 200
+            };
         }
-
-        deleteSession();
-        cookies().delete("TempToken");
-        cookies().delete("TempID");
-
-        return {
-            message: "Account updated successfully. Please Login",
-            success: true,
-            status: 200
-        };
     } catch (err) {
         console.error("Error updating user:", err);
         return handleError(err);

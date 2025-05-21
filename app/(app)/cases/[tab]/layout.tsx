@@ -25,6 +25,7 @@ export default function LayoutPage({
     { id: "active", label: "Active Cases" },
     { id: "unassigned", label: "Unassigned Cases" },
     { id: "concluded", label: "Concluded Cases" },
+    { id: "joined", label: "Joined Cases" },
   ];
   const directorTabs = [
     { id: "assigned", label: "Assigned To Me" },
