@@ -296,7 +296,7 @@ export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "title",
     header: "Case Title",
     cell: ({ row }) => {
-      const title = row.original?.title || "N/A";
+      const title = row.original?.casefile.title || "N/A";
 
       return (
         <Tooltip>
@@ -322,8 +322,8 @@ export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
     accessorKey: "type",
     header: "Case Type",
     cell: ({ row }) => {
-      const casetype = row.original?.case_type_name || "N/A";
-      const subName = row.original?.sub_case_type_name?.toLowerCase() || "";
+      const casetype = row.original?.casefile.case_type_name || "N/A";
+      const subName = row.original?.casefile.sub_case_type_name?.toLowerCase() || "";
       return (
         <div>
           <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
@@ -338,8 +338,8 @@ export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
     header: "Date Filed",
     cell: ({ row }) => (
       <span>
-        {row.original?.created_at
-          ? dateFormatter(row.original?.created_at)?.fullDate
+        {row.original?.casefile?.created_at
+          ? dateFormatter(row.original?.casefile?.created_at)?.fullDate
           : ""}
       </span>
     ),
@@ -347,16 +347,16 @@ export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
   {
     accessorKey: "court",
     header: "MGT. DISTRICT",
-    cell: ({ row }) => <span>{row.original?.division_name || "N/A"}</span>,
+    cell: ({ row }) => <span>{row.original?.casefile.division_name || "N/A"}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
       <StatusBadge
-        tooltip={(row.original?.review_status || "")?.toLowerCase()}
+        tooltip={(row.original?.casefile.status || "")?.toLowerCase()}
         tooltipProps={{ delayDuration: 200 }}
-        status={(row.original?.review_status || "")?.toLowerCase() as any}
+        status={(row.original?.casefile.status || "")?.toLowerCase() as any}
       />
     ),
   },

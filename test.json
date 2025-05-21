@@ -1,23 +1,56 @@
-{
-    "total_rows": 1,
-    "total_pages": 1,
-    "size": 10,
-    "page": 1,
-    "data": [
-        {
-            "id": "ec1acab4-b56d-4f57-822e-31238c06ea9f",
-            "casefile_id": "4b2161d4-ad82-4305-8720-43f5ba07e6e9",
-            "honorific": "MISS",
-            "middle_name": "",
-            "last_name": "Schneider",
-            "first_name": "Basil",
-            "phone_number": "09030339023",
-            "email_address": "prince.muteh+4@gmail.com",
-            "address": "Sit non corrupti si",
-            "whatsapp": "",
-            "category": "Claimant",
-            "created_at": "2025-05-20T13:01:50.883963Z",
-            "updated_at": "2025-05-20T13:01:50.883963Z"
+[
+    {
+        "id": "99ad0e54-6b17-4364-9bec-dea8105587d4",
+        "casefile_id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+        "honorific": "MISS",
+        "middle_name": "",
+        "last_name": "Barr",
+        "first_name": "Giacomo",
+        "phone_number": "09039330930",
+        "email_address": "joytester@yopmail.com",
+        "address": "Ut quo maiores ea no",
+        "whatsapp": "",
+        "category": "Claimant",
+        "created_at": "2025-05-21T16:14:51.412503Z",
+        "updated_at": "2025-05-21T16:14:51.412503Z",
+        "casefile": {
+            "id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+            "case_suit_number": "CV/BWR/0004e/2025",
+            "title": "OFE V TOCHUKWU",
+            "description": "",
+            "case_type_name": "CIVIL CASE",
+            "sub_case_type_name": "PLAINT FOR DEFAULT SUMMONS",
+            "division_name": "Bwari",
+            "sub_division_name": "Gaba",
+            "created_at": "2025-05-14T08:08:02.053311Z",
+            "updated_at": "2025-05-14T09:05:23.772069Z"
         }
-    ]
-}
+    },
+    {
+        "id": "614ba640-c868-44d2-bc2b-66e512f773ce",
+        "casefile_id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+        "honorific": "DR",
+        "middle_name": "",
+        "last_name": "Hays",
+        "first_name": "April",
+        "phone_number": "09039330923",
+        "email_address": "joytester@yopmail.com",
+        "address": "Ratione cupidatat co",
+        "whatsapp": "",
+        "category": "Defendant",
+        "created_at": "2025-05-21T16:12:58.508607Z",
+        "updated_at": "2025-05-21T16:12:58.508607Z",
+        "casefile": {
+            "id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+            "case_suit_number": "CV/BWR/0004e/2025",
+            "title": "OFE V TOCHUKWU",
+            "description": "",
+            "case_type_name": "CIVIL CASE",
+            "sub_case_type_name": "PLAINT FOR DEFAULT SUMMONS",
+            "division_name": "Bwari",
+            "sub_division_name": "Gaba",
+            "created_at": "2025-05-14T08:08:02.053311Z",
+            "updated_at": "2025-05-14T09:05:23.772069Z"
+        }
+    }
+]

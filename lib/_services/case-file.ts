@@ -87,6 +87,19 @@ export interface IChangeStatus {
   reason?: string;
 }
 
+export interface casex {
+  case_suit_number: string;
+  title: string;
+  description: string;
+  case_type_name: string;
+  sub_case_type_name: string;
+  division_name: string;
+  sub_division_name: string;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface CaseDetailsResponse {
   review_status: string;
   id: string;
@@ -107,6 +120,7 @@ export interface CaseDetailsResponse {
   reassignment_status: string;
   case_request_status: string;
   CaseDetailsResponse: string;
+  casefile: casex;
 }
 
 const CaseFileService = {
