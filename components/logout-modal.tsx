@@ -27,7 +27,7 @@ export default function LogoutModal() {
       <DialogTrigger asChild>
         <Button
           variant={"link"}
-          className={cn(
+          className={cn(  
             "rounded-md text-neutral-400 hover:bg-gray-100 block py-1 px-4 text-sm font-semibold transition-color"
           )}
         >
