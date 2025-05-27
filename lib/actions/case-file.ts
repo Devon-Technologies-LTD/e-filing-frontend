@@ -178,6 +178,15 @@ export async function getDocumentHistory(id: string) {
     return handleApiError(error);
   }
 }
+export async function getDecisionHistory(id: string) {
+  try {
+    const data = await CaseFileService.Decisionhistory(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 export async function getDocumentActivity(id: string) {
   try {
     const data = await CaseFileService.DocumentActivity(id);

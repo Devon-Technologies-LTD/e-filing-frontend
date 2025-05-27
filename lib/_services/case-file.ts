@@ -312,6 +312,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+  async Decisionhistory(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `casefile/decision/${id}`
+    );
+    return response.data;
+  },
   async DocumentActivity(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(
       `casefile/document-activity/${id}`

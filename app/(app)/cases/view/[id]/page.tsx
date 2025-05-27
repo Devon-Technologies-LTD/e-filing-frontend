@@ -74,6 +74,7 @@ export default function SingleCasePage({ params }: { params: { id: string } }) {
     queryFn: () => getDecision(params.id),
     enabled: !!params.id,
   });
+  console.log(JSON.stringify(data));
 
   const handleRefileProcesses = () => {
     const caseTypeFields = getCaseTypeFields(data);
