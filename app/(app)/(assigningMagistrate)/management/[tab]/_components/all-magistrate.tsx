@@ -132,6 +132,7 @@ export default function AllMagistrates() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+      
       <DataTable columns={columns} loading={draftsLoading} data={data?.data} />
 
       {data?.data?.length > 0 && (

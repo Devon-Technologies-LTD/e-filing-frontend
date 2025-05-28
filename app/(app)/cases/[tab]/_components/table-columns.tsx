@@ -301,10 +301,7 @@ export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
       return (
         <Tooltip>
           <TooltipTrigger asChild>
-            <div
-              className="max-w-32 text-left truncate break-words cursor-pointer"
-              title={title}
-            >
+            <div className="max-w-32 text-left truncate break-words cursor-pointer" title={title}>
               {title}
             </div>
           </TooltipTrigger>

@@ -176,10 +176,11 @@ export default function FilteredCases() {
   }, [tab]);
 
   const handleRowClick = (row: any) => {
+    const id = (tab === "joined") ? row.casefile_id : row.id;
     const path =
       user?.role === ROLES.CENTRAL_REGISTRAR
-        ? `/cases/reviews/${encodeURIComponent(row.id)}`
-        : `/cases/view/${encodeURIComponent(row.id)}`;
+        ? `/cases/reviews/${encodeURIComponent(id)}`
+        : `/cases/view/${encodeURIComponent(id)}`;
     router.push(path);
   };
 
