@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Download, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/svg/icons";
 import { toast } from "sonner";
 
