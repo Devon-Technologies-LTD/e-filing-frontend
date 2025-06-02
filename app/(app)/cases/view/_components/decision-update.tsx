@@ -21,10 +21,19 @@ export function DecisionUpdate({ id }: DecisionUpdateProps) {
   const tabs = [{ id: "history", label: "Decision History" }];
   const [activeTab, setActiveTab] = useState("history");
 
-  const { data, isLoading, isError } = useQuery<DecisionData>({
+  const { data, isLoading, isError, error, } = useQuery<DecisionData, Error>({
     queryKey: ["documentDecision", id],
     queryFn: async () => {
       const response = await getDecisionHistory(id);
+
+      // Check for judgment error
+      if (
+        response?.data?.message === "judgement has not been delivered" ||
+        !response?.data?.data?.decision
+      ) {
+        throw new Error("Judgment has not been delivered");
+      }
+
       return {
         decision: response.data.data.decision,
         reason: response.data.data.reason,
@@ -35,7 +44,9 @@ export function DecisionUpdate({ id }: DecisionUpdateProps) {
     enabled: !!id,
   });
 
-  console.log("Decision Data:", data);
+  const decisionDate = data?.decision_date ? new Date(data.decision_date) : null;
+  const isValidDate = decisionDate instanceof Date && !isNaN(decisionDate.getTime());
+
 
   return (
     <div className="bg-white space-y-4 w-full overflow-hidden p-4 rounded-lg shadow-sm">
@@ -60,26 +71,31 @@ export function DecisionUpdate({ id }: DecisionUpdateProps) {
           <div className="flex justify-center items-center py-10 text-gray-500 text-sm">
             Loading updates...
           </div>
-        ) : isError || !data ? (
+        ) : isError ? (
           <div className="text-center text-sm text-red-500">
-            No decision data available.
+            {error.message}
           </div>
         ) : (
           <div className="border-b py-3 space-y-2">
             <div className="flex items-center gap-4">
               <div className="flex space-x-2 w-2/3 items-center">
                 <Icons.check />
-                <div className="">
-                  <span className="text-sm font-semibold">{data?.decision ?? ""}</span>
+                <div>
+                  <span className="text-sm font-semibold">
+                    {data?.decision ?? ""}
+                  </span>
                   <div className="text-md text-gray-700">
-                    <span className="font-medium"> {data.reason} </span>
+                    <span className="font-medium"> {data?.reason} </span>
                   </div>
                 </div>
               </div>
             </div>
-            <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
-              {format(new Date(data?.decision_date ?? ""), "MMM dd, yyyy")}
-            </span>
+            {isValidDate && (
+              <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
+                {format(decisionDate, "MMM dd, yyyy")}
+              </span>
+            )}
+
           </div>
         )}
       </div>
