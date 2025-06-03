@@ -33,9 +33,9 @@ jobs:
 
       - name: Copy build files to the remote server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SERVER_KEY }}
-          REMOTE_USER: ${{ secrets.STAGING_SERVER_USERNAME }}
-          REMOTE_HOST: ${{ secrets.STAGING_SERVER_IP }}
+          SSH_PRIVATE_KEY: ${{ secrets.PREPROD_SERVER_KEY }}
+          REMOTE_USER: ${{ secrets.PREPROD_SERVER_USERNAME }}
+          REMOTE_HOST: ${{ secrets.PREPROD_SERVER_IP }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
@@ -43,14 +43,14 @@ jobs:
           ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
           
           # Copy .next folder, public folder, and node_modules to the server
-          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/home/devonadmin/pre-prod/e-filing-frontend/"
+          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/opt/products/docket-master/e-filing-frontend"
 
       # Step 6: SSH into the server, pull latest code, and run docker-compose
       - name: SSH into the server, pull latest code, and run Docker Compose
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SERVER_KEY }}
-          REMOTE_USER: ${{ secrets.STAGING_SERVER_USERNAME }}
-          REMOTE_HOST: ${{ secrets.STAGING_SERVER_IP }}
+          SSH_PRIVATE_KEY: ${{ secrets.PREPROD_SERVER_KEY }}
+          REMOTE_USER: ${{ secrets.PREPROD_SERVER_USERNAME }}
+          REMOTE_HOST: ${{ secrets.PREPROD_SERVER_IP }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
@@ -60,7 +60,7 @@ jobs:
           # SSH into the server, pull the latest code, and run docker-compose
           ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
             # Navigate to the project directory
-            cd /home/devonadmin/pre-prod/e-filing-frontend || exit
+            cd /opt/products/docket-master/e-filing-frontend || exit
             # Pull latest code from the repo
             rm package-lock.json yarn.lock
             git pull origin pre-prod || exit
