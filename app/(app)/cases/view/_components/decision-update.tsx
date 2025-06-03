@@ -2,73 +2,51 @@ import type React from "react";
 import ReusableTabs from "@/components/ui/reusable-tabs";
 import { useState } from "react";
 import { Icons } from "@/components/svg/icons";
-import CaseHistoryTimeline from "./case-history";
-import { getDocumentHistory, getDocumentActivity } from "@/lib/actions/case-file";
 import { useQuery } from "@tanstack/react-query";
-import { dateFormatter } from "@/lib/utils";
-import { ActivityList } from "@/components/activity-list";
+import { format } from "date-fns";
+import { getDecisionHistory } from "@/lib/actions/case-file";
 
 interface DecisionUpdateProps {
   id: string;
 }
 
-interface DocumentItem {
-  title: string;
-  created_at: string;
-  description: string;
-  status: string;
+interface DecisionData {
+  decision: string;
+  reason: string;
+  file_path: string;
+  decision_date: string;
 }
 
 export function DecisionUpdate({ id }: DecisionUpdateProps) {
-  const tabs = [
-    { id: "recent", label: "Recent Activities" },
-    { id: "history", label: "Decision History" },
-  ];
+  const tabs = [{ id: "history", label: "Decision History" }];
+  const [activeTab, setActiveTab] = useState("history");
 
-  const [activeTab, setActiveTab] = useState("recent");
+  const { data, isLoading, isError, error, } = useQuery<DecisionData, Error>({
+    queryKey: ["documentDecision", id],
+    queryFn: async () => {
+      const response = await getDecisionHistory(id);
 
-  const {
-    data: documentActivity,
-    isLoading: isActivityLoading,
-  } = useQuery({
-    queryKey: ["documentActivity", id],
-    queryFn: () => getDocumentActivity(id),
+      // Check for judgment error
+      if (
+        response?.data?.message === "judgement has not been delivered" ||
+        !response?.data?.data?.decision
+      ) {
+        throw new Error("Judgment has not been delivered");
+      }
+
+      return {
+        decision: response.data.data.decision,
+        reason: response.data.data.reason,
+        file_path: response.data.data.file_path,
+        decision_date: response.data.data.decision_date,
+      };
+    },
     enabled: !!id,
   });
 
-  const isValidDate = (date: any) => {
-    const parsed = new Date(date);
-    return !isNaN(parsed.getTime());
-  };
+  const decisionDate = data?.decision_date ? new Date(data.decision_date) : null;
+  const isValidDate = decisionDate instanceof Date && !isNaN(decisionDate.getTime());
 
-
-  const {
-    data: documentHistory,
-    isLoading: isHistoryLoading,
-  } = useQuery({
-    queryKey: ["documentHistory", id],
-    queryFn: () => getDocumentHistory(id),
-    enabled: !!id,
-  });
-
-  const timelineSteps = Array.isArray(documentHistory?.data.data)
-    ? documentHistory.data.data.map((item: any) => ({
-      title: item?.title,
-      status: "completed",
-
-      time: isValidDate(item?.created_at)
-        ? dateFormatter(item.created_at).fullDate
-        : "Invalid date",
-    })) : [];
-
-  const timelineStepsActivity = Array.isArray(documentActivity?.data.data)
-    ? documentActivity.data.data.map((item: any) => ({
-      description: item.title,
-      status: "completed",
-      created_at: item.created_at,
-    })) : [];
-
-  const isLoading = isActivityLoading || isHistoryLoading;
 
   return (
     <div className="bg-white space-y-4 w-full overflow-hidden p-4 rounded-lg shadow-sm">
@@ -77,7 +55,7 @@ export function DecisionUpdate({ id }: DecisionUpdateProps) {
           <Icons.recent /> DECISION UPDATES
         </h2>
         <p className="text-xs font-medium">
-          {timelineSteps.length} Updates available
+          {data ? "1 Update available" : "No Updates"}
         </p>
       </div>
 
@@ -93,15 +71,32 @@ export function DecisionUpdate({ id }: DecisionUpdateProps) {
           <div className="flex justify-center items-center py-10 text-gray-500 text-sm">
             Loading updates...
           </div>
+        ) : isError ? (
+          <div className="text-center text-sm text-red-500">
+            {error.message}
+          </div>
         ) : (
-          <>
-            {activeTab === "recent" && (
-              <ActivityList notifications={timelineStepsActivity ?? []} />
+          <div className="border-b py-3 space-y-2">
+            <div className="flex items-center gap-4">
+              <div className="flex space-x-2 w-2/3 items-center">
+                <Icons.check />
+                <div>
+                  <span className="text-sm font-semibold">
+                    {data?.decision ?? ""}
+                  </span>
+                  <div className="text-md text-gray-700">
+                    <span className="font-medium"> {data?.reason} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {isValidDate && (
+              <span className="text-xs text-stone-600 font-bold opacity-60 flex justify-end">
+                {format(decisionDate, "MMM dd, yyyy")}
+              </span>
             )}
-            {activeTab === "history" && (
-              <CaseHistoryTimeline steps={timelineSteps} />
-            )}
-          </>
+
+          </div>
         )}
       </div>
     </div>

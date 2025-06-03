@@ -29,27 +29,40 @@ export async function createCaseFile(payload: ICreateCaseFileData) {
     return handleApiError(error);
   }
 }
-// Updated getCaseFiles function
-export async function getCaseFiles(
-  payload: IDraftFilter & { role?: ROLES },
-  page: number,
-  size: number
-) {
+export async function addLawyers(payload: any, caseId: string, type: string) {
   try {
-    if (
-      [
-        ROLES.PRESIDING_MAGISTRATE,
-        ROLES.ASSIGNING_MAGISTRATE,
-        ROLES.DIRECTOR_MAGISTRATE,
-        ROLES.CENTRAL_REGISTRAR,
-      ].includes(payload.role as ROLES)
+    const data = await CaseFileService.addLawyers(payload, caseId, type);
+    console.log(data);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+
+// Updated getCaseFiles function
+export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }, page: number, size: number, tab: string) {
+  try {
+    if ([
+      ROLES.PRESIDING_MAGISTRATE,
+      ROLES.ASSIGNING_MAGISTRATE,
+      ROLES.DIRECTOR_MAGISTRATE,
+      ROLES.CENTRAL_REGISTRAR,
+    ].includes(payload.role as ROLES)
     ) {
       const data = await CaseFileService.getCaseFilesAdmin(payload, page, size);
       return { ...data, success: true };
     } else {
-      const data = await CaseFileService.getCaseFiles(payload, page, size);
-      return { ...data, success: true };
+      if (tab == "joined") {
+        const data = await CaseFileService.getJoinedFiles(page, size);
+        console.log(JSON.stringify(data));
+        return { ...data, success: true };
+      } else {
+        const data = await CaseFileService.getCaseFiles(payload, page, size);
+        return { ...data, success: true };
+      }
     }
+
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);
@@ -159,6 +172,15 @@ export async function getDecision(id: string) {
 export async function getDocumentHistory(id: string) {
   try {
     const data = await CaseFileService.Documenthistory(id);
+    return { data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+export async function getDecisionHistory(id: string) {
+  try {
+    const data = await CaseFileService.Decisionhistory(id);
     return { data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;

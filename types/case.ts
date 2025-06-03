@@ -3,6 +3,7 @@ export type TCaseFilterType =
   | "pending"
   | "case"
   | "recent"
+  | "joined"
   | "active"
   | "reassigned"
   | "assigned"

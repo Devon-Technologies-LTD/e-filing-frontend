@@ -74,6 +74,8 @@ export const InvitationFormSchema = z.object({
   });
 
 export type TSignupFormPayload = z.infer<typeof SignupFormSchema>;
+
+
 export type TForogotPayload = z.infer<typeof EMailFormSchema>;
 
 export type TUpdateType =

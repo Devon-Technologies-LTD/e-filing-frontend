@@ -1,50 +1,56 @@
-{
-    "success": true,
-    "message": "Success",
-    "data": [
-        {
-            "id": "33599f79-e6f2-45b5-aeba-7925a1518895",
-            "case_suit_number": "",
-            "casefile_id": "c5123d36-e84d-4e3e-be3f-1ab524652a6c",
-            "document_id": "b38f5688-7462-4aad-aab4-86177a4f4656",
+[
+    {
+        "id": "99ad0e54-6b17-4364-9bec-dea8105587d4",
+        "casefile_id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+        "honorific": "MISS",
+        "middle_name": "",
+        "last_name": "Barr",
+        "first_name": "Giacomo",
+        "phone_number": "09039330930",
+        "email_address": "joytester@yopmail.com",
+        "address": "Ut quo maiores ea no",
+        "whatsapp": "",
+        "category": "Claimant",
+        "created_at": "2025-05-21T16:14:51.412503Z",
+        "updated_at": "2025-05-21T16:14:51.412503Z",
+        "casefile": {
+            "id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+            "case_suit_number": "CV/BWR/0004e/2025",
+            "title": "OFE V TOCHUKWU",
             "description": "",
-            "title": "Document with tite: First Information Report (FIR) has been uploaded",
-            "type": "document",
-            "category": "activity",
-            "created_at": "2025-05-14T09:58:05.919239Z"
-        },
-        {
-            "id": "8efd9b0a-0eca-461f-89cc-8277892d1394",
-            "case_suit_number": "",
-            "casefile_id": "c5123d36-e84d-4e3e-be3f-1ab524652a6c",
-            "document_id": "9ad9b2be-ecb6-465b-97dc-e0e97900c989",
-            "description": "",
-            "title": "Document with tite: Counter Affidavit has been uploaded",
-            "type": "document",
-            "category": "activity",
-            "created_at": "2025-05-14T09:58:13.78103Z"
-        },
-        {
-            "id": "ae9ae997-90c2-4cc5-be4f-480afee8a722",
-            "case_suit_number": "",
-            "casefile_id": "c5123d36-e84d-4e3e-be3f-1ab524652a6c",
-            "document_id": "f2bee61b-15f7-4a19-aa2e-29dcaf10e6ab",
-            "description": "",
-            "title": "Document with tite: Motion for Bail has been uploaded",
-            "type": "document",
-            "category": "activity",
-            "created_at": "2025-05-14T09:58:24.844891Z"
-        },
-        {
-            "id": "5b2479ce-0b2c-426b-802e-38b38515d6c9",
-            "case_suit_number": "",
-            "casefile_id": "c5123d36-e84d-4e3e-be3f-1ab524652a6c",
-            "document_id": "adb1c5ea-abd1-46c4-94fd-1589631c15f8",
-            "description": "",
-            "title": "Document with tite: Halla Martinez-635322 (EXHIBITS) has been uploaded",
-            "type": "document",
-            "category": "activity",
-            "created_at": "2025-05-14T09:58:32.260699Z"
+            "case_type_name": "CIVIL CASE",
+            "sub_case_type_name": "PLAINT FOR DEFAULT SUMMONS",
+            "division_name": "Bwari",
+            "sub_division_name": "Gaba",
+            "created_at": "2025-05-14T08:08:02.053311Z",
+            "updated_at": "2025-05-14T09:05:23.772069Z"
         }
-    ]
-}
+    },
+    {
+        "id": "614ba640-c868-44d2-bc2b-66e512f773ce",
+        "casefile_id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+        "honorific": "DR",
+        "middle_name": "",
+        "last_name": "Hays",
+        "first_name": "April",
+        "phone_number": "09039330923",
+        "email_address": "joytester@yopmail.com",
+        "address": "Ratione cupidatat co",
+        "whatsapp": "",
+        "category": "Defendant",
+        "created_at": "2025-05-21T16:12:58.508607Z",
+        "updated_at": "2025-05-21T16:12:58.508607Z",
+        "casefile": {
+            "id": "3714fa8f-8194-4e0c-8109-f45092be03f8",
+            "case_suit_number": "CV/BWR/0004e/2025",
+            "title": "OFE V TOCHUKWU",
+            "description": "",
+            "case_type_name": "CIVIL CASE",
+            "sub_case_type_name": "PLAINT FOR DEFAULT SUMMONS",
+            "division_name": "Bwari",
+            "sub_division_name": "Gaba",
+            "created_at": "2025-05-14T08:08:02.053311Z",
+            "updated_at": "2025-05-14T09:05:23.772069Z"
+        }
+    }
+]

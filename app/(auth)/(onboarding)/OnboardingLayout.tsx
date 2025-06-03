@@ -38,9 +38,9 @@ export default function CaseFilingLayout({
                 <div className="w-[1px] h-10 bg-gray-200"></div>
                 <div className="text-sm font-light text-gray-800">
                   <div className="text-xs text-muted">Abuja</div>
-                  <div className="text-app-primary font-bold text-sm">
+                  {/* <div className="text-app-primary font-bold text-sm">
                     Docket Master
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="hidden md:flex items-center text-app-primary group relative">

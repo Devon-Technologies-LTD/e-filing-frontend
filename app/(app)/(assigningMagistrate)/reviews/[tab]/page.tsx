@@ -38,6 +38,7 @@ export default function FilteredCases() {
         },
         currentPage,
         DEFAULT_PAGE_SIZE,
+        ""
       );
     },
     staleTime: 50000,

@@ -40,9 +40,10 @@ interface CaseOverviewProps {
 interface IProps {
   data: CaseOverviewProps;
   costBreakdown: any[];
+  caseId: string
 }
 
-export function CaseOverview({ data, costBreakdown }: IProps) {
+export function CaseOverview({ data, costBreakdown, caseId }: IProps) {
   const [isEdit, setIsEdit] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -76,67 +77,65 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
   // For defendant names
   const defName = defendant
     ? defendant
-        .map(
-          (d, index) =>
-            `${index + 1}: ${d?.last_name || ""} ${d?.middle_name || ""} ${
-              d?.first_name || ""
-            }`
-        )
-        .join("\n") // Line break after each entry
+      .map(
+        (d, index) =>
+          `${index + 1}: ${d?.last_name || ""} ${d?.middle_name || ""} ${d?.first_name || ""
+          }`
+      )
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For claimant names
   const claimName = claimant
     ? claimant
-        .map(
-          (c, index) =>
-            `${index + 1}: ${c?.last_name || ""} ${c?.middle_name || ""} ${
-              c?.first_name || ""
-            }`
-        )
-        .join("\n") // Line break after each entry
+      .map(
+        (c, index) =>
+          `${index + 1}: ${c?.last_name || ""} ${c?.middle_name || ""} ${c?.first_name || ""
+          }`
+      )
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For defendant emails
   const defEmail = defendant
     ? defendant
-        .map((d, index) => `${index + 1}: ${d?.email_address || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((d, index) => `${index + 1}: ${d?.email_address || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For claimant emails
   const claimEmail = claimant
     ? claimant
-        .map((c, index) => `${index + 1}: ${c?.email_address || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((c, index) => `${index + 1}: ${c?.email_address || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For defendant addresses
   const defAddress = defendant
     ? defendant
-        .map((d, index) => `${index + 1}: ${d?.address || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((d, index) => `${index + 1}: ${d?.address || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For claimant addresses
   const claimAddress = claimant
     ? claimant
-        .map((c, index) => `${index + 1}: ${c?.address || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((c, index) => `${index + 1}: ${c?.address || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For defendant phone numbers
   const defPhone = defendant
     ? defendant
-        .map((d, index) => `${index + 1}: ${d?.phone_number || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((d, index) => `${index + 1}: ${d?.phone_number || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   // For claimant phone numbers
   const claimPhone = claimant
     ? claimant
-        .map((c, index) => `${index + 1}: ${c?.phone_number || "N/A"}`)
-        .join("\n") // Line break after each entry
+      .map((c, index) => `${index + 1}: ${c?.phone_number || "N/A"}`)
+      .join("\n") // Line break after each entry
     : "N/A";
 
   return (
@@ -174,10 +173,12 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
         {/* Claimant Information */}
         <div className="space-y-6">
           <ClaimantInfo
+            type="claimant"
             name={claimName}
             email={claimEmail}
             address={claimAddress}
             phone={claimPhone}
+            caseNumber={caseId}
           />
           <ClaimantInfo
             type="defendant"
@@ -190,6 +191,7 @@ export function CaseOverview({ data, costBreakdown }: IProps) {
             address={defAddress}
             phone={defPhone}
             defendant={defendant}
+            caseNumber={caseId}
           />
           {/* Magistrate Court Information */}
           <MagistrateCourtInfo

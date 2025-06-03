@@ -287,3 +287,74 @@ export const UnderReviewColumns: ColumnDef<CaseDetailsResponse>[] = [
     ),
   },
 ];
+export const joinedColumns: ColumnDef<CaseDetailsResponse>[] = [
+  {
+    accessorKey: "casefile_id",
+    header: "Case Suit (ID)",
+  },
+  {
+    accessorKey: "title",
+    header: "Case Title",
+    cell: ({ row }) => {
+      const title = row.original?.casefile.title || "N/A";
+
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="max-w-32 text-left truncate break-words cursor-pointer" title={title}>
+              {title}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent
+            side="bottom"
+            className="text-zinc-700 bg-white border-0 font-medium text-xs"
+          >
+            <div className="max-w-32 truncate break-words">{title}</div>
+          </TooltipContent>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: "Case Type",
+    cell: ({ row }) => {
+      const casetype = row.original?.casefile.case_type_name || "N/A";
+      const subName = row.original?.casefile.sub_case_type_name?.toLowerCase() || "";
+      return (
+        <div>
+          <span className="uppercase">{casetype ? `${casetype}:` : ""}</span>
+          <br />
+          <span className="capitalize">{subName}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "filingDate",
+    header: "Date Filed",
+    cell: ({ row }) => (
+      <span>
+        {row.original?.casefile?.created_at
+          ? dateFormatter(row.original?.casefile?.created_at)?.fullDate
+          : ""}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "court",
+    header: "MGT. DISTRICT",
+    cell: ({ row }) => <span>{row.original?.casefile.division_name || "N/A"}</span>,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <StatusBadge
+        tooltip={(row.original?.casefile.status || "")?.toLowerCase()}
+        tooltipProps={{ delayDuration: 200 }}
+        status={(row.original?.casefile.status || "")?.toLowerCase() as any}
+      />
+    ),
+  },
+];

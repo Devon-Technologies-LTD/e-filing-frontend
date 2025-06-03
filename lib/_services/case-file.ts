@@ -87,6 +87,19 @@ export interface IChangeStatus {
   reason?: string;
 }
 
+export interface casex {
+  case_suit_number: string;
+  title: string;
+  description: string;
+  case_type_name: string;
+  sub_case_type_name: string;
+  division_name: string;
+  sub_division_name: string;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface CaseDetailsResponse {
   review_status: string;
   id: string;
@@ -107,6 +120,7 @@ export interface CaseDetailsResponse {
   reassignment_status: string;
   case_request_status: string;
   CaseDetailsResponse: string;
+  casefile: casex;
 }
 
 const CaseFileService = {
@@ -116,6 +130,21 @@ const CaseFileService = {
       payload
     );
     return response.data;
+  },
+  async addLawyers(payload: any, caseId: string, type: string): Promise<any> {
+    if (type == "claimant") {
+      const response = await axiosInstance.post<any>(
+        `casefile/${caseId}/add-claimant`,
+        payload
+      );
+      return response.data;
+    } else {
+      const response = await axiosInstance.post<any>(
+        `casefile/${caseId}/add-defendant`,
+        payload
+      );
+      return response.data;
+    }
   },
 
   async getCaseFilesAdmin(
@@ -166,6 +195,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+
+  async getJoinedFiles(page: number, size: number): Promise<any> {
+    const response = await axiosInstance.get<any>(`casefile/lawyer-cases?page=${page}&size=${size}`);
+    return response.data;
+  },
+
   async getCaseFilesbyId(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(`CaseFile/${id}`);
     return response.data;
@@ -228,7 +263,6 @@ const CaseFileService = {
       `casefile/${caseFileId}`,
       payload
     );
-
     return response.data;
   },
 
@@ -275,6 +309,12 @@ const CaseFileService = {
   async Documenthistory(id: string): Promise<any> {
     const response = await axiosInstance.get<any>(
       `casefile/document-history/${id}`
+    );
+    return response.data;
+  },
+  async Decisionhistory(id: string): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `casefile/decision/${id}`
     );
     return response.data;
   },
