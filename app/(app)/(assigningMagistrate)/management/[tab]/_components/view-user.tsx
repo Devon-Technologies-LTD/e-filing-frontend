@@ -2,7 +2,6 @@ import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { IUsersColumn } from "./table-column";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { AnalyticsChart } from "./analytics-chart";
@@ -93,15 +92,15 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
 
             {/* Stats Grid */}
             <div className="flex divide-x- justify-between py-6 border-b-2 items-center">
-              <StatsCard label="Total Assigned Case" value={`2,345 Cases`} />
+              <StatsCard label="Total Assigned Case" value={`0 Cases`} />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Active Cases" value={`5 Cases`} />
+              <StatsCard label="Active Cases" value={`0 Cases`} />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Closed Cases" value={`2,309 Cases`} />
+              <StatsCard label="Closed Cases" value={`0 Cases`} />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Re-assigned Case" value={`11 Cases`} />
+              <StatsCard label="Re-assigned Case" value={`0 Cases`} />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Avg. Resolution Time(Days)" value={`4 Days`} />
+              <StatsCard label="Avg. Resolution Time(Days)" value={`0 Days`} />
             </div>
 
             {/* Analytics */}
@@ -130,7 +129,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   >
                     {
                       // row.status === "ACTIVE"
-                      row.status === "true"
+                      row.status === "ACTIVE"
                         ? "DE-ACTIVATE USER"
                         : "ACTIVATE USER"
                     }

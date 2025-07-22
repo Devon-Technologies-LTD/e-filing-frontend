@@ -9,6 +9,8 @@ import { ConfirmationModal } from "@/components/confirmation-modal";
 import { Icons } from "@/components/svg/icons";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 interface Props {
   userId: string | undefined; // Expecting user ID to delete
@@ -17,6 +19,8 @@ interface Props {
 }
 
 function DeleteUser({ userId, email, trigger }: Props) {
+  const queryClient = useQueryClient();
+
   const [inputValue, setInputValue] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +43,11 @@ function DeleteUser({ userId, email, trigger }: Props) {
         'email': email,
         'userId': userId
       }
+
       const response = await axios.post(`/api/delete-user`, data);
       toast.success("User deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["userManagement"] });
+      
       setIsOpen(false); // ✅ Close only on success
     } catch (error: any) {
       console.error("Error deleting user:", error);

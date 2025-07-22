@@ -13,6 +13,7 @@ import DragDropUploaderNIN from "./signup/DragDropUploaderNIN";
 import { useRouter } from "next/navigation";
 import { OnboardingContext } from '@/context/OnboardingContext';
 import { Checkbox } from "../ui/checkbox";
+import React from "react";
 
 
 const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) => {
@@ -124,7 +125,7 @@ const InvitationComponent = ({ email, otpz }: { email: string; otpz: string }) =
                             />
                             <div className="grid gap-1.5 leading-none">
                                 <p className="text-sm font-semibold text-muted-foreground">
-                                    I confirm that the information I have provided is true and accurate.
+                                   I confirm that every information provided is true and accurate and should there be any misleading or inaccurate information, I take full responsibility
                                 </p>
                             </div>
                         </div>

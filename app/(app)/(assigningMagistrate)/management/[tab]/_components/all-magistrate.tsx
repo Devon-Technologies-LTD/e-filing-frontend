@@ -1,26 +1,23 @@
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
-import { FilterDropdown } from "@/components/ui/filter-dropdown";
 import { Input } from "@/components/ui/input";
 import { useAppSelector } from "@/hooks/redux";
 import { ROLES } from "@/types/auth";
-import { CaseTypes, COURT_TYPE } from "@/types/files/case-type";
+import { CaseTypes } from "@/types/files/case-type";
 import React, { useMemo, useState } from "react";
 import { createUserColumns, } from "./table-column";
 import InviteUser from "./invite-user";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/ui/pagination";
-import { getUserManagement, getUserManagementFilter } from "@/lib/actions/user-management";
+import {  getUserManagementFilter } from "@/lib/actions/user-management";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { Search } from "lucide-react";
 
 export default function AllMagistrates() {
   const { data: user } = useAppSelector((state) => state.profile);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
-  const handleCourtTypeChange = (value: string) => {
-    setSelectedCourt(value as CaseTypes);
-  };
+  const [selectedCourt] = useState<CaseTypes | "all">("all");
+ 
   let headingText, descriptionText, buttonText;
   switch (user?.role) {
     case ROLES.CHIEF_JUDGE:
@@ -45,13 +42,9 @@ export default function AllMagistrates() {
       descriptionText = "View general information about magistrates.";
       buttonText = "INVITE NEW MAGISTRATE";
   }
-  const courtFilter = [
-    { value: "all", label: "ALL COURT TYPE" },
-    ...COURT_TYPE,
-  ];
 
   const columns = useMemo(
-    () => createUserColumns(user?.role!, "all"),
+    () => createUserColumns(user?.role as ROLES, "all"),
     [user?.role]
   );
   const [searchTerm, setSearchTerm] = useState("");

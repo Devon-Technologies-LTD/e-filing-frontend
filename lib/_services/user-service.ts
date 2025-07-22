@@ -213,6 +213,12 @@ const UserService = {
     );
     return response.data;
   },
+   async getVerificationAdmin(): Promise<any> {
+    const response = await axiosInstance.get<INotificationFilter>(
+      `admin/verification/`
+    );
+    return response.data;
+  },
 }
 
 export default UserService

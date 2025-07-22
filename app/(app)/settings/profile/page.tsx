@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { useAppSelector } from "@/hooks/redux";
 import { getInitials } from "@/constants";
 import { getVerification } from "@/lib/actions/admin-file";
+import React from "react";
+import { ROLES } from "@/types/auth";
 
 interface Verification {
   id: string;
@@ -38,7 +40,7 @@ export default function ProfileForm() {
     const fetchVerification = async () => {
       setLoading(true);
       try {
-        const response = await getVerification();
+        const response = await getVerification(user?.role as ROLES);
         if (response.success && response.data) {
           setVerification(response.data);
         } else {

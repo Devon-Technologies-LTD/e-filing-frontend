@@ -1,11 +1,8 @@
 import InputField from "@/components/ui/InputField";
 import { useAppSelector } from "@/hooks/redux";
-import { updateMultipleCaseTypeFields } from "@/redux/slices/case-filing-slice";
-import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 
 export default function CivilFormLitigants() {
-  const dispatch = useDispatch();
 
   const {
     caseType: { claimant, defendant },
@@ -20,7 +17,7 @@ export default function CivilFormLitigants() {
       </p>
       <div className="flex gap-2">
         <div className=" w-full text-neutral-600 space-y-6">
-          <p className="text-base font-bold">COMPLAINT DETAILS</p>
+          <p className="text-base font-bold">Complainant’s Details</p>
           <InputField
             id="claimant_address"
             name="claimant_address"

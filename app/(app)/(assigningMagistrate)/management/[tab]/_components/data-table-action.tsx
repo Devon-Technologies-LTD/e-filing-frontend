@@ -8,15 +8,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
-import { USER_STATUS } from "@/types/auth";
 import MagistrateProfile from "./view-user";
 import DeleteUser from "./delete-user";
 import DeactivateUser from "./deactivate-user";
 
-interface props {
+interface Props {
   row: Row<any>;
 }
-export default function UserManagementDataTableAction({ row }: props) {
+
+export default function UserManagementDataTableAction({ row }: Props) {
+  const user = row.original;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,29 +27,36 @@ export default function UserManagementDataTableAction({ row }: props) {
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-56 py-4 space-y-1.5">
         <DropdownMenuItem
           onSelect={(event) => event.stopPropagation()}
-          variant="outline"
           className="p-0"
         >
-          <MagistrateProfile row={row.original} />
+          <MagistrateProfile row={user} />
         </DropdownMenuItem>
-        <DropdownMenuItem className="p-0" variant="outline">
-          <DeactivateUser
-            row={row.original}
-            trigger={
-              <p className="px-2 py-1.5 w-full ">
-                {row.original.status === "ACTIVE"
-                  ? "DE-ACTIVATE USER"
-                  : "ACTIVATE USER"}
-              </p>
-            }
-          />
-        </DropdownMenuItem>
-        <DropdownMenuItem className="p-0 " variant="outline">
+
+        {user.status.toLowerCase() !== "pending" && (
+          <DropdownMenuItem className="p-0">
+            <DeactivateUser
+              row={user}
+              trigger={
+                <p className="px-2 py-1.5 w-full">
+                  {user.status === "ACTIVE"
+                    ? "DE-ACTIVATE USER"
+                    : "ACTIVATE USER"}
+                </p>
+              }
+            />
+          </DropdownMenuItem>
+        )}
+
+        <DropdownMenuItem className="p-0">
           <DeleteUser
-            trigger={<p className="px-2 py-1.5 w-full  ">DELETE USER</p>} userId={row.original.id} email={row.original.email} />
+            trigger={<p className="px-2 py-1.5 w-full">DELETE USER</p>}
+            userId={user.id}
+            email={user.email}
+          />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
