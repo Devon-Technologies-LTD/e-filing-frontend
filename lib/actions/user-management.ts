@@ -29,6 +29,7 @@ export interface Ipage {
     year?: string,
 }
 
+
 const handleError = (err: unknown) => {
     console.error("API Error:", err);
     const error = err as ErrorResponse;
@@ -59,7 +60,8 @@ const handleError = (err: unknown) => {
     }
 };
 
-const fetchData = async (serviceMethod: Function, params?: any) => {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+const fetchData = async (serviceMethod: Function, params?: unknown) => {
     try {
         const data = await serviceMethod(params);
         return { ...data, success: true };
@@ -67,7 +69,8 @@ const fetchData = async (serviceMethod: Function, params?: any) => {
         return handleError(err);
     }
 };
-const fetchData2 = async (serviceMethod: Function, params?: any) => {
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+const fetchData2 = async (serviceMethod: Function, params?: unknown) => {
     try {
         return await serviceMethod(params);
     } catch (err) {
@@ -100,6 +103,7 @@ export const breakdown = (type: string, id: string) => {
     }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const handleFormAction = async (serviceMethod: Function, formData: FormData) => {
     const formDataObject = Object.fromEntries(formData.entries());
     try {
@@ -133,6 +137,7 @@ export async function resetPassword(
         
         await axiosInstance.post("/auth/change-password", data);
         return { status: 200, success: true, message: "Password changed successfully", errors: {} };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         if (err.response) {
             return {

@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import AllMagistrates from "./all-magistrate";
 import PendingInvites from "./pending-invites";
 import Registerars from "./registerars";
+import React from "react";
+
 
 export default function ChiefJudgeUserManagement() {
   const params = useParams();
