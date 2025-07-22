@@ -5,6 +5,8 @@ import { ROLES } from "@/types/auth";
 import { ColumnDef } from "@tanstack/react-table";
 import UserManagementDataTableAction from "./data-table-action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import React from "react";
+
 
 export interface IUsersColumn {
   id: string;
@@ -92,7 +94,7 @@ export const createUserColumns = (
     },
   ];
 
-  let conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
+  const conditionalColumns: ColumnDef<IUsersColumn>[] = [...baseColumns];
 
   if (userRole === ROLES.DIRECTOR_MAGISTRATE) {
     const directorColumns: ColumnDef<IUsersColumn>[] = [
