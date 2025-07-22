@@ -22,7 +22,7 @@ export default function FinancialMetrics() {
   const { data: user } = useAppSelector((state) => state.profile);
   const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(user.role);
-  const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user.role);
+  const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
   const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
 
   const [caseStatusData, setStatusData] = React.useState<CaseData[]>([
