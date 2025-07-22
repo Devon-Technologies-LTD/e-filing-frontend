@@ -43,7 +43,7 @@ jobs:
           ssh-keyscan -H "$REMOTE_HOST" >> ~/.ssh/known_hosts
           
           # Copy .next folder, public folder, and node_modules to the server
-          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/opt/products/docket-master/e-filing-frontend"
+          scp -r next_and_node_modules.tar.gz "$REMOTE_USER@$REMOTE_HOST:/home/devonadmin/pre-prod/e-filing-frontend"
 
       # Step 6: SSH into the server, pull latest code, and run docker-compose
       - name: SSH into the server, pull latest code, and run Docker Compose
@@ -60,7 +60,7 @@ jobs:
           # SSH into the server, pull the latest code, and run docker-compose
           ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
             # Navigate to the project directory
-            cd /opt/products/docket-master/e-filing-frontend || exit
+            cd /home/devonadmin/pre-prod/e-filing-frontend || exit
             # Pull latest code from the repo
             rm package-lock.json yarn.lock
             git pull origin pre-prod || exit
