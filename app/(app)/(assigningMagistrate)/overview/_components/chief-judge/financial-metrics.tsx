@@ -1,14 +1,14 @@
 import React from "react";
 import { MetricCard } from "../metric-card";
-import CaseDistributionBarChart from "./case-distribution-chart";
+// import CaseDistributionBarChart from "./case-distribution-chart";
 import { ROLES } from "@/types/auth";
-import { data, presidingdata, centraldata } from "./type";
+// import { data, presidingdata, centraldata } from "./type";
 import { useAppSelector } from "@/hooks/redux";
-import UpcomingHearing from "../upcoming-hearing";
+// import UpcomingHearing from "../upcoming-hearing";
 import { getFinancialMetric } from "@/lib/actions/user-management";
 import { useQuery } from "@tanstack/react-query";
 import OverViewSkeleton from "../../overview-skeleton";
-import CaseStatusChart from "./case-status-chart";
+// import CaseStatusChart from "./case-status-chart";
 import FinanceDistributionBarChart from "./financial-distribution-chart";
 interface CaseData {
   division_name: string;
@@ -20,10 +20,10 @@ interface CaseData {
 export default function FinancialMetrics() {
 
   const { data: user } = useAppSelector((state) => state.profile);
-  const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
-  const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(user.role);
+  // const isPresiding = user?.role && [ROLES.CHIEF_JUDGE, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
+  // const isHearing = user?.role && [ROLES.ASSIGNING_MAGISTRATE, ROLES.PRESIDING_MAGISTRATE, ROLES.DIRECTOR_MAGISTRATE].includes(user.role);
   const rightModal = user?.role && [ROLES.CENTRAL_REGISTRAR, ROLES.PRESIDING_MAGISTRATE].includes(user.role);
-  const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
+  // const centeral = user?.role && [ROLES.CENTRAL_REGISTRAR].includes(user.role);
 
   const [caseStatusData, setStatusData] = React.useState<CaseData[]>([
     { division_name: "No Data", amount: 0 },

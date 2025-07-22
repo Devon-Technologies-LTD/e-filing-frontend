@@ -4,11 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   images: {
-    domains: ["api.efiling.staging.devontech.io"],
+    domains: ["api.efiling.preprod.devontech.io"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "api.efiling.staging.devontech.io",
+        hostname: "api.efiling.preprod.devontech.io",
       },
     ],
   },
