@@ -6,6 +6,8 @@ import { RoleToTabs } from "@/types/general";
 import { ROLES } from "@/types/auth";
 import { useAppSelector } from "@/hooks/redux";
 import { useMemo } from "react";
+import React from "react";
+
 
 const defaultTabs: { id: MCaseFilterType; label: string }[] = [];
 
