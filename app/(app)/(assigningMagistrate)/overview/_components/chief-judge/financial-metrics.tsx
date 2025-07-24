@@ -111,7 +111,6 @@ export default function FinancialMetrics() {
           )}
         </div>
       </div>
-
       <div className="bg-white">
         <FinanceDistributionBarChart heading="ACTIVE MAGISTERATE HANDLING CASES ACROSS DIVISION" caseData={caseStatusData} />
       </div>
