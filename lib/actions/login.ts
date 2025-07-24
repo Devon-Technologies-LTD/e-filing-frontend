@@ -12,7 +12,12 @@ import { redirect } from "next/navigation";
 import { defaultLoginRedirect } from "@/routes";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { ErrorResponse, handleError, LoginResponseData, ROLES } from "@/types/auth";
+import {
+  ErrorResponse,
+  handleError,
+  LoginResponseData,
+  ROLES,
+} from "@/types/auth";
 
 export async function LoginAction(_prevState: unknown, formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -92,14 +97,13 @@ export interface LoginResponseData2 {
     last_name: string;
     phone_number: string;
     role: ROLES;
-  }
+  };
   token: string;
 }
 
-
 export async function googleLoginAction(email: string) {
   let role: ROLES;
-  
+
   try {
     const res = await authService.googleLoginUser(email);
     const data = res.data as LoginResponseData2;
@@ -144,14 +148,14 @@ export async function ForgotPasswordAction(
 
   try {
     // Simulate API call (uncomment when ready)
-  const resultz =  await authService.forgotPassword(result.data);
+    const resultz = await authService.forgotPassword(result.data);
     cookies().set("otpEmail", result.data.email);
   } catch (err: any) {
     if (err?.response) {
       return {
         status: err.response.status,
         message: err.response.data.message,
-        errors: err.response.data.data['error'],
+        errors: err.response.data.data["error"],
         success: false,
       };
     } else if (err.request) {
@@ -176,6 +180,8 @@ export async function ForgotPasswordAction(
 
 export async function logoutAction() {
   deleteSession();
+  cookies().delete("TempToken");
+  cookies().delete("TempID");
   redirect("/login");
 }
 
@@ -186,8 +192,7 @@ export async function verifyOTP(_prevState: unknown, formData: FormData) {
   if (!result.success) {
     return {
       status: 400,
-      errors: result.error.flatten
-        ().fieldErrors,
+      errors: result.error.flatten().fieldErrors,
       message: "",
     };
   }
@@ -313,4 +318,3 @@ export async function resetPassword(_prevState: unknown, formData: FormData) {
   }
   redirect("/login");
 }
-

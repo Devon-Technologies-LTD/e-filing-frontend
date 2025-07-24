@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import React from "react";
 
 const BackIcon = ({ className }: React.SVGAttributes<HTMLOrSVGElement>) => {
   return (
