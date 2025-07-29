@@ -68,6 +68,7 @@ const LoginComponent = () => {
           </span>
         </p>
       </div>
+      
       <form action={dispatch} className="w-full space-y-6">
         <InputField
           id="email"
