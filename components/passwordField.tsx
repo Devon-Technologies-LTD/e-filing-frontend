@@ -51,13 +51,13 @@ export const LoginPasswordField: React.FC<LoginPasswordFieldProps> = ({
           className={clsx("text-xs font-bold", error ? "text-red-500" : "text-neutral-600")}
         >
           {label}
-          <span className="text-red-500 ml-1 text-lg">*</span>
+          <span className="text-red-500 ml-1">*</span>
         </Label>
       )}
 
       <div className="grid grid-cols-1 grid-rows-0 place-items-center relative">
         <Input
-          className={clsx("col-span-full text-2xl leading-relaxed font-sans border-0 border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer  placeholder:text-md placeholder:font-semibold placeholder:text-zinc-400 text-md border-app-secondary row-span-full bg-transparent border-none peer",
+          className={clsx("col-span-full text-2xl leading-relaxed font-sans border-0 border-b-2 px-2 text-muted-foreground focus:ring-transparent focus-visible:ring-transparent peer  placeholder:text-sm placeholder:font-semibold placeholder:text-zinc-400 text-md border-app-secondary row-span-full bg-transparent border-none peer",
             error ? "border-red-500 focus:border-red-500" : "border-neutral-200"
           )}
           name={name}
