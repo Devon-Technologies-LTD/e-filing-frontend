@@ -40,7 +40,7 @@ const AuthLayout = ({ children, headerContent }: AuthLayoutProps) => {
             <div className="flex-1 overflow-y-auto">
                 <section className="min-h-full w-full py-8 px-4">
                     <div className="container mx-auto flex items-center justify-center">
-                        <div className="w-full max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col gap-4 items-center justify-center">
+                        <div className="w-full max-w-md md:max-w-lg lg:max-w-lg flex flex-col gap-4 items-center justify-center">
                             {children}
                         </div>
                     </div>
