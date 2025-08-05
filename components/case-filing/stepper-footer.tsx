@@ -24,6 +24,7 @@ import { useCriminalCaseFormValidator } from "./validators/criminal-case-validat
 import { toast } from "sonner";
 import { useFamilyCaseFormValidator } from "./validators/family-case-validaotr";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import ExemptionVerificationModal from "../ExemptionVerificationModal";
 
 interface Iprops {
   isRefiling?: boolean;
@@ -189,6 +190,17 @@ export function StepperNavigation({ isRefiling }: Iprops) {
             <MoveLeft /> Back
           </Button>
         </div>
+
+        <ExemptionVerificationModal />
+
+        {/* <Button
+          size={"lg"}
+          className="font-bold bg-[#7C2D121A] text-primary text-sm flex-end h-11"
+          onClick={() => {}}
+          disabled={formPending || generateRRRMutation.isPending}
+        >
+          Input exemption code if applicable
+        </Button> */}
 
         <div className="w-1/2 flex gap-3 justify-end ">
           {!isRefiling ? (
