@@ -41,14 +41,20 @@ export async function addLawyers(payload: any, caseId: string, type: string) {
 }
 
 // Updated getCaseFiles function
-export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }, page: number, size: number, tab: string) {
+export async function getCaseFiles(
+  payload: IDraftFilter & { role?: ROLES },
+  page: number,
+  size: number,
+  tab: string
+) {
   try {
-    if ([
-      ROLES.PRESIDING_MAGISTRATE,
-      ROLES.ASSIGNING_MAGISTRATE,
-      ROLES.DIRECTOR_MAGISTRATE,
-      ROLES.CENTRAL_REGISTRAR,
-    ].includes(payload.role as ROLES)
+    if (
+      [
+        ROLES.PRESIDING_MAGISTRATE,
+        ROLES.ASSIGNING_MAGISTRATE,
+        ROLES.DIRECTOR_MAGISTRATE,
+        ROLES.CENTRAL_REGISTRAR,
+      ].includes(payload.role as ROLES)
     ) {
       const data = await CaseFileService.getCaseFilesAdmin(payload, page, size);
       return { ...data, success: true };
@@ -62,7 +68,6 @@ export async function getCaseFiles(payload: IDraftFilter & { role?: ROLES }, pag
         return { ...data, success: true };
       }
     }
-
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);
@@ -242,6 +247,21 @@ export async function updateCaseType({
   try {
     const data = await CaseFileService.patchCaseType({ payload, caseTypeId });
     return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
+
+export async function verifyExemptionCode(
+  _prevState: unknown,
+  formData: FormData
+) {
+  const exemptionId = formData.get("exemptionId");
+  try {
+    // const data = await CaseFileService.patchCaseType();
+    // return { ...data, success: true };
+    return { status: "success", success: true, message: "Verified Successfully" };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);

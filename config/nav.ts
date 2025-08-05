@@ -86,4 +86,12 @@ export const navigationLinks: NavItem[] = [
     ],
     isActive: (pathname) => pathname?.startsWith("/management"),
   },
+   {
+    title: "Excemption",
+    href: "/excemption",
+    roles: [
+      ROLES.CENTRAL_REGISTRAR,
+    ],
+    isActive: (pathname) => pathname?.startsWith("/excemption"),
+  },
 ];
