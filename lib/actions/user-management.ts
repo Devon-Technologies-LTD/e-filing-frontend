@@ -9,7 +9,6 @@ type ErrorResponse = {
   request?: unknown;
   message?: string;
 };
-
 export interface Ipage {
   page?: number;
   size?: number;
@@ -70,6 +69,7 @@ const fetchData = async (serviceMethod: Function, params?: unknown) => {
     return handleError(err);
   }
 };
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const fetchData2 = async (serviceMethod: Function, params?: unknown) => {
   try {
@@ -79,35 +79,25 @@ const fetchData2 = async (serviceMethod: Function, params?: unknown) => {
   }
 };
 
-export const getUserManagement = (params: Ipage) =>
-  fetchData(UserService.getUserManagement, params);
-export const getUserManagementFilter = (params: Ipage) =>
-  fetchData(UserService.getUserManagementFilter, params);
+export const getUserManagement = (params: Ipage) =>  fetchData(UserService.getUserManagement, params);
+export const getUserManagementFilter = (params: Ipage) =>  fetchData(UserService.getUserManagementFilter, params);
 export const getUserCase = () => fetchData2(UserService.getUserCase);
 export const getAllUser = () => fetchData(UserService.getAllUser);
-export const getPendingUser = (params: Ipage) =>
-  fetchData(UserService.getPendingUsers, params);
-export const getOversight = (params: Ipage) =>
-  fetchData(UserService.magistrateOversight, params);
-export const getPerformance = (params: Ipage) =>
-  fetchData(UserService.getPerformance, params);
+export const getPendingUser = (params: Ipage) =>  fetchData(UserService.getPendingUsers, params);
+export const getOversight = (params: Ipage) =>  fetchData(UserService.magistrateOversight, params);
+export const getPerformance = (params: Ipage) =>  fetchData(UserService.getPerformance, params);
 export const getCaseMetric = () => fetchData(UserService.caseMetric);
 export const getCaseMetric2 = () => fetchData(UserService.caseMetric2);
-export const getCaseBreakDown = (id: string) =>
-  fetchData2(UserService.getCaseBreakDown, id);
-export const getMagisterateBreakDown = (id: string) =>
-  fetchData2(UserService.getMagisterateBreakDown, id);
-export const getFinanceBreakDown = (id: string) =>
-  fetchData2(UserService.getFinanceBreakDown, id);
+export const getCaseBreakDown = (id: string) =>  fetchData2(UserService.getCaseBreakDown, id);
+export const getMagisterateBreakDown = (id: string) =>  fetchData2(UserService.getMagisterateBreakDown, id);
+export const getFinanceBreakDown = (id: string) =>  fetchData2(UserService.getFinanceBreakDown, id);
 export const magistrateMetric = () => fetchData(UserService.magistrateMetric);
-export const getFinancialMetric = () =>
-  fetchData(UserService.getFinancialMetric);
-export const getCaseDistribution = () =>
-  fetchData(UserService.getCaseDistribution);
-export const getProfileCases = (id: string) =>
-  fetchData(UserService.getProfileCases, id);
+export const getFinancialMetric = () =>  fetchData(UserService.getFinancialMetric);
+export const getCaseDistribution = () =>  fetchData(UserService.getCaseDistribution);
+export const getProfileCases = (id: string) =>  fetchData(UserService.getProfileCases, id);
 
 export const breakdown = (type: string, id: string) => {
+  
   if (type === "magistrate") {
     return fetchData2(UserService.getMagisterateBreakDown, id);
   } else if (type === "case") {
@@ -115,7 +105,9 @@ export const breakdown = (type: string, id: string) => {
   } else if (type === "finances") {
     return fetchData2(UserService.getFinanceBreakDown, id);
   }
+
 };
+
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const handleFormAction = async (
@@ -131,8 +123,7 @@ const handleFormAction = async (
   }
 };
 
-export const InviteUserAction = (_prevState: unknown, formData: FormData) =>
-  handleFormAction(UserService.addUserManagement, formData);
+export const InviteUserAction = (_prevState: unknown, formData: FormData) =>  handleFormAction(UserService.addUserManagement, formData);
 export const ActiveUserAction = (_prevState: unknown, formData: FormData) =>
   handleFormAction(UserService.addUserManagement, formData);
 

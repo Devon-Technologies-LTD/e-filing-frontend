@@ -76,6 +76,7 @@ export default function MagistrateCases() {
               />
             </>
           )}
+          
           {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               <MetricCard
@@ -94,11 +95,12 @@ export default function MagistrateCases() {
               />
             </>
           )}
+
           {[ROLES.CHIEF_JUDGE, ROLES.DIRECTOR_MAGISTRATE, ROLES.ASSIGNING_MAGISTRATE].includes(user?.role as ROLES) && (
             <>
               <MetricCard
                 type="magistrate"
-                metricKey="activeMagistrate"
+                metricKey="ACTIVE"
                 value="Active Magistrates Handling cases"
                 metric={data?.activeMagistrate ?? { total: 0, difference: 0 }}
                 rightModal={rightModal}
