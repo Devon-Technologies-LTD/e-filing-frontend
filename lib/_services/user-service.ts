@@ -118,24 +118,28 @@ const UserService = {
     );
     return response.data;
   },
+  
   async getMagisterateBreakDown(id: string): Promise<any> {
     const response = await axiosInstance.get(
       `admin/analyitcs/magistrate-breakdown/${id}`
     );
     return response.data;
   },
+  
   async getFinanceBreakDown(id: string): Promise<any> {
     const response = await axiosInstance.get(
       `admin/analyitcs/financial-breakdown/${id}`
     );
     return response.data;
   },
+
   async magistrateMetric(): Promise<any> {
     const response = await axiosInstance.get(
       `admin/analyitcs/magistrate-metrics`
     );
     return response.data;
   },
+
   async getFinancialMetric(): Promise<any> {
     const response = await axiosInstance.get(
       `admin/analyitcs/financial-metrics`
