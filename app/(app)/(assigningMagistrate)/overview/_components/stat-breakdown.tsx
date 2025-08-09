@@ -1,6 +1,5 @@
 "use client";
 
-import { AllCasesFilter } from "@/components/filters/all-cases";
 import {
   Table,
   TableBody,
@@ -9,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { breakdown, getCaseBreakDown, getMagisterateBreakDown } from "@/lib/actions/user-management";
+import { breakdown } from "@/lib/actions/user-management";
 import { cn, formatNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import CountUp from "react-countup";
@@ -31,14 +30,12 @@ interface StatBreakdownProps {
 }
 
 export function StatBreakdown({
-  description,
   metric,
   metricKey,
   type,
   value,
   variant = "default",
 }: StatBreakdownProps) {
-
   const { data = [], isLoading, error } = useQuery({
     queryKey: ["CaseBreakdown", metricKey ?? "", type ?? ""],
     queryFn: async (): Promise<DivisionData[]> => {
@@ -54,8 +51,6 @@ export function StatBreakdown({
     staleTime: 100000,
     enabled: !!metricKey,
   });
-
-
   const bgColors: Record<string, string> = {
     default: "bg-gray-100",
     primary: "bg-blue-100",
