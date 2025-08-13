@@ -10,7 +10,13 @@ import { createPerformanceColumns } from "./table-column-performace";
 import Pagination from "@/components/ui/pagination";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@radix-ui/react-select";
 import { Search } from "lucide-react";
 import { COURT_TYPE, CaseTypes } from "@/types/files/case-type";
 
@@ -32,7 +38,10 @@ export default function PerformanceMagisterate() {
   const [selectedCourt, setSelectedCourt] = useState<CaseTypes | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const courtFilterOptions = [{ value: "all", label: "ALL COURT TYPE" }, ...COURT_TYPE];
+  const courtFilterOptions = [
+    { value: "all", label: "ALL COURT TYPE" },
+    ...COURT_TYPE,
+  ];
   const handleCourtTypeChange = useCallback((value: string) => {
     setSelectedCourt(value as CaseTypes);
   }, []);
@@ -43,8 +52,6 @@ export default function PerformanceMagisterate() {
   // const courtFilterOptions = [{ value: "all", label: "ALL COURT TYPE" }, ...COURT_TYPE];
   const [role, setRole] = useState<string>(() => {
     switch (user?.role) {
-      case ROLES.CHIEF_JUDGE:
-        return "DIRECTOR_MAGISTRATE";
       case ROLES.DIRECTOR_MAGISTRATE:
         return "ASSIGNING_MAGISTRATE";
       case ROLES.ASSIGNING_MAGISTRATE:
@@ -55,12 +62,16 @@ export default function PerformanceMagisterate() {
   });
 
   const { data, isLoading: draftsLoading } = useQuery({
-    queryKey: ["magistrate-performance", { searchQuery, currentPage, role, division_id: user?.court_division_id }],
+    queryKey: [
+      "magistrate-performance",
+      { searchQuery, currentPage, role, division_id: user?.court_division_id },
+    ],
     queryFn: async () =>
       await getPerformance({
         page: currentPage,
         size: DEFAULT_PAGE_SIZE,
-        division_id: user?.court_division_id,
+        division_id:
+          user?.role === ROLES.CHIEF_JUDGE ? "" : user?.court_division_id,
         search: searchQuery,
         usertype: role,
       }),
@@ -70,7 +81,10 @@ export default function PerformanceMagisterate() {
   const handleRowClick = (row: any) => {
     console.log(row);
   };
-  const columns = useMemo(() => createPerformanceColumns(user?.role!, "all"), [user?.role]);
+  const columns = useMemo(
+    () => createPerformanceColumns(user?.role!, "all"),
+    [user?.role]
+  );
 
   return (
     <div className="bg-white h-screen overflow-hidden flex flex-col space-y-4">
@@ -88,7 +102,9 @@ export default function PerformanceMagisterate() {
           />
         </div>
         <div className="flex gap-3">
-          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(user?.role as ROLES) && (
+          {[ROLES.DIRECTOR_MAGISTRATE, ROLES.CHIEF_JUDGE].includes(
+            user?.role as ROLES
+          ) && (
             <FilterDropdown
               triggerVariant="outline"
               itemVariant="outline"
@@ -124,68 +140,3 @@ export default function PerformanceMagisterate() {
     </div>
   );
 }
-
-// import { DataTable } from "@/components/data-table";
-// import { useAppSelector } from "@/hooks/redux";
-// import React, { useMemo, useState } from "react";
-// // import { mainColumns } from "./table-columns";
-// import { USER_STATUS } from "@/types/auth";
-
-// export interface IUsersColumn {
-//   id?: string;
-//   name: string;
-//   total: string;
-//   status: USER_STATUS;
-//   active?: string;
-//   reassigned?: string;
-//   close?: string;
-//   courtType?: string;
-//   resolutionTime?: string;
-// }
-
-// export const mockUsers: IUsersColumn[] = [
-//   {
-//     id: "1",
-//     name: "Bayo Adetola",
-//     total: "1000 cases",
-//     status: USER_STATUS.ACTIVE,
-//     active: "100 case",
-//     close: "20 cases",
-//     reassigned: "20 cases",
-//     courtType: "Magistrate Court",
-//     resolutionTime: "Magistrate Court",
-//   },
-//   {
-//     id: "1",
-//     name: "Bayo Adetola",
-//     total: "3000",
-//     status: USER_STATUS.INACTIVE,
-//     active: "100 case",
-//     close: "20 cases",
-//     reassigned: "20 cases",
-//     courtType: "Family Court",
-//     resolutionTime: "Family Court",
-//   },
-// ];
-
-// export default function PerformanceMagisterate() {
-//   const { data: user } = useAppSelector((state) => state.profile);
-//   const handleRowClick = (row: any) => {
-//     console.log(row);
-//   };
-
-//   // const columns = useMemo(
-//   //   () => mainColumns(user?.role!, "performance"),
-//   //   [user?.role]
-//   // );
-//   return (
-//     <div className="bg-white  space-y-6">
-//       {/* <DataTable
-//         onRowClick={handleRowClick}
-//         columns={columns}
-//         loading={false}
-//         data={mockUsers}
-//       /> */}
-//     </div>
-//   );
-// }
