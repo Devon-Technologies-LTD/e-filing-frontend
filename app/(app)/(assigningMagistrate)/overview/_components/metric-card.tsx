@@ -19,6 +19,7 @@ export const MetricCard: React.FC<{
   description?: string;
   value?: string;
 }> = ({ metric, description, className, rightModal, type, metricKey , value }) => {
+  
   const bgColors: ColorToVariant = {
     total: "bg-neutral-200",
     active: "bg-green-50",
@@ -27,7 +28,9 @@ export const MetricCard: React.FC<{
     reassigned: "bg-red-50",
     concluded: "bg-purple-50",
   };
+
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <div className="space-y-4 pb-4 my-4 bg-white shadow-customTwo rounded-lg grid-cols-[repeat(auto-fit,minmax(250px,1fr))">
@@ -49,7 +52,6 @@ export const MetricCard: React.FC<{
               <span className="font-extrabold">
                 {formatNumber(Number(metric?.difference) || 0)}
               </span>
-              {" "}
               in the last year
             </p>
           </span>

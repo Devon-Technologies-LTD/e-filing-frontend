@@ -3,7 +3,7 @@ name: Deploy Next.js to Remote Server
 on:
   push:
     branches:
-      - pre-prod  # Replace with your branch
+      - pre-prod  # Replace with your branch # just to trigger a new deployment
 
 jobs:
   deploy:

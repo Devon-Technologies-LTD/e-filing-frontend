@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -8,33 +9,57 @@ import { AnalyticsChart } from "./analytics-chart";
 import DeleteUser from "./delete-user";
 import DeactivateUser from "./deactivate-user";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
+import { getProfileCases } from "@/lib/actions/user-management";
 
 interface StatsCardProps {
   label: string;
   value: string | number;
   className?: string;
+  isLoading?: boolean;
 }
 
-function StatsCard({ label, value, className }: StatsCardProps) {
+function StatsCard({ label, value, className, isLoading }: StatsCardProps) {
   return (
     <div className={cn("", className)}>
       <p className="text-stone-600 font-bold opacity-60 text-sm">{label}</p>
-      <p className="text-zinc-900 text-xs font-extrabold">{value}</p>
+      <p className="text-zinc-900 text-xs font-extrabold">
+        {isLoading ? "Loading..." : value}
+      </p>
     </div>
   );
 }
-const chartData = [
-  { label: "Total Assigned Case", value: 800 },
-  { label: "Active Cases", value: 500 },
-  { label: "Closed Cases", value: 400 },
-  { label: "Re-Assigned Case", value: 300 },
-];
 
 export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
   const initials = row.name
     .split(" ")
     .map((part) => part.charAt(0).toUpperCase())
     .join("");
+
+  console.log(row.id, "row id");
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getProfileCases", row.id],
+    queryFn: async () => {
+      return await getProfileCases(row.id);
+    },
+    staleTime: 100000,
+  });
+  
+  console.log(data);
+  // Create chart data based on API response
+  const chartData = data?.data ? [
+    { label: "Total Assigned Case", value: data?.data.total_assigned },
+    { label: "Active Cases", value: data?.data.total_active },
+    { label: "Closed Cases", value: data?.data.total_closed },
+    { label: "Re-Assigned Case", value: data?.data.total_reassigned },
+  ] : [
+    { label: "Total Assigned Case", value: 0 },
+    { label: "Active Cases", value: 0 },
+    { label: "Closed Cases", value: 0 },
+    { label: "Re-Assigned Case", value: 0 },
+  ];
+
   return (
     <>
       <Sheet>
@@ -76,7 +101,6 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
                   </p>
                   <p className="text-sm text-primary font-extrabold uppercase">
                     {row?.court_division ?? "-"}
-
                   </p>
                 </div>
                 <div className="px-3">
@@ -92,15 +116,35 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
 
             {/* Stats Grid */}
             <div className="flex divide-x- justify-between py-6 border-b-2 items-center">
-              <StatsCard label="Total Assigned Case" value={`0 Cases`} />
+              <StatsCard
+                label="Total Assigned Case"
+                value={`${data?.data.total_assigned ?? 0} Cases`}
+                isLoading={isLoading}
+              />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Active Cases" value={`0 Cases`} />
+              <StatsCard
+                label="Active Cases"
+                value={`${data?.data.total_active ?? 0} Cases`}
+                isLoading={isLoading}
+              />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Closed Cases" value={`0 Cases`} />
+              <StatsCard
+                label="Closed Cases"
+                value={`${data?.data.total_closed ?? 0} Cases`}
+                isLoading={isLoading}
+              />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Re-assigned Case" value={`0 Cases`} />
+              <StatsCard
+                label="Re-assigned Case"
+                value={`${data?.data.total_reassigned ?? 0} Cases`}
+                isLoading={isLoading}
+              />
               <div className="border-l-2 h-12" />
-              <StatsCard label="Avg. Resolution Time(Days)" value={`0 Days`} />
+              <StatsCard
+                label="Avg. Resolution Time(Days)"
+                value={`${data?.avg_res_days ?? 0} Days`}
+                isLoading={isLoading}
+              />
             </div>
 
             {/* Analytics */}
@@ -111,14 +155,19 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
             {/* Actions */}
             <div className="flex items-center gap-4">
               <DeleteUser
-                trigger={<Button
-                  variant="danger"
-                  size={"medium"}
-                  className="h-12 px-5"
-                  onClick={() => { }}
-                >
-                  DELETE USER
-                </Button>} userId={undefined} email={undefined} />
+                trigger={
+                  <Button
+                    variant="danger"
+                    size={"medium"}
+                    className="h-12 px-5"
+                    onClick={() => { }}
+                  >
+                    DELETE USER
+                  </Button>
+                }
+                userId={undefined}
+                email={undefined}
+              />
               <DeactivateUser
                 row={row}
                 trigger={

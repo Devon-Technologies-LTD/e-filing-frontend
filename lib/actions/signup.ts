@@ -20,7 +20,7 @@ export async function reSendOtpAction(_prevState: unknown, formData: FormData) {
                 success: false,  // Ensure success is always included
             };
         }
-        const res = await authService.resendOtp({ email });
+        await authService.resendOtp({ email });
         return {
             status: 200,
             message: "Email sent successfully.",
@@ -200,6 +200,7 @@ export async function invitationAction(_prevState: unknown, formData: FormData) 
             message: "Invalid image format. Only JPG and PNG are allowed.",
         };
     }
+
 
     // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024; // 5MB

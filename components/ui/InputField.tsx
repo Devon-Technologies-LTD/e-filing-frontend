@@ -36,6 +36,7 @@ interface InputFieldProps {
   };
 }
 
+
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
   (
     {
@@ -132,7 +133,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             autoComplete="off"
             autoFocus={autoFocus}
             className={clsx(
-              "w-full p-2 border-0 border-b-[1px] text-lg placeholder:font-semibold placeholder:text-zinc-400 focus:outline-none focus:border-b-2 border-app-secondary",
+              "w-full p-2 border-0 border-b-[1px] placeholder:text-sm  text-lg placeholder:font-semibold placeholder:text-zinc-400 focus:outline-none focus:border-b-2 border-app-secondary",
               error
                 ? "border-red-500 focus:border-red-500"
                 : "border-neutral-200",
