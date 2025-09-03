@@ -35,6 +35,7 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
     .split(" ")
     .map((part) => part.charAt(0).toUpperCase())
     .join("");
+
   console.log(row.id, "row id");
 
   const { data, isLoading } = useQuery({
@@ -44,7 +45,8 @@ export default function MagistrateProfile({ row }: { row: IUsersColumn }) {
     },
     staleTime: 100000,
   });
-console.log(data);
+  
+  console.log(data);
   // Create chart data based on API response
   const chartData = data?.data ? [
     { label: "Total Assigned Case", value: data?.data.total_assigned },
@@ -114,32 +116,32 @@ console.log(data);
 
             {/* Stats Grid */}
             <div className="flex divide-x- justify-between py-6 border-b-2 items-center">
-              <StatsCard 
-                label="Total Assigned Case" 
+              <StatsCard
+                label="Total Assigned Case"
                 value={`${data?.data.total_assigned ?? 0} Cases`}
                 isLoading={isLoading}
               />
               <div className="border-l-2 h-12" />
-              <StatsCard 
-                label="Active Cases" 
+              <StatsCard
+                label="Active Cases"
                 value={`${data?.data.total_active ?? 0} Cases`}
                 isLoading={isLoading}
               />
               <div className="border-l-2 h-12" />
-              <StatsCard 
-                label="Closed Cases" 
+              <StatsCard
+                label="Closed Cases"
                 value={`${data?.data.total_closed ?? 0} Cases`}
                 isLoading={isLoading}
               />
               <div className="border-l-2 h-12" />
-              <StatsCard 
-                label="Re-assigned Case" 
+              <StatsCard
+                label="Re-assigned Case"
                 value={`${data?.data.total_reassigned ?? 0} Cases`}
                 isLoading={isLoading}
               />
               <div className="border-l-2 h-12" />
-              <StatsCard 
-                label="Avg. Resolution Time(Days)" 
+              <StatsCard
+                label="Avg. Resolution Time(Days)"
                 value={`${data?.avg_res_days ?? 0} Days`}
                 isLoading={isLoading}
               />
@@ -158,7 +160,7 @@ console.log(data);
                     variant="danger"
                     size={"medium"}
                     className="h-12 px-5"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     DELETE USER
                   </Button>
@@ -172,7 +174,7 @@ console.log(data);
                   <Button
                     variant="ghost"
                     className="font-semibold"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     {
                       // row.status === "ACTIVE"
