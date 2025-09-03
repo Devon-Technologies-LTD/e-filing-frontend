@@ -1,15 +1,5 @@
 "use client";
-
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import ExemptionIDGenerator from "./GenerateExemption";
+import { DataTable } from "@/components/data-table";
+import { DraftsColumns } from "./_component/table-columns";
 
 type Status = "Active" | "Suspended" | "Deactivated";
 
@@ -86,6 +78,11 @@ export default function ExemptionPage() {
     const matchesStatus = statusFilter === "All" || e.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.id);
+  };
 
   const statusColors: Record<Status, string> = {
     Active: "bg-green-100 text-green-700",
@@ -101,7 +98,7 @@ export default function ExemptionPage() {
             <h1 className="text-lg font-semibold">Exemption IDs</h1>
           </div>
           <div className="">
-            {/* <ExemptionIDGenerator /> */}
+            <ExemptionIDGenerator />
             {/* <Button className="text-sm">
               Generate New Exemption ID
             </Button> */}
@@ -138,7 +135,16 @@ export default function ExemptionPage() {
               </DropdownMenu>
             </div>
 
-            <Table>
+
+            <DataTable
+              onRowClick={handleRowClick}
+              columns={DraftsColumns}
+              loading={false}
+              // data={data?.data}
+              data={filtered}
+            // {[...exemptions]}
+            />
+            {/* <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Exemption ID</TableHead>
@@ -168,7 +174,7 @@ export default function ExemptionPage() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table> */}
           </div>
         </div>
       </div>

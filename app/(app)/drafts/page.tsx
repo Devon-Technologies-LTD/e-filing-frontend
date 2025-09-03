@@ -22,7 +22,6 @@ import { toast } from "sonner";
 export default function Page() {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [selectedRow, setSelectedRow] = useState(null);
   const handleRowClick = (row: any) => {
     setSelectedRow(row.id);
