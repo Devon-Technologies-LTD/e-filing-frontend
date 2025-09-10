@@ -15,6 +15,7 @@ export interface IDocumentFileType {
   notes?: string;
   status: string;
   created_at?: string;
+  exemption_code?: string;
   updated_at?: string;
 }
 
@@ -54,13 +55,16 @@ export interface ICaseTypes {
   interpleader?: string;
   originating?: string;
   counsel_name: string;
+  exemption_code: string;
 }
 
-export interface ILegalCounsels {}
+export interface ILegalCounsels { }
 
 interface FormState {
   current_step: number;
   paymentType: string;
+  exemption_code: string;
+
   legal_counsels: ILegalCounsels[];
   caseType: ICaseTypes;
   totalAmount: number;
@@ -106,6 +110,7 @@ const initialState: FormState = {
     counsel_name: "",
     title: "",
     case_file_id: "",
+    exemption_code: "",
     case_type: "",
     sub_case_type: "",
     direct_complain: "",
@@ -127,6 +132,7 @@ const initialState: FormState = {
   },
   legal_counsels: [],
   documents: [],
+  exemption_code: ""
 };
 
 const formSlice = createSlice({
@@ -194,9 +200,9 @@ const formSlice = createSlice({
         (document) =>
           !(
             document.title.toLowerCase() ===
-              action.payload.title.toLowerCase() &&
+            action.payload.title.toLowerCase() &&
             document.sub_title.toLowerCase() ===
-              action.payload.subCase.toLowerCase()
+            action.payload.subCase.toLowerCase()
           )
       );
     },

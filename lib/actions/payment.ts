@@ -12,16 +12,33 @@ export async function generateRRR(caseFileId: string, amount?: any) {
     return handleApiError(error);
   }
 }
+export async function ProcessExemption(casefile_id: string,
+  reference: string,
+  payment_method: string) {
+  try {
+    const data = await PaymentService.validateExemption({
+      casefile_id,
+      reference,
+      payment_method,
+    });
+    return { data: data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 
 export async function validatePayment(
   casefile_id: string,
   reference: string,
+  exemption_code: string,
   payment_method: string
 ) {
   try {
     const data = await PaymentService.validatePayment({
       casefile_id,
       reference,
+      exemption_code,
       payment_method,
     });
     return { data: data, success: true };

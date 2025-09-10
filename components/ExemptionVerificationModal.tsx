@@ -10,17 +10,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Loader2, AlertCircle } from "lucide-react";
-import { verifyExemptionCode } from "@/lib/actions/case-file";
+import { verifyExemptionCode, verifyExemptionCode2 } from "@/lib/actions/case-file";
+import { ICaseTypes, updateCaseTypeName } from "@/redux/slices/case-filing-slice";
+type ExemptionVerificationModalProps = {
+  handleExemptionStep: () => void;
+  setExmptionCode: (code: string) => void;
+};
 
-export default function ExemptionVerificationModal() {
+export default function ExemptionVerificationModal({ handleExemptionStep, setExmptionCode }: ExemptionVerificationModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+
   const [state, setState] = useState<{
     status: "idle" | "success" | "error";
     message?: string;
     errors?: string;
     data?: any;
   }>({ status: "idle" });
+
   const [exemptionCode, setExemptionCode] = useState("");
   const handleOpenChange = (open: boolean | ((prevState: boolean) => boolean)) => {
     setIsOpen(open);
@@ -42,15 +49,23 @@ export default function ExemptionVerificationModal() {
 
     startTransition(async () => {
       try {
-        const result = await verifyExemptionCode(exemptionCode.trim());
-        console.log(result);
-        if (result.status === "success") {
+        const result = await verifyExemptionCode2(exemptionCode.trim());
+        console.log(result.success);
+        if (result.success) {
           setState({
             status: "success",
             message: "Verification successful",
             data: result.data
           });
+          setExmptionCode(exemptionCode);
+          //
           return;
+        } else {
+          setState({
+            status: "error",
+            message: "Invalid Exemption Code ",
+            data: result.data
+          });
         }
       } catch (error) {
         setState({
@@ -80,7 +95,10 @@ export default function ExemptionVerificationModal() {
         Your exemption code has been validated successfully
       </p>
       <Button
-        onClick={() => handleOpenChange(false)}
+        onClick={() => {
+          handleExemptionStep();
+          handleOpenChange(false);
+        }}
         className="mt-4 bg-green-600 hover:bg-green-700"
       >
         Continue
@@ -107,6 +125,7 @@ export default function ExemptionVerificationModal() {
       <div className="space-y-2">
         <Label htmlFor="exemptionId" className="text-sm font-medium text-gray-700">
           Exemption ID
+          <span className="text-red-500">*</span>
         </Label>
         <Input
           id="exemptionId"
@@ -191,4 +210,8 @@ export default function ExemptionVerificationModal() {
       </Dialog>
     </div>
   );
+}
+
+function dispatch(arg0: { payload: Partial<ICaseTypes>; type: "case-filing-form/updateCaseTypeName"; }) {
+  throw new Error("Function not implemented.");
 }
