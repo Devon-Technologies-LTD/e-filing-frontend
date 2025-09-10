@@ -382,7 +382,6 @@ export const handleApiError = (error: any) => {
       success: false,
     };
   }
-
   if (error?.request) {
     return {
       data: null,
@@ -392,7 +391,6 @@ export const handleApiError = (error: any) => {
       success: false,
     };
   }
-
   return {
     data: null,
     status: 500,
