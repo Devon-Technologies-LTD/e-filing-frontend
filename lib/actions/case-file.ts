@@ -257,11 +257,18 @@ export async function verifyExemptionCode(
   _prevState: unknown,
   formData: FormData
 ) {
-  const exemptionId = formData.get("exemptionId");
+  const exemptionId = formData.get("exemptionId") as string | null;
+  console.log(exemptionId);
+
+
+  if (!exemptionId) {
+    return { success: false, message: "Missing exemptionId" };
+  }
+
   try {
-    // const data = await CaseFileService.patchCaseType();
-    // return { ...data, success: true };
-    return { status: "success", success: true, message: "Verified Successfully" };
+    const data = await CaseFileService.validateExemptionCode(exemptionId);
+    console.log(data);
+    return { ...data, success: true };
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     return handleApiError(error);

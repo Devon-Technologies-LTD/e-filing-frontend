@@ -48,9 +48,7 @@ export default function ScheduleSheet({ trigger, id }: ScheduleSheetProps) {
     event.preventDefault();
     if (!date) return toast.error("Please select a hearing date.");
     // if (!time) return toast.error("Please select a time.");
-
     setIsSubmitting(true);
-
     const parsedTime = parse("9:00 AM", "hh:mm a", new Date());
     try {
       const formData = {
