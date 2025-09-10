@@ -22,58 +22,12 @@ export default function ExemptionVerificationModal() {
     data?: any;
   }>({ status: "idle" });
   const [exemptionCode, setExemptionCode] = useState("");
-
-  // // Mock verification function
-  // const verifyCode = async (
-  //   code: string
-  // ): Promise<{
-  //   status: "idle" | "success" | "error";
-  //   message: string;
-  //   errors?: string;
-  //   data?: any;
-  // }> => {
-  //   await new Promise(resolve => setTimeout(resolve, 2000));
-
-  //   if (!code) {
-  //     return { 
-  //       status: "error", 
-  //       message: "Exemption ID is required",
-  //       errors: "Please enter a valid exemption code"
-  //     };
-  //   }
-
-  //   if (code.length < 6) {
-  //     return { 
-  //       status: "error", 
-  //       message: "Invalid exemption code format",
-  //       errors: "Exemption code must be at least 6 characters"
-  //     };
-  //   }
-
-  //   if (code.toLowerCase().includes('valid')) {
-  //     return { 
-  //       status: "success", 
-  //       message: "Exemption code verified successfully",
-  //       data: { exemptionId: code, verified: true }
-  //     };
-  //   }
-
-  //   return { 
-  //     status: "error", 
-  //     message: "Invalid exemption code",
-  //     errors: "The exemption code entered is not valid or has expired"
-  //   };
-  // };
-
   const handleOpenChange = (open: boolean | ((prevState: boolean) => boolean)) => {
     setIsOpen(open);
     if (!open) {
       setState({ status: "idle" });
       setExemptionCode("");
     }
-
-
-    
   };
 
   const handleSubmit = () => {
