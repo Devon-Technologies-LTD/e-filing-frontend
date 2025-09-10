@@ -10,6 +10,7 @@ import { useCaseOverviewFormValidator } from "./validators/case-overview-validat
 import { useSaveForm } from "./hooks";
 import {
   addCaseTypeError,
+  updateCaseTypeName,
   updatePaymentType,
   updateStep,
 } from "@/redux/slices/case-filing-slice";
@@ -31,9 +32,13 @@ interface Iprops {
 }
 export function StepperNavigation({ isRefiling }: Iprops) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExemption, setIsExemption] = useState(false);
+    const [exemptioCode, setExmptionCode] = useState("");
+  
   const dispatch = useDispatch();
   const { current_step, caseType, legal_counsels, documents, totalAmount } =
     useAppSelector((store) => store.caseFileForm);
+
   const { validate } = useCaseOverviewFormValidator({
     store: caseType,
   });
@@ -72,7 +77,6 @@ export function StepperNavigation({ isRefiling }: Iprops) {
 
   const handleNextStep = async () => {
     if (current_step === 1) {
-      //  dispatch(updateStep(step + 1));
       await validate(() =>
         saveForm({
           case_file_id: caseType.case_file_id,
@@ -91,7 +95,6 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         );
       }
       if (caseType.case_type === CaseTypeData.CIVIL_CASE) {
-        // await validateCivilCase(() => dispatch(updateStep(current_step + 1)));
         await validateCivilCase(() =>
           saveForm({
             case_file_id: caseType.case_file_id,
@@ -104,7 +107,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
       }
       if (caseType.case_type === CaseTypeData.CRIMINAL_CASE) {
         await validateCriminalCase(() =>
-          // dispatch(updateStep(current_step + 1))
+
           saveForm({
             case_file_id: caseType.case_file_id,
             data: {
@@ -115,7 +118,6 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         );
       }
       if (caseType.case_type === CaseTypeData.FAMILY_CASE) {
-        // await validateFamilyCase(() => dispatch(updateStep(current_step + 1)));
         await validateFamilyCase(() =>
           saveForm({
             case_file_id: caseType.case_file_id,
@@ -141,7 +143,6 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         router.push("/cases");
       }
     } else {
-      // dispatch(updateStep(current_step + 1));
       saveForm({
         case_file_id: caseType.case_file_id,
         data: {
@@ -177,6 +178,13 @@ export function StepperNavigation({ isRefiling }: Iprops) {
     }
   };
 
+  const handleExemptionStep = () => {
+    dispatch(updatePaymentType("exemption"));
+    console.log(exemptioCode);
+    dispatch(updateCaseTypeName({ exemption_code: exemptioCode.trim() }));
+    dispatch(updateStep(6));
+  }
+
   return (
     <>
       <CardFooter className="flex h-20 container py-0 justify-between">
@@ -192,7 +200,7 @@ export function StepperNavigation({ isRefiling }: Iprops) {
         </div>
 
         {current_step === 5 && (
-          <ExemptionVerificationModal />
+          <ExemptionVerificationModal setExmptionCode={setExmptionCode}  handleExemptionStep={handleExemptionStep} />
         )}
 
         {/* <Button
