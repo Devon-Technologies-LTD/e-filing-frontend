@@ -132,19 +132,21 @@ export default function TimelineProgress({
   const {
     caseType: { case_file_id, reference },
     paymentType,
+    exemption_code
   } = useAppSelector((state) => state.caseFileForm);
+
   const router = useRouter();
 
   const { data: verifyData, isLoading: verifyLoading } = useQuery({
     queryKey: ["verify_transaction"],
-    queryFn: async () => validatePayment(case_file_id, reference!, paymentType),
+    queryFn: async () => validatePayment(case_file_id, reference!, paymentType, exemption_code),
   });
 
   // Payment verification effect
   useEffect(() => {
     setSteps((current) =>
       current.map((step, index) =>
-        index === 0
+        index === 0 
           ? {
               ...step,
               status: verifyLoading

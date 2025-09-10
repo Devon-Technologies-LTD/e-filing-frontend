@@ -7,7 +7,7 @@ import {
   updateCaseFile,
   updateCaseType,
 } from "@/lib/actions/case-file";
-import { generateRRR } from "@/lib/actions/payment";
+import { generateRRR, ProcessExemption } from "@/lib/actions/payment";
 import { dateFormatter, formatErrors, generateCaseTitle } from "@/lib/utils";
 import {
   clearCaseTypeError,
@@ -110,6 +110,7 @@ export const useSaveForm = ({
     console.log("closed");
   };
   const initializePaystackPayment = usePaystackPayment(paystackConfig);
+
   const handlePaystackPayment = useCallback(() => {
     initializePaystackPayment({
       onSuccess: onPaystackSuccess,
@@ -133,6 +134,8 @@ export const useSaveForm = ({
       }
     },
   });
+
+
 
   const mutation = useMutation({
     mutationFn: async ({ case_file_id, data }: SaveFormParams) => {
@@ -214,7 +217,7 @@ export const useSaveForm = ({
         const errorMessage = formatErrors(data.errors);
         toast.error(
           `${data?.message}: ${errorMessage}` ||
-            "An error occurred while saving the form."
+          "An error occurred while saving the form."
         );
         return;
       } else {
@@ -244,7 +247,11 @@ export const useSaveForm = ({
           if (step === 5) {
             if (paymentType === "paystack") {
               handlePaystackPayment();
-            } else generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+            } else if(paymentType === "remita") {
+              generateRRRMutation.mutate({ caseFileId: data.casefile_id });
+            } else {
+              // processViaExemption.mutate({ caseFileId: data.casefile_id });
+            }
           } else if (step < 5) {
             dispatch(updateStep(step + 1));
           }

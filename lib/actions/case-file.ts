@@ -253,48 +253,52 @@ export async function updateCaseType({
   }
 }
 
-// export async function verifyExemptionCode(
-//   _prevState: unknown,
-//   formData: FormData
-// ) {
-//   const exemptionId = formData.get("exemptionId") as string | null;
-//   console.log(exemptionId);
-//   if (!exemptionId) {
-//     return { success: false, message: "Missing exemptionId" };
-//   }
-//   try {
-//     const data = await CaseFileService.validateExemptionCode(exemptionId);
-//     return { ...data, success: true };
-//   } catch (err: unknown) {
-//     const error = err as ErrorResponse;
-//     return handleApiError(error);
-//   }
-// }
+export async function verifyExemptionCode2(
+  exemptionCode: string
+) {
+  console.log(exemptionCode);
+  if (!exemptionCode) {
+    return { success: false, message: "Missing exemptionId" };
+  }
+  try {
+    const data = await CaseFileService.validateExemptionCode(exemptionCode);
+    return { ...data, success: true };
+  } catch (err: unknown) {
+    const error = err as ErrorResponse;
+    return handleApiError(error);
+  }
+}
 
 
-export async function verifyExemptionCode(exemptionCode : string) {
+export async function verifyExemptionCode(exemptionCode: string, case_file_id: string) {
   if (!exemptionCode?.trim()) {
-    return { 
-      status: "error", 
+    return {
+      status: "error",
       message: "Exemption ID is required",
       errors: "Please enter a valid exemption code"
     };
   }
 
   try {
-    const data = await CaseFileService.validateExemptionCode(exemptionCode.trim());
+    const dataJSON = {
+      exemption_code: exemptionCode.trim(),
+      casefile_id: case_file_id,
+      payment_method: "paystack",
+      amount: 0
+    };
+    const data = await CaseFileService.validateExemption(dataJSON);
     console.log(data);
 
-    return { 
-      status: "success", 
+    return {
+      status: "success",
       message: "Exemption code verified successfully",
-      data 
+      data
     };
-    
+
   } catch (err: unknown) {
     const error = err as ErrorResponse;
     const handledError = handleApiError(error);
-    
+
     return {
       status: "error",
       message: handledError.message || "Invalid exemption code",
