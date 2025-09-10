@@ -324,6 +324,12 @@ const CaseFileService = {
     );
     return response.data;
   },
+  async validateExemptionCode(code: any): Promise<any> {
+    const response = await axiosInstance.get<any>(
+      `user/verify-exemption-code/${code}`
+    );
+    return response.data;
+  },
 
 
   async patchCaseType({

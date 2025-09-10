@@ -14,7 +14,6 @@ export default function FilteredCases() {
     return mainColumns;
   };
   const columns = getColumns();
-
   return (
     <div className="space-y-12">
       <CasesDataTableToolbar />
