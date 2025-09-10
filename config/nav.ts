@@ -92,6 +92,6 @@ export const navigationLinks: NavItem[] = [
     roles: [
       ROLES.CENTRAL_REGISTRAR,
     ],
-    isActive: (pathname) => pathname?.startsWith("/excemption"),
+    isActive: (pathname) => pathname?.startsWith("/exemption"),
   },
 ];
