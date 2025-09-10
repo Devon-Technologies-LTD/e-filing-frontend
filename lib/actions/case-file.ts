@@ -253,24 +253,52 @@ export async function updateCaseType({
   }
 }
 
-export async function verifyExemptionCode(
-  _prevState: unknown,
-  formData: FormData
-) {
-  const exemptionId = formData.get("exemptionId") as string | null;
-  console.log(exemptionId);
+// export async function verifyExemptionCode(
+//   _prevState: unknown,
+//   formData: FormData
+// ) {
+//   const exemptionId = formData.get("exemptionId") as string | null;
+//   console.log(exemptionId);
+//   if (!exemptionId) {
+//     return { success: false, message: "Missing exemptionId" };
+//   }
+//   try {
+//     const data = await CaseFileService.validateExemptionCode(exemptionId);
+//     return { ...data, success: true };
+//   } catch (err: unknown) {
+//     const error = err as ErrorResponse;
+//     return handleApiError(error);
+//   }
+// }
 
 
-  if (!exemptionId) {
-    return { success: false, message: "Missing exemptionId" };
+export async function verifyExemptionCode(exemptionCode : string) {
+  if (!exemptionCode?.trim()) {
+    return { 
+      status: "error", 
+      message: "Exemption ID is required",
+      errors: "Please enter a valid exemption code"
+    };
   }
 
   try {
-    const data = await CaseFileService.validateExemptionCode(exemptionId);
+    const data = await CaseFileService.validateExemptionCode(exemptionCode.trim());
     console.log(data);
-    return { ...data, success: true };
+
+    return { 
+      status: "success", 
+      message: "Exemption code verified successfully",
+      data 
+    };
+    
   } catch (err: unknown) {
     const error = err as ErrorResponse;
-    return handleApiError(error);
+    const handledError = handleApiError(error);
+    
+    return {
+      status: "error",
+      message: handledError.message || "Invalid exemption code",
+      errors: handledError.errors || "The exemption code entered is not valid or has expired"
+    };
   }
 }

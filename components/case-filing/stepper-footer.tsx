@@ -193,7 +193,6 @@ export function StepperNavigation({ isRefiling }: Iprops) {
 
         {current_step === 5 && (
           <ExemptionVerificationModal />
-
         )}
 
         {/* <Button
