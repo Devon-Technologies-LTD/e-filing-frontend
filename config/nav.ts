@@ -88,7 +88,7 @@ export const navigationLinks: NavItem[] = [
   },
    {
     title: "Exemption",
-    href: "/Exemption",
+    href: "/exemption",
     roles: [
       ROLES.CENTRAL_REGISTRAR,
     ],
