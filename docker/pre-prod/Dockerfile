@@ -39,7 +39,6 @@ COPY ./src/app/favicon.ico ./public
 COPY --from=builder --chown=staff001:staff001 /app/.next/standalone ./
 COPY --from=builder --chown=staff001:staff001 /app/.next/static ./.next/static
 
-
 USER staff001
 
 EXPOSE 9800
