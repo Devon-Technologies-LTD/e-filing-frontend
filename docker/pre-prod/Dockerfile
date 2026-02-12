@@ -32,10 +32,8 @@ RUN addgroup -g 1001 -S staff001
 RUN adduser -S staff001 -u 1001
 
 COPY --from=builder /app/public ./public
-COPY ./src/app/favicon.ico ./public
+COPY ./app/favicon.png ./public
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=staff001:staff001 /app/.next/standalone ./
 COPY --from=builder --chown=staff001:staff001 /app/.next/static ./.next/static
 
