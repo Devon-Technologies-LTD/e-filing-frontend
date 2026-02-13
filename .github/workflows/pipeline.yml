@@ -73,10 +73,11 @@ jobs:
           port: ${{ secrets.AWS_STAGING_1_PORT }}
           script: |
             set -e
-            APP_DIR="/opt/products/docketmaster/$IMAGE_ENV/frontend"
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_TAG=${{ env.IMAGE_TAG }}
             IMAGE_ENV=${{ env.IMAGE_ENV }}
+
+            APP_DIR="/opt/products/docketmaster/$IMAGE_ENV/frontend"
 
             mkdir -p $APP_DIR
             cd $APP_DIR
