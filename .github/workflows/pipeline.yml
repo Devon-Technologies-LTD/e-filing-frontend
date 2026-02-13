@@ -55,7 +55,6 @@ jobs:
             -t $IMAGE_NAME:$IMAGE_TAG \
             -f docker/$IMAGE_ENV/Dockerfile .
 
-          docker build -t $IMAGE_NAME:$IMAGE_TAG -f docker/$IMAGE_ENV/Dockerfile .
           docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$LATEST_TAG
           docker push $IMAGE_NAME:$IMAGE_TAG
           docker push $IMAGE_NAME:$LATEST_TAG
