@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -74,9 +75,15 @@ export function UserNav() {
             </Avatar>
             <div className="flex flex-col space-y-2">
               <p className="text-sm font-medium leading-none">{user?.role}</p>
-              <p className="text-sm font-medium leading-none">{user?.first_name} {user?.last_name}</p>
-              <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
-              <p className="text-xs leading-none text-bold text-muted-foreground">{user?.court_divison}</p>
+              <p className="text-sm font-medium leading-none">
+                {user?.first_name} {user?.last_name}
+              </p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user?.email}
+              </p>
+              <p className="text-xs leading-none text-bold text-muted-foreground">
+                {user?.court_divison}
+              </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuGroup className="space-y-3 p-4">
@@ -84,7 +91,9 @@ export function UserNav() {
               <DropdownMenuItem asChild>
                 <span className="flex gap-3">
                   <Icons.Court />
-                  <p className="text-sm uppercase text-app-primary font-semibold">{user?.court_type}</p>
+                  <p className="text-sm uppercase text-app-primary font-semibold">
+                    {user?.court_type}
+                  </p>
                 </span>
               </DropdownMenuItem>
             )}
